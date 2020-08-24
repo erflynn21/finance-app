@@ -1,13 +1,9 @@
 <script>
+    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import Expense from './Expense.svelte';
+    import { Expenses } from '../api/expenses';
     
-    function getExpenses() {
-        return [
-          { _id: 1, text: "This is expense 1" },
-          { _id: 2, text: "This is expense 2" },
-          { _id: 3, text: "This is expense 3" }
-        ];
-      }
+    $: expenses = useTracker(() => Expenses.find({}).fetch());
    
   </script>
    
@@ -17,7 +13,7 @@
       <h1>Expenses</h1>
     </header>
     <ul>
-    {#each getExpenses() as expense}
+    {#each $expenses as expense}
       <Expense
         key={expense._id}
         expense={expense}
