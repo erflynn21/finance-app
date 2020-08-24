@@ -10,6 +10,10 @@
 </script>
 
 <div>
-    <button class="delete" on:click={deleteExpense}>X</button>
-    <li>{expense.text}</li>
+    <ul>
+        <button class="delete" on:click={deleteExpense}>X</button>
+        <li>{expense.title}</li>
+        <li>{expense.date}</li>
+        <li>{expense.amount}</li>
+    </ul>
 </div>

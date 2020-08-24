@@ -3,19 +3,24 @@
     import Expense from './Expense.svelte';
     import { Expenses } from '../api/expenses';
 
-    let newExpense = '';
-    
-    $: expenses = useTracker(() => Expenses.find({}, { sort: { createdAt: -1 } }).fetch());
+    let title;
+    let amount;
+    let date = new Date().toISOString().substr(0, 10);
+
+    $: expenses = useTracker(() => Expenses.find({}, { sort: { date: -1 } }).fetch());
 
     const handleSubmit = (e) => {
         // insert new expense
         Expenses.insert({
-            text: newExpense,
-            createdAt: new Date()
-        })
+            title: title,
+            date: date,
+            amount: amount,
+        });
 
         // clear form
-        newExpense = '';
+        title = '';
+        date = new Date().toISOString().substr(0, 10);
+        amount = '';
     }
    
   </script>
@@ -25,7 +30,10 @@
     <header>
       <h1>Expenses</h1>
       <form class="new-expense" on:submit|preventDefault={handleSubmit}>
-          <input type="text" placeholder='new expense...' bind:value={newExpense}>
+          <input type="text" placeholder='new expense...' bind:value={title}>
+          <input type="date" id='today' bind:value={date}>
+          <input type="text" placeholder='amount' bind:value={amount}>
+          <button on:click|preventDefault={handleSubmit}>Add</button>
       </form>
     </header>
     <ul>
