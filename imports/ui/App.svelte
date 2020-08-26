@@ -15,7 +15,7 @@
    
     $: expenses = useTracker(() => Expenses.find({}, { sort: { date: -1 } }).fetch());
 
-    const handleSubmit = () => {
+    async function handleSubmit() {
         // insert new expense
         if (expense.currency === userCurrency) {
             Expenses.insert({
@@ -26,14 +26,14 @@
             });
             console.log(expense.amount);
         } else {
-            convertCurrency()
-        }
+            await convertCurrency();
+        };
         
 
         // clear form
-        title = '';
-        date = new Date().toISOString().substr(0, 10);
-        amount = '';
+        expense.title = '';
+        expense.date = new Date().toISOString().substr(0, 10);
+        expense.amount = '';
     }
 
     async function convertCurrency() {
@@ -42,13 +42,14 @@
         let data = await response.json();
         let rates = JSON.stringify(data.rates);
         let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-        let convertedAmount = (expense.amount / exchangeRate);
+        let convertedAmount = (expense.amount / exchangeRate).toFixed(2);
         Expenses.insert({
             title: expense.title,
             date: expense.date,
             amount: convertedAmount,
             currency: expense.currency,
         })
+
     }
 
    
