@@ -1,5 +1,5 @@
 <script>
-    import { Incomes } from '../api/incomes.js';
+    import { Incomes } from '../../api/incomes.js';
 
     export let income;
 
@@ -9,14 +9,14 @@
 </script>
 
 <div>
-    {#if income.convertedAmount !== null}
+    {#if income.originalAmount !== null}
         <button class="delete" on:click={deleteIncome}>X</button>
         <span>{income.title}</span>
         <span>{income.date}</span>
-        <span>{income.convertedCurrency}{income.convertedAmount}</span>
-        <span>
-            Original Amount and Currency: {income.currency}{income.amount}
-        </span>
+        <span>{income.currency}{income.amount}</span>
+        <!-- <span>
+            Original Amount and Currency: {income.originalCurrency}{income.originalAmount}
+        </span> -->
     {:else}
         <button class="delete" on:click={deleteIncome}>X</button>
         <span>{income.title}</span>
