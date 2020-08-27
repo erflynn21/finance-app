@@ -1,19 +1,8 @@
 <script>
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import Expense from './components/Expense.svelte';
-    import Income from './components/Income.svelte';
     import AddExpenseForm from './components/AddExpenseForm.svelte';
     import AddIncomeForm from './components/AddIncomeForm.svelte';
-    import { Expenses } from '../api/expenses';
-    import { Incomes } from '../api/incomes';
-
-    $: expenses = useTracker(() =>
-        Expenses.find({}, { sort: { date: -1 } }).fetch()
-    );
-
-    $: incomes = useTracker(() =>
-        Incomes.find({}, { sort: { date: -1 } }).fetch()
-    );
+    import ExpenseList from './components/ExpenseList.svelte';
+    import IncomeList from './components/IncomeList.svelte';
 
     // let totalExpenses = [];
     // let expenseSum = 0;
@@ -36,18 +25,9 @@
         <!-- Form to add incomes -->
         <AddIncomeForm />
     </header>
-    <h1>Expenses:</h1>
-    <!-- List of expenses -->
-    {#each $expenses as expense (expense._id)}
-        <Expense {expense} />
-    {/each}
-    <h3>Total Expenses:</h3>
-    <h1>Incomes:</h1>
-    <!-- List of incomes -->
-    {#each $incomes as income (income._id)}
-        <Income {income} />
-    {/each}
-    <h3>Total Income:</h3>
-    <h1>Remaining:</h1>
-
+    <div>
+        <ExpenseList />
+        <IncomeList />
+        <h1>Remaining:</h1>
+    </div>
 </div>
