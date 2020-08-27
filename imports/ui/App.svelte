@@ -15,6 +15,24 @@
     //         return a + b;
     //     }, 0);
     // };
+
+    $: expenseSum = 0;
+    const recalculateExpenses = (totalExpenses) => {
+        expenses = totalExpenses.detail.data;
+        expenseSum = expenses.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+    };
+
+    $: incomeSum = 0;
+    const recalculateIncomes = (totalIncomes) => {
+        incomes = totalIncomes.detail.data;
+        incomeSum = incomes.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+    };
+
+    $: remainingBudget = Number((incomeSum - expenseSum).toFixed(2));
 </script>
 
 <div class="container">
@@ -26,8 +44,10 @@
         <AddIncomeForm />
     </header>
     <div>
-        <ExpenseList />
-        <IncomeList />
-        <h1>Remaining:</h1>
+        <ExpenseList on:recalculateExpenses={recalculateExpenses} />
+        <h3>Total Expenses: {expenseSum}</h3>
+        <IncomeList on:recalculateIncome={recalculateIncomes} />
+        <h3>Total Income: {incomeSum}</h3>
+        <h1>Remaining: {remainingBudget}</h1>
     </div>
 </div>

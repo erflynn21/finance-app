@@ -2,14 +2,12 @@
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Expenses } from '../../api/expenses';
     import Expense from '../components/Expense.svelte';
+    import { createEventDispatcher } from 'svelte';
+    let dispatch = createEventDispatcher();
 
     $: expenses = useTracker(() =>
         Expenses.find({}, { sort: { date: -1 } }).fetch()
     );
-
-    $: expenseSum = totalExpenses.reduce(function (a, b) {
-        return a + b;
-    }, 0);
 
     $: totalExpenses = [];
     let totalExpensesIDs = [];
@@ -18,12 +16,14 @@
             totalExpensesIDs = [...totalExpensesIDs, expense._id];
             totalExpenses = [...totalExpenses, expense.amount];
         }
+        dispatch('recalculateExpenses', { data: totalExpenses });
     };
 
     const deleteExpenseFromTotal = (expense) => {
         const index = totalExpensesIDs.indexOf(expense.detail._id);
         totalExpenses.splice(index, 1);
         totalExpenses = totalExpenses;
+        dispatch('recalculateExpenses', { data: totalExpenses });
     };
 </script>
 
@@ -36,5 +36,4 @@
     {#each $expenses as expense (expense._id)}
         <Expense {expense} on:delete={deleteExpenseFromTotal} />
     {/each}
-    <h3>Total Expenses: {expenseSum}</h3>
 </div>

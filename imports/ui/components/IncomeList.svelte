@@ -2,14 +2,12 @@
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Incomes } from '../../api/incomes';
     import Income from '../components/Income.svelte';
+    import { createEventDispatcher } from 'svelte';
+    let dispatch = createEventDispatcher();
 
     $: incomes = useTracker(() =>
         Incomes.find({}, { sort: { date: -1 } }).fetch()
     );
-
-    $: incomeSum = totalIncomes.reduce(function (a, b) {
-        return a + b;
-    }, 0);
 
     $: totalIncomes = [];
     let totalIncomesIDs = [];
@@ -18,12 +16,14 @@
             totalIncomesIDs = [...totalIncomesIDs, income._id];
             totalIncomes = [...totalIncomes, income.amount];
         }
+        dispatch('recalculateIncome', { data: totalIncomes });
     };
 
     const deleteIncomeFromTotal = (income) => {
         const index = totalIncomesIDs.indexOf(income.detail._id);
         totalIncomes.splice(index, 1);
         totalIncomes = totalIncomes;
+        dispatch('recalculateIncome', { data: totalIncomes });
     };
 </script>
 
@@ -36,5 +36,4 @@
     {#each $incomes as income (income._id)}
         <Income {income} on:delete={deleteIncomeFromTotal} />
     {/each}
-    <h3>Total Income: {incomeSum}</h3>
 </div>
