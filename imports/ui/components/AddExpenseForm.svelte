@@ -1,5 +1,9 @@
 <script>
+    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Expenses } from '../../api/expenses';
+    import { Budgets } from '../../api/budgets';
+
+    $: budgets = useTracker(() => Budgets.find({}).fetch());
 
     let userCurrency = 'CNY';
 
@@ -65,9 +69,12 @@
     <input type="number" placeholder="amount" bind:value={expense.amount} />
     <select id="category" bind:value={expense.category}>
         <option disabled selected value>-- select a category --</option>
-        <option value="Rent">Rent</option>
+        {#each $budgets as budget (budget._id)}
+            <option value={budget.category}>{budget.category}</option>
+        {/each}
+        <!-- <option value="Rent">Rent</option>
         <option value="Groceries">Groceries</option>
-        <option value="Utilities">Utilities</option>
+        <option value="Utilities">Utilities</option> -->
     </select>
     <select id="expense-currency" bind:value={expense.currency}>
         <option value="USD">USD</option>

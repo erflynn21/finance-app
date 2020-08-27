@@ -1,8 +1,10 @@
 <script>
     import AddExpenseForm from './components/AddExpenseForm.svelte';
     import AddIncomeForm from './components/AddIncomeForm.svelte';
+    import AddBudgetForm from './components/AddBudgetForm.svelte';
     import ExpenseList from './components/ExpenseList.svelte';
     import IncomeList from './components/IncomeList.svelte';
+    import BudgetList from './components/BudgetList.svelte';
 
     $: expenseSum = 0;
     const recalculateExpenses = (totalExpenses) => {
@@ -30,12 +32,19 @@
         <AddExpenseForm />
         <!-- Form to add incomes -->
         <AddIncomeForm />
+        <!-- Form to add budgets -->
+        <AddBudgetForm />
+
     </header>
     <div>
+        <!-- List of expenses -->
         <ExpenseList on:recalculateExpenses={recalculateExpenses} />
         <h3>Total Expenses: {expenseSum}</h3>
+        <!-- List of incomes -->
         <IncomeList on:recalculateIncome={recalculateIncomes} />
         <h3>Total Income: {incomeSum}</h3>
-        <h1>Remaining: {remainingBudget}</h1>
+        <h1>Remaining Total: {remainingBudget}</h1>
+        <!-- List of budgets -->
+        <BudgetList />
     </div>
 </div>
