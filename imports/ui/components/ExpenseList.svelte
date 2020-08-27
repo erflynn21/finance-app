@@ -11,14 +11,19 @@
         return a + b;
     }, 0);
 
-    let totalExpenses = [];
+    $: totalExpenses = [];
     let totalExpenseIDs = [];
     const calculateTotal = (expense) => {
         if (totalExpenseIDs.includes(expense._id) === false) {
             totalExpenseIDs = [...totalExpenseIDs, expense._id];
             totalExpenses = [...totalExpenses, expense.amount];
-            console.log(totalExpenses);
         }
+    };
+
+    const deleteExpenseFromTotal = (expense) => {
+        const index = totalExpenseIDs.indexOf(expense.detail._id);
+        totalExpenses.splice(index, 1);
+        totalExpenses = totalExpenses;
     };
 </script>
 
@@ -29,7 +34,7 @@
         <div />
     {/each}
     {#each $expenses as expense (expense._id)}
-        <Expense {expense} />
+        <Expense {expense} on:delete={deleteExpenseFromTotal} />
     {/each}
     <h3>Total Expenses: {expenseSum}</h3>
 </div>
