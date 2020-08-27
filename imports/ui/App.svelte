@@ -4,18 +4,6 @@
     import ExpenseList from './components/ExpenseList.svelte';
     import IncomeList from './components/IncomeList.svelte';
 
-    // let totalExpenses = [];
-    // let expenseSum = 0;
-    // let totalIncome = 0;
-
-    // const calculateExpenses = () => {
-    //     totalExpenses = [...totalExpenses, expense.amount];
-    //     console.log(totalExpenses);
-    //     expenseSum = totalExpenses.reduce(function (a, b) {
-    //         return a + b;
-    //     }, 0);
-    // };
-
     $: expenseSum = 0;
     const recalculateExpenses = (totalExpenses) => {
         expenses = totalExpenses.detail.data;

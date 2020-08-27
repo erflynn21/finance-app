@@ -6,6 +6,7 @@
     let expense = {
         title: '',
         amount: null,
+        category: '',
         date: new Date().toISOString().substr(0, 10),
         currency: userCurrency,
         originalAmount: null,
@@ -25,6 +26,7 @@
             title: expense.title,
             date: expense.date,
             amount: expense.amount,
+            category: expense.category,
             originalAmount: expense.originalAmount,
             currency: expense.currency,
             originalCurrency: expense.originalCurrency,
@@ -34,7 +36,7 @@
         expense.title = '';
         expense.date = new Date().toISOString().substr(0, 10);
         expense.amount = '';
-        expense.currency = userCurrency;
+        (expense.category = ''), (expense.currency = userCurrency);
         expense.originalCurrency = null;
         expense.originalAmount = null;
     }
@@ -61,6 +63,12 @@
         bind:value={expense.title} />
     <input type="date" id="today" bind:value={expense.date} />
     <input type="number" placeholder="amount" bind:value={expense.amount} />
+    <select id="category" bind:value={expense.category}>
+        <option disabled selected value>-- select a category --</option>
+        <option value="Rent">Rent</option>
+        <option value="Groceries">Groceries</option>
+        <option value="Utilities">Utilities</option>
+    </select>
     <select id="expense-currency" bind:value={expense.currency}>
         <option value="USD">USD</option>
         <option value="CNY">CNY</option>
