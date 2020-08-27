@@ -40,31 +40,17 @@
     }
 
     async function convertAmount() {
-        let url;
-        if (expense.amount !== null) {
-            expense.originalAmount = expense.amount;
-            expense.originalCurrency = expense.currency;
-            url = `https://api.exchangeratesapi.io/${expense.date}?base=${userCurrency}&symbols=${expense.originalCurrency}`;
-        } else {
-            income.originalAmount = income.amount;
-            income.originalCurrency = income.currency;
-            url = `https://api.exchangeratesapi.io/${income.date}?base=${userCurrency}&symbols=${income.originalCurrency}`;
-        }
+        expense.originalAmount = expense.amount;
+        expense.originalCurrency = expense.currency;
+        let url = `https://api.exchangeratesapi.io/${expense.date}?base=${userCurrency}&symbols=${expense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
         let rates = JSON.stringify(data.rates);
         let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-        if (expense.amount !== null) {
-            expense.amount = Number(
-                (expense.originalAmount / exchangeRate).toFixed(2)
-            );
-            expense.currency = userCurrency;
-        } else {
-            income.amount = Number(
-                (income.originalAmount / exchangeRate).toFixed(2)
-            );
-            income.currency = userCurrency;
-        }
+        expense.amount = Number(
+            (expense.originalAmount / exchangeRate).toFixed(2)
+        );
+        expense.currency = userCurrency;
     }
 </script>
 
