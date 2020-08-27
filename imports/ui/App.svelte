@@ -22,7 +22,17 @@
         }, 0);
     };
 
-    $: remainingBudget = Number((incomeSum - expenseSum).toFixed(2));
+    $: remainingTotal = Number((incomeSum - expenseSum).toFixed(2));
+
+    $: budgetSum = 0;
+    const recalculateBudgets = (totalBudgets) => {
+        budgets = totalBudgets.detail.data;
+        budgetSum = budgets.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+    };
+
+    $: remainingBudget = incomeSum - budgetSum;
 </script>
 
 <div class="container">
@@ -43,8 +53,12 @@
         <!-- List of incomes -->
         <IncomeList on:recalculateIncome={recalculateIncomes} />
         <h3>Total Income: {incomeSum}</h3>
-        <h1>Remaining Total: {remainingBudget}</h1>
+        <h3>Remaining Total: {remainingTotal}</h3>
         <!-- List of budgets -->
-        <BudgetList />
+        <BudgetList on:recalculateBudgets={recalculateBudgets} />
+        <h3>
+            Total Budgeted: {budgetSum} out of {incomeSum}. You have {remainingBudget}
+            left to budget.
+        </h3>
     </div>
 </div>

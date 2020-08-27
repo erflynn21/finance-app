@@ -1,9 +1,12 @@
 <script>
     import { Budgets } from '../../api/budgets';
     export let budget;
+    import { createEventDispatcher } from 'svelte';
+    let dispatch = createEventDispatcher();
 
     const deleteBudget = () => {
         Budgets.remove(budget._id);
+        dispatch('delete', budget);
     };
 </script>
 
