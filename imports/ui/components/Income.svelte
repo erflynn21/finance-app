@@ -1,10 +1,12 @@
 <script>
     import { Incomes } from '../../api/incomes.js';
-
     export let income;
+    import { createEventDispatcher } from 'svelte';
+    let dispatch = createEventDispatcher();
 
     const deleteIncome = () => {
         Incomes.remove(income._id);
+        dispatch('delete', income);
     };
 </script>
 

@@ -12,16 +12,16 @@
     }, 0);
 
     $: totalExpenses = [];
-    let totalExpenseIDs = [];
+    let totalExpensesIDs = [];
     const calculateTotal = (expense) => {
-        if (totalExpenseIDs.includes(expense._id) === false) {
-            totalExpenseIDs = [...totalExpenseIDs, expense._id];
+        if (totalExpensesIDs.includes(expense._id) === false) {
+            totalExpensesIDs = [...totalExpensesIDs, expense._id];
             totalExpenses = [...totalExpenses, expense.amount];
         }
     };
 
     const deleteExpenseFromTotal = (expense) => {
-        const index = totalExpenseIDs.indexOf(expense.detail._id);
+        const index = totalExpensesIDs.indexOf(expense.detail._id);
         totalExpenses.splice(index, 1);
         totalExpenses = totalExpenses;
     };
