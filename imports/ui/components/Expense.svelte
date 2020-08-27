@@ -1,6 +1,5 @@
 <script>
     import { Expenses } from '../../api/expenses.js';
-
     export let expense;
 
     const deleteExpense = () => {
@@ -10,17 +9,21 @@
 
 <div>
     {#if expense.originalAmount !== null}
-        <button class="delete" on:click={deleteExpense}>X</button>
-        <span>{expense.title}</span>
-        <span>{expense.date}</span>
-        <span>{expense.currency}{expense.amount}</span>
-        <!-- <span>
-            Original Amount and Currency: {expense.originalCurrency}{expense.originalAmount}
-        </span> -->
+        <div>
+            <button class="delete" on:click={deleteExpense}>X</button>
+            <span>{expense.title}</span>
+            <span>{expense.date}</span>
+            <span>{expense.currency}{expense.amount}</span>
+            <!-- <span>
+                Original Amount and Currency: {expense.originalCurrency}{expense.originalAmount}
+            </span> -->
+        </div>
     {:else}
-        <button class="delete" on:click={deleteExpense}>X</button>
-        <span>{expense.title}</span>
-        <span>{expense.date}</span>
-        <span>{expense.currency}{expense.amount}</span>
+        <div>
+            <button class="delete" on:click={deleteExpense}>X</button>
+            <span>{expense.title}</span>
+            <span>{expense.date}</span>
+            <span>{expense.currency}{expense.amount}</span>
+        </div>
     {/if}
 </div>

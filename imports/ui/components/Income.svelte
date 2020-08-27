@@ -10,17 +10,21 @@
 
 <div>
     {#if income.originalAmount !== null}
-        <button class="delete" on:click={deleteIncome}>X</button>
-        <span>{income.title}</span>
-        <span>{income.date}</span>
-        <span>{income.currency}{income.amount}</span>
-        <!-- <span>
-            Original Amount and Currency: {income.originalCurrency}{income.originalAmount}
-        </span> -->
+        <div>
+            <button class="delete" on:click={deleteIncome}>X</button>
+            <span>{income.title}</span>
+            <span>{income.date}</span>
+            <span>{income.currency}{income.amount}</span>
+            <!-- <span>
+                Original Amount and Currency: {income.originalCurrency}{income.originalAmount}
+            </span> -->
+        </div>
     {:else}
-        <button class="delete" on:click={deleteIncome}>X</button>
-        <span>{income.title}</span>
-        <span>{income.date}</span>
-        <span>{income.currency}{income.amount}</span>
+        <div>
+            <button class="delete" on:click={deleteIncome}>X</button>
+            <span>{income.title}</span>
+            <span>{income.date}</span>
+            <span>{income.currency}{income.amount}</span>
+        </div>
     {/if}
 </div>

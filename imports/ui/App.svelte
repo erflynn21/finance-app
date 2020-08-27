@@ -33,7 +33,8 @@
         Incomes.find({}, { sort: { date: -1 } }).fetch()
     );
 
-    // let totalExpenses = 0;
+    let totalExpenses = [];
+    let expenseSum = 0;
     // let totalIncome = 0;
 
     async function handleAddExpense() {
@@ -106,13 +107,25 @@
         let rates = JSON.stringify(data.rates);
         let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
         if (expense.amount !== null) {
-            expense.amount = (expense.originalAmount / exchangeRate).toFixed(2);
+            expense.amount = Number(
+                (expense.originalAmount / exchangeRate).toFixed(2)
+            );
             expense.currency = userCurrency;
         } else {
-            income.amount = (income.originalAmount / exchangeRate).toFixed(2);
+            income.amount = Number(
+                (income.originalAmount / exchangeRate).toFixed(2)
+            );
             income.currency = userCurrency;
         }
     }
+
+    // const calculateExpenses = () => {
+    //     totalExpenses = [...totalExpenses, expense.amount];
+    //     console.log(totalExpenses);
+    //     expenseSum = totalExpenses.reduce(function (a, b) {
+    //         return a + b;
+    //     }, 0);
+    // };
 </script>
 
 <div class="container">
@@ -134,7 +147,6 @@
                 <option value="CNY">CNY</option>
             </select>
             <button on:click|preventDefault={handleAddExpense}>Add</button>
-
         </form>
 
         <!-- Form to add incomes -->
@@ -153,14 +165,13 @@
                 <option value="CNY">CNY</option>
             </select>
             <button on:click|preventDefault={handleAddIncome}>Add</button>
-
         </form>
     </header>
     <h1>Expenses:</h1>
     {#each $expenses as expense (expense._id)}
         <Expense {expense} />
     {/each}
-    <h3>Total Expenses:</h3>
+    <h3>Total Expenses: {expenseSum}</h3>
     <h1>Incomes:</h1>
     {#each $incomes as income (income._id)}
         <Income {income} />
