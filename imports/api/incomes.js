@@ -4,6 +4,12 @@ import { check } from 'meteor/check';
 
 export const Incomes = new Mongo.Collection('incomes');
 
+if (Meteor.isServer) {
+    Meteor.publish('incomes', function incomesPublication() {
+        return Incomes.find( { owner: this.userId });
+    })
+}
+
 Meteor.methods({
     'incomes.insert'(income) {
         check(income, Object);

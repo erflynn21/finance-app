@@ -4,6 +4,12 @@ import { check } from 'meteor/check';
 
 export const Budgets = new Mongo.Collection('budgets');
 
+if (Meteor.isServer) {
+    Meteor.publish('budgets', function budgetsPublication() {
+        return Budgets.find( { owner: this.userId });
+    })
+}
+
 Meteor.methods({
     'budgets.insert'(budget) {
         check(budget, Object);
@@ -16,6 +22,7 @@ Meteor.methods({
             category: budget.category,
             amount: budget.amount,
             currency: budget.currency,
+            owner: Meteor.userId(),
         });
     },
 

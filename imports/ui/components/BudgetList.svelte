@@ -1,4 +1,5 @@
 <script>
+    import { Meteor } from 'meteor/meteor';
     import { onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Budgets } from '../../api/budgets';
@@ -26,6 +27,7 @@
     };
 
     onMount(() => {
+        Meteor.subscribe('budgets');
         dispatch('recalculateBudgets', { data: totalBudgets });
     });
 </script>
