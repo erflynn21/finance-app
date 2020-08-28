@@ -1,4 +1,5 @@
 <script>
+    import { Meteor } from 'meteor/meteor';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Expenses } from '../../api/expenses';
     import { Budgets } from '../../api/budgets';
@@ -34,6 +35,7 @@
             originalAmount: expense.originalAmount,
             currency: expense.currency,
             originalCurrency: expense.originalCurrency,
+            owner: Meteor.userID(),
         });
 
         // clear form
@@ -65,7 +67,7 @@
         type="text"
         placeholder="new expense..."
         bind:value={expense.title} />
-    <input type="date" id="today" bind:value={expense.date} />
+    <input type="date" bind:value={expense.date} />
     <input type="number" placeholder="amount" bind:value={expense.amount} />
     <select id="category" bind:value={expense.category}>
         <option disabled selected value>-- select a category --</option>

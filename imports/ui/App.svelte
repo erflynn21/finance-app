@@ -1,10 +1,15 @@
 <script>
+    import { Meteor } from 'meteor/meteor';
+    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import AddExpenseForm from './components/AddExpenseForm.svelte';
     import AddIncomeForm from './components/AddIncomeForm.svelte';
     import AddBudgetForm from './components/AddBudgetForm.svelte';
     import ExpenseList from './components/ExpenseList.svelte';
     import IncomeList from './components/IncomeList.svelte';
     import BudgetList from './components/BudgetList.svelte';
+    import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
+
+    $: currentUser = useTracker(() => Meteor.user());
 
     $: expenseSum = 0;
     const recalculateExpenses = (totalExpenses) => {
@@ -35,30 +40,36 @@
     $: remainingBudget = incomeSum - budgetSum;
 </script>
 
-<div class="container">
-    <header>
-        <h1>Budget</h1>
-        <!-- Form to add expenses-->
-        <AddExpenseForm />
-        <!-- Form to add incomes -->
-        <AddIncomeForm />
-        <!-- Form to add budgets -->
-        <AddBudgetForm />
+{#if $currentUser}
+    <div class="container">
+        <header>
+            <BlazeTemplate template="loginButtons" />
+            <h1>Budget</h1>
+            <!-- Form to add expenses-->
+            <AddExpenseForm />
+            <!-- Form to add incomes -->
+            <AddIncomeForm />
+            <!-- Form to add budgets -->
+            <AddBudgetForm />
 
-    </header>
-    <div>
-        <!-- List of expenses -->
-        <ExpenseList on:recalculateExpenses={recalculateExpenses} />
-        <h3>Total Expenses: {expenseSum}</h3>
-        <!-- List of incomes -->
-        <IncomeList on:recalculateIncome={recalculateIncomes} />
-        <h3>Total Income: {incomeSum}</h3>
-        <h3>Remaining Total: {remainingTotal}</h3>
-        <!-- List of budgets -->
-        <BudgetList on:recalculateBudgets={recalculateBudgets} />
-        <h3>
-            Total Budgeted: {budgetSum} out of {incomeSum}. You have {remainingBudget}
-            left to budget.
-        </h3>
+        </header>
+        <div>
+            <!-- List of expenses -->
+            <ExpenseList on:recalculateExpenses={recalculateExpenses} />
+            <h3>Total Expenses: {expenseSum}</h3>
+            <!-- List of incomes -->
+            <IncomeList on:recalculateIncome={recalculateIncomes} />
+            <h3>Total Income: {incomeSum}</h3>
+            <h3>Remaining Total: {remainingTotal}</h3>
+            <!-- List of budgets -->
+            <BudgetList on:recalculateBudgets={recalculateBudgets} />
+            <h3>
+                Total Budgeted: {budgetSum} out of {incomeSum}. You have {remainingBudget}
+                left to budget.
+            </h3>
+        </div>
     </div>
-</div>
+{:else}
+    <div>Please log in</div>
+    <BlazeTemplate template="loginButtons" />
+{/if}
