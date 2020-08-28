@@ -27,16 +27,7 @@
         }
 
         // add the expense
-        Expenses.insert({
-            title: expense.title,
-            date: expense.date,
-            amount: expense.amount,
-            category: expense.category,
-            originalAmount: expense.originalAmount,
-            currency: expense.currency,
-            originalCurrency: expense.originalCurrency,
-            owner: Meteor.userId(),
-        });
+        Meteor.call('expenses.insert', expense);
 
         // clear form
         expense.title = '';
