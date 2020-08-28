@@ -1,6 +1,5 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { Expenses } from '../../api/expenses.js';
     export let expense;
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();

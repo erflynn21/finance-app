@@ -1,7 +1,6 @@
 <script>
     import { Meteor } from 'meteor/meteor';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Expenses } from '../../api/expenses';
     import { Budgets } from '../../api/budgets';
 
     $: budgets = useTracker(() => Budgets.find({}).fetch());

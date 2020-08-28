@@ -1,5 +1,5 @@
 <script>
-    import { Incomes } from '../../api/incomes';
+    import { Meteor } from 'meteor/meteor';
 
     let userCurrency = 'CNY';
 
@@ -21,14 +21,7 @@
         }
 
         // add the income
-        Incomes.insert({
-            title: income.title,
-            date: income.date,
-            amount: income.amount,
-            originalAmount: income.originalAmount,
-            currency: income.currency,
-            originalCurrency: income.originalCurrency,
-        });
+        Meteor.call('incomes.insert', income);
 
         // clear form
         income.title = '';
