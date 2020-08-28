@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Expenses } from '../../api/expenses';
     import Expense from '../components/Expense.svelte';
@@ -25,6 +26,10 @@
         totalExpenses = totalExpenses;
         dispatch('recalculateExpenses', { data: totalExpenses });
     };
+
+    onMount(() => {
+        dispatch('recalculateExpenses', { data: totalExpenses });
+    });
 </script>
 
 <div>
