@@ -1,5 +1,5 @@
 <script>
-    import { Budgets } from '../../api/budgets';
+    import { Meteor } from 'meteor/meteor';
 
     let userCurrency = 'CNY';
 
@@ -19,11 +19,7 @@
         }
 
         // add the budget
-        Budgets.insert({
-            category: budget.category,
-            amount: budget.amount,
-            currency: budget.currency,
-        });
+        Meteor.call('budgets.insert', budget);
 
         // clear form
         budget.category = '';

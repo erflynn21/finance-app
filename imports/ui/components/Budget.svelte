@@ -1,11 +1,12 @@
 <script>
+    import { Meteor } from 'meteor/meteor';
     import { Budgets } from '../../api/budgets';
     export let budget;
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
 
     const deleteBudget = () => {
-        Budgets.remove(budget._id);
+        Meteor.call('budgets.remove', budget._id);
         dispatch('delete', budget);
     };
 </script>
