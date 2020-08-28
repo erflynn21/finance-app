@@ -35,7 +35,7 @@
             originalAmount: expense.originalAmount,
             currency: expense.currency,
             originalCurrency: expense.originalCurrency,
-            owner: Meteor.userID(),
+            owner: Meteor.userId(),
         });
 
         // clear form

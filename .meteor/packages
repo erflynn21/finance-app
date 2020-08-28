@@ -26,3 +26,7 @@ static-html
 accounts-ui
 accounts-password
 svelte:blaze-integration
+accounts-facebook
+accounts-google
+facebook-config-ui
+google-config-ui
