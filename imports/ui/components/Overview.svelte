@@ -1,4 +1,5 @@
 <script>
+    import { Meteor } from 'meteor/meteor';
     import AddExpenseForm from './AddExpenseForm.svelte';
     import AddIncomeForm from './AddIncomeForm.svelte';
     import AddBudgetForm from './AddBudgetForm.svelte';
@@ -6,6 +7,7 @@
     import IncomeList from './IncomeList.svelte';
     import BudgetList from './BudgetList.svelte';
     import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
+    import Settings from './Settings.svelte';
 
     $: expenseSum = 0;
     const recalculateExpenses = (totalExpenses) => {
@@ -39,7 +41,7 @@
 <div class="container">
     <header>
         <BlazeTemplate template="loginButtons" />
-        <h1>Budget</h1>
+        <h1>Budget for {Meteor.user().username}</h1>
         <!-- Form to add expenses-->
         <AddExpenseForm />
         <!-- Form to add incomes -->
@@ -63,4 +65,5 @@
             left to budget.
         </h3>
     </div>
+    <Settings />
 </div>

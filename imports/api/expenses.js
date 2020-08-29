@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-import { check } from 'meteor/check'
+import { check } from 'meteor/check';
 
 export const Expenses = new Mongo.Collection('expenses');
 
