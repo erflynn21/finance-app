@@ -33,7 +33,7 @@
 </script>
 
 <div>
-    <h1>Budgets:</h1>
+    <h1>Base Budgets:</h1>
     {#each $budgets.map(calculateTotal) as expense}
         <div />
     {/each}

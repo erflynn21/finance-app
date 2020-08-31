@@ -82,7 +82,6 @@
         {#each $usersettings.map(setUserCurrency) as usersetting}
             <div />
         {/each}
-
     </select>
     <button on:click|preventDefault={updateBudget}>Edit</button>
 </form>

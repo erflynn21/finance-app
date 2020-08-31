@@ -1,5 +1,4 @@
 <script>
-    import { Meteor } from 'meteor/meteor';
     import AddExpenseForm from './AddExpenseForm.svelte';
     import AddIncomeForm from './AddIncomeForm.svelte';
     import AddBudgetForm from './AddBudgetForm.svelte';
@@ -8,25 +7,7 @@
     import BudgetList from './BudgetList.svelte';
     import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
     import Settings from './Settings.svelte';
-
-    // setting budget month
-    const date = new Date();
-    const months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    ];
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
+    import MonthlyBudget from './MonthlyBudget.svelte';
 
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
@@ -59,17 +40,22 @@
 </script>
 
 <div class="container">
-    <header>
+    <div class="login">
         <BlazeTemplate template="loginButtons" />
-        <h1>Budget for {month} {year}</h1>
+    </div>
+
+    <div>
+        <MonthlyBudget />
+    </div>
+
+    <div class="forms">
         <!-- Form to add expenses-->
         <AddExpenseForm />
         <!-- Form to add incomes -->
         <AddIncomeForm />
         <!-- Form to add budgets -->
         <AddBudgetForm />
-
-    </header>
+    </div>
     <div>
         <!-- List of expenses -->
         <ExpenseList on:recalculateExpenses={recalculateExpenses} />
