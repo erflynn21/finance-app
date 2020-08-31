@@ -37,9 +37,3 @@
     </div>
     <button class="edit" on:click={() => (isHidden = !isHidden)}>Edit</button>
 </div>
-
-<style>
-    .hidden {
-        display: none;
-    }
-</style>

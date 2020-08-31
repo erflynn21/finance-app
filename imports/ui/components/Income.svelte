@@ -2,12 +2,15 @@
     import { Meteor } from 'meteor/meteor';
     export let income;
     import { createEventDispatcher } from 'svelte';
+    import UpdateIncomeForm from './UpdateIncomeForm.svelte';
     let dispatch = createEventDispatcher();
 
     const deleteIncome = () => {
         Meteor.call('incomes.remove', income._id);
         dispatch('delete', income);
     };
+
+    let isHidden = true;
 </script>
 
 <div>
@@ -29,4 +32,8 @@
             <span>{income.currency}{income.amount}</span>
         </div>
     {/if}
+    <div class:hidden={isHidden}>
+        <UpdateIncomeForm {income} on:collapse={() => (isHidden = !isHidden)} />
+    </div>
+    <button class="edit" on:click={() => (isHidden = !isHidden)}>Edit</button>
 </div>

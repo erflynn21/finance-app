@@ -34,4 +34,24 @@ Meteor.methods({
 
         Incomes.remove(incomeId);
     },
+
+    'incomes.update' (incomeId, income) {
+        check(incomeId, String);
+        check(income, Object);
+
+        if (!this.userId) {
+            throw new Meteor.Error('not authorized');
+        }
+
+        Incomes.update(incomeId, {
+            title: income.title,
+            date: income.date,
+            amount: income.amount,
+            category: income.category,
+            originalAmount: income.originalAmount,
+            currency: income.currency,
+            originalCurrency: income.originalCurrency,
+            owner: Meteor.userId(),
+        });
+    }
 });
