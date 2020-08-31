@@ -32,7 +32,7 @@
     };
 
     async function updateIncome() {
-        // check whether expense needs to be converted;
+        // check whether income needs to be converted;
         if (updatedIncome.currency !== userCurrency) {
             await convertAmount();
         }

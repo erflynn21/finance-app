@@ -1,14 +1,17 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { Budgets } from '../../api/budgets';
+    import UpdateBudgetForm from './UpdateBudgetForm.svelte';
     export let budget;
     import { createEventDispatcher } from 'svelte';
+
     let dispatch = createEventDispatcher();
 
     const deleteBudget = () => {
         Meteor.call('budgets.remove', budget._id);
         dispatch('delete', budget);
     };
+
+    let isHidden = true;
 </script>
 
 <div>
@@ -16,3 +19,7 @@
     <span>{budget.category}</span>
     <span>{budget.currency}{budget.amount}</span>
 </div>
+<div class:hidden={isHidden}>
+    <UpdateBudgetForm {budget} on:collapse={() => (isHidden = !isHidden)} />
+</div>
+<button class="edit" on:click={() => (isHidden = !isHidden)}>Edit</button>

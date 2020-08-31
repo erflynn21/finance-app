@@ -31,4 +31,20 @@ Meteor.methods({
 
         Budgets.remove(budgetId);
     },
+
+    'budgets.update' (budgetId, budget) {
+        check(budgetId, String);
+        check(budget, Object);
+
+        if (!this.userId) {
+            throw new Meteor.Error('not authorized');
+        }
+
+        Budgets.update(budgetId, {
+            category: budget.category,
+            currency: budget.currency,
+            amount: budget.amount,
+            owner: Meteor.userId(),
+        });
+    }
 });
