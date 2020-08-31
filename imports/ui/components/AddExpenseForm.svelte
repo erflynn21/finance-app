@@ -44,7 +44,7 @@
         expense.title = '';
         expense.date = new Date().toISOString().substr(0, 10);
         expense.amount = '';
-        (expense.category = ''), (expense.currency = userCurrency);
+        expense.currency = userCurrency;
         expense.originalCurrency = null;
         expense.originalAmount = null;
     }

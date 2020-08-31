@@ -1,23 +1,36 @@
 <script>
     import { Meteor } from 'meteor/meteor';
+    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
+    import { onMount } from 'svelte';
+    import { UserSettings } from '../../api/usersettings';
 
-    let userCurrency = 'CNY';
+    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
+
+    $: userCurrency = '';
+
+    const setUserCurrency = (usersetting) => {
+        if (usersetting === undefined) {
+            return;
+        } else {
+            userCurrency = usersetting.baseCurrency;
+        }
+    };
 
     let income = {
         title: '',
         amount: null,
         date: new Date().toISOString().substr(0, 10),
-        currency: userCurrency,
+        currency: '',
         originalAmount: null,
         originalCurrency: null,
     };
 
     async function handleAddIncome() {
         // check whether expense needs to be converted to base currency
-        if (income.currency !== userCurrency) {
-            await convertAmount();
-        } else {
+        if (income.currency === '' || income.currency === userCurrency) {
             income.currency = userCurrency;
+        } else {
+            await convertAmount();
         }
 
         // add the income
@@ -45,6 +58,11 @@
         );
         income.currency = userCurrency;
     }
+
+    onMount(() => {
+        Meteor.subscribe('usersettings');
+        setUserCurrency();
+    });
 </script>
 
 <form class="new-income" on:submit|preventDefault={handleAddIncome}>
@@ -52,8 +70,17 @@
     <input type="date" id="today" bind:value={income.date} />
     <input type="number" placeholder="amount" bind:value={income.amount} />
     <select id="income-currency" bind:value={income.currency}>
-        <option value="USD">USD</option>
-        <option value="CNY">CNY</option>
+        {#each $usersettings as usersetting (usersetting._id)}
+            <option value={usersetting.baseCurrency}>
+                {usersetting.baseCurrency}
+            </option>
+            {#each usersetting.currencyOptions as currencyOption}
+                <option value={currencyOption}>{currencyOption}</option>
+            {/each}
+        {/each}
+        {#each $usersettings.map(setUserCurrency) as usersetting}
+            <div />
+        {/each}
     </select>
     <button on:click|preventDefault={handleAddIncome}>Add</button>
 </form>
