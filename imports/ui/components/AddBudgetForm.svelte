@@ -1,25 +1,34 @@
 <script>
     import { Meteor } from 'meteor/meteor';
+    import { onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { UserSettings } from '../../api/usersettings';
 
-    let userCurrency = 'CNY';
-
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
+
+    $: userCurrency = '';
+
+    const setUserCurrency = (usersetting) => {
+        if (usersetting === undefined) {
+            return;
+        } else {
+            userCurrency = usersetting.baseCurrency;
+        }
+    };
 
     let budget = {
         category: '',
         amount: '',
-        currency: userCurrency,
+        currency: '',
         date: new Date().toISOString().substr(0, 10),
     };
 
     async function handleAddBudget() {
         // check whether budget needs to be converted to base currency
-        if (budget.currency !== userCurrency) {
-            await convertAmount();
-        } else {
+        if (budget.currency === '' || budget.currency === userCurrency) {
             budget.currency = userCurrency;
+        } else {
+            await convertAmount();
         }
 
         // add the budget
@@ -44,6 +53,11 @@
         );
         budget.currency = userCurrency;
     }
+
+    onMount(() => {
+        Meteor.subscribe('usersettings');
+        setUserCurrency();
+    });
 </script>
 
 <form class="new-budget" on:submit|preventDefault={handleAddBudget}>
@@ -60,6 +74,9 @@
             {#each usersetting.currencyOptions as currencyOption}
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
+        {/each}
+        {#each $usersettings.map(setUserCurrency) as usersetting}
+            <div />
         {/each}
     </select>
     <button on:click|preventDefault={handleAddBudget}>Add</button>

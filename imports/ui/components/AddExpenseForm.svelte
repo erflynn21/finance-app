@@ -33,7 +33,6 @@
         // check whether expense needs to be converted to base currency
         if (expense.currency === '' || expense.currency === userCurrency) {
             expense.currency = userCurrency;
-            console.log(expense.currency);
         } else {
             await convertAmount();
         }
