@@ -1,7 +1,11 @@
 <script>
     import { Meteor } from 'meteor/meteor';
+    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
+    import { UserSettings } from '../../api/usersettings';
 
     let userCurrency = 'CNY';
+
+    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
     let budget = {
         category: '',
@@ -48,9 +52,15 @@
         placeholder="new budget...."
         bind:value={budget.category} />
     <input type="number" placeholder="amount" bind:value={budget.amount} />
-    <select id="expense-currency" bind:value={budget.currency}>
-        <option value="USD">USD</option>
-        <option value="CNY">CNY</option>
+    <select id="budget-currency" bind:value={budget.currency}>
+        {#each $usersettings as usersetting (usersetting._id)}
+            <option value={usersetting.baseCurrency}>
+                {usersetting.baseCurrency}
+            </option>
+            {#each usersetting.currencyOptions as currencyOption}
+                <option value={currencyOption}>{currencyOption}</option>
+            {/each}
+        {/each}
     </select>
     <button on:click|preventDefault={handleAddBudget}>Add</button>
 </form>

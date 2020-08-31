@@ -1,28 +1,41 @@
 <script>
     import { Meteor } from 'meteor/meteor';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
+    import { onMount } from 'svelte';
     import { Budgets } from '../../api/budgets';
+    import { UserSettings } from '../../api/usersettings';
 
     $: budgets = useTracker(() => Budgets.find({}).fetch());
 
-    let userCurrency = 'CNY';
+    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
+
+    $: userCurrency = '';
+
+    const setUserCurrency = (usersetting) => {
+        if (usersetting === undefined) {
+            return;
+        } else {
+            userCurrency = usersetting.baseCurrency;
+        }
+    };
 
     let expense = {
         title: '',
-        amount: null,
+        amount: '',
         category: '',
         date: new Date().toISOString().substr(0, 10),
-        currency: userCurrency,
+        currency: '',
         originalAmount: null,
         originalCurrency: null,
     };
 
     async function handleAddExpense() {
         // check whether expense needs to be converted to base currency
-        if (expense.currency !== userCurrency) {
-            await convertAmount();
-        } else {
+        if (expense.currency === '' || expense.currency === userCurrency) {
             expense.currency = userCurrency;
+            console.log(expense.currency);
+        } else {
+            await convertAmount();
         }
 
         // add the expense
@@ -50,6 +63,11 @@
         );
         expense.currency = userCurrency;
     }
+
+    onMount(() => {
+        Meteor.subscribe('usersettings');
+        setUserCurrency();
+    });
 </script>
 
 <form class="new-expense" on:submit|preventDefault={handleAddExpense}>
@@ -64,13 +82,20 @@
         {#each $budgets as budget (budget._id)}
             <option value={budget.category}>{budget.category}</option>
         {/each}
-        <!-- <option value="Rent">Rent</option>
-        <option value="Groceries">Groceries</option>
-        <option value="Utilities">Utilities</option> -->
     </select>
     <select id="expense-currency" bind:value={expense.currency}>
-        <option value="USD">USD</option>
-        <option value="CNY">CNY</option>
+        {#each $usersettings as usersetting (usersetting._id)}
+            <option value={usersetting.baseCurrency}>
+                {usersetting.baseCurrency}
+            </option>
+            {#each usersetting.currencyOptions as currencyOption}
+                <option value={currencyOption}>{currencyOption}</option>
+            {/each}
+        {/each}
+        {#each $usersettings.map(setUserCurrency) as usersetting}
+            <div />
+        {/each}
+
     </select>
     <button on:click|preventDefault={handleAddExpense}>Add</button>
 </form>

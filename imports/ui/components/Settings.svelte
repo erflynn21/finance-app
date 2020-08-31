@@ -57,7 +57,10 @@
         <CurrenciesList />
     </select>
     <label for="currency-options">Currency Options:</label>
-    <select id="currency-options" bind:value={usersetting.currencyOptions}>
+    <select
+        id="currency-options"
+        bind:value={usersetting.currencyOptions}
+        multiple>
         <CurrenciesList />
     </select>
     <button on:click|preventDefault={updateUserSettings}>
