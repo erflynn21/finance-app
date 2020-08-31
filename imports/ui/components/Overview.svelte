@@ -9,6 +9,26 @@
     import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
     import Settings from './Settings.svelte';
 
+    // setting budget month
+    const date = new Date();
+    const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ];
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
     const recalculateExpenses = (totalExpenses) => {
         expenses = totalExpenses.detail.data;
@@ -41,7 +61,7 @@
 <div class="container">
     <header>
         <BlazeTemplate template="loginButtons" />
-        <h1>Budget for {Meteor.user().username}</h1>
+        <h1>Budget for {month} {year}</h1>
         <!-- Form to add expenses-->
         <AddExpenseForm />
         <!-- Form to add incomes -->

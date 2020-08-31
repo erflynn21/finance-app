@@ -36,6 +36,26 @@ Meteor.methods({
         Expenses.remove(expenseId);
     },
 
+    'expenses.update' (expenseId, expense) {
+        check(expenseId, String);
+        check(expense, Object);
+
+        if (!this.userId) {
+            throw new Meteor.Error('not authorized');
+        }
+
+        Expenses.update(expenseId, {
+            title: expense.title,
+            date: expense.date,
+            amount: expense.amount,
+            category: expense.category,
+            originalAmount: expense.originalAmount,
+            currency: expense.currency,
+            originalCurrency: expense.originalCurrency,
+            owner: Meteor.userId(),
+        });
+    }
+
     // 'expenses.setChecked' (expenseId, setChecked) {
     //     check(expenseId, String);
     //     check(setChecked, Boolean);
