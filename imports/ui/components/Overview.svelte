@@ -11,6 +11,8 @@
     import MonthlyBudget from './MonthlyBudget.svelte';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
+    import { expenseSumStore } from '../stores/ExpenseSumStore';
+    import { Expenses } from '../../api/expenses';
 
     const setUserCurrency = () => {
         usersetting = UserSettings.findOne({});
@@ -29,6 +31,21 @@
         expenseSum = expenses.reduce(function (a, b) {
             return a + b;
         }, 0);
+        expenseSumStore.set(expenseSum);
+    };
+
+    const recalculateFromBudgetView = () => {
+        let totalExpenses = Expenses.find({}).fetch();
+        let expenses = [];
+        totalExpenses.forEach((expense) => {
+            expenses = [...expenses, expense.amount];
+        });
+        console.log(expenses);
+        expenseSum = expenses.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+        console.log(expenseSum);
+        expenseSumStore.set(expenseSum);
     };
 
     $: incomeSum = 0;
@@ -64,7 +81,7 @@
     </div>
 
     <div>
-        <MonthlyBudget on:recalculateExpenses={recalculateExpenses} />
+        <MonthlyBudget on:recalculateExpenses={recalculateFromBudgetView} />
     </div>
 
     <div class="forms">
@@ -79,7 +96,7 @@
         <!--  -->
         <!-- List of expenses -->
         <ExpenseList on:recalculateExpenses={recalculateExpenses} />
-        <h3>Total Expenses: {expenseSum}</h3>
+        <h3>Total Expenses: {$expenseSumStore}</h3>
         <!-- List of incomes -->
         <IncomeList on:recalculateIncome={recalculateIncomes} />
         <h3>Total Income: {incomeSum}</h3>

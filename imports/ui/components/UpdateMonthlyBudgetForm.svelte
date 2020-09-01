@@ -5,18 +5,9 @@
     import { UserSettings } from '../../api/usersettings';
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
+    import { userCurrency } from '../stores/UserCurrencyStore';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
-
-    $: userCurrency = '';
-
-    const setUserCurrency = (usersetting) => {
-        if (usersetting === undefined) {
-            return;
-        } else {
-            userCurrency = usersetting.baseCurrency;
-        }
-    };
 
     let updatedMonthlyBudget = {
         month: monthlyBudget.month,
@@ -26,11 +17,6 @@
         currency: monthlyBudget.currency,
         amount: monthlyBudget.amount,
     };
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-        setUserCurrency();
-    });
 
     const updateMonthlyBudget = () => {
         Meteor.call(
@@ -55,7 +41,7 @@
             <option value={monthlyBudget.currency}>
                 {monthlyBudget.currency}
             </option>
-            {#if monthlyBudget.currency !== userCurrency}
+            {#if monthlyBudget.currency !== $userCurrency}
                 <option value={usersetting.baseCurrency}>
                     {usersetting.baseCurrency}
                 </option>
@@ -63,9 +49,6 @@
             {#each usersetting.currencyOptions as currencyOption}
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
-        {/each}
-        {#each $usersettings.map(setUserCurrency) as usersetting}
-            <div />
         {/each}
     </select>
     <button on:click|preventDefault={updateMonthlyBudget}>Edit</button>

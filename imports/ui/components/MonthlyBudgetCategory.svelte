@@ -7,10 +7,9 @@
     export let budget;
     export let month;
     export let year;
-    import { createEventDispatcher } from 'svelte';
     import UpdateMonthlyBudgetForm from './UpdateMonthlyBudgetForm.svelte';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
-    import { subscribe } from 'svelte/internal';
+    import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
 
     $: monthlyBudget = {
@@ -63,7 +62,14 @@
     };
 
     onMount(() => {
-        Meteor.subscribe('expenses');
+        Meteor.subscribe('expenses', function () {
+            let totalExpenses = Expenses.find({}).fetch();
+            totalExpenses.forEach((expense) => {
+                if (expense.category === budget.category) {
+                    calculateTotal(expense);
+                }
+            });
+        });
         Meteor.subscribe('monthlybudgets', function () {
             checkMonthlyBudget();
         });
@@ -131,9 +137,6 @@
             {expense}
             on:delete={deleteExpenseFromTotal}
             on:expenseEdited={updateExpenseInTotal} />
-        {#each [calculateTotal(expense)] as expense}
-            <div />
-        {/each}
     {/if}
 {/each}
 <br />
