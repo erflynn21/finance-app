@@ -29,6 +29,7 @@
         originalAmount: expense.originalAmount,
         currency: expense.currency,
         originalCurrency: expense.originalCurrency,
+        _id: expense._id,
     };
 
     async function updateExpense() {
@@ -42,6 +43,7 @@
 
         // collapse the update menu
         dispatch('collapse');
+        dispatch('expenseEdited', updatedExpense);
     }
 
     async function convertAmount() {

@@ -45,7 +45,7 @@
     </div>
 
     <div>
-        <MonthlyBudget />
+        <MonthlyBudget on:recalculateExpenses={recalculateExpenses} />
     </div>
 
     <div class="forms">
@@ -57,6 +57,7 @@
         <AddBudgetForm />
     </div>
     <div>
+        <!--  -->
         <!-- List of expenses -->
         <ExpenseList on:recalculateExpenses={recalculateExpenses} />
         <h3>Total Expenses: {expenseSum}</h3>

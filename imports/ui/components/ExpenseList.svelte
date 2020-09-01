@@ -17,7 +17,15 @@
         if (totalExpensesIDs.includes(expense._id) === false) {
             totalExpensesIDs = [...totalExpensesIDs, expense._id];
             totalExpenses = [...totalExpenses, expense.amount];
+            totalExpenses = totalExpenses;
         }
+        dispatch('recalculateExpenses', { data: totalExpenses });
+    };
+
+    const updateExpenseInTotal = (expense) => {
+        console.log(expense);
+        const index = totalExpensesIDs.indexOf(expense.detail._id);
+        totalExpenses.splice(index, 1, expense.detail.amount);
         dispatch('recalculateExpenses', { data: totalExpenses });
     };
 
@@ -30,17 +38,19 @@
 
     onMount(() => {
         Meteor.subscribe('expenses');
-        dispatch('recalculateExpenses', { data: totalExpenses });
     });
 </script>
 
 <div>
     <h1>Expenses:</h1>
     <!-- List of expenses -->
-    {#each $expenses.map(calculateTotal) as expense}
-        <div />
-    {/each}
     {#each $expenses as expense (expense._id)}
-        <Expense {expense} on:delete={deleteExpenseFromTotal} />
+        {#each [calculateTotal(expense)] as expense}
+            <div />
+        {/each}
+        <Expense
+            {expense}
+            on:delete={deleteExpenseFromTotal}
+            on:expenseEdited={updateExpenseInTotal} />
     {/each}
 </div>

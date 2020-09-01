@@ -33,7 +33,8 @@
     <div class:hidden={isHidden}>
         <UpdateExpenseForm
             {expense}
-            on:collapse={() => (isHidden = !isHidden)} />
+            on:collapse={() => (isHidden = !isHidden)}
+            on:expenseEdited />
     </div>
     <button class="edit" on:click={() => (isHidden = !isHidden)}>Edit</button>
 </div>
