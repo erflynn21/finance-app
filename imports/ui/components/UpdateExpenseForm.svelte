@@ -6,20 +6,11 @@
     export let expense;
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
+    import { userCurrency } from '../stores/UserCurrencyStore';
 
     $: budgets = useTracker(() => Budgets.find({}).fetch());
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
-
-    $: userCurrency = '';
-
-    const setUserCurrency = (usersetting) => {
-        if (usersetting === undefined) {
-            return;
-        } else {
-            userCurrency = usersetting.baseCurrency;
-        }
-    };
 
     let updatedExpense = {
         title: expense.title,
@@ -34,7 +25,7 @@
 
     async function updateExpense() {
         // check whether expense needs to be converted;
-        if (updatedExpense.currency !== userCurrency) {
+        if (updatedExpense.currency !== $userCurrency) {
             await convertAmount();
         }
 
@@ -49,7 +40,7 @@
     async function convertAmount() {
         updatedExpense.originalAmount = updatedExpense.amount;
         updatedExpense.originalCurrency = updatedExpense.currency;
-        let url = `https://api.exchangeratesapi.io/${updatedExpense.date}?base=${userCurrency}&symbols=${updatedExpense.originalCurrency}`;
+        let url = `https://api.exchangeratesapi.io/${updatedExpense.date}?base=${$userCurrency}&symbols=${updatedExpense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
         let rates = JSON.stringify(data.rates);
@@ -57,13 +48,8 @@
         updatedExpense.amount = Number(
             (updatedExpense.originalAmount / exchangeRate).toFixed(2)
         );
-        updatedExpense.currency = userCurrency;
+        updatedExpense.currency = $userCurrency;
     }
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-        setUserCurrency();
-    });
 </script>
 
 <form class="update-expense" on:submit|preventDefault={updateExpense}>
@@ -84,7 +70,7 @@
     <select id="expense-currency" bind:value={updatedExpense.currency}>
         {#each $usersettings as usersetting (usersetting._id)}
             <option value={expense.currency}>{expense.currency}</option>
-            {#if expense.currency !== userCurrency}
+            {#if expense.currency !== $userCurrency}
                 <option value={usersetting.baseCurrency}>
                     {usersetting.baseCurrency}
                 </option>
@@ -92,9 +78,6 @@
             {#each usersetting.currencyOptions as currencyOption}
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
-        {/each}
-        {#each $usersettings.map(setUserCurrency) as usersetting}
-            <div />
         {/each}
     </select>
     <button on:click|preventDefault={updateExpense}>Edit</button>

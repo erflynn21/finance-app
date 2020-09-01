@@ -1,20 +1,10 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { UserSettings } from '../../api/usersettings';
+    import { userCurrency } from '../stores/UserCurrencyStore';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
-
-    $: userCurrency = '';
-
-    const setUserCurrency = (usersetting) => {
-        if (usersetting === undefined) {
-            return;
-        } else {
-            userCurrency = usersetting.baseCurrency;
-        }
-    };
 
     let budget = {
         category: '',
@@ -25,8 +15,8 @@
 
     async function handleAddBudget() {
         // check whether budget needs to be converted to base currency
-        if (budget.currency === '' || budget.currency === userCurrency) {
-            budget.currency = userCurrency;
+        if (budget.currency === '' || budget.currency === $userCurrency) {
+            budget.currency = $userCurrency;
         } else {
             await convertAmount();
         }
@@ -37,13 +27,13 @@
         // clear form
         budget.category = '';
         budget.amount = '';
-        budget.currency = userCurrency;
+        budget.currency = $userCurrency;
     }
 
     async function convertAmount() {
         budget.originalAmount = budget.amount;
         budget.originalCurrency = budget.currency;
-        let url = `https://api.exchangeratesapi.io/${budget.date}?base=${userCurrency}&symbols=${budget.originalCurrency}`;
+        let url = `https://api.exchangeratesapi.io/${budget.date}?base=${$userCurrency}&symbols=${budget.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
         let rates = JSON.stringify(data.rates);
@@ -51,13 +41,8 @@
         budget.amount = Number(
             (budget.originalAmount / exchangeRate).toFixed(2)
         );
-        budget.currency = userCurrency;
+        budget.currency = $userCurrency;
     }
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-        setUserCurrency();
-    });
 </script>
 
 <form class="new-budget" on:submit|preventDefault={handleAddBudget}>
@@ -74,9 +59,6 @@
             {#each usersetting.currencyOptions as currencyOption}
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
-        {/each}
-        {#each $usersettings.map(setUserCurrency) as usersetting}
-            <div />
         {/each}
     </select>
     <button on:click|preventDefault={handleAddBudget}>Add</button>

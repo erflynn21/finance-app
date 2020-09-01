@@ -1,25 +1,15 @@
 <script>
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { onMount } from 'svelte';
     import { Budgets } from '../../api/budgets';
     import { UserSettings } from '../../api/usersettings';
     export let income;
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
+    import { userCurrency } from '../stores/UserCurrencyStore';
 
     $: budgets = useTracker(() => Budgets.find({}).fetch());
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
-
-    $: userCurrency = '';
-
-    const setUserCurrency = (usersetting) => {
-        if (usersetting === undefined) {
-            return;
-        } else {
-            userCurrency = usersetting.baseCurrency;
-        }
-    };
 
     let updatedIncome = {
         title: income.title,
@@ -33,7 +23,7 @@
 
     async function updateIncome() {
         // check whether income needs to be converted;
-        if (updatedIncome.currency !== userCurrency) {
+        if (updatedIncome.currency !== $userCurrency) {
             await convertAmount();
         }
 
@@ -47,7 +37,7 @@
     async function convertAmount() {
         updatedIncome.originalAmount = updatedIncome.amount;
         updatedIncome.originalCurrency = updatedIncome.currency;
-        let url = `https://api.exchangeratesapi.io/${updatedIncome.date}?base=${userCurrency}&symbols=${updatedIncome.originalCurrency}`;
+        let url = `https://api.exchangeratesapi.io/${updatedIncome.date}?base=${$userCurrency}&symbols=${updatedIncome.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
         let rates = JSON.stringify(data.rates);
@@ -55,13 +45,8 @@
         updatedIncome.amount = Number(
             (updatedIncome.originalAmount / exchangeRate).toFixed(2)
         );
-        updatedIncome.currency = userCurrency;
+        updatedIncome.currency = $userCurrency;
     }
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-        setUserCurrency();
-    });
 </script>
 
 <form class="update-income" on:submit|preventDefault={updatedIncome}>
@@ -82,7 +67,7 @@
     <select id="income-currency" bind:value={updatedIncome.currency}>
         {#each $usersettings as usersetting (usersetting._id)}
             <option value={income.currency}>{income.currency}</option>
-            {#if income.currency !== userCurrency}
+            {#if income.currency !== $userCurrency}
                 <option value={usersetting.baseCurrency}>
                     {usersetting.baseCurrency}
                 </option>
@@ -90,9 +75,6 @@
             {#each usersetting.currencyOptions as currencyOption}
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
-        {/each}
-        {#each $usersettings.map(setUserCurrency) as usersetting}
-            <div />
         {/each}
 
     </select>

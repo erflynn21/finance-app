@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte';
     import AddExpenseForm from './AddExpenseForm.svelte';
     import AddIncomeForm from './AddIncomeForm.svelte';
     import AddBudgetForm from './AddBudgetForm.svelte';
@@ -8,6 +9,18 @@
     import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
     import Settings from './Settings.svelte';
     import MonthlyBudget from './MonthlyBudget.svelte';
+    import { UserSettings } from '../../api/usersettings';
+    import { userCurrency } from '../stores/UserCurrencyStore';
+
+    const setUserCurrency = () => {
+        usersetting = UserSettings.findOne({});
+        if (usersetting === undefined) {
+            return;
+        } else {
+            // userCurrency = usersetting.baseCurrency;
+            userCurrency.set(usersetting.baseCurrency);
+        }
+    };
 
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
@@ -37,6 +50,12 @@
     };
 
     $: remainingBudget = incomeSum - budgetSum;
+
+    onMount(() => {
+        Meteor.subscribe('usersettings', function () {
+            setUserCurrency();
+        });
+    });
 </script>
 
 <div class="container">
