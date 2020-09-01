@@ -22,8 +22,8 @@ Meteor.methods({
             month: monthlybudget.month,
             year: monthlybudget.year,
             category: monthlybudget.category,
-            amount: monthlybudget.amount,
             currency: monthlybudget.currency,
+            amount: monthlybudget.amount,
             owner: Meteor.userId(),
         });
     },

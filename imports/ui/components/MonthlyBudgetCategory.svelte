@@ -8,17 +8,66 @@
     export let month;
     export let year;
     import { createEventDispatcher } from 'svelte';
+    import UpdateMonthlyBudgetForm from './UpdateMonthlyBudgetForm.svelte';
+    import { MonthlyBudgets } from '../../api/monthlybudgets';
+    import { subscribe } from 'svelte/internal';
     let dispatch = createEventDispatcher();
 
-    let monthlyBudget = {
-        month: { month },
-        year: { year },
+    $: monthlyBudget = {
+        month: month,
+        year: year,
         category: budget.category,
         amount: budget.amount,
         currency: budget.currency,
+        id: null,
     };
 
+    let isHidden = true;
+
     $: expenses = useTracker(() => Expenses.find({}).fetch());
+
+    // $: monthlybudgets = useTracker(() => MonthlyBudgets.find({}).fetch());
+
+    const checkMonthlyBudget = () => {
+        let monthlybudget = MonthlyBudgets.findOne({
+            year: year,
+            month: month,
+            category: monthlyBudget.category,
+        });
+
+        if (monthlybudget === undefined) {
+            Meteor.call('monthlybudgets.insert', monthlyBudget);
+            const newmonthlybudget = MonthlyBudgets.findOne({
+                year: year,
+                month: month,
+                category: monthlyBudget.category,
+            });
+            monthlyBudget = {
+                month: newmonthlybudget.month,
+                year: newmonthlybudget.year,
+                category: newmonthlybudget.category,
+                amount: newmonthlybudget.amount,
+                currency: newmonthlybudget.currency,
+                id: newmonthlybudget._id,
+            };
+        } else {
+            monthlyBudget = {
+                month: monthlybudget.month,
+                year: monthlybudget.year,
+                category: monthlybudget.category,
+                amount: monthlybudget.amount,
+                currency: monthlybudget.currency,
+                id: monthlybudget._id,
+            };
+        }
+    };
+
+    onMount(() => {
+        Meteor.subscribe('expenses');
+        Meteor.subscribe('monthlybudgets', function () {
+            checkMonthlyBudget();
+        });
+    });
 
     $: totalExpenses = [];
     let totalExpensesIDs = [];
@@ -42,10 +91,6 @@
         recalculateExpenses(totalExpenses);
     };
 
-    onMount(() => {
-        Meteor.subscribe('expenses');
-    });
-
     let expensesSums = {
         sum: 0,
         id: '',
@@ -68,7 +113,16 @@
 </script>
 
 <span>{budget.category} --</span>
-<span>Budgeted: {budget.amount}</span>
+<span>
+    Budgeted: {monthlyBudget.amount}
+    <button class="edit" on:click={() => (isHidden = !isHidden)}>Edit</button>
+    <div class:hidden={isHidden}>
+        <UpdateMonthlyBudgetForm
+            {monthlyBudget}
+            on:collapse={() => (isHidden = !isHidden)}
+            on:updateBudgets={checkMonthlyBudget} />
+    </div>
+</span>
 <span>Spent: {expensesSums.sum}</span>
 <br />
 {#each $expenses as expense (expense._id)}
