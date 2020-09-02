@@ -1,6 +1,5 @@
 <script>
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { onMount } from 'svelte';
     import { Budgets } from '../../api/budgets';
     import { UserSettings } from '../../api/usersettings';
     export let expense;
@@ -31,10 +30,10 @@
 
         // update the currency
         Meteor.call('expenses.update', expense._id, updatedExpense);
+        dispatch('expenseEdited', updatedExpense);
 
         // collapse the update menu
         dispatch('collapse');
-        dispatch('expenseEdited', updatedExpense);
     }
 
     async function convertAmount() {
@@ -50,17 +49,21 @@
         );
         updatedExpense.currency = $userCurrency;
     }
+
+    const exitUpdate = () => {
+        dispatch('collapse');
+    };
 </script>
 
 <form class="update-expense" on:submit|preventDefault={updateExpense}>
     <input
         type="text"
-        placeholder={expense.title}
+        placeholder={updatedExpense.title}
         bind:value={updatedExpense.title} />
     <input type="date" bind:value={updatedExpense.date} />
     <input
         type="number"
-        placeholder={expense.amount}
+        placeholder={updatedExpense.amount}
         bind:value={updatedExpense.amount} />
     <select id="category" bind:value={updatedExpense.category}>
         {#each $budgets as budget (budget._id)}
@@ -69,8 +72,10 @@
     </select>
     <select id="expense-currency" bind:value={updatedExpense.currency}>
         {#each $usersettings as usersetting (usersetting._id)}
-            <option value={expense.currency}>{expense.currency}</option>
-            {#if expense.currency !== $userCurrency}
+            <option value={updatedExpense.currency}>
+                {updatedExpense.currency}
+            </option>
+            {#if updatedExpense.currency !== $userCurrency}
                 <option value={usersetting.baseCurrency}>
                     {usersetting.baseCurrency}
                 </option>
@@ -81,4 +86,5 @@
         {/each}
     </select>
     <button on:click|preventDefault={updateExpense}>Edit</button>
+    <button on:click|preventDefault={exitUpdate}>Exit</button>
 </form>

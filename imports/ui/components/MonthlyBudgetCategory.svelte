@@ -25,8 +25,6 @@
 
     $: expenses = useTracker(() => Expenses.find({}).fetch());
 
-    // $: monthlybudgets = useTracker(() => MonthlyBudgets.find({}).fetch());
-
     const checkMonthlyBudget = () => {
         let monthlybudget = MonthlyBudgets.findOne({
             year: year,
@@ -62,59 +60,25 @@
     };
 
     onMount(() => {
-        Meteor.subscribe('expenses', function () {
-            let totalExpenses = Expenses.find({}).fetch();
-            totalExpenses.forEach((expense) => {
-                if (expense.category === budget.category) {
-                    calculateTotal(expense);
-                }
-            });
-        });
         Meteor.subscribe('monthlybudgets', function () {
             checkMonthlyBudget();
         });
+        calculateCategoryExpenses();
     });
 
-    $: totalExpenses = [];
-    let totalExpensesIDs = [];
-    const calculateTotal = (expense) => {
-        if (totalExpensesIDs.includes(expense._id) === false) {
-            totalExpensesIDs = [...totalExpensesIDs, expense._id];
-            totalExpenses = [...totalExpenses, expense.amount];
-        }
-        recalculateExpenses(totalExpenses);
-    };
-
-    const updateExpenseInTotal = (expense) => {
-        const index = totalExpensesIDs.indexOf(expense.detail._id);
-        totalExpenses.splice(index, 1, expense.detail.amount);
-        recalculateExpenses(totalExpenses);
-    };
-
-    const deleteExpenseFromTotal = (expense) => {
-        const index = totalExpensesIDs.indexOf(expense.detail._id);
-        totalExpenses.splice(index, 1);
-        recalculateExpenses(totalExpenses);
-    };
-
-    let expensesSums = {
-        sum: 0,
-        id: '',
-    };
-    const recalculateExpenses = (totalExpenses) => {
-        if (expensesSums.sum === 0) {
-            expensesSums.sum = totalExpenses.reduce(function (a, b) {
-                return a + b;
-            }, 0);
-            expensesSums.id = budget._id;
-        } else {
-            expensesSums.sum = totalExpenses.reduce(function (a, b) {
-                return a + b;
-            }, 0);
-            expensesSums.id = budget._id;
-        }
-
-        dispatch('recalculateExpenses', { data: expensesSums });
+    $: expenseSum = 0;
+    const calculateCategoryExpenses = () => {
+        let totalExpenses = Expenses.find({
+            category: monthlyBudget.category,
+        }).fetch();
+        let expenses = [];
+        totalExpenses.forEach((expense) => {
+            expenses = [...expenses, expense.amount];
+        });
+        expenseSum = expenses.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+        dispatch('calculate');
     };
 </script>
 
@@ -126,17 +90,20 @@
         <UpdateMonthlyBudgetForm
             {monthlyBudget}
             on:collapse={() => (isHidden = !isHidden)}
-            on:updateBudgets={checkMonthlyBudget} />
+            on:updateBudgets={calculateCategoryExpenses} />
     </div>
 </span>
-<span>Spent: {expensesSums.sum}</span>
+<span>Spent: {expenseSum}</span>
 <br />
 {#each $expenses as expense (expense._id)}
     {#if expense.category === budget.category}
         <Expense
             {expense}
-            on:delete={deleteExpenseFromTotal}
-            on:expenseEdited={updateExpenseInTotal} />
+            on:delete={calculateCategoryExpenses}
+            on:expenseEdited={calculateCategoryExpenses} />
+        {#each [calculateCategoryExpenses(expense)] as expense}
+            <div />
+        {/each}
     {/if}
 {/each}
 <br />

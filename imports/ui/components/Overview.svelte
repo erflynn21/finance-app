@@ -19,32 +19,30 @@
         if (usersetting === undefined) {
             return;
         } else {
-            // userCurrency = usersetting.baseCurrency;
             userCurrency.set(usersetting.baseCurrency);
         }
     };
 
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
-    const recalculateExpenses = (totalExpenses) => {
-        expenses = totalExpenses.detail.data;
-        expenseSum = expenses.reduce(function (a, b) {
-            return a + b;
-        }, 0);
-        expenseSumStore.set(expenseSum);
-    };
+    // const recalculateExpensesOld = (totalExpenses) => {
+    //     expenses = totalExpenses.detail.data;
+    //     expenseSum = expenses.reduce(function (a, b) {
+    //         return a + b;
+    //     }, 0);
+    //     expenseSumStore.set(expenseSum);
+    //     console.log(expenseSum);
+    // };
 
-    const recalculateFromBudgetView = () => {
+    const calculateExpenses = () => {
         let totalExpenses = Expenses.find({}).fetch();
         let expenses = [];
         totalExpenses.forEach((expense) => {
             expenses = [...expenses, expense.amount];
         });
-        console.log(expenses);
         expenseSum = expenses.reduce(function (a, b) {
             return a + b;
         }, 0);
-        console.log(expenseSum);
         expenseSumStore.set(expenseSum);
     };
 
@@ -71,6 +69,7 @@
     onMount(() => {
         Meteor.subscribe('usersettings', function () {
             setUserCurrency();
+            calculateExpenses();
         });
     });
 </script>
@@ -81,7 +80,7 @@
     </div>
 
     <div>
-        <MonthlyBudget on:recalculateExpenses={recalculateFromBudgetView} />
+        <MonthlyBudget on:calculate={calculateExpenses} />
     </div>
 
     <div class="forms">
@@ -95,7 +94,10 @@
     <div>
         <!--  -->
         <!-- List of expenses -->
-        <ExpenseList on:recalculateExpenses={recalculateExpenses} />
+        <ExpenseList
+            on:delete={calculateExpenses}
+            on:expenseEdited={calculateExpenses}
+            on:calculate={calculateExpenses} />
         <h3>Total Expenses: {$expenseSumStore}</h3>
         <!-- List of incomes -->
         <IncomeList on:recalculateIncome={recalculateIncomes} />

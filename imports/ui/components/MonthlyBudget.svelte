@@ -30,7 +30,7 @@
 <div class="monthly-overview">
     <h1>{month} {year}</h1>
     {#each $baseBudgets as budget (budget._id)}
-        <MonthlyBudgetCategory {budget} {month} {year} on:recalculateExpenses />
+        <MonthlyBudgetCategory {budget} {month} {year} on:calculate />
     {/each}
     <h3>Total Expenses: {$expenseSumStore}</h3>
 </div>

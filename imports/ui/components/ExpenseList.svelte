@@ -11,29 +11,8 @@
         Expenses.find({}, { sort: { date: -1 } }).fetch()
     );
 
-    $: totalExpenses = [];
-    let totalExpensesIDs = [];
-    const calculateTotal = (expense) => {
-        if (totalExpensesIDs.includes(expense._id) === false) {
-            totalExpensesIDs = [...totalExpensesIDs, expense._id];
-            totalExpenses = [...totalExpenses, expense.amount];
-            totalExpenses = totalExpenses;
-        }
-        dispatch('recalculateExpenses', { data: totalExpenses });
-    };
-
-    const updateExpenseInTotal = (expense) => {
-        console.log(expense);
-        const index = totalExpensesIDs.indexOf(expense.detail._id);
-        totalExpenses.splice(index, 1, expense.detail.amount);
-        dispatch('recalculateExpenses', { data: totalExpenses });
-    };
-
-    const deleteExpenseFromTotal = (expense) => {
-        const index = totalExpensesIDs.indexOf(expense.detail._id);
-        totalExpenses.splice(index, 1);
-        totalExpenses = totalExpenses;
-        dispatch('recalculateExpenses', { data: totalExpenses });
+    const dispatchCalc = () => {
+        dispatch('calculate');
     };
 
     onMount(() => {
@@ -45,12 +24,9 @@
     <h1>Expenses:</h1>
     <!-- List of expenses -->
     {#each $expenses as expense (expense._id)}
-        {#each [calculateTotal(expense)] as expense}
+        {#each [dispatchCalc(expense)] as expense}
             <div />
         {/each}
-        <Expense
-            {expense}
-            on:delete={deleteExpenseFromTotal}
-            on:expenseEdited={updateExpenseInTotal} />
+        <Expense {expense} on:delete on:expenseEdited />
     {/each}
 </div>
