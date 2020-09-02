@@ -1,22 +1,44 @@
 <script>
+    import { onMount } from 'svelte';
     import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
     import Overview from './Overview.svelte';
-    let current = 'summary';
+    import MonthlyBudget from './MonthlyBudget.svelte';
+    import Settings from './Settings.svelte';
+    import { UserSettings } from '../../api/usersettings';
+    import { userCurrency } from '../stores/UserCurrencyStore';
+    let current = 'overview';
+
+    const setUserCurrency = () => {
+        usersetting = UserSettings.findOne({});
+        if (usersetting === undefined) {
+            return;
+        } else {
+            userCurrency.set(usersetting.baseCurrency);
+        }
+    };
+
+    onMount(() => {
+        Meteor.subscribe('usersettings', function () {
+            setUserCurrency();
+        });
+    });
 </script>
 
 <div class="login">
     <BlazeTemplate template="loginButtons" />
 </div>
 
-{#if current === 'overview'}
-    <Overview />
-{:else if current === 'budget'}
-    <h1>Budget Component</h1>
-{:else if current === 'summary'}
-    <h1>Summary Component</h1>
-{:else if current === 'settings'}
-    <h1>Settings Component</h1>
-{/if}
+<div class="content">
+    {#if current === 'overview'}
+        <Overview />
+    {:else if current === 'budget'}
+        <MonthlyBudget />
+    {:else if current === 'summary'}
+        <h1>Summary Component</h1>
+    {:else if current === 'settings'}
+        <Settings />
+    {/if}
+</div>
 
 <div class="bottom-nav-container">
     <div class="tab-nav-container">
@@ -56,6 +78,9 @@
 </div>
 
 <style>
+    .content {
+        min-height: calc(100vh - 20px);
+    }
     .bottom-nav-container {
         background-color: #fff;
         display: flex;
@@ -66,7 +91,7 @@
         margin: 0;
         bottom: 0;
         position: sticky;
-        border-top: 1px;
+        /* border-top: 1px; */
         width: 100%;
     }
 

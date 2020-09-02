@@ -3,23 +3,11 @@
     import ExpenseList from './ExpenseList.svelte';
     import IncomeList from './IncomeList.svelte';
     import BudgetList from './BudgetList.svelte';
-    import Settings from './Settings.svelte';
     import MonthlyBudget from './MonthlyBudget.svelte';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { Expenses } from '../../api/expenses';
-    import Forms from './Forms.svelte';
-    import Nav from './Nav.svelte';
-
-    const setUserCurrency = () => {
-        usersetting = UserSettings.findOne({});
-        if (usersetting === undefined) {
-            return;
-        } else {
-            userCurrency.set(usersetting.baseCurrency);
-        }
-    };
 
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
@@ -57,17 +45,12 @@
 
     onMount(() => {
         Meteor.subscribe('usersettings', function () {
-            setUserCurrency();
             calculateExpenses();
         });
     });
 </script>
 
 <div class="container">
-
-    <div>
-        <MonthlyBudget on:calculate={calculateExpenses} />
-    </div>
     <div>
         <!--  -->
         <!-- List of expenses -->
@@ -87,9 +70,6 @@
             left to budget.
         </h3>
     </div>
-    <Settings />
-    <Forms />
-    <Nav />
 </div>
 
 <style>
