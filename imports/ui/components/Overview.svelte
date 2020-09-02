@@ -2,10 +2,6 @@
     import { onMount } from 'svelte';
     import ExpenseList from './ExpenseList.svelte';
     import IncomeList from './IncomeList.svelte';
-    import BudgetList from './BudgetList.svelte';
-    import MonthlyBudget from './MonthlyBudget.svelte';
-    import { UserSettings } from '../../api/usersettings';
-    import { userCurrency } from '../stores/UserCurrencyStore';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { Expenses } from '../../api/expenses';
 
@@ -33,16 +29,6 @@
 
     $: remainingTotal = Number((incomeSum - expenseSum).toFixed(2));
 
-    $: budgetSum = 0;
-    const recalculateBudgets = (totalBudgets) => {
-        budgets = totalBudgets.detail.data;
-        budgetSum = budgets.reduce(function (a, b) {
-            return a + b;
-        }, 0);
-    };
-
-    $: remainingBudget = incomeSum - budgetSum;
-
     onMount(() => {
         Meteor.subscribe('usersettings', function () {
             calculateExpenses();
@@ -52,7 +38,6 @@
 
 <div class="container">
     <div>
-        <!--  -->
         <!-- List of expenses -->
         <ExpenseList
             on:delete={calculateExpenses}
@@ -63,15 +48,5 @@
         <IncomeList on:recalculateIncome={recalculateIncomes} />
         <h3>Total Income: {incomeSum}</h3>
         <h3>Remaining Total: {remainingTotal}</h3>
-        <!-- List of budgets -->
-        <BudgetList on:recalculateBudgets={recalculateBudgets} />
-        <h3>
-            Total Budgeted: {budgetSum} out of {incomeSum}. You have {remainingBudget}
-            left to budget.
-        </h3>
     </div>
 </div>
-
-<style>
-
-</style>

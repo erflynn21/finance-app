@@ -4,6 +4,7 @@
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { UserSettings } from '../../api/usersettings';
     import CurrenciesList from '../shared/CurrenciesList.svelte';
+    import BudgetList from './BudgetList.svelte';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -37,6 +38,14 @@
             Meteor.call('usersettings.insert', usersetting);
         }
     }
+
+    $: budgetSum = 0;
+    const recalculateBudgets = (totalBudgets) => {
+        budgets = totalBudgets.detail.data;
+        budgetSum = budgets.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+    };
 
     onMount(() => {
         Meteor.subscribe('usersettings');
@@ -73,4 +82,8 @@
     <div>Last Name: {updateduserinfo.lastName}</div>
     <div>Base Currency: {updateduserinfo.baseCurrency}</div>
     <div>Currency Options: {updateduserinfo.currencyOptions}</div>
+
+    <!-- List of base budgets -->
+    <BudgetList on:recalculateBudgets={recalculateBudgets} />
+    <h3>Total Budgeted: {budgetSum}.</h3>
 </form>
