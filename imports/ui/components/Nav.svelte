@@ -1,11 +1,22 @@
 <script>
     import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
-    let current = 'overview';
+    import Overview from './Overview.svelte';
+    let current = 'summary';
 </script>
 
 <div class="login">
     <BlazeTemplate template="loginButtons" />
 </div>
+
+{#if current === 'overview'}
+    <Overview />
+{:else if current === 'budget'}
+    <h1>Budget Component</h1>
+{:else if current === 'summary'}
+    <h1>Summary Component</h1>
+{:else if current === 'settings'}
+    <h1>Settings Component</h1>
+{/if}
 
 <div class="bottom-nav-container">
     <div class="tab-nav-container">
