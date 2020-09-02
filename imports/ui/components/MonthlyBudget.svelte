@@ -45,6 +45,7 @@
         Meteor.subscribe('expenses', function () {
             calculateExpenses();
         });
+        Meteor.subscribe('budgets');
     });
 </script>
 

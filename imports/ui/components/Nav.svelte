@@ -4,8 +4,10 @@
     import Overview from './Overview.svelte';
     import MonthlyBudget from './MonthlyBudget.svelte';
     import Settings from './Settings.svelte';
+    import Summary from './Summary.svelte';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
+
     let current = 'overview';
 
     const setUserCurrency = () => {
@@ -34,7 +36,7 @@
     {:else if current === 'budget'}
         <MonthlyBudget />
     {:else if current === 'summary'}
-        <h1>Summary Component</h1>
+        <Summary />
     {:else if current === 'settings'}
         <Settings />
     {/if}
