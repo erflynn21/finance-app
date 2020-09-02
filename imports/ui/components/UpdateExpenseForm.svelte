@@ -6,6 +6,7 @@
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
+    import { Expenses } from '../../api/expenses';
 
     $: budgets = useTracker(() => Budgets.find({}).fetch());
 

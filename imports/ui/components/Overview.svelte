@@ -1,18 +1,16 @@
 <script>
     import { onMount } from 'svelte';
-    import AddExpenseForm from './AddExpenseForm.svelte';
-    import AddIncomeForm from './AddIncomeForm.svelte';
-    import AddBudgetForm from './AddBudgetForm.svelte';
     import ExpenseList from './ExpenseList.svelte';
     import IncomeList from './IncomeList.svelte';
     import BudgetList from './BudgetList.svelte';
-    import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
     import Settings from './Settings.svelte';
     import MonthlyBudget from './MonthlyBudget.svelte';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { Expenses } from '../../api/expenses';
+    import Forms from './Forms.svelte';
+    import Nav from './Nav.svelte';
 
     const setUserCurrency = () => {
         usersetting = UserSettings.findOne({});
@@ -25,15 +23,6 @@
 
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
-    // const recalculateExpensesOld = (totalExpenses) => {
-    //     expenses = totalExpenses.detail.data;
-    //     expenseSum = expenses.reduce(function (a, b) {
-    //         return a + b;
-    //     }, 0);
-    //     expenseSumStore.set(expenseSum);
-    //     console.log(expenseSum);
-    // };
-
     const calculateExpenses = () => {
         let totalExpenses = Expenses.find({}).fetch();
         let expenses = [];
@@ -75,21 +64,9 @@
 </script>
 
 <div class="container">
-    <div class="login">
-        <BlazeTemplate template="loginButtons" />
-    </div>
 
     <div>
         <MonthlyBudget on:calculate={calculateExpenses} />
-    </div>
-
-    <div class="forms">
-        <!-- Form to add expenses-->
-        <AddExpenseForm />
-        <!-- Form to add incomes -->
-        <AddIncomeForm />
-        <!-- Form to add budgets -->
-        <AddBudgetForm />
     </div>
     <div>
         <!--  -->
@@ -111,4 +88,10 @@
         </h3>
     </div>
     <Settings />
+    <Forms />
+    <Nav />
 </div>
+
+<style>
+
+</style>
