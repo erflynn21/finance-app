@@ -37,42 +37,45 @@
     {/if}
 </div>
 
-<div class="bottom-nav-container">
-    <div class="tab-nav-container">
-        <button>
-            <div
-                class="tab {current === 'overview' ? 'active' : ''}"
-                on:click={() => (current = 'overview')}>
-                <img src="/img/overview.svg" alt="" />
-            </div>
-        </button>
-        <button>
-            <div
-                class="tab {current === 'budget' ? 'active' : ''}"
-                on:click={() => (current = 'budget')}>
-                <img src="/img/budget.svg" alt="" />
-            </div>
-        </button>
-        <button>
-            <div
-                class="tab {current === 'summary' ? 'active' : ''}"
-                on:click={() => (current = 'summary')}>
-                <img src="/img/wallet.svg" alt="" />
-            </div>
-        </button>
-        <button>
-            <div
-                class="tab {current === 'settings' ? 'active' : ''}"
-                on:click={() => (current = 'settings')}>
-                <img src="/img/settings.svg" alt="" />
-            </div>
-        </button>
+<footer>
+    <div class="bottom-nav-container">
+        <div class="tab-nav-container">
+            <button>
+                <div
+                    class="tab {current === 'overview' ? 'active' : ''}"
+                    on:click={() => (current = 'overview')}>
+                    <img src="/img/overview.svg" alt="" />
+                </div>
+            </button>
+            <button>
+                <div
+                    class="tab {current === 'budget' ? 'active' : ''}"
+                    on:click={() => (current = 'budget')}>
+                    <img src="/img/budget.svg" alt="" />
+                </div>
+            </button>
+            <button>
+                <div
+                    class="tab {current === 'summary' ? 'active' : ''}"
+                    on:click={() => (current = 'summary')}>
+                    <img src="/img/wallet.svg" alt="" />
+                </div>
+            </button>
+            <button>
+                <div
+                    class="tab {current === 'settings' ? 'active' : ''}"
+                    on:click={() => (current = 'settings')}>
+                    <img src="/img/settings.svg" alt="" />
+                </div>
+            </button>
+        </div>
     </div>
-</div>
+</footer>
 
 <style>
     .content {
-        min-height: calc(100vh - 20px);
+        min-height: calc(100vh - 50px);
+        max-height: calc(100vh - 50px);
     }
     .bottom-nav-container {
         background-color: #fff;
@@ -107,17 +110,6 @@
         height: 30px;
     }
 
-    /* .tab p {
-        font-weight: bold;
-        overflow: hidden;
-        max-width: 0;
-    }
-
-    .tab.active p {
-        margin-left: 10px;
-        max-width: 200px;
-        transition: max-width 0.4s linear;
-    } */
     button,
     button:active,
     button:visited,

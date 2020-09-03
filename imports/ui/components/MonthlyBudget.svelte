@@ -50,13 +50,92 @@
 </script>
 
 <div class="monthly-overview">
-    <h1>{month} {year}</h1>
-    {#each $baseBudgets as budget (budget._id)}
-        <MonthlyBudgetCategory
-            {budget}
-            {month}
-            {year}
-            on:calculate={calculateExpenses} />
-    {/each}
-    <h3>Total Expenses: {$expenseSumStore}</h3>
+    <div class="heading">
+        <h1>Budget</h1>
+    </div>
+
+    <div class="add-button">
+        <button>+</button>
+    </div>
+
+    <div class="budget-summary">
+        <h1>{month} {year}</h1>
+        <h3>Total Expenses: {$expenseSumStore}</h3>
+    </div>
+
+    <div class="budget-list">
+        {#each $baseBudgets as budget (budget._id)}
+            <MonthlyBudgetCategory
+                {budget}
+                {month}
+                {year}
+                on:calculate={calculateExpenses} />
+        {/each}
+    </div>
+
 </div>
+
+<style>
+    button,
+    button:active,
+    button:visited,
+    button:enabled,
+    button:focus {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        outline: 0;
+        min-width: 0px;
+    }
+
+    .heading {
+        width: 100%;
+        display: flex;
+        box-shadow: 0 2px 2px -2px gray;
+        align-items: center;
+        justify-content: center;
+        padding-top: 10px;
+        padding-bottom: 5px;
+        padding-right: 15px;
+    }
+
+    .heading h1 {
+        font-size: 20px;
+        font-weight: 500;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .add-button {
+        position: absolute;
+        height: 38px;
+        top: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+    }
+
+    .add-button button {
+        font-size: 20px;
+        font-weight: 300;
+    }
+
+    .budget-summary {
+        display: inline-block;
+        padding: 10px 0 10px 15px;
+    }
+
+    .budget-summary h1 {
+        font-size: 20px;
+    }
+
+    .budget-summary h3 {
+        font-size: 16px;
+        font-weight: 500;
+    }
+</style>
