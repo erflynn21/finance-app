@@ -1,6 +1,5 @@
 <script>
     import { onMount } from 'svelte';
-    import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
     import Overview from './Overview.svelte';
     import MonthlyBudget from './MonthlyBudget.svelte';
     import Settings from './Settings.svelte';
@@ -26,10 +25,6 @@
     });
 </script>
 
-<div>
-    <BlazeTemplate template="loginButtons" />
-</div>
-
 <div class="content">
     {#if current === 'overview'}
         <Overview />
@@ -49,7 +44,6 @@
                 class="tab {current === 'overview' ? 'active' : ''}"
                 on:click={() => (current = 'overview')}>
                 <img src="/img/overview.svg" alt="" />
-                <!-- <p>Overview</p> -->
             </div>
         </button>
         <button>
@@ -57,7 +51,6 @@
                 class="tab {current === 'budget' ? 'active' : ''}"
                 on:click={() => (current = 'budget')}>
                 <img src="/img/budget.svg" alt="" />
-                <!-- <p>Budget</p> -->
             </div>
         </button>
         <button>
@@ -65,7 +58,6 @@
                 class="tab {current === 'summary' ? 'active' : ''}"
                 on:click={() => (current = 'summary')}>
                 <img src="/img/wallet.svg" alt="" />
-                <!-- <p>Summary</p> -->
             </div>
         </button>
         <button>
@@ -73,7 +65,6 @@
                 class="tab {current === 'settings' ? 'active' : ''}"
                 on:click={() => (current = 'settings')}>
                 <img src="/img/settings.svg" alt="" />
-                <!-- <p>Settings</p> -->
             </div>
         </button>
     </div>

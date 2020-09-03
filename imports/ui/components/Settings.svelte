@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { UserSettings } from '../../api/usersettings';
+    import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
     import CurrenciesList from '../shared/CurrenciesList.svelte';
     import BudgetList from './BudgetList.svelte';
     import AddBudgetForm from './AddBudgetForm.svelte';
@@ -52,6 +53,10 @@
         Meteor.subscribe('usersettings');
     });
 </script>
+
+<div>
+    <BlazeTemplate template="loginButtons" />
+</div>
 
 <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
     <input
