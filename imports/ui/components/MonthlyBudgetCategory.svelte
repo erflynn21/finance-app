@@ -24,6 +24,8 @@
 
     let isHidden = true;
 
+    let isDropdown = true;
+
     $: expenses = useTracker(() => Expenses.find({}).fetch());
 
     const checkMonthlyBudget = () => {
@@ -105,7 +107,7 @@
             <div class="percent" style="width: {$tweenedPercentage}%" />
             <span>{percentage}</span>
         </div>
-        <div class="dropdown">
+        <div class="dropdown" on:click={() => (isDropdown = !isDropdown)}>
             <img src="/img/dropdown.svg" alt="" />
         </div>
         <div class:hidden={isHidden}>
@@ -118,18 +120,20 @@
     <br />
 
 </div>
-<!-- {#each $expenses as expense (expense._id)}
-    {#if expense.category === budget.category}
-        <Expense
-            {expense}
-            on:delete={calculateCategoryExpenses}
-            on:expenseEdited={calculateCategoryExpenses} />
-        {#each [calculateCategoryExpenses(expense)] as expense}
-            <div />
-        {/each}
-    {/if}
-{/each} -->
-<!-- <br /> -->
+<div class:isDropdown>
+    {#each $expenses as expense (expense._id)}
+        {#if expense.category === budget.category}
+            <Expense
+                {expense}
+                on:delete={calculateCategoryExpenses}
+                on:expenseEdited={calculateCategoryExpenses} />
+            {#each [calculateCategoryExpenses(expense)] as expense}
+                <div />
+            {/each}
+        {/if}
+    {/each}
+    <br />
+</div>
 
 <style>
     .category {
