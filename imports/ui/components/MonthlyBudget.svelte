@@ -128,6 +128,7 @@
     .budget-summary {
         display: inline-block;
         padding: 10px 0 10px 15px;
+        margin-bottom: 10px;
     }
 
     .budget-summary h1 {
@@ -137,5 +138,9 @@
     .budget-summary h3 {
         font-size: 16px;
         font-weight: 500;
+    }
+
+    .budget-list {
+        margin: 0 15px;
     }
 </style>

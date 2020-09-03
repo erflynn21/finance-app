@@ -7,6 +7,7 @@
     export let budget;
     export let month;
     export let year;
+    import { tweened } from 'svelte/motion';
     import UpdateMonthlyBudgetForm from './UpdateMonthlyBudgetForm.svelte';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
     import { createEventDispatcher } from 'svelte';
@@ -80,22 +81,44 @@
         }, 0);
         dispatch('calculate');
     };
+
+    // percentage and tweened values
+    $: percentage = Math.floor((100 / monthlyBudget.amount) * expenseSum) || 0;
+    const tweenedPercentage = tweened(0);
+    $: tweenedPercentage.set(percentage);
 </script>
 
-<span>{budget.category} --</span>
-<span>
-    Budgeted: {monthlyBudget.amount}
-    <button class="edit" on:click={() => (isHidden = !isHidden)}>Edit</button>
-    <div class:hidden={isHidden}>
-        <UpdateMonthlyBudgetForm
-            {monthlyBudget}
-            on:collapse={() => (isHidden = !isHidden)}
-            on:updateBudgets={calculateCategoryExpenses} />
+<div class="category">
+    <div class="grid row-one">
+        <div class="category-name">
+            <h4>{budget.category}</h4>
+        </div>
+        <div class="amount-summary">
+            {expenseSum} of {monthlyBudget.amount}
+            <button class="edit" on:click={() => (isHidden = !isHidden)}>
+                <img src="/img/edit.svg" alt="" />
+            </button>
+        </div>
     </div>
-</span>
-<span>Spent: {expenseSum}</span>
-<br />
-{#each $expenses as expense (expense._id)}
+    <div class="grid row-two">
+        <div class="percentage">
+            <div class="percent" style="width: {$tweenedPercentage}%" />
+            <span>{percentage}</span>
+        </div>
+        <div class="dropdown">
+            <img src="/img/dropdown.svg" alt="" />
+        </div>
+        <div class:hidden={isHidden}>
+            <UpdateMonthlyBudgetForm
+                {monthlyBudget}
+                on:collapse={() => (isHidden = !isHidden)}
+                on:updateBudgets={calculateCategoryExpenses} />
+        </div>
+    </div>
+    <br />
+
+</div>
+<!-- {#each $expenses as expense (expense._id)}
     {#if expense.category === budget.category}
         <Expense
             {expense}
@@ -105,5 +128,77 @@
             <div />
         {/each}
     {/if}
-{/each}
-<br />
+{/each} -->
+<!-- <br /> -->
+
+<style>
+    .category {
+        padding: 10px 0;
+        height: 40px;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .grid {
+        display: grid;
+        margin: 5px 0;
+    }
+
+    .row-one {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .amount-summary {
+        justify-self: end;
+    }
+
+    .amount-summary button img {
+        height: 15px;
+    }
+
+    .row-two {
+        grid-template-columns: 1fr 0.1fr;
+    }
+
+    .percentage {
+        grid-column: 1/2;
+        width: 100%;
+        position: relative;
+    }
+
+    span {
+        display: inline-block;
+        color: white;
+    }
+
+    .percent {
+        height: 100%;
+        position: absolute;
+        box-sizing: border-box;
+        background-color: #8ac148;
+        border-left: 4px solid #599014;
+        border-radius: 5px;
+    }
+
+    .dropdown {
+        grid-column: 2/3;
+        justify-self: end;
+    }
+
+    .dropdown img {
+        height: 20px;
+    }
+
+    button,
+    button:active,
+    button:visited,
+    button:enabled,
+    button:focus {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        outline: 0;
+        min-width: 0px;
+    }
+</style>
