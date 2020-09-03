@@ -8,7 +8,7 @@
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
 
-    let current = 'overview';
+    let current = 'budget';
 
     const setUserCurrency = () => {
         usersetting = UserSettings.findOne({});
@@ -26,7 +26,7 @@
     });
 </script>
 
-<div class="login">
+<div>
     <BlazeTemplate template="loginButtons" />
 </div>
 
@@ -49,7 +49,7 @@
                 class="tab {current === 'overview' ? 'active' : ''}"
                 on:click={() => (current = 'overview')}>
                 <img src="/img/overview.svg" alt="" />
-                <p>Overview</p>
+                <!-- <p>Overview</p> -->
             </div>
         </button>
         <button>
@@ -57,7 +57,7 @@
                 class="tab {current === 'budget' ? 'active' : ''}"
                 on:click={() => (current = 'budget')}>
                 <img src="/img/budget.svg" alt="" />
-                <p>Budget</p>
+                <!-- <p>Budget</p> -->
             </div>
         </button>
         <button>
@@ -65,7 +65,7 @@
                 class="tab {current === 'summary' ? 'active' : ''}"
                 on:click={() => (current = 'summary')}>
                 <img src="/img/wallet.svg" alt="" />
-                <p>Summary</p>
+                <!-- <p>Summary</p> -->
             </div>
         </button>
         <button>
@@ -73,7 +73,7 @@
                 class="tab {current === 'settings' ? 'active' : ''}"
                 on:click={() => (current = 'settings')}>
                 <img src="/img/settings.svg" alt="" />
-                <p>Settings</p>
+                <!-- <p>Settings</p> -->
             </div>
         </button>
     </div>
@@ -92,16 +92,14 @@
         text-align: center;
         margin: 0;
         bottom: 0;
+        padding: 10px 20px;
         position: sticky;
-        /* border-top: 1px; */
-        width: 100%;
     }
 
     .tab-nav-container {
         display: flex;
         justify-content: space-between;
-        padding: 10px 50px 10px 50px;
-        width: 500px;
+        width: 100%;
     }
 
     .tab {
@@ -111,14 +109,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0 30px;
+        padding: 0;
     }
 
     .tab img {
         height: 30px;
     }
 
-    .tab p {
+    /* .tab p {
         font-weight: bold;
         overflow: hidden;
         max-width: 0;
@@ -128,7 +126,7 @@
         margin-left: 10px;
         max-width: 200px;
         transition: max-width 0.4s linear;
-    }
+    } */
     button,
     button:active,
     button:visited,
@@ -139,5 +137,6 @@
         border: 0;
         background: transparent;
         outline: 0;
+        min-width: 0px;
     }
 </style>

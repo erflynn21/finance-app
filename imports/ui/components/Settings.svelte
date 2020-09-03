@@ -5,6 +5,7 @@
     import { UserSettings } from '../../api/usersettings';
     import CurrenciesList from '../shared/CurrenciesList.svelte';
     import BudgetList from './BudgetList.svelte';
+    import AddBudgetForm from './AddBudgetForm.svelte';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -86,4 +87,8 @@
     <!-- List of base budgets -->
     <BudgetList on:recalculateBudgets={recalculateBudgets} />
     <h3>Total Budgeted: {budgetSum}.</h3>
+
+    <!-- Form to add budgets -->
+    <h3>Add in a base budget:</h3>
+    <AddBudgetForm />
 </form>
