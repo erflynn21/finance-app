@@ -17,35 +17,49 @@
     let date = date1[1] + '-' + date1[2];
 </script>
 
-<ListItem>
-    <div class="expense">
-        <button class="delete" on:click={deleteExpense}>
-            <img src="/img/delete.svg" alt="" />
-        </button>
+<div class="container">
+    <ListItem>
+        <div class="expense">
+            <button class="delete" on:click={deleteExpense}>
+                <img src="/img/delete.svg" alt="" />
+            </button>
 
-        <time datetime={expense.date} class="date">{date}</time>
-        <span class="title">{expense.title}</span>
-        <!-- <span>{expense.category}</span> -->
-        <span class="amount">{expense.currency}{expense.amount}</span>
-        {#if expense.originalAmount !== null}
-            <!-- <span>
+            <time datetime={expense.date} class="date">{date}</time>
+            <span class="title">{expense.title}</span>
+            <!-- <span>{expense.category}</span> -->
+            <span class="amount">{expense.currency}{expense.amount}</span>
+            {#if expense.originalAmount !== null}
+                <!-- <span>
                 Original Amount and Currency: {expense.originalCurrency}{expense.originalAmount}
             </span> -->
-        {/if}
+            {/if}
 
-        <div class:hidden={isHidden} class="update-expense">
-            <UpdateExpenseForm
-                {expense}
-                on:collapse={() => (isHidden = !isHidden)}
-                on:expenseEdited />
+            <div class:hidden={isHidden} class="update-expense">
+                <UpdateExpenseForm
+                    {expense}
+                    on:collapse={() => (isHidden = !isHidden)}
+                    on:expenseEdited />
+            </div>
+            <button class="edit" on:click={() => (isHidden = !isHidden)}>
+                <img src="/img/edit.svg" alt="" />
+            </button>
         </div>
-        <button class="edit" on:click={() => (isHidden = !isHidden)}>
-            <img src="/img/edit.svg" alt="" />
-        </button>
-    </div>
-</ListItem>
+    </ListItem>
+</div>
 
 <style>
+    .container {
+        max-width: 100vw;
+        position: relative;
+    }
+    .container::after {
+        content: '';
+        position: relative;
+        display: block;
+        border-bottom: 1px solid lightgray;
+        left: -20px;
+        width: 110vw;
+    }
     .expense {
         display: grid;
         grid-template-columns: 0.2fr 0.4fr 1fr 0.5fr 0.2fr;
@@ -54,11 +68,8 @@
         align-items: center;
         width: calc(100vw - 25px);
         margin-left: -5px;
-        margin-bottom: 0;
     }
 
-    .date {
-    }
     .edit img {
         height: 15px;
     }

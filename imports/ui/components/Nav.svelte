@@ -7,7 +7,7 @@
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
 
-    let current = 'transactions';
+    let current = 'budget';
 
     const setUserCurrency = () => {
         usersetting = UserSettings.findOne({});
@@ -78,8 +78,6 @@
         min-height: calc(100vh - 50px);
         max-height: calc(100vh - 50px);
         background-color: #eeeeeee7;
-        overflow-y: scroll;
-        overflow-x: hidden;
     }
     .bottom-nav-container {
         background-color: #fff;

@@ -91,50 +91,55 @@
     $: tweenedPercentage.set(percentage);
 </script>
 
-<ListItem>
-    <div class="grid row-one">
-        <div class="category-name">
-            <h4>{budget.category}</h4>
+<div class="container">
+    <ListItem>
+        <div class="grid row-one">
+            <div class="category-name">
+                <h4>{budget.category}</h4>
+            </div>
+            <div class="amount-summary">
+                {expenseSum} of {monthlyBudget.amount}
+                <button class="edit" on:click={() => (isHidden = !isHidden)}>
+                    <img src="/img/edit.svg" alt="" />
+                </button>
+            </div>
         </div>
-        <div class="amount-summary">
-            {expenseSum} of {monthlyBudget.amount}
-            <button class="edit" on:click={() => (isHidden = !isHidden)}>
-                <img src="/img/edit.svg" alt="" />
-            </button>
+        <div class:hidden={isHidden}>
+            <UpdateMonthlyBudgetForm
+                {monthlyBudget}
+                on:collapse={() => (isHidden = !isHidden)}
+                on:updateBudgets={calculateCategoryExpenses} />
         </div>
-    </div>
-    <div class:hidden={isHidden}>
-        <UpdateMonthlyBudgetForm
-            {monthlyBudget}
-            on:collapse={() => (isHidden = !isHidden)}
-            on:updateBudgets={calculateCategoryExpenses} />
-    </div>
-    <div class="grid row-two">
-        <div class="percentage">
-            <div class="percent" style="width: {$tweenedPercentage}%" />
-            <span>{percentage}%</span>
+        <div class="grid row-two">
+            <div class="percentage">
+                <div class="percent" style="width: {$tweenedPercentage}%" />
+                <span>{percentage}%</span>
+            </div>
+            <div class="dropdown" on:click={() => (isDropdown = !isDropdown)}>
+                <img src="/img/dropdown.svg" alt="" />
+            </div>
         </div>
-        <div class="dropdown" on:click={() => (isDropdown = !isDropdown)}>
-            <img src="/img/dropdown.svg" alt="" />
+        <div class:isDropdown class="expense-dropdown">
+            {#each $expenses as expense (expense._id)}
+                {#if expense.category === budget.category}
+                    <Expense
+                        {expense}
+                        on:delete={calculateCategoryExpenses}
+                        on:expenseEdited={calculateCategoryExpenses} />
+                    {#each [calculateCategoryExpenses(expense)] as expense}
+                        <div />
+                    {/each}
+                {/if}
+            {/each}
+            <br />
         </div>
-    </div>
-    <div class:isDropdown class="expense-dropdown">
-        {#each $expenses as expense (expense._id)}
-            {#if expense.category === budget.category}
-                <Expense
-                    {expense}
-                    on:delete={calculateCategoryExpenses}
-                    on:expenseEdited={calculateCategoryExpenses} />
-                {#each [calculateCategoryExpenses(expense)] as expense}
-                    <div />
-                {/each}
-            {/if}
-        {/each}
-        <br />
-    </div>
-</ListItem>
+    </ListItem>
+</div>
 
 <style>
+    .container {
+        margin-bottom: 10px;
+    }
     .grid {
         display: grid;
         margin: 5px 0;
@@ -207,6 +212,7 @@
     }
 
     .expense-dropdown {
-        height: auto;
+        margin-left: -10px;
+        margin-bottom: -15px;
     }
 </style>

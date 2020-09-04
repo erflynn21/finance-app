@@ -80,22 +80,24 @@
 <div class="monthly-overview">
     <Heading>Budget</Heading>
 
-    <ListItem>
-        <div class="grid row-one">
-            <div class="budget">
-                <h4>{month} {year}</h4>
+    <div class="budget-summary">
+        <ListItem>
+            <div class="grid row-one">
+                <div class="budget">
+                    <h4>{month} {year}</h4>
+                </div>
+                <div class="amount-summary">
+                    {$expenseSumStore} of {$budgetSumStore}
+                </div>
             </div>
-            <div class="amount-summary">
-                {$expenseSumStore} of {$budgetSumStore}
+            <div class="grid row-two">
+                <div class="percentage">
+                    <div class="percent" style="width: {$tweenedPercentage}%" />
+                    <span>{percentage}%</span>
+                </div>
             </div>
-        </div>
-        <div class="grid row-two">
-            <div class="percentage">
-                <div class="percent" style="width: {$tweenedPercentage}%" />
-                <span>{percentage}%</span>
-            </div>
-        </div>
-    </ListItem>
+        </ListItem>
+    </div>
 
     <div class="budget-list">
         {#each $baseBudgets as budget (budget._id)}
@@ -110,6 +112,10 @@
 </div>
 
 <style>
+    .budget-summary {
+        margin-bottom: 10px;
+    }
+
     .grid {
         display: grid;
         margin: 5px 0;
