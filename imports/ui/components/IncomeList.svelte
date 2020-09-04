@@ -35,7 +35,6 @@
 </script>
 
 <div>
-    <h1>Incomes:</h1>
     <!-- List of incomes -->
     {#each $incomes.map(calculateTotal) as income}
         <div />

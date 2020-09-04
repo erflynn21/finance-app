@@ -6,8 +6,45 @@
     import Transactions from './Transactions.svelte';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
+    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
 
-    let current = 'budget';
+    let current = 'transactions';
+
+    const currencyDict = {
+        EUR: '€',
+        CNY: '¥',
+        USD: '$',
+        JPY: '¥',
+        BGN: 'лв',
+        CZK: 'Kč',
+        DKK: 'kr',
+        GBP: '£',
+        HUF: 'Ft',
+        PLN: 'zł',
+        RON: 'lei',
+        SEK: 'kr',
+        CHF: 'CHF',
+        ISK: 'kr',
+        NOK: 'kr',
+        HRK: 'kn',
+        RUB: '₽',
+        TRY: '₺',
+        AUD: '$',
+        BRL: 'R$',
+        CAD: '$',
+        HKD: '$',
+        IDR: 'Rp',
+        ILS: '₪',
+        INR: '₹',
+        KRW: '₩',
+        MXN: '$',
+        MYR: 'RM',
+        NZD: '$',
+        PHP: '₱',
+        SGD: '$',
+        THB: '฿',
+        ZAR: 'R',
+    };
 
     const setUserCurrency = () => {
         usersetting = UserSettings.findOne({});
@@ -18,9 +55,14 @@
         }
     };
 
+    const setUserCurrencySymbol = () => {
+        userCurrencySymbol.set(currencyDict[$userCurrency]);
+    };
+
     onMount(() => {
         Meteor.subscribe('usersettings', function () {
             setUserCurrency();
+            setUserCurrencySymbol();
         });
     });
 </script>

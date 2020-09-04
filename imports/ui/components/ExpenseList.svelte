@@ -21,7 +21,7 @@
 </script>
 
 <div>
-    <h1>Expenses:</h1>
+
     <!-- List of expenses -->
     {#each $expenses as expense (expense._id)}
         {#each [dispatchCalc(expense)] as expense}

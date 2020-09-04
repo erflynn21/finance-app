@@ -1,6 +1,7 @@
 <script>
     import { Meteor } from 'meteor/meteor';
     import UpdateExpenseForm from './UpdateExpenseForm.svelte';
+    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     export let expense;
     import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
@@ -13,8 +14,15 @@
 
     let isHidden = true;
 
+    let date;
     let date1 = expense.date.split('-');
-    let date = date1[1] + '-' + date1[2];
+    let date2 = date1[1] + '/' + date1[2];
+    let date3 = date2.split('0');
+    if (date3[2] === undefined) {
+        date = date3[1];
+    } else {
+        date = date3[1] + date3[2];
+    }
 </script>
 
 <div class="container">
@@ -26,8 +34,7 @@
 
             <time datetime={expense.date} class="date">{date}</time>
             <span class="title">{expense.title}</span>
-            <!-- <span>{expense.category}</span> -->
-            <span class="amount">{expense.currency}{expense.amount}</span>
+            <span class="amount">{$userCurrencySymbol}{expense.amount}</span>
             {#if expense.originalAmount !== null}
                 <!-- <span>
                 Original Amount and Currency: {expense.originalCurrency}{expense.originalAmount}
@@ -62,12 +69,20 @@
     }
     .expense {
         display: grid;
-        grid-template-columns: 0.2fr 0.4fr 1fr 0.5fr 0.2fr;
+        grid-template-columns: 0.15fr 0.25fr 1fr 0.6fr 0.15fr;
         gap: 10px;
         justify-items: start;
         align-items: center;
         width: calc(100vw - 25px);
         margin-left: -5px;
+    }
+
+    .amount {
+        justify-self: end;
+    }
+
+    .edit {
+        justify-self: end;
     }
 
     .edit img {

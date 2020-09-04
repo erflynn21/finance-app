@@ -21,8 +21,8 @@
 
     async function handleAddExpense() {
         // check whether expense needs to be converted to base currency
-        if (expense.currency === '' || expense.currency === $userCurrency) {
-            expense.currency = $userCurrency;
+        if (expense.currency === '' || expense.currency === userCurrency) {
+            expense.currency = userCurrency;
         } else {
             await convertAmount();
         }
@@ -35,7 +35,7 @@
         expense.date = new Date().toISOString().substr(0, 10);
         expense.category = '';
         expense.amount = '';
-        expense.currency = $userCurrency;
+        expense.currency = userCurrency;
         expense.originalCurrency = null;
         expense.originalAmount = null;
     }
@@ -43,7 +43,7 @@
     async function convertAmount() {
         expense.originalAmount = expense.amount;
         expense.originalCurrency = expense.currency;
-        let url = `https://api.exchangeratesapi.io/${expense.date}?base=${$userCurrency}&symbols=${expense.originalCurrency}`;
+        let url = `https://api.exchangeratesapi.io/${expense.date}?base=${userCurrency}&symbols=${expense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
         let rates = JSON.stringify(data.rates);
@@ -51,7 +51,7 @@
         expense.amount = Number(
             (expense.originalAmount / exchangeRate).toFixed(2)
         );
-        expense.currency = $userCurrency;
+        expense.currency = userCurrency;
     }
 </script>
 
