@@ -11,7 +11,7 @@
     import UpdateMonthlyBudgetForm from './UpdateMonthlyBudgetForm.svelte';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
     import { createEventDispatcher } from 'svelte';
-    import BudgetCategory from '../shared/BudgetCategory.svelte';
+    import ListItem from '../shared/ListItem.svelte';
     let dispatch = createEventDispatcher();
 
     $: monthlyBudget = {
@@ -91,7 +91,7 @@
     $: tweenedPercentage.set(percentage);
 </script>
 
-<BudgetCategory>
+<ListItem>
     <div class="grid row-one">
         <div class="category-name">
             <h4>{budget.category}</h4>
@@ -118,8 +118,7 @@
             <img src="/img/dropdown.svg" alt="" />
         </div>
     </div>
-    <br />
-    <div class:isDropdown>
+    <div class:isDropdown class="expense-dropdown">
         {#each $expenses as expense (expense._id)}
             {#if expense.category === budget.category}
                 <Expense
@@ -133,7 +132,7 @@
         {/each}
         <br />
     </div>
-</BudgetCategory>
+</ListItem>
 
 <style>
     .grid {
@@ -205,5 +204,9 @@
         background: transparent;
         outline: 0;
         min-width: 0px;
+    }
+
+    .expense-dropdown {
+        height: auto;
     }
 </style>

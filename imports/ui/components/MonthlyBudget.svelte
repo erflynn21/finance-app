@@ -9,7 +9,7 @@
     import Heading from '../shared/Heading.svelte';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
     import { tweened } from 'svelte/motion';
-    import BudgetCategory from '../shared/BudgetCategory.svelte';
+    import ListItem from '../shared/ListItem.svelte';
 
     // getting budget and expense info
     $: baseBudgets = useTracker(() => Budgets.find({}).fetch());
@@ -80,25 +80,22 @@
 <div class="monthly-overview">
     <Heading>Budget</Heading>
 
-    <BudgetCategory>
-        <div class="budget-summary">
-
-            <div class="grid row-one">
-                <div class="budget">
-                    <h4>{month} {year}</h4>
-                </div>
-                <div class="amount-summary">
-                    {$expenseSumStore} of {$budgetSumStore}
-                </div>
+    <ListItem>
+        <div class="grid row-one">
+            <div class="budget">
+                <h4>{month} {year}</h4>
             </div>
-            <div class="grid row-two">
-                <div class="percentage">
-                    <div class="percent" style="width: {$tweenedPercentage}%" />
-                    <span>{percentage}%</span>
-                </div>
+            <div class="amount-summary">
+                {$expenseSumStore} of {$budgetSumStore}
             </div>
         </div>
-    </BudgetCategory>
+        <div class="grid row-two">
+            <div class="percentage">
+                <div class="percent" style="width: {$tweenedPercentage}%" />
+                <span>{percentage}%</span>
+            </div>
+        </div>
+    </ListItem>
 
     <div class="budget-list">
         {#each $baseBudgets as budget (budget._id)}
@@ -113,9 +110,6 @@
 </div>
 
 <style>
-    .budget-summary {
-        padding-bottom: 15px;
-    }
     .grid {
         display: grid;
         margin: 5px 0;

@@ -1,12 +1,12 @@
-<div class="budget-category">
+<div class="list-item">
     <slot />
 </div>
 
 <style>
-    .budget-category {
+    .list-item {
         background-color: white;
         width: 100%;
-        padding: 10px 10px 0px 15px;
+        padding: 10px 10px 10px 15px;
         margin-bottom: 10px;
     }
 </style>

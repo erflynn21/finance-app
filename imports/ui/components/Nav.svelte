@@ -7,7 +7,7 @@
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
 
-    let current = 'budget';
+    let current = 'transactions';
 
     const setUserCurrency = () => {
         usersetting = UserSettings.findOne({});
