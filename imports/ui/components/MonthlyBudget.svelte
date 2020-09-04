@@ -5,6 +5,7 @@
     import MonthlyBudgetCategory from './MonthlyBudgetCategory.svelte';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { Expenses } from '../../api/expenses';
+    import Heading from '../shared/Heading.svelte';
 
     // getting budget and expense info
     $: baseBudgets = useTracker(() => Budgets.find({}).fetch());
@@ -50,13 +51,7 @@
 </script>
 
 <div class="monthly-overview">
-    <div class="heading">
-        <h1>Budget</h1>
-    </div>
-
-    <!-- <div class="add-button">
-        <button>+</button>
-    </div> -->
+    <Heading>Budget</Heading>
 
     <div class="card">
         <div class="budget-summary">
@@ -78,57 +73,6 @@
 </div>
 
 <style>
-    /* button,
-    button:active,
-    button:visited,
-    button:enabled,
-    button:focus {
-        margin: 0;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        outline: 0;
-        min-width: 0px;
-    } */
-
-    .heading {
-        width: 100%;
-        display: flex;
-        box-shadow: 0 2px 2px -2px gray;
-        align-items: center;
-        justify-content: center;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        padding-right: 15px;
-        background-color: #9ccc65;
-    }
-
-    .heading h1 {
-        font-size: 18px;
-        font-weight: 400;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-    }
-
-    /* .add-button {
-        position: absolute;
-        height: 38px;
-        top: 0;
-        right: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 12px;
-    }
-
-    .add-button button {
-        font-size: 20px;
-        font-weight: 300;
-    } */
-
     .budget-summary {
         display: inline-block;
         padding: 10px 0 10px 15px;

@@ -102,6 +102,12 @@
             </button>
         </div>
     </div>
+    <div class:hidden={isHidden}>
+        <UpdateMonthlyBudgetForm
+            {monthlyBudget}
+            on:collapse={() => (isHidden = !isHidden)}
+            on:updateBudgets={calculateCategoryExpenses} />
+    </div>
     <div class="grid row-two">
         <div class="percentage">
             <div class="percent" style="width: {$tweenedPercentage}%" />
@@ -109,12 +115,6 @@
         </div>
         <div class="dropdown" on:click={() => (isDropdown = !isDropdown)}>
             <img src="/img/dropdown.svg" alt="" />
-        </div>
-        <div class:hidden={isHidden}>
-            <UpdateMonthlyBudgetForm
-                {monthlyBudget}
-                on:collapse={() => (isHidden = !isHidden)}
-                on:updateBudgets={calculateCategoryExpenses} />
         </div>
     </div>
     <br />

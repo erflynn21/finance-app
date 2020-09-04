@@ -4,6 +4,7 @@
     import IncomeList from './IncomeList.svelte';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { Expenses } from '../../api/expenses';
+    import Heading from '../shared/Heading.svelte';
 
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
@@ -37,6 +38,7 @@
 </script>
 
 <div class="container">
+    <Heading>Transactions</Heading>
     <div>
         <!-- List of expenses -->
         <ExpenseList

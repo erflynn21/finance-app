@@ -3,11 +3,11 @@
     import Overview from './Overview.svelte';
     import MonthlyBudget from './MonthlyBudget.svelte';
     import Settings from './Settings.svelte';
-    import Summary from './Summary.svelte';
+    import Transactions from './Transactions.svelte';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
 
-    let current = 'budget';
+    let current = 'transactions';
 
     const setUserCurrency = () => {
         usersetting = UserSettings.findOne({});
@@ -30,8 +30,8 @@
         <Overview />
     {:else if current === 'budget'}
         <MonthlyBudget />
-    {:else if current === 'summary'}
-        <Summary />
+    {:else if current === 'transactions'}
+        <Transactions />
     {:else if current === 'settings'}
         <Settings />
     {/if}
