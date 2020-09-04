@@ -5,7 +5,6 @@
     import MonthlyBudgetCategory from './MonthlyBudgetCategory.svelte';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { budgetSumStore } from '../stores/BudgetSumStore';
-    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     import { Expenses } from '../../api/expenses';
     import Heading from '../shared/Heading.svelte';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
@@ -88,7 +87,7 @@
                     <h4>{month} {year}</h4>
                 </div>
                 <div class="amount-summary">
-                    {$userCurrencySymbol}{$expenseSumStore} of {$userCurrencySymbol}{$budgetSumStore}
+                    {$expenseSumStore} of {$budgetSumStore}
                 </div>
             </div>
             <div class="grid row-two">
