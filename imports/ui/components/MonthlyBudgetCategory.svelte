@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Expenses } from '../../api/expenses';
+    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     import Expense from './Expense.svelte';
     export let budget;
     export let month;
@@ -98,7 +99,9 @@
                 <h4>{budget.category}</h4>
             </div>
             <div class="amount-summary">
-                {expenseSum} of {monthlyBudget.amount}
+                <p class="amount">
+                    {$userCurrencySymbol}{expenseSum} of {$userCurrencySymbol}{monthlyBudget.amount}
+                </p>
                 <button class="edit" on:click={() => (isHidden = !isHidden)}>
                     <img src="/img/edit.svg" alt="" />
                 </button>
@@ -152,6 +155,11 @@
 
     .amount-summary {
         justify-self: end;
+        display: flex;
+    }
+
+    .amount {
+        padding-right: 18px;
     }
 
     .amount-summary button img {

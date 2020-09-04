@@ -8,7 +8,7 @@
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
 
-    let current = 'transactions';
+    let current = 'budget';
 
     const currencyDict = {
         EUR: '€',
