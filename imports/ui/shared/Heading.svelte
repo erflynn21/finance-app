@@ -15,6 +15,10 @@
         padding-bottom: 10px;
         padding-right: 15px;
         background-color: #9ccc65;
+        margin-bottom: 2px;
+        position: sticky;
+        top: 0;
+        left: 0;
     }
 
     .heading h1 {

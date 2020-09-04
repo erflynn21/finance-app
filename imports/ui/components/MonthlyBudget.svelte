@@ -4,8 +4,12 @@
     import { Budgets } from '../../api/budgets';
     import MonthlyBudgetCategory from './MonthlyBudgetCategory.svelte';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
+    import { budgetSumStore } from '../stores/BudgetSumStore';
     import { Expenses } from '../../api/expenses';
     import Heading from '../shared/Heading.svelte';
+    import { MonthlyBudgets } from '../../api/monthlybudgets';
+    import { tweened } from 'svelte/motion';
+    import BudgetCategory from '../shared/BudgetCategory.svelte';
 
     // getting budget and expense info
     $: baseBudgets = useTracker(() => Budgets.find({}).fetch());
@@ -21,6 +25,21 @@
             return a + b;
         }, 0);
         expenseSumStore.set(expenseSum);
+    };
+
+    $: budgetSum = 0;
+    const calculateTotalBudgets = () => {
+        let totalBudgets = MonthlyBudgets.find({}).fetch();
+        let budgets = [];
+        totalBudgets.forEach((budget) => {
+            budgets = [...budgets, budget.amount];
+        });
+        budgetSum = Number(
+            budgets.reduce(function (a, b) {
+                return a + b;
+            }, 0)
+        ).toFixed(2);
+        budgetSumStore.set(budgetSum);
     };
 
     // setting budget month
@@ -47,18 +66,39 @@
             calculateExpenses();
         });
         Meteor.subscribe('budgets');
+        Meteor.subscribe('monthlybudgets', function () {
+            calculateTotalBudgets();
+        });
     });
+
+    // percentage and tweened values
+    $: percentage = Math.floor((100 / $budgetSumStore) * $expenseSumStore) || 0;
+    const tweenedPercentage = tweened(0);
+    $: tweenedPercentage.set(percentage);
 </script>
 
 <div class="monthly-overview">
     <Heading>Budget</Heading>
 
-    <div class="card">
+    <BudgetCategory>
         <div class="budget-summary">
-            <h1>{month} {year}</h1>
-            <h3>Total Expenses: {$expenseSumStore}</h3>
+
+            <div class="grid row-one">
+                <div class="budget">
+                    <h4>{month} {year}</h4>
+                </div>
+                <div class="amount-summary">
+                    {$expenseSumStore} of {$budgetSumStore}
+                </div>
+            </div>
+            <div class="grid row-two">
+                <div class="percentage">
+                    <div class="percent" style="width: {$tweenedPercentage}%" />
+                    <span>{percentage}%</span>
+                </div>
+            </div>
         </div>
-    </div>
+    </BudgetCategory>
 
     <div class="budget-list">
         {#each $baseBudgets as budget (budget._id)}
@@ -74,21 +114,52 @@
 
 <style>
     .budget-summary {
-        display: inline-block;
-        padding: 10px 0 10px 15px;
-        margin-bottom: 10px;
+        padding-bottom: 15px;
+    }
+    .grid {
+        display: grid;
+        margin: 5px 0;
+        width: calc(100vw - 30px);
     }
 
-    .budget-summary h1 {
-        font-size: 20px;
+    .row-one {
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 5px;
     }
 
-    .budget-summary h3 {
-        font-size: 16px;
-        font-weight: 500;
+    .amount-summary {
+        justify-self: end;
     }
 
-    .budget-list {
-        margin: 0 15px;
+    .row-two {
+        grid-template-columns: 1fr 0.1fr;
+        width: 100%;
+        height: 25px;
+    }
+
+    .percentage {
+        grid-column: 1/2;
+        width: 100%;
+        position: relative;
+        background-color: lightgray;
+        box-sizing: border-box;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+    }
+
+    span {
+        position: absolute;
+        color: white;
+        padding-left: 5px;
+        font-size: 14px;
+    }
+
+    .percent {
+        height: 100%;
+        position: absolute;
+        box-sizing: border-box;
+        background-color: #9ccc65;
+        border-radius: 5px;
     }
 </style>

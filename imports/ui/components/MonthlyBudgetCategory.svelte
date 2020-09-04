@@ -11,6 +11,7 @@
     import UpdateMonthlyBudgetForm from './UpdateMonthlyBudgetForm.svelte';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
     import { createEventDispatcher } from 'svelte';
+    import BudgetCategory from '../shared/BudgetCategory.svelte';
     let dispatch = createEventDispatcher();
 
     $: monthlyBudget = {
@@ -90,7 +91,7 @@
     $: tweenedPercentage.set(percentage);
 </script>
 
-<div class="card">
+<BudgetCategory>
     <div class="grid row-one">
         <div class="category-name">
             <h4>{budget.category}</h4>
@@ -111,7 +112,7 @@
     <div class="grid row-two">
         <div class="percentage">
             <div class="percent" style="width: {$tweenedPercentage}%" />
-            <span>{percentage}</span>
+            <span>{percentage}%</span>
         </div>
         <div class="dropdown" on:click={() => (isDropdown = !isDropdown)}>
             <img src="/img/dropdown.svg" alt="" />
@@ -132,20 +133,13 @@
         {/each}
         <br />
     </div>
-
-</div>
+</BudgetCategory>
 
 <style>
-    .card {
-        margin-left: 0;
-        margin-right: 0;
-        padding: 10px 10px 0 10px;
-        height: auto;
-    }
-
     .grid {
         display: grid;
         margin: 5px 0;
+        width: calc(100vw - 25px);
     }
 
     .row-one {
@@ -162,17 +156,25 @@
 
     .row-two {
         grid-template-columns: 1fr 0.1fr;
+        height: 25px;
     }
 
     .percentage {
         grid-column: 1/2;
         width: 100%;
         position: relative;
+        background-color: lightgray;
+        box-sizing: border-box;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
     }
 
     span {
-        display: inline-block;
+        position: absolute;
         color: white;
+        padding-left: 5px;
+        font-size: 14px;
     }
 
     .percent {
@@ -180,7 +182,6 @@
         position: absolute;
         box-sizing: border-box;
         background-color: #9ccc65;
-        border-left: 4px solid #6b9b37;
         border-radius: 5px;
     }
 

@@ -2,6 +2,13 @@ body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -18,8 +25,15 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .card {
-  margin: 10px 15px 0 15px;
+  margin: 0;
   background-color: white;
   border-radius: 5px;
-  box-shadow: 5px 5px 5px #cac8c84d;
+  /* box-shadow: 5px 5px 5px #cac8c84d; */
+}
+
+.section {
+  background-color: white;
+  width: 100%;
+  padding: 10px 15px 10px 15px;
+  margin-bottom: 10px;
 }

@@ -13,7 +13,7 @@
     let isHidden = true;
 </script>
 
-<div class="expense">
+<div class="card">
     <button class="delete" on:click={deleteExpense}>
         <img src="/img/delete.svg" alt="" />
     </button>
@@ -44,8 +44,11 @@
 </div>
 
 <style>
-    .expense {
-        width: 100%;
+    .card {
+        margin-left: 0;
+        margin-right: 0;
+        padding: 10px 10px 10px 10px;
+        height: auto;
     }
     .edit img {
         height: 15px;

@@ -3,6 +3,7 @@
     import ExpenseList from './ExpenseList.svelte';
     import IncomeList from './IncomeList.svelte';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
+    import { incomeSumStore } from '../stores/IncomeSumStore';
     import { Expenses } from '../../api/expenses';
     import Heading from '../shared/Heading.svelte';
 
@@ -26,12 +27,16 @@
         incomeSum = incomes.reduce(function (a, b) {
             return a + b;
         }, 0);
+        incomeSum = incomes.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+        incomeSumStore.set(incomeSum);
     };
 
-    $: remainingTotal = Number((incomeSum - expenseSum).toFixed(2));
+    $: remainingTotal = Number(($incomeSumStore - $expenseSumStore).toFixed(2));
 
     onMount(() => {
-        Meteor.subscribe('usersettings', function () {
+        Meteor.subscribe('expenses', function () {
             calculateExpenses();
         });
     });
@@ -48,7 +53,7 @@
         <h3>Total Expenses: {$expenseSumStore}</h3>
         <!-- List of incomes -->
         <IncomeList on:recalculateIncome={recalculateIncomes} />
-        <h3>Total Income: {incomeSum}</h3>
+        <h3>Total Income: {$incomeSumStore}</h3>
         <h3>Remaining Total: {remainingTotal}</h3>
     </div>
 </div>

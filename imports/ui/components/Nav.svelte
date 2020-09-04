@@ -7,7 +7,7 @@
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
 
-    let current = 'transactions';
+    let current = 'budget';
 
     const setUserCurrency = () => {
         usersetting = UserSettings.findOne({});
@@ -57,8 +57,8 @@
             </button>
             <button>
                 <div
-                    class="tab {current === 'summary' ? 'active' : ''}"
-                    on:click={() => (current = 'summary')}>
+                    class="tab {current === 'transactions' ? 'active' : ''}"
+                    on:click={() => (current = 'transactions')}>
                     <img src="/img/wallet.svg" alt="" />
                 </div>
             </button>
@@ -78,6 +78,8 @@
         min-height: calc(100vh - 50px);
         max-height: calc(100vh - 50px);
         background-color: #eeeeeee7;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
     .bottom-nav-container {
         background-color: #fff;
