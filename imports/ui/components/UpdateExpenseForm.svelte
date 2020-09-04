@@ -3,7 +3,7 @@
     import { Budgets } from '../../api/budgets';
     import { UserSettings } from '../../api/usersettings';
     export let expense;
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { Expenses } from '../../api/expenses';
@@ -54,6 +54,10 @@
     const exitUpdate = () => {
         dispatch('collapse');
     };
+
+    onMount(() => {
+        Meteor.subscribe('usersettings');
+    });
 </script>
 
 <form class="update-expense" on:submit|preventDefault={updateExpense}>
@@ -72,6 +76,7 @@
         {/each}
     </select>
     <select id="expense-currency" bind:value={updatedExpense.currency}>
+
         {#each $usersettings as usersetting (usersetting._id)}
             <option value={updatedExpense.currency}>
                 {updatedExpense.currency}

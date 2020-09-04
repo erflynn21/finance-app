@@ -54,13 +54,15 @@
         <h1>Budget</h1>
     </div>
 
-    <div class="add-button">
+    <!-- <div class="add-button">
         <button>+</button>
-    </div>
+    </div> -->
 
-    <div class="budget-summary">
-        <h1>{month} {year}</h1>
-        <h3>Total Expenses: {$expenseSumStore}</h3>
+    <div class="card">
+        <div class="budget-summary">
+            <h1>{month} {year}</h1>
+            <h3>Total Expenses: {$expenseSumStore}</h3>
+        </div>
     </div>
 
     <div class="budget-list">
@@ -76,7 +78,7 @@
 </div>
 
 <style>
-    button,
+    /* button,
     button:active,
     button:visited,
     button:enabled,
@@ -87,7 +89,7 @@
         background: transparent;
         outline: 0;
         min-width: 0px;
-    }
+    } */
 
     .heading {
         width: 100%;
@@ -96,20 +98,22 @@
         align-items: center;
         justify-content: center;
         padding-top: 10px;
-        padding-bottom: 5px;
+        padding-bottom: 10px;
         padding-right: 15px;
+        background-color: #9ccc65;
     }
 
     .heading h1 {
-        font-size: 20px;
-        font-weight: 500;
+        font-size: 18px;
+        font-weight: 400;
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
+        color: white;
     }
 
-    .add-button {
+    /* .add-button {
         position: absolute;
         height: 38px;
         top: 0;
@@ -123,7 +127,7 @@
     .add-button button {
         font-size: 20px;
         font-weight: 300;
-    }
+    } */
 
     .budget-summary {
         display: inline-block;

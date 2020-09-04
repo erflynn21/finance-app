@@ -16,3 +16,10 @@ h1, h2, h3, h4, h5, h6, p {
 .isDropdown {
   display: none;
 }
+
+.card {
+  margin: 10px 15px 0 15px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px #cac8c84d;
+}

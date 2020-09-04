@@ -90,7 +90,7 @@
     $: tweenedPercentage.set(percentage);
 </script>
 
-<div class="category">
+<div class="card">
     <div class="grid row-one">
         <div class="category-name">
             <h4>{budget.category}</h4>
@@ -118,29 +118,29 @@
         </div>
     </div>
     <br />
+    <div class:isDropdown>
+        {#each $expenses as expense (expense._id)}
+            {#if expense.category === budget.category}
+                <Expense
+                    {expense}
+                    on:delete={calculateCategoryExpenses}
+                    on:expenseEdited={calculateCategoryExpenses} />
+                {#each [calculateCategoryExpenses(expense)] as expense}
+                    <div />
+                {/each}
+            {/if}
+        {/each}
+        <br />
+    </div>
 
-</div>
-<div class:isDropdown>
-    {#each $expenses as expense (expense._id)}
-        {#if expense.category === budget.category}
-            <Expense
-                {expense}
-                on:delete={calculateCategoryExpenses}
-                on:expenseEdited={calculateCategoryExpenses} />
-            {#each [calculateCategoryExpenses(expense)] as expense}
-                <div />
-            {/each}
-        {/if}
-    {/each}
-    <br />
 </div>
 
 <style>
-    .category {
-        padding: 10px 0;
-        height: 40px;
-        width: 100%;
-        margin-bottom: 5px;
+    .card {
+        margin-left: 0;
+        margin-right: 0;
+        padding: 10px 10px 0 10px;
+        height: auto;
     }
 
     .grid {
@@ -179,8 +179,8 @@
         height: 100%;
         position: absolute;
         box-sizing: border-box;
-        background-color: #8ac148;
-        border-left: 4px solid #599014;
+        background-color: #9ccc65;
+        border-left: 4px solid #6b9b37;
         border-radius: 5px;
     }
 

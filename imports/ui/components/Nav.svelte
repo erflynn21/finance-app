@@ -47,6 +47,7 @@
                     <img src="/img/overview.svg" alt="" />
                 </div>
             </button>
+
             <button>
                 <div
                     class="tab {current === 'budget' ? 'active' : ''}"
@@ -76,6 +77,7 @@
     .content {
         min-height: calc(100vh - 50px);
         max-height: calc(100vh - 50px);
+        background-color: #eeeeeee7;
     }
     .bottom-nav-container {
         background-color: #fff;
