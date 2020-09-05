@@ -6,6 +6,7 @@
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     import { tweened } from 'svelte/motion';
     import { incomeSumStore } from '../stores/IncomeSumStore';
+    import DoughnutChart from './DoughnutChart.svelte';
 
     // setting budget month
     const date = new Date();
@@ -91,6 +92,17 @@
             </div>
         </ListItem>
     </div>
+
+    <div class="spending">
+        <ListItem>
+            <div class="title">
+                <h3>SPENDING</h3>
+            </div>
+            <div class="doughnut">
+                <DoughnutChart />
+            </div>
+        </ListItem>
+    </div>
 </div>
 
 <style>
@@ -155,6 +167,10 @@
         border-radius: 5px;
     }
 
+    .cash-flow {
+        margin-bottom: 10px;
+    }
+
     .row-one h3 {
         margin-bottom: 5px;
     }
@@ -183,5 +199,10 @@
     .cash-flow-sum h4 {
         font-size: 18px;
         font-weight: 500;
+    }
+
+    .doughnut {
+        width: 80vw;
+        height: auto;
     }
 </style>

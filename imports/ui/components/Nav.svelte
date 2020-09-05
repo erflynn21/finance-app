@@ -14,7 +14,7 @@
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import { budgetSumStore } from '../stores/BudgetSumStore';
 
-    let current = 'budget';
+    let current = 'overview';
 
     const currencyDict = {
         EUR: '€',

@@ -36,7 +36,7 @@
         expense.date = new Date().toISOString().substr(0, 10);
         expense.category = '';
         expense.amount = '';
-        expense.currency = userCurrency;
+        expense.currency = $userCurrency;
         expense.originalCurrency = null;
         expense.originalAmount = null;
     }
