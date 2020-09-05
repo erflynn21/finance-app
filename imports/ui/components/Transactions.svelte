@@ -7,6 +7,7 @@
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     import { Expenses } from '../../api/expenses';
+    import { Incomes } from '../../api/incomes';
     import Heading from '../shared/Heading.svelte';
 
     // getting summary of total amounts for expenses, income and budgets
@@ -24,11 +25,12 @@
     };
 
     $: incomeSum = 0;
-    const recalculateIncomes = (totalIncomes) => {
-        incomes = totalIncomes.detail.data;
-        incomeSum = incomes.reduce(function (a, b) {
-            return a + b;
-        }, 0);
+    const calculateIncomes = () => {
+        let totalIncomes = Incomes.find({}).fetch();
+        let incomes = [];
+        totalIncomes.forEach((expense) => {
+            incomes = [...incomes, expense.amount];
+        });
         incomeSum = incomes.reduce(function (a, b) {
             return a + b;
         }, 0);
@@ -40,6 +42,9 @@
     onMount(() => {
         Meteor.subscribe('expenses', function () {
             calculateExpenses();
+        });
+        Meteor.subscribe('incomes', function () {
+            calculateIncomes();
         });
     });
 </script>
@@ -53,11 +58,14 @@
         <ExpenseList
             on:delete={calculateExpenses}
             on:expenseEdited={calculateExpenses}
-            on:calculate={calculateExpenses} />
+            on:calculateExpenses={calculateExpenses} />
         <!-- List of incomes -->
         <h1>Income:</h1>
         <h3>Total Income: {$userCurrencySymbol}{$incomeSumStore}</h3>
-        <IncomeList on:recalculateIncome={recalculateIncomes} />
+        <IncomeList
+            on:delete={calculateIncomes}
+            on:incomeEdited={calculateIncomes}
+            on:calculateIncomes={calculateIncomes} />
         <h3>Remaining: {$userCurrencySymbol}{remainingTotal}</h3>
     </div>
 </div>

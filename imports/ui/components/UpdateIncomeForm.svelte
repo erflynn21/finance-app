@@ -29,6 +29,7 @@
 
         // update the currency
         Meteor.call('incomes.update', income._id, updatedIncome);
+        dispatch('incomeEdited', updatedIncome);
 
         // collapse the update menu
         dispatch('collapse');
@@ -59,24 +60,13 @@
         type="number"
         placeholder={income.amount}
         bind:value={updatedIncome.amount} />
-    <select id="category" bind:value={updatedIncome.category}>
-        {#each $budgets as budget (budget._id)}
-            <option value={budget.category}>{budget.category}</option>
-        {/each}
-    </select>
     <select id="income-currency" bind:value={updatedIncome.currency}>
+        <option value={$userCurrency}>{$userCurrency}</option>
         {#each $usersettings as usersetting (usersetting._id)}
-            <option value={income.currency}>{income.currency}</option>
-            {#if income.currency !== $userCurrency}
-                <option value={usersetting.baseCurrency}>
-                    {usersetting.baseCurrency}
-                </option>
-            {/if}
             {#each usersetting.currencyOptions as currencyOption}
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
         {/each}
-
     </select>
     <button on:click|preventDefault={updateIncome}>Edit</button>
 </form>

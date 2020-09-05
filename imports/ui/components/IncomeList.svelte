@@ -11,35 +11,21 @@
         Incomes.find({}, { sort: { date: -1 } }).fetch()
     );
 
-    $: totalIncomes = [];
-    let totalIncomesIDs = [];
-    const calculateTotal = (income) => {
-        if (totalIncomesIDs.includes(income._id) === false) {
-            totalIncomesIDs = [...totalIncomesIDs, income._id];
-            totalIncomes = [...totalIncomes, income.amount];
-        }
-        dispatch('recalculateIncome', { data: totalIncomes });
-    };
-
-    const deleteIncomeFromTotal = (income) => {
-        const index = totalIncomesIDs.indexOf(income.detail._id);
-        totalIncomes.splice(index, 1);
-        totalIncomes = totalIncomes;
-        dispatch('recalculateIncome', { data: totalIncomes });
+    const dispatchCalc = () => {
+        dispatch('calculateIncomes');
     };
 
     onMount(() => {
         Meteor.subscribe('incomes');
-        dispatch('recalculateIncome', { data: totalIncomes });
     });
 </script>
 
 <div>
     <!-- List of incomes -->
-    {#each $incomes.map(calculateTotal) as income}
-        <div />
-    {/each}
     {#each $incomes as income (income._id)}
-        <Income {income} on:delete={deleteIncomeFromTotal} />
+        {#each [dispatchCalc(income)] as income}
+            <div />
+        {/each}
+        <Income {income} on:delete on:incomeEdited />
     {/each}
 </div>

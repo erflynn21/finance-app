@@ -43,7 +43,8 @@
             <div class:hidden={isHidden} class="update-income">
                 <UpdateIncomeForm
                     {income}
-                    on:collapse={() => (isHidden = !isHidden)} />
+                    on:collapse={() => (isHidden = !isHidden)}
+                    on:incomeEdited />
             </div>
             <button class="edit" on:click={() => (isHidden = !isHidden)}>
                 <img src="/img/edit.svg" alt="" />

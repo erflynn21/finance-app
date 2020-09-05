@@ -57,6 +57,7 @@
 
     onMount(() => {
         Meteor.subscribe('usersettings');
+        Meteor.subscribe('budgets');
     });
 </script>
 
@@ -71,22 +72,21 @@
         placeholder={updatedExpense.amount}
         bind:value={updatedExpense.amount} />
     <select id="category" bind:value={updatedExpense.category}>
+        <option value={expense.category}>{expense.category}</option>
         {#each $budgets as budget (budget._id)}
-            <option value={budget.category}>{budget.category}</option>
+            {#if budget.category !== expense.category}
+                <option value={budget.category}>{budget.category}</option>
+            {/if}
         {/each}
     </select>
     <select id="expense-currency" bind:value={updatedExpense.currency}>
+        <option value={$userCurrency}>{$userCurrency}</option>
         {#each $usersettings as usersetting (usersetting._id)}
-            {#if updatedExpense.currency !== $userCurrency}
-                <option value={usersetting.baseCurrency}>
-                    {usersetting.baseCurrency}
-                </option>
-            {/if}
             {#each usersetting.currencyOptions as currencyOption}
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
         {/each}
     </select>
-    <button on:click|preventDefault={updateExpense}>Edit</button>
+    <button on:click|preventDefault={updateExpense}>Update</button>
     <button on:click|preventDefault={exitUpdate}>Exit</button>
 </form>

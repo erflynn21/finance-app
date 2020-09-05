@@ -18,16 +18,6 @@
         currencyOptions: '',
     };
 
-    // const getUserInfo = () => {
-    //     user = UserSettings.findOne({});
-    //     usersetting = {
-    //         firstName: user.firstName,
-    //         lastName: user.lastName,
-    //         baseCurrency: user.baseCurrency,
-    //         currencyOptions: user.currencyOptions,
-    //     };
-    // };
-
     $: updateduserinfo = {};
 
     const parseUserInfo = (userinfo) => {
@@ -70,7 +60,7 @@
 </div>
 
 <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
-    <input
+    <!-- <input
         type="text"
         placeholder={updateduserinfo.firstName}
         bind:value={usersetting.firstName} />
@@ -91,7 +81,7 @@
     </select>
     <button on:click|preventDefault={updateUserSettings}>
         Update User Settings
-    </button>
+    </button> -->
     {#each $usersettings.map(parseUserInfo) as userinfo}
         <div />
     {/each}

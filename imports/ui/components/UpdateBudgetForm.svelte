@@ -41,6 +41,10 @@
         );
         updatedBudget.currency = $userCurrency;
     }
+
+    const exitUpdate = () => {
+        dispatch('collapse');
+    };
 </script>
 
 <form class="update-budget" on:submit|preventDefault={updateBudget}>
@@ -65,5 +69,6 @@
             {/each}
         {/each}
     </select>
-    <button on:click|preventDefault={updateBudget}>Edit</button>
+    <button on:click|preventDefault={updateBudget}>Update</button>
+    <button on:click|preventDefault={exitUpdate}>Exit</button>
 </form>

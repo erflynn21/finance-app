@@ -12,7 +12,7 @@
     );
 
     const dispatchCalc = () => {
-        dispatch('calculate');
+        dispatch('calculateExpenses');
     };
 
     onMount(() => {
@@ -21,7 +21,6 @@
 </script>
 
 <div>
-
     <!-- List of expenses -->
     {#each $expenses as expense (expense._id)}
         {#each [dispatchCalc(expense)] as expense}
