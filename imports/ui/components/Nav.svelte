@@ -14,7 +14,7 @@
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import { budgetSumStore } from '../stores/BudgetSumStore';
 
-    let current = 'overview';
+    let current = 'budget';
 
     const currencyDict = {
         EUR: '€',
@@ -132,7 +132,7 @@
     {:else if current === 'transactions'}
         <Transactions />
     {:else if current === 'settings'}
-        <Settings />
+        <Settings on:recalculateBudgets={calculateBudgets} />
     {/if}
 </div>
 

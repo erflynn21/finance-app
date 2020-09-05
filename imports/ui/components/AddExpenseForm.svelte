@@ -75,7 +75,9 @@
     </select>
     <select id="expense-currency" bind:value={expense.currency}>
         {#each $usersettings as usersetting (usersetting._id)}
-            <option value={$userCurrency}>{$userCurrency}</option>
+            <option value={usersetting.baseCurrency}>
+                {usersetting.baseCurrency}
+            </option>
             {#each usersetting.currencyOptions as currencyOption}
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}

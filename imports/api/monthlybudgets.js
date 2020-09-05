@@ -27,7 +27,7 @@ Meteor.methods({
             owner: Meteor.userId(),
         });
     },
-
+    
     'monthlybudgets.update' (monthlybudgetId, monthlybudget) {
         check(monthlybudgetId, String);
         check(monthlybudget, Object);

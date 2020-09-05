@@ -26,6 +26,7 @@
 
         // collapse the update menu
         dispatch('collapse');
+        dispatch('recalculateBudgets');
     }
 
     async function convertAmount() {

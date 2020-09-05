@@ -19,7 +19,7 @@
         month: month,
         year: year,
         category: budget.category,
-        amount: '',
+        amount: budget.amount,
         currency: budget.currency,
         id: null,
     };

@@ -8,7 +8,7 @@
 
     const deleteBudget = () => {
         Meteor.call('budgets.remove', budget._id);
-        dispatch('delete', budget);
+        dispatch('recalculateBudgets');
     };
 
     let isHidden = true;
@@ -20,6 +20,9 @@
     <span>{budget.currency}{budget.amount}</span>
 </div>
 <div class:hidden={isHidden}>
-    <UpdateBudgetForm {budget} on:collapse={() => (isHidden = !isHidden)} />
+    <UpdateBudgetForm
+        {budget}
+        on:collapse={() => (isHidden = !isHidden)}
+        on:recalculateBudgets />
 </div>
 <button class="edit" on:click={() => (isHidden = !isHidden)}>Edit</button>

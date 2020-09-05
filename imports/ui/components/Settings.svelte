@@ -4,6 +4,8 @@
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { UserSettings } from '../../api/usersettings';
     import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
+    import { Budgets } from '../../api/budgets';
+    import { baseBudgetSumStore } from '../stores/BaseBudgetSumStore';
     import CurrenciesList from '../shared/CurrenciesList.svelte';
     import BudgetList from './BudgetList.svelte';
     import AddBudgetForm from './AddBudgetForm.svelte';
@@ -31,7 +33,7 @@
         };
     };
 
-    async function updateUserSettings() {
+    const updateUserSettings = () => {
         // check if user already has settings in database
         if (updateduserinfo.owner) {
             // if yes, update settings
@@ -40,18 +42,28 @@
             // if no, add settings
             Meteor.call('usersettings.insert', usersetting);
         }
-    }
+    };
 
     $: budgetSum = 0;
-    const recalculateBudgets = (totalBudgets) => {
-        budgets = totalBudgets.detail.data;
-        budgetSum = budgets.reduce(function (a, b) {
-            return a + b;
-        }, 0);
+    const calculateBaseBudgets = () => {
+        let totalBudgets = Budgets.find({}).fetch();
+        let budgets = [];
+        totalBudgets.forEach((budget) => {
+            budgets = [...budgets, budget.amount];
+        });
+        budgetSum = Number(
+            budgets.reduce(function (a, b) {
+                return a + b;
+            }, 0)
+        ).toFixed(2);
+        baseBudgetSumStore.set(budgetSum);
     };
 
     onMount(() => {
         Meteor.subscribe('usersettings');
+        Meteor.subscribe('budgets', function () {
+            calculateBaseBudgets();
+        });
     });
 </script>
 
@@ -60,7 +72,7 @@
 </div>
 
 <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
-    <!-- <input
+    <input
         type="text"
         placeholder={updateduserinfo.firstName}
         bind:value={usersetting.firstName} />
@@ -81,7 +93,7 @@
     </select>
     <button on:click|preventDefault={updateUserSettings}>
         Update User Settings
-    </button> -->
+    </button>
     {#each $usersettings.map(parseUserInfo) as userinfo}
         <div />
     {/each}
@@ -89,18 +101,17 @@
     <div>Last Name: {updateduserinfo.lastName}</div>
     <div>Base Currency: {updateduserinfo.baseCurrency}</div>
     <div>Currency Options: {updateduserinfo.currencyOptions}</div>
-
-    <!-- List of base budgets -->
-    <BudgetList on:recalculateBudgets={recalculateBudgets} />
-    <h3>Total Budgeted: {budgetSum}.</h3>
-
-    <!-- Form to add budgets -->
-    <h3>Add in a base budget:</h3>
-    <AddBudgetForm />
 </form>
+
+<!-- List of base budgets -->
+<BudgetList on:recalculateBudgets={calculateBaseBudgets} />
+<h3>Total Budgeted: {$baseBudgetSumStore}</h3>
+
+<!-- Form to add budgets -->
+<h3>Add in a base budget:</h3>
+<AddBudgetForm on:recalculateBudgets={calculateBaseBudgets} />
 
 <Forms />
 
 <style>
-
 </style>

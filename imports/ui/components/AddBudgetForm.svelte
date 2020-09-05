@@ -4,6 +4,9 @@
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
+    import Colors from '../shared/Colors.svelte';
+    import { createEventDispatcher } from 'svelte';
+    let dispatch = createEventDispatcher();
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -11,6 +14,7 @@
         category: '',
         amount: '',
         currency: '',
+        color: '',
         date: new Date().toISOString().substr(0, 10),
     };
 
@@ -24,11 +28,13 @@
 
         // add the budget
         Meteor.call('budgets.insert', budget);
+        dispatch('recalculateBudgets');
 
         // clear form
         budget.category = '';
         budget.amount = '';
         budget.currency = $userCurrency;
+        budget.color = '';
     }
 
     async function convertAmount() {
@@ -65,6 +71,11 @@
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
         {/each}
+    </select>
+    <label for="color">Color:</label>
+    <select id="color" bind:value={budget.color}>
+        <option disabled selected value>-- select a color --</option>
+        <Colors />
     </select>
     <button on:click|preventDefault={handleAddBudget}>Add</button>
 </form>
