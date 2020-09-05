@@ -4,7 +4,6 @@
     import IncomeList from './IncomeList.svelte';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { incomeSumStore } from '../stores/IncomeSumStore';
-    import { userCurrency } from '../stores/UserCurrencyStore';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     import { Expenses } from '../../api/expenses';
     import { Incomes } from '../../api/incomes';
@@ -39,14 +38,14 @@
 
     $: remainingTotal = Number(($incomeSumStore - $expenseSumStore).toFixed(2));
 
-    onMount(() => {
-        Meteor.subscribe('expenses', function () {
-            calculateExpenses();
-        });
-        Meteor.subscribe('incomes', function () {
-            calculateIncomes();
-        });
-    });
+    // onMount(() => {
+    //     Meteor.subscribe('expenses', function () {
+    //         calculateExpenses();
+    //     });
+    //     Meteor.subscribe('incomes', function () {
+    //         calculateIncomes();
+    //     });
+    // });
 </script>
 
 <div class="container">

@@ -3,6 +3,7 @@
         <slot />
     </h1>
 </div>
+<div class="spacer" />
 
 <style>
     .heading {
@@ -16,9 +17,9 @@
         padding-right: 15px;
         background-color: #9ccc65;
         margin-bottom: 2px;
-        position: sticky;
+        position: fixed;
         top: 0;
-        left: 0;
+        z-index: 1;
     }
 
     .heading h1 {
@@ -29,5 +30,9 @@
         align-items: center;
         justify-content: center;
         color: white;
+    }
+
+    .spacer {
+        height: 41px;
     }
 </style>

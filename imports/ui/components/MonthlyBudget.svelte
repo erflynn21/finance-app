@@ -159,7 +159,7 @@
         height: 100%;
         position: absolute;
         box-sizing: border-box;
-        background-color: #9ccc65;
+        background-color: green;
         border-radius: 5px;
     }
 </style>

@@ -7,8 +7,14 @@
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
+    import { Expenses } from '../../api/expenses';
+    import { Incomes } from '../../api/incomes';
+    import { MonthlyBudgets } from '../../api/monthlybudgets';
+    import { expenseSumStore } from '../stores/ExpenseSumStore';
+    import { incomeSumStore } from '../stores/IncomeSumStore';
+    import { budgetSumStore } from '../stores/BudgetSumStore';
 
-    let current = 'transactions';
+    let current = 'overview';
 
     const currencyDict = {
         EUR: '€',
@@ -64,7 +70,58 @@
             setUserCurrency();
             setUserCurrencySymbol();
         });
+        Meteor.subscribe('expenses', function () {
+            calculateExpenses();
+        });
+        Meteor.subscribe('incomes', function () {
+            calculateIncomes();
+        });
+        Meteor.subscribe('monthlybudgets', function () {
+            calculateBudgets();
+        });
     });
+
+    // getting summary of total amounts for expenses, income and budgets
+    $: expenseSum = 0;
+    const calculateExpenses = () => {
+        let totalExpenses = Expenses.find({}).fetch();
+        let expenses = [];
+        totalExpenses.forEach((expense) => {
+            expenses = [...expenses, expense.amount];
+        });
+        expenseSum = expenses.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+        expenseSumStore.set(expenseSum);
+    };
+
+    $: incomeSum = 0;
+    const calculateIncomes = () => {
+        let totalIncomes = Incomes.find({}).fetch();
+        let incomes = [];
+        totalIncomes.forEach((expense) => {
+            incomes = [...incomes, expense.amount];
+        });
+        incomeSum = incomes.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+        incomeSumStore.set(incomeSum);
+    };
+
+    $: budgetSum = 0;
+    const calculateBudgets = () => {
+        let totalBudgets = MonthlyBudgets.find({}).fetch();
+        let budgets = [];
+        totalBudgets.forEach((budget) => {
+            budgets = [...budgets, budget.amount];
+        });
+        budgetSum = Number(
+            budgets.reduce(function (a, b) {
+                return a + b;
+            }, 0)
+        ).toFixed(2);
+        budgetSumStore.set(budgetSum);
+    };
 </script>
 
 <div class="content">

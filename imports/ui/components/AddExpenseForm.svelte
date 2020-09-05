@@ -22,8 +22,8 @@
 
     async function handleAddExpense() {
         // check whether expense needs to be converted to base currency
-        if (expense.currency === '' || expense.currency === userCurrency) {
-            expense.currency = userCurrency;
+        if (expense.currency === '' || expense.currency === $userCurrency) {
+            expense.currency = $userCurrency;
         } else {
             await convertAmount();
         }
@@ -75,9 +75,7 @@
     </select>
     <select id="expense-currency" bind:value={expense.currency}>
         {#each $usersettings as usersetting (usersetting._id)}
-            <option value={usersetting.baseCurrency}>
-                {usersetting.baseCurrency}
-            </option>
+            <option value={$userCurrency}>{$userCurrency}</option>
             {#each usersetting.currencyOptions as currencyOption}
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
