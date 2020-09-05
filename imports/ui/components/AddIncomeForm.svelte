@@ -1,6 +1,7 @@
 <script>
     import { Meteor } from 'meteor/meteor';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
+    import { onMount } from 'svelte';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
 
@@ -48,6 +49,10 @@
         );
         income.currency = $userCurrency;
     }
+
+    onMount(() => {
+        Meteor.subscribe('usersettings');
+    });
 </script>
 
 <form class="new-income" on:submit|preventDefault={handleAddIncome}>

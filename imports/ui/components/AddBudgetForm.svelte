@@ -1,5 +1,6 @@
 <script>
     import { Meteor } from 'meteor/meteor';
+    import { onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
@@ -43,6 +44,10 @@
         );
         budget.currency = $userCurrency;
     }
+
+    onMount(() => {
+        Meteor.subscribe('usersettings');
+    });
 </script>
 
 <form class="new-budget" on:submit|preventDefault={handleAddBudget}>

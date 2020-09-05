@@ -8,7 +8,7 @@
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
 
-    let current = 'transactions';
+    let current = 'budget';
 
     const currencyDict = {
         EUR: '€',
@@ -116,6 +116,9 @@
 </footer>
 
 <style>
+    footer {
+        box-shadow: 0px -2px 2px -2px gray;
+    }
     .content {
         min-height: calc(100vh - 50px);
         max-height: calc(100vh - 50px);
@@ -142,7 +145,6 @@
 
     .tab {
         background-color: #ffffff;
-        border-radius: 50px;
         cursor: pointer;
         display: flex;
         align-items: center;

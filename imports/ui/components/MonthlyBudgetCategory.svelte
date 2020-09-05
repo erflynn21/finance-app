@@ -12,13 +12,14 @@
     import { MonthlyBudgets } from '../../api/monthlybudgets';
     import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
+    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     let dispatch = createEventDispatcher();
 
     $: monthlyBudget = {
         month: month,
         year: year,
         category: budget.category,
-        amount: budget.amount,
+        amount: '',
         currency: budget.currency,
         id: null,
     };
@@ -98,7 +99,7 @@
                 <h4>{budget.category}</h4>
             </div>
             <div class="amount-summary">
-                {expenseSum} of {monthlyBudget.amount}
+                {$userCurrencySymbol}{expenseSum} of {$userCurrencySymbol}{monthlyBudget.amount}
                 <button class="edit" on:click={() => (isHidden = !isHidden)}>
                     <img src="/img/edit.svg" alt="" />
                 </button>
@@ -108,7 +109,7 @@
             <UpdateMonthlyBudgetForm
                 {monthlyBudget}
                 on:collapse={() => (isHidden = !isHidden)}
-                on:updateBudgets={calculateCategoryExpenses} />
+                on:updateBudgets={(calculateCategoryExpenses, checkMonthlyBudget)} />
         </div>
         <div class="grid row-two">
             <div class="percentage">

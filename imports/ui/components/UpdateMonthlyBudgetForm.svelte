@@ -27,6 +27,10 @@
         dispatch('updateBudgets');
         dispatch('collapse');
     };
+
+    onMount(() => {
+        Meteor.subscribe('monthlybudgets');
+    });
 </script>
 
 <form

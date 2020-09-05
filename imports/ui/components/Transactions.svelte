@@ -55,9 +55,9 @@
             on:expenseEdited={calculateExpenses}
             on:calculate={calculateExpenses} />
         <!-- List of incomes -->
-        <h1>Incomes:</h1>
-        <IncomeList on:recalculateIncome={recalculateIncomes} />
+        <h1>Income:</h1>
         <h3>Total Income: {$userCurrencySymbol}{$incomeSumStore}</h3>
+        <IncomeList on:recalculateIncome={recalculateIncomes} />
         <h3>Remaining: {$userCurrencySymbol}{remainingTotal}</h3>
     </div>
 </div>

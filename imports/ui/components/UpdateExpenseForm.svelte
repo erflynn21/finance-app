@@ -76,11 +76,7 @@
         {/each}
     </select>
     <select id="expense-currency" bind:value={updatedExpense.currency}>
-
         {#each $usersettings as usersetting (usersetting._id)}
-            <option value={updatedExpense.currency}>
-                {updatedExpense.currency}
-            </option>
             {#if updatedExpense.currency !== $userCurrency}
                 <option value={usersetting.baseCurrency}>
                     {usersetting.baseCurrency}

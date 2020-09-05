@@ -7,6 +7,7 @@
     import CurrenciesList from '../shared/CurrenciesList.svelte';
     import BudgetList from './BudgetList.svelte';
     import AddBudgetForm from './AddBudgetForm.svelte';
+    import Forms from './Forms.svelte';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -16,6 +17,16 @@
         baseCurrency: '',
         currencyOptions: '',
     };
+
+    // const getUserInfo = () => {
+    //     user = UserSettings.findOne({});
+    //     usersetting = {
+    //         firstName: user.firstName,
+    //         lastName: user.lastName,
+    //         baseCurrency: user.baseCurrency,
+    //         currencyOptions: user.currencyOptions,
+    //     };
+    // };
 
     $: updateduserinfo = {};
 
@@ -54,18 +65,18 @@
     });
 </script>
 
-<div>
+<div class="logout">
     <BlazeTemplate template="loginButtons" />
 </div>
 
 <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
     <input
         type="text"
-        placeholder="first name"
+        placeholder={updateduserinfo.firstName}
         bind:value={usersetting.firstName} />
     <input
         type="text"
-        placeholder="last name"
+        placeholder={updateduserinfo.lastName}
         bind:value={usersetting.lastName} />
     <label for="base-currency">Base Currency:</label>
     <select id="base-currency" bind:value={usersetting.baseCurrency}>
@@ -97,3 +108,9 @@
     <h3>Add in a base budget:</h3>
     <AddBudgetForm />
 </form>
+
+<Forms />
+
+<style>
+
+</style>

@@ -1,5 +1,6 @@
 <script>
     import { Meteor } from 'meteor/meteor';
+    import { onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Budgets } from '../../api/budgets';
     import { UserSettings } from '../../api/usersettings';
@@ -43,7 +44,7 @@
     async function convertAmount() {
         expense.originalAmount = expense.amount;
         expense.originalCurrency = expense.currency;
-        let url = `https://api.exchangeratesapi.io/${expense.date}?base=${userCurrency}&symbols=${expense.originalCurrency}`;
+        let url = `https://api.exchangeratesapi.io/${expense.date}?base=${$userCurrency}&symbols=${expense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
         let rates = JSON.stringify(data.rates);
@@ -53,6 +54,10 @@
         );
         expense.currency = userCurrency;
     }
+
+    onMount(() => {
+        Meteor.subscribe('usersettings');
+    });
 </script>
 
 <form class="new-expense" on:submit|preventDefault={handleAddExpense}>
@@ -77,7 +82,6 @@
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
         {/each}
-
     </select>
     <button on:click|preventDefault={handleAddExpense}>Add</button>
 </form>

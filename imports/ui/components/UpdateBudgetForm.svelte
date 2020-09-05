@@ -53,22 +53,17 @@
         placeholder={budget.amount}
         bind:value={updatedBudget.amount} />
     <select id="budget-currency" bind:value={updatedBudget.currency}>
-        <option value={$userCurrency} />
         {#each $usersettings as usersetting (usersetting._id)}
+            <option value={budget.currency}>{budget.currency}</option>
+            {#if budget.currency !== $userCurrency}
+                <option value={usersetting.baseCurrency}>
+                    {usersetting.baseCurrency}
+                </option>
+            {/if}
             {#each usersetting.currencyOptions as currencyOption}
                 <option value={currencyOption}>{currencyOption}</option>
             {/each}
         {/each}
     </select>
-    <!-- <select id="budget-currency" bind:value={budget.currency}>
-        {#each $usersettings as usersetting (usersetting._id)}
-            <option value={usersetting.baseCurrency}>
-                {usersetting.baseCurrency}
-            </option>
-            {#each usersetting.currencyOptions as currencyOption}
-                <option value={currencyOption}>{currencyOption}</option>
-            {/each}
-        {/each}
-    </select> -->
     <button on:click|preventDefault={updateBudget}>Edit</button>
 </form>
