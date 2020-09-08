@@ -21,6 +21,7 @@
         category: budget.category,
         amount: budget.amount,
         currency: budget.currency,
+        color: budget.color,
         id: null,
     };
 
@@ -50,6 +51,7 @@
                 category: newmonthlybudget.category,
                 amount: newmonthlybudget.amount,
                 currency: newmonthlybudget.currency,
+                color: newmonthlybudget.color,
                 id: newmonthlybudget._id,
             };
         } else {
@@ -59,6 +61,7 @@
                 category: monthlybudget.category,
                 amount: monthlybudget.amount,
                 currency: monthlybudget.currency,
+                color: monthlybudget.color,
                 id: monthlybudget._id,
             };
         }

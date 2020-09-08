@@ -52,7 +52,7 @@
         expense.amount = Number(
             (expense.originalAmount / exchangeRate).toFixed(2)
         );
-        expense.currency = userCurrency;
+        expense.currency = $userCurrency;
     }
 
     onMount(() => {

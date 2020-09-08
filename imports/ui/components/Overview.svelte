@@ -106,6 +106,9 @@
 </div>
 
 <style>
+    .container {
+        max-width: 100vw;
+    }
     h3 {
         font-size: 20px;
         font-weight: 500;
@@ -202,7 +205,8 @@
     }
 
     .doughnut {
-        width: 80vw;
+        max-width: 100%;
         height: auto;
+        margin: -40px 20px 0 0;
     }
 </style>
