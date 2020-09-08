@@ -13,6 +13,7 @@
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import { budgetSumStore } from '../stores/BudgetSumStore';
+    import AddButton from './AddButton.svelte';
 
     let current = 'overview';
 
@@ -137,6 +138,7 @@
 </div>
 
 <footer>
+    <AddButton />
     <div class="bottom-nav-container">
         <div class="tab-nav-container">
             <button>

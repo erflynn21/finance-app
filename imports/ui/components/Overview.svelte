@@ -116,7 +116,7 @@
 
     .month {
         justify-self: end;
-        align-self: end;
+        align-self: center;
     }
     .month h4 {
         font-size: 16px;
