@@ -49,7 +49,7 @@ h1, h2, h3, h4, h5, h6, p {
   margin-bottom: 10px;
 }
 
-#toggle:checked ~ .forms {
+/* #toggle:checked ~ .forms {
   opacity: 1;
   transform: translateX(10%);
   display: block;
@@ -61,4 +61,4 @@ h1, h2, h3, h4, h5, h6, p {
 
 #toggle:checked ~ .button:after {
   transform: rotate(135deg);
-}
+} */

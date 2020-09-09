@@ -111,7 +111,5 @@
 <h3>Add in a base budget:</h3>
 <AddBudgetForm on:recalculateBudgets={calculateBaseBudgets} />
 
-<Forms />
-
 <style>
 </style>

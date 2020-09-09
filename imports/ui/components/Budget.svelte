@@ -3,7 +3,6 @@
     import UpdateBudgetForm from './UpdateBudgetForm.svelte';
     export let budget;
     import { createEventDispatcher } from 'svelte';
-
     let dispatch = createEventDispatcher();
 
     const deleteBudget = () => {

@@ -1,14 +1,30 @@
 <script>
     import Forms from './Forms.svelte';
+    import { Meteor } from 'meteor/meteor';
+
+    let forms = false;
+
+    const showForms = () => {
+        forms = true;
+    };
+
+    const collapse = () => {
+        forms = false;
+    };
+
+    Meteor.subscribe('budgets');
 </script>
 
 <div class="act-btn">
-    <div class="forms">
-        <Forms />
-    </div>
-    <input type="checkbox" id="toggle" />
+    <input type="checkbox" id="toggle" on:click={showForms} />
     <label class="button" for="toggle" />
 </div>
+
+{#if forms === true}
+    <div class="forms">
+        <Forms on:collapse={collapse} />
+    </div>
+{/if}
 
 <style>
     .act-btn {
@@ -19,6 +35,7 @@
         justify-content: center;
         align-items: center;
         z-index: 2;
+        height: 50px;
     }
 
     #toggle {
@@ -43,7 +60,6 @@
         height: 2px;
         background: #fff;
         transform: rotate(90deg);
-        transition: all 0.4s ease;
     }
 
     .button:after {
@@ -52,17 +68,5 @@
         width: 20px;
         height: 2px;
         background: #fff;
-        transition: all 0.4s ease;
-    }
-
-    .forms {
-        opacity: 1;
-        /* display: none; */
-        transition: all 0.4s ease-in-out;
-        width: 100%;
-        background: white;
-        transform: translateX(0%);
-        position: absolute;
-        bottom: 100px;
     }
 </style>
