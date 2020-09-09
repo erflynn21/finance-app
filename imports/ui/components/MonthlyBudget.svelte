@@ -112,6 +112,9 @@
 </div>
 
 <style>
+    .monthly-overview {
+        margin-bottom: 60px;
+    }
     .budget-summary {
         margin-bottom: 10px;
     }

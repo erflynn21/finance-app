@@ -71,45 +71,50 @@
     <BlazeTemplate template="loginButtons" />
 </div>
 
-<form class="user-settings" on:submit|preventDefault={updateUserSettings}>
-    <input
-        type="text"
-        placeholder={updateduserinfo.firstName}
-        bind:value={usersetting.firstName} />
-    <input
-        type="text"
-        placeholder={updateduserinfo.lastName}
-        bind:value={usersetting.lastName} />
-    <label for="base-currency">Base Currency:</label>
-    <select id="base-currency" bind:value={usersetting.baseCurrency}>
-        <CurrenciesList />
-    </select>
-    <label for="currency-options">Currency Options:</label>
-    <select
-        id="currency-options"
-        bind:value={usersetting.currencyOptions}
-        multiple>
-        <CurrenciesList />
-    </select>
-    <button on:click|preventDefault={updateUserSettings}>
-        Update User Settings
-    </button>
-    {#each $usersettings.map(parseUserInfo) as userinfo}
-        <div />
-    {/each}
-    <div>First Name: {updateduserinfo.firstName}</div>
-    <div>Last Name: {updateduserinfo.lastName}</div>
-    <div>Base Currency: {updateduserinfo.baseCurrency}</div>
-    <div>Currency Options: {updateduserinfo.currencyOptions}</div>
-</form>
+<div class="container">
+    <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
+        <input
+            type="text"
+            placeholder={updateduserinfo.firstName}
+            bind:value={usersetting.firstName} />
+        <input
+            type="text"
+            placeholder={updateduserinfo.lastName}
+            bind:value={usersetting.lastName} />
+        <label for="base-currency">Base Currency:</label>
+        <select id="base-currency" bind:value={usersetting.baseCurrency}>
+            <CurrenciesList />
+        </select>
+        <label for="currency-options">Currency Options:</label>
+        <select
+            id="currency-options"
+            bind:value={usersetting.currencyOptions}
+            multiple>
+            <CurrenciesList />
+        </select>
+        <button on:click|preventDefault={updateUserSettings}>
+            Update User Settings
+        </button>
+        {#each $usersettings.map(parseUserInfo) as userinfo}
+            <div />
+        {/each}
+        <div>First Name: {updateduserinfo.firstName}</div>
+        <div>Last Name: {updateduserinfo.lastName}</div>
+        <div>Base Currency: {updateduserinfo.baseCurrency}</div>
+        <div>Currency Options: {updateduserinfo.currencyOptions}</div>
+    </form>
 
-<!-- List of base budgets -->
-<BudgetList on:recalculateBudgets={calculateBaseBudgets} />
-<h3>Total Budgeted: {$baseBudgetSumStore}</h3>
+    <!-- List of base budgets -->
+    <BudgetList on:recalculateBudgets={calculateBaseBudgets} />
+    <h3>Total Budgeted: {$baseBudgetSumStore}</h3>
 
-<!-- Form to add budgets -->
-<h3>Add in a base budget:</h3>
-<AddBudgetForm on:recalculateBudgets={calculateBaseBudgets} />
+    <!-- Form to add budgets -->
+    <h3>Add in a base budget:</h3>
+    <AddBudgetForm on:recalculateBudgets={calculateBaseBudgets} />
+</div>
 
 <style>
+    .container {
+        margin-bottom: 60px;
+    }
 </style>

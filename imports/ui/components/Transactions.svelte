@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from 'svelte';
     import ExpenseList from './ExpenseList.svelte';
     import IncomeList from './IncomeList.svelte';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
@@ -37,15 +36,6 @@
     };
 
     $: remainingTotal = Number(($incomeSumStore - $expenseSumStore).toFixed(2));
-
-    // onMount(() => {
-    //     Meteor.subscribe('expenses', function () {
-    //         calculateExpenses();
-    //     });
-    //     Meteor.subscribe('incomes', function () {
-    //         calculateIncomes();
-    //     });
-    // });
 </script>
 
 <div class="container">
@@ -84,5 +74,9 @@
         font-weight: 400;
         text-align: center;
         margin: 10px 0;
+    }
+
+    .container {
+        margin-bottom: 60px;
     }
 </style>

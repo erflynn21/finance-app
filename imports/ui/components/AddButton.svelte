@@ -2,7 +2,7 @@
     import Forms from './Forms.svelte';
     import { Meteor } from 'meteor/meteor';
 
-    let forms = true;
+    let forms = false;
 
     const showForms = () => {
         forms = true;
@@ -36,6 +36,15 @@
         align-items: center;
         z-index: 2;
         height: 50px;
+    }
+
+    .act-btn:focus {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .act-btn input:focus {
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
     }
 
     #toggle {

@@ -175,9 +175,6 @@
 </footer>
 
 <style>
-    footer {
-        box-shadow: 0px -2px 2px -2px gray;
-    }
     .content {
         min-height: calc(100vh - 50px);
         max-height: calc(100vh - 50px);
@@ -192,8 +189,9 @@
         text-align: center;
         margin: 0;
         bottom: 0;
-        padding: 10px 20px;
+        padding: 10px 40px;
         position: sticky;
+        border-top: 1px solid #e4e0e0;
     }
 
     .tab-nav-container {

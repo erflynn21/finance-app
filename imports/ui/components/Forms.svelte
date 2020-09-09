@@ -8,7 +8,7 @@
         dispatch('collapse');
     };
 
-    let active = 'income';
+    let active = 'expense';
 </script>
 
 <div class="container">
