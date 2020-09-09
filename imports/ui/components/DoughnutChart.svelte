@@ -10,13 +10,62 @@
 
     $: categoryExpenses = [];
 
-    $: categoryColors = [];
+    $: categoryColors = [
+        '#f44336',
+        '#9c27b0',
+        '#2196f3',
+        '#00695f',
+        '#ffeb3b',
+        '#ff9800',
+        '#e91e63',
+        '#673ab7',
+        '#00bcd4',
+        '#ffc107',
+        '#2c387e',
+        '#4caf50',
+        '#ff5722',
+        '#03a9f4',
+        '#cddc39',
+        '#8bc34a',
+        '#aa2e25',
+        '#6d1b7b',
+        '#1769aa',
+        '#00695f',
+        '#b1a429',
+        '#b26a00',
+        '#a31545',
+        '#482880',
+        '#008394',
+        '#b28704',
+        '#2c387e',
+        '#357a38',
+        '#b23c17',
+        '#0276aa',
+        '#8f9a27',
+        '#618833',
+        '#f6685e',
+        '#af52bf',
+        '#4dabf5',
+        '#33ab9f',
+        '#ffef62',
+        '#ffac33',
+        '#ed4b82',
+        '#8561c5',
+        '#33c9dc',
+        '#ffcd38',
+        '#6573c3',
+        '#6fbf73',
+        '#ff784e',
+        '#35baf6',
+        '#d7e360',
+        '#a2cf6e',
+    ];
 
     const initateLabels = () => {
         let budgets = MonthlyBudgets.find({}).fetch();
         budgets.forEach((budget) => {
             categoryLabels = [...categoryLabels, budget.category];
-            categoryColors = [...categoryColors, budget.color];
+            // categoryColors = [...categoryColors, budget.color];
         });
 
         let expenses = Expenses.find({}).fetch();

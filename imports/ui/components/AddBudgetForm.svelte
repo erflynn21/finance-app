@@ -14,7 +14,6 @@
         category: '',
         amount: '',
         currency: '',
-        color: '',
         date: new Date().toISOString().substr(0, 10),
     };
 
@@ -34,7 +33,6 @@
         budget.category = '';
         budget.amount = '';
         budget.currency = $userCurrency;
-        budget.color = '';
     }
 
     async function convertAmount() {
@@ -73,9 +71,5 @@
         {/each}
     </select>
     <label for="color">Color:</label>
-    <select id="color" bind:value={budget.color}>
-        <option disabled selected value>-- select a color --</option>
-        <Colors />
-    </select>
     <button on:click|preventDefault={handleAddBudget}>Add</button>
 </form>
