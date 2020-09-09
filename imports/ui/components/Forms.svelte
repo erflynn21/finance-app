@@ -8,22 +8,34 @@
         dispatch('collapse');
     };
 
-    let active = 'expense';
+    let active = 'income';
 </script>
 
 <div class="container">
     <div class="background" on:click={dispatchCollapse} />
     <div class="forms">
         <div class="selector">
-            <button on:click={() => (active = 'expense')}>Expense</button>
-            <button on:click={() => (active = 'income')}>Income</button>
+            <ul>
+                <li
+                    on:click={() => (active = 'expense')}
+                    class:active={active === 'expense'}>
+                    Expense
+                </li>
+
+                <li
+                    on:click={() => (active = 'income')}
+                    class:active={active === 'income'}>
+                    Income
+                </li>
+            </ul>
         </div>
+        <div class="border" />
         {#if active === 'expense'}
             <!-- Form to add expenses-->
-            <AddExpenseForm />
+            <AddExpenseForm on:collapse />
         {:else}
             <!-- Form to add incomes -->
-            <AddIncomeForm />
+            <AddIncomeForm on:collapse />
         {/if}
     </div>
 </div>
@@ -43,12 +55,43 @@
         background: rgba(0, 0, 0, 0.5);
     }
 
+    .selector {
+        text-align: center;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .border {
+        border: 1px solid #f2f2f2;
+    }
+
+    .selector ul {
+        cursor: pointer;
+        margin: 0 10px;
+        padding: 5px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .selector ul li {
+        margin: 0 15px;
+        font-size: 18px;
+    }
+
+    .active {
+        color: green;
+        border-bottom: 1px solid green;
+        padding-bottom: 5px;
+    }
+
     .forms {
         position: absolute;
         background: white;
         bottom: 0;
-        padding: 20px 20px 50px 20px;
-        border-radius: 10px;
-        height: 120px;
+        padding: 20px 30px 15px 30px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        width: calc(100% - 60px);
     }
 </style>

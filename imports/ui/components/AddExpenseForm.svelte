@@ -5,6 +5,8 @@
     import { Budgets } from '../../api/budgets';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
+    import { createEventDispatcher } from 'svelte';
+    let dispatch = createEventDispatcher();
 
     $: budgets = useTracker(() => Budgets.find({}).fetch());
 
@@ -39,6 +41,8 @@
         expense.currency = $userCurrency;
         expense.originalCurrency = null;
         expense.originalAmount = null;
+
+        dispatch('collapse');
     }
 
     async function convertAmount() {
@@ -61,27 +65,106 @@
 </script>
 
 <form class="new-expense" on:submit|preventDefault={handleAddExpense}>
-    <input
-        type="text"
-        placeholder="new expense..."
-        bind:value={expense.title} />
-    <input type="date" bind:value={expense.date} />
-    <input type="number" placeholder="amount" bind:value={expense.amount} />
-    <select id="category" bind:value={expense.category}>
-        <option disabled selected value>-- select a category --</option>
-        {#each $budgets as budget (budget._id)}
-            <option value={budget.category}>{budget.category}</option>
-        {/each}
-    </select>
-    <select id="expense-currency" bind:value={expense.currency}>
-        {#each $usersettings as usersetting (usersetting._id)}
-            <option value={usersetting.baseCurrency}>
-                {usersetting.baseCurrency}
-            </option>
-            {#each usersetting.currencyOptions as currencyOption}
-                <option value={currencyOption}>{currencyOption}</option>
+    <div class="date">
+        <label for="date">Date: </label>
+        <input type="date" name="date" bind:value={expense.date} />
+    </div>
+
+    <div class="title">
+        <label for="title">Expense: </label>
+        <input type="text" placeholder="Name" bind:value={expense.title} />
+    </div>
+
+    <div class="amount">
+        <label for="amount">Amount: </label>
+        <input type="number" placeholder="0.00" bind:value={expense.amount} />
+    </div>
+
+    <div class="category">
+        <label for="category">Category: </label>
+        <select id="category" bind:value={expense.category}>
+            <option disabled selected value>-- select a category --</option>
+            {#each $budgets as budget (budget._id)}
+                <option value={budget.category}>{budget.category}</option>
             {/each}
-        {/each}
-    </select>
-    <button on:click|preventDefault={handleAddExpense}>Add</button>
+        </select>
+    </div>
+
+    <div class="currency">
+        <label for="currency">Currency: </label>
+        <select id="expense-currency" bind:value={expense.currency}>
+            {#each $usersettings as usersetting (usersetting._id)}
+                <option value={usersetting.baseCurrency}>
+                    {usersetting.baseCurrency}
+                </option>
+                {#each usersetting.currencyOptions as currencyOption}
+                    <option value={currencyOption}>{currencyOption}</option>
+                {/each}
+            {/each}
+        </select>
+    </div>
+
+    <div><button on:click|preventDefault={handleAddExpense}>Add</button></div>
 </form>
+
+<style>
+    .new-expense {
+        width: 100%;
+        background: white;
+    }
+
+    .new-expense div {
+        margin: 15px 0;
+        display: grid;
+        grid-template-columns: 0.5fr 1fr;
+    }
+
+    input {
+        border: none;
+    }
+
+    input:active {
+        border: none;
+    }
+
+    .date input {
+        width: 65%;
+    }
+
+    .title input {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding-bottom: 5px;
+    }
+
+    .amount input {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding-bottom: 5px;
+    }
+
+    .category select {
+        width: 80%;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .currency select {
+        width: 30%;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .currency {
+        padding-bottom: 15px;
+    }
+
+    button {
+        width: 60%;
+        justify-self: center;
+        height: 35px;
+        grid-column: 1/3;
+        border-radius: 10px;
+        cursor: pointer;
+        border: 0;
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+        background: green;
+        color: white;
+    }
+</style>

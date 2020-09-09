@@ -3,6 +3,10 @@
   overflow-x: hidden;
 }
 
+*:focus {
+  outline: none;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -48,17 +52,3 @@ h1, h2, h3, h4, h5, h6, p {
   padding: 10px 15px 10px 15px;
   margin-bottom: 10px;
 }
-
-/* #toggle:checked ~ .forms {
-  opacity: 1;
-  transform: translateX(10%);
-  display: block;
-}
-
-#toggle:checked ~ .button:before {
-  transform: rotate(225deg);
-}
-
-#toggle:checked ~ .button:after {
-  transform: rotate(135deg);
-} */

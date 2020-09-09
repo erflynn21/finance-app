@@ -2,7 +2,7 @@
     import Forms from './Forms.svelte';
     import { Meteor } from 'meteor/meteor';
 
-    let forms = false;
+    let forms = true;
 
     const showForms = () => {
         forms = true;
