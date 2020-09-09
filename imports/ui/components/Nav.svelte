@@ -138,7 +138,7 @@
 </div>
 
 <footer>
-    <AddButton />
+    <AddButton on:recalculateExpenses={calculateExpenses} />
     <div class="bottom-nav-container">
         <div class="tab-nav-container">
             <button>

@@ -22,7 +22,7 @@
 
 {#if forms === true}
     <div class="forms">
-        <Forms on:collapse={collapse} />
+        <Forms on:collapse={collapse} on:recalculateExpenses />
     </div>
 {/if}
 

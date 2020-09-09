@@ -116,8 +116,22 @@
         </div>
         <div class="grid row-two">
             <div class="percentage">
-                <div class="percent" style="width: {$tweenedPercentage}%" />
-                <span>{percentage}%</span>
+                {#if percentage <= 70}
+                    <div
+                        class="percent"
+                        style="width: {$tweenedPercentage}%; background-color: green" />
+                    <span>{percentage}%</span>
+                {:else if percentage > 70 && percentage <= 90}
+                    <div
+                        class="percent"
+                        style="width: {$tweenedPercentage}%; background-color: yellow" />
+                    <span style="color: gray">{percentage}%</span>
+                {:else}
+                    <div
+                        class="percent"
+                        style="width: {$tweenedPercentage}%; background-color: red" />
+                    <span>{percentage}%</span>
+                {/if}
             </div>
             <div class="dropdown" on:click={() => (isDropdown = !isDropdown)}>
                 <img src="/img/dropdown.svg" alt="" />
@@ -151,7 +165,7 @@
     }
 
     .row-one {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 0.75fr 1fr;
     }
 
     .amount-summary {

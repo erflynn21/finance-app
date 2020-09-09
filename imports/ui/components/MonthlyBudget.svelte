@@ -126,7 +126,7 @@
     }
 
     .row-one {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 0.75fr 1fr;
         margin-bottom: 5px;
     }
 

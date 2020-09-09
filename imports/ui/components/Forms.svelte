@@ -32,7 +32,7 @@
         <div class="border" />
         {#if active === 'expense'}
             <!-- Form to add expenses-->
-            <AddExpenseForm on:collapse />
+            <AddExpenseForm on:collapse on:recalculateExpenses />
         {:else}
             <!-- Form to add incomes -->
             <AddIncomeForm on:collapse />

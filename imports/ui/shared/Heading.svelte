@@ -15,11 +15,11 @@
         padding-top: 10px;
         padding-bottom: 10px;
         padding-right: 15px;
-        background-color: #9ccc65;
+        background-color: green;
         margin-bottom: 2px;
         position: fixed;
         top: 0;
-        z-index: 1;
+        z-index: 2;
     }
 
     .heading h1 {

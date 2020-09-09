@@ -1,5 +1,4 @@
 <script>
-    import Heading from '../shared/Heading.svelte';
     import ListItem from '../shared/ListItem.svelte';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { budgetSumStore } from '../stores/BudgetSumStore';
@@ -34,81 +33,136 @@
     $: cashflow = Number($incomeSumStore - $expenseSumStore).toFixed(2);
 </script>
 
-<div class="container">
-    <Heading>Overview</Heading>
+<div class="background" />
+<div class="heading">
+    <h1>Overview</h1>
+</div>
+<div class="spacer" />
 
-    <div class="budget-summary">
-        <ListItem>
-            <div class="grid row-one">
-                <div class="budget">
-                    <h3>BUDGETS</h3>
+<div class="outer-container">
+    <div class="container">
+        <div class="budget-summary rounded">
+            <ListItem>
+                <div class="grid row-one">
+                    <div class="budget">
+                        <h3>BUDGETS</h3>
+                    </div>
+                    <div class="month">
+                        <h4>{month}</h4>
+                    </div>
                 </div>
-                <div class="month">
-                    <h4>{month}</h4>
+                <div class="grid row-two">
+                    <div class="percentage">
+                        {#if percentage <= 70}
+                            <div
+                                class="percent"
+                                style="width: {$tweenedPercentage}%; background-color: green" />
+                            <span>{percentage}%</span>
+                        {:else if percentage > 70 && percentage <= 90}
+                            <div
+                                class="percent"
+                                style="width: {$tweenedPercentage}%; background-color: yellow" />
+                            <span style="color: gray">{percentage}%</span>
+                        {:else}
+                            <div
+                                class="percent"
+                                style="width: {$tweenedPercentage}%; background-color: red" />
+                            <span>{percentage}%</span>
+                        {/if}
+                    </div>
                 </div>
-            </div>
-            <div class="grid row-two">
-                <div class="percentage">
-                    {#if percentage <= 70}
-                        <div
-                            class="percent"
-                            style="width: {$tweenedPercentage}%; background-color: green" />
-                    {:else if percentage > 70 && percentage <= 90}
-                        <div
-                            class="percent"
-                            style="width: {$tweenedPercentage}%; background-color: yellow" />
-                    {:else}
-                        <div
-                            class="percent"
-                            style="width: {$tweenedPercentage}%; background-color: red" />
-                    {/if}
-                    <span>{percentage}%</span>
-                </div>
-            </div>
-        </ListItem>
-    </div>
+            </ListItem>
+        </div>
 
-    <div class="cash-flow">
-        <ListItem>
-            <div class="grid row-one">
-                <h3>CASH FLOW</h3>
-            </div>
-            <div class="grid cash-flow-summary">
-                <div class="exp-inc">
-                    <h5>{$userCurrencySymbol}{$incomeSumStore} Earned</h5>
-                    <h5>-{$userCurrencySymbol}{$expenseSumStore} Spent</h5>
+        <div class="cash-flow rounded">
+            <ListItem>
+                <div class="grid row-one">
+                    <h3>CASH FLOW</h3>
                 </div>
-                <div class="cash-flow-sum">
-                    {#if cashflow >= 0}
-                        <h4 style="color: green">
-                            {$userCurrencySymbol}{cashflow}
-                        </h4>
-                    {:else}
-                        <h4 style="color: red">
-                            {$userCurrencySymbol}{cashflow}
-                        </h4>
-                    {/if}
+                <div class="grid cash-flow-summary">
+                    <div class="exp-inc">
+                        <h5>{$userCurrencySymbol}{$incomeSumStore} Earned</h5>
+                        <h5>-{$userCurrencySymbol}{$expenseSumStore} Spent</h5>
+                    </div>
+                    <div class="cash-flow-sum">
+                        {#if cashflow >= 0}
+                            <h4 style="color: green">
+                                {$userCurrencySymbol}{cashflow}
+                            </h4>
+                        {:else}
+                            <h4 style="color: red">
+                                {$userCurrencySymbol}{cashflow}
+                            </h4>
+                        {/if}
+                    </div>
                 </div>
-            </div>
-        </ListItem>
-    </div>
+            </ListItem>
+        </div>
 
-    <div class="spending">
-        <ListItem>
-            <div class="title">
-                <h3>SPENDING</h3>
-            </div>
-            <div class="doughnut">
-                <DoughnutChart />
-            </div>
-        </ListItem>
+        <div class="spending rounded">
+            <ListItem>
+                <div class="title">
+                    <h3>SPENDING</h3>
+                </div>
+                <div class="doughnut">
+                    <DoughnutChart />
+                </div>
+            </ListItem>
+        </div>
     </div>
 </div>
 
 <style>
-    .container {
-        max-width: 100vw;
+    .background {
+        width: 100%;
+        box-shadow: 0 2px 2px -2px gray;
+        background-color: green;
+        margin-bottom: 2px;
+        position: fixed;
+        top: 0;
+        z-index: 0;
+        height: 120px;
     }
+    .heading {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 15px;
+        position: absolute;
+        top: 0;
+        z-index: 2;
+        height: 50px;
+        width: 100%;
+        background: green;
+    }
+
+    .heading h1 {
+        font-size: 30px;
+        font-weight: 400;
+        width: 100%;
+        color: white;
+        padding-left: 20px;
+        padding-top: 15px;
+    }
+
+    .spacer {
+        height: 80px;
+    }
+
+    .outer-container {
+        width: 90%;
+        display: flex;
+        justify-content: center;
+        padding: 0 5%;
+    }
+    .container {
+        width: 100%;
+        z-index: 1;
+    }
+
+    .rounded {
+        border-radius: 5px;
+    }
+
     h3 {
         font-size: 20px;
         font-weight: 500;
@@ -130,7 +184,7 @@
     .grid {
         display: grid;
         margin: 5px 0;
-        width: calc(100vw - 30px);
+        width: calc(100% - 40px);
     }
 
     .row-one {
