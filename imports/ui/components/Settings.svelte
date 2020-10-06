@@ -9,7 +9,7 @@
     import CurrenciesList from '../shared/CurrenciesList.svelte';
     import BudgetList from './BudgetList.svelte';
     import AddBudgetForm from './AddBudgetForm.svelte';
-    import Forms from './Forms.svelte';
+    import Heading from '../shared/Heading.svelte';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -67,13 +67,10 @@
     });
 </script>
 
-<div class="logout">
-    <BlazeTemplate template="loginButtons" />
-</div>
-
 <div class="container">
+    <Heading>Transactions</Heading>
     <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
-        <input
+        <!-- <input
             type="text"
             placeholder={updateduserinfo.firstName}
             bind:value={usersetting.firstName} />
@@ -84,7 +81,7 @@
         <label for="base-currency">Base Currency:</label>
         <select id="base-currency" bind:value={usersetting.baseCurrency}>
             <CurrenciesList />
-        </select>
+        </select> -->
         <label for="currency-options">Currency Options:</label>
         <select
             id="currency-options"
@@ -98,8 +95,8 @@
         {#each $usersettings.map(parseUserInfo) as userinfo}
             <div />
         {/each}
-        <div>First Name: {updateduserinfo.firstName}</div>
-        <div>Last Name: {updateduserinfo.lastName}</div>
+        <!-- <div>First Name: {updateduserinfo.firstName}</div>
+        <div>Last Name: {updateduserinfo.lastName}</div> -->
         <div>Base Currency: {updateduserinfo.baseCurrency}</div>
         <div>Currency Options: {updateduserinfo.currencyOptions}</div>
     </form>
@@ -111,6 +108,10 @@
     <!-- Form to add budgets -->
     <h3>Add in a base budget:</h3>
     <AddBudgetForm on:recalculateBudgets={calculateBaseBudgets} />
+</div>
+
+<div class="logout">
+    <BlazeTemplate template="loginButtons" />
 </div>
 
 <style>

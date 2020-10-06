@@ -2,6 +2,7 @@
     import AddExpenseForm from './AddExpenseForm.svelte';
     import AddIncomeForm from './AddIncomeForm.svelte';
     import { createEventDispatcher } from 'svelte';
+    import AddBudgetForm from './AddBudgetForm.svelte';
     let dispatch = createEventDispatcher();
 
     const dispatchCollapse = () => {
@@ -27,15 +28,23 @@
                     class:active={active === 'income'}>
                     Income
                 </li>
+                <li
+                    on:click={() => (active = 'budget')}
+                    class:active={active === 'budget'}>
+                    Budget
+                </li>
             </ul>
         </div>
         <div class="border" />
         {#if active === 'expense'}
             <!-- Form to add expenses-->
             <AddExpenseForm on:collapse on:recalculateExpenses />
-        {:else}
+        {:else if active === 'income'}
             <!-- Form to add incomes -->
             <AddIncomeForm on:collapse />
+        {:else}
+            <!-- Form to add budget -->
+            <AddBudgetForm on:collapse />
         {/if}
     </div>
 </div>
