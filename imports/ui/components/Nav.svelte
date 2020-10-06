@@ -15,7 +15,7 @@
     import { budgetSumStore } from '../stores/BudgetSumStore';
     import AddButton from './AddButton.svelte';
 
-    let current = 'overview';
+    let current = 'transactions';
 
     const currencyDict = {
         EUR: '€',
