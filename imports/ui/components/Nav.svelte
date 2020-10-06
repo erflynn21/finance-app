@@ -1,5 +1,5 @@
 <script>
-    import { afterUpdate, onMount } from 'svelte';
+    import { onMount } from 'svelte';
     import Overview from './Overview.svelte';
     import MonthlyBudget from './MonthlyBudget.svelte';
     import Settings from './Settings.svelte';
@@ -13,6 +13,7 @@
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import { budgetSumStore } from '../stores/BudgetSumStore';
+    import { startDate, endDate } from '../stores/CurrentDateStore';
     import AddButton from './AddButton.svelte';
 
     let current = 'transactions';
@@ -85,7 +86,9 @@
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
     const calculateExpenses = () => {
-        let totalExpenses = Expenses.find({}).fetch();
+        let totalExpenses = Expenses.find({
+            date: { $gte: $startDate, $lte: $endDate },
+        }).fetch();
         let expenses = [];
         totalExpenses.forEach((expense) => {
             expenses = [...expenses, expense.amount];
@@ -94,12 +97,13 @@
             return a + b;
         }, 0);
         expenseSumStore.set(expenseSum);
-        console.log($expenseSumStore);
     };
 
     $: incomeSum = 0;
     const calculateIncomes = () => {
-        let totalIncomes = Incomes.find({}).fetch();
+        let totalIncomes = Incomes.find({
+            date: { $gte: $startDate, $lte: $endDate },
+        }).fetch();
         let incomes = [];
         totalIncomes.forEach((expense) => {
             incomes = [...incomes, expense.amount];

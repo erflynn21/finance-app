@@ -4,6 +4,7 @@
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
+    import { startDate, endDate } from '../stores/CurrentDateStore';
     import { Expenses } from '../../api/expenses';
     import { Incomes } from '../../api/incomes';
     import Heading from '../shared/Heading.svelte';
@@ -11,7 +12,9 @@
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
     const calculateExpenses = () => {
-        let totalExpenses = Expenses.find({}).fetch();
+        let totalExpenses = Expenses.find({
+            date: { $gte: $startDate, $lte: $endDate },
+        }).fetch();
         let expenses = [];
         totalExpenses.forEach((expense) => {
             expenses = [...expenses, expense.amount];
@@ -24,7 +27,9 @@
 
     $: incomeSum = 0;
     const calculateIncomes = () => {
-        let totalIncomes = Incomes.find({}).fetch();
+        let totalIncomes = Incomes.find({
+            date: { $gte: $startDate, $lte: $endDate },
+        }).fetch();
         let incomes = [];
         totalIncomes.forEach((expense) => {
             incomes = [...incomes, expense.amount];

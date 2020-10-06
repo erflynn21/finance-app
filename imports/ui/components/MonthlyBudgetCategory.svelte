@@ -13,6 +13,7 @@
     import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
+    import { startDate, endDate } from '../stores/CurrentDateStore';
     let dispatch = createEventDispatcher();
 
     $: monthlyBudget = {
@@ -78,6 +79,7 @@
     const calculateCategoryExpenses = () => {
         let totalExpenses = Expenses.find({
             category: monthlyBudget.category,
+            date: { $gte: $startDate, $lte: $endDate },
         }).fetch();
         let expenses = [];
         totalExpenses.forEach((expense) => {
@@ -102,7 +104,9 @@
                 <h4>{budget.category}</h4>
             </div>
             <div class="amount-summary">
-                {$userCurrencySymbol}{expenseSum} of {$userCurrencySymbol}{monthlyBudget.amount}
+                {$userCurrencySymbol}{expenseSum}
+                of
+                {$userCurrencySymbol}{monthlyBudget.amount}
                 <button class="edit" on:click={() => (isHidden = !isHidden)}>
                     <img src="/img/edit.svg" alt="" />
                 </button>

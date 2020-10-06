@@ -6,6 +6,7 @@
     import { tweened } from 'svelte/motion';
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import DoughnutChart from './DoughnutChart.svelte';
+    import { onMount } from 'svelte';
 
     // setting budget month
     const date = new Date();

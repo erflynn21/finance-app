@@ -1,8 +1,10 @@
 <script>
     import Chart from 'chart.js';
     import { afterUpdate, onMount } from 'svelte';
+    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Expenses } from '../../api/expenses';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
+    import { startDate, endDate } from '../stores/CurrentDateStore';
 
     $: categoryLabels = [];
 
@@ -77,17 +79,27 @@
     ];
     const currentMonth = months[date.getMonth()];
 
+    $: expenses = useTracker(() =>
+        Expenses.find(
+            {
+                date: { $gte: $startDate, $lte: $endDate },
+            },
+            { sort: { date: -1 } }
+        ).fetch()
+    );
+
     const initateLabels = () => {
         let budgets = MonthlyBudgets.find({ month: currentMonth }).fetch();
+        categoryLabels = [];
+        categoryExpenses = [];
         budgets.forEach((budget) => {
             categoryLabels = [...categoryLabels, budget.category];
         });
 
-        let expenses = Expenses.find({}).fetch();
         let categoryExpenseTotal = 0;
 
         budgets.forEach((budget) => {
-            expenses.forEach((expense) => {
+            $expenses.forEach((expense) => {
                 if (expense.category === budget.category) {
                     categoryExpenseTotal =
                         categoryExpenseTotal + expense.amount;
@@ -151,6 +163,7 @@
     });
 
     afterUpdate(() => {
+        initateLabels();
         initiateChart();
     });
 </script>

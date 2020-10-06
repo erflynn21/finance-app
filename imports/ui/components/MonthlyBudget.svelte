@@ -11,13 +11,16 @@
     import { MonthlyBudgets } from '../../api/monthlybudgets';
     import { tweened } from 'svelte/motion';
     import ListItem from '../shared/ListItem.svelte';
+    import { startDate, endDate } from '../stores/CurrentDateStore';
 
     // getting budget and expense info
     $: baseBudgets = useTracker(() => Budgets.find({}).fetch());
 
     $: expenseSum = 0;
     const calculateExpenses = () => {
-        let totalExpenses = Expenses.find({}).fetch();
+        let totalExpenses = Expenses.find({
+            date: { $gte: $startDate, $lte: $endDate },
+        }).fetch();
         let expenses = [];
         totalExpenses.forEach((expense) => {
             expenses = [...expenses, expense.amount];
@@ -88,7 +91,9 @@
                     <h4>{month} {year}</h4>
                 </div>
                 <div class="amount-summary">
-                    {$userCurrencySymbol}{$expenseSumStore} of {$userCurrencySymbol}{$budgetSumStore}
+                    {$userCurrencySymbol}{$expenseSumStore}
+                    of
+                    {$userCurrencySymbol}{$budgetSumStore}
                 </div>
             </div>
             <div class="grid row-two">
