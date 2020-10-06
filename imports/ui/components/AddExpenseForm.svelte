@@ -43,7 +43,7 @@
         expense.originalAmount = null;
 
         dispatch('collapse');
-        dispatch('recaculateExpenses');
+        dispatch('recalculateExpenses');
     }
 
     async function convertAmount() {

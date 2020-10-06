@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import Overview from './Overview.svelte';
     import MonthlyBudget from './MonthlyBudget.svelte';
     import Settings from './Settings.svelte';
@@ -94,6 +94,7 @@
             return a + b;
         }, 0);
         expenseSumStore.set(expenseSum);
+        console.log($expenseSumStore);
     };
 
     $: incomeSum = 0;

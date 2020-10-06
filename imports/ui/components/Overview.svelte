@@ -114,7 +114,7 @@
 
 <style>
     .background {
-        width: 100%;
+        width: 100vw;
         box-shadow: 0 2px 2px -2px gray;
         background-color: green;
         margin-bottom: 2px;
@@ -122,6 +122,7 @@
         top: 0;
         z-index: 0;
         height: 120px;
+        overflow: hidden;
     }
     .heading {
         padding-top: 10px;
@@ -131,14 +132,14 @@
         top: 0;
         z-index: 2;
         height: 50px;
-        width: 100%;
+        width: 100vw;
         background: green;
     }
 
     .heading h1 {
         font-size: 30px;
         font-weight: 400;
-        width: 100%;
+        width: 100vw;
         color: white;
         padding-left: 20px;
         padding-top: 15px;
@@ -146,6 +147,8 @@
 
     .spacer {
         height: 80px;
+        width: 100vw;
+        background: transparent;
     }
 
     .outer-container {

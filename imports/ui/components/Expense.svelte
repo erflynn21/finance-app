@@ -17,11 +17,15 @@
     let date;
     let date1 = expense.date.split('-');
     let date2 = date1[1] + '/' + date1[2];
-    let date3 = date2.split('0');
-    if (date3[2] === undefined) {
-        date = date3[1];
+    if (date2.startsWith('0')) {
+        let date3 = date2.split('0');
+        if (date3[2] === undefined) {
+            date = date3[1];
+        } else {
+            date = date3[1] + date3[2];
+        }
     } else {
-        date = date3[1] + date3[2];
+        date = date2;
     }
 </script>
 
@@ -35,11 +39,7 @@
             <time datetime={expense.date} class="date">{date}</time>
             <span class="title">{expense.title}</span>
             <span class="amount">{$userCurrencySymbol}{expense.amount}</span>
-            {#if expense.originalAmount !== null}
-                <!-- <span>
-                Original Amount and Currency: {expense.originalCurrency}{expense.originalAmount}
-            </span> -->
-            {/if}
+            <!-- {#if expense.originalAmount !== null}{/if} -->
 
             <div class:hidden={isHidden} class="update-expense">
                 <UpdateExpenseForm
@@ -69,7 +69,7 @@
     }
     .expense {
         display: grid;
-        grid-template-columns: 0.15fr 0.25fr 1fr 0.6fr 0.15fr;
+        grid-template-columns: 0.15fr 0.3fr 1fr 0.6fr 0.15fr;
         gap: 10px;
         justify-items: start;
         align-items: center;

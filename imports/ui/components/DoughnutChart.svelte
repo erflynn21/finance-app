@@ -4,8 +4,6 @@
     import { Expenses } from '../../api/expenses';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
 
-    // let doughnutChart;
-
     $: categoryLabels = [];
 
     $: categoryExpenses = [];
@@ -61,11 +59,28 @@
         '#a2cf6e',
     ];
 
+    // getting current month
+    const date = new Date();
+    const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ];
+    const currentMonth = months[date.getMonth()];
+
     const initateLabels = () => {
-        let budgets = MonthlyBudgets.find({}).fetch();
+        let budgets = MonthlyBudgets.find({ month: currentMonth }).fetch();
         budgets.forEach((budget) => {
             categoryLabels = [...categoryLabels, budget.category];
-            // categoryColors = [...categoryColors, budget.color];
         });
 
         let expenses = Expenses.find({}).fetch();
