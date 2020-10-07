@@ -97,7 +97,7 @@
                 >
                 <CurrenciesList />
             </select>
-            <button on:click|preventDefault={updateUserSettings}>
+            <button on:click|preventDefault={updateUserSettings} class='ui button'>
                 Update User Settings
             </button>
             {#each $usersettings.map(parseUserInfo) as userinfo}
@@ -153,7 +153,7 @@
         justify-self: center;
     }
 
-    button {
+    /* button {
         width: 60%;
         justify-self: center;
         height: 35px;
@@ -165,7 +165,7 @@
         background: green;
         color: white;
         margin-top: 15px;
-    }
+    } */
 
     .settings-info {
         text-align: center;

@@ -21,5 +21,21 @@
       "server": "server/main.js"
     },
     "testModule": "tests/main.js"
+  },
+  "postcss": {
+    "plugins": {
+      "postcss-easy-import": {},
+      "autoprefixer": {
+        "browsers": [
+          "last 2 versions"
+        ]
+      }
+    }
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "postcss": "^6.0.22",
+    "postcss-easy-import": "^3.0.0",
+    "postcss-load-config": "^1.2.0"
   }
 }
