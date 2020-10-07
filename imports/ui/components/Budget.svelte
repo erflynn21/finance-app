@@ -3,6 +3,9 @@
     import UpdateBudgetForm from './UpdateBudgetForm.svelte';
     export let budget;
     import { createEventDispatcher } from 'svelte';
+    import ListItem from '../shared/ListItem.svelte';
+    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
+
     let dispatch = createEventDispatcher();
 
     const deleteBudget = () => {
@@ -13,15 +16,84 @@
     let isHidden = true;
 </script>
 
-<div>
-    <button class="delete" on:click={deleteBudget}>X</button>
-    <span>{budget.category}</span>
-    <span>{budget.currency}{budget.amount}</span>
+<div class="container">
+    <ListItem>
+        <div class="budget">
+            <button class="delete" on:click={deleteBudget}>
+                <img src="/img/delete.svg" alt="" />
+            </button>
+
+            <span class="category">{budget.category}</span>
+            <span class="amount">{$userCurrencySymbol}{budget.amount}</span>
+
+            <div class:hidden={isHidden} class="update-budget">
+                <UpdateBudgetForm
+                    {budget}
+                    on:collapse={() => (isHidden = !isHidden)}
+                    on:expenseEdited />
+            </div>
+
+            <button class="edit" on:click={() => (isHidden = !isHidden)}>
+                <img src="/img/edit.svg" alt="" />
+            </button>
+        </div>
+    </ListItem>
 </div>
-<div class:hidden={isHidden}>
-    <UpdateBudgetForm
-        {budget}
-        on:collapse={() => (isHidden = !isHidden)}
-        on:recalculateBudgets />
-</div>
-<button class="edit" on:click={() => (isHidden = !isHidden)}>Edit</button>
+
+<style>
+    .container {
+        max-width: 100vw;
+        position: relative;
+    }
+    .container::after {
+        content: '';
+        position: relative;
+        display: block;
+        border-bottom: 1px solid lightgray;
+        left: -20px;
+        width: 110vw;
+    }
+    .budget {
+        display: grid;
+        grid-template-columns: 0.15fr 1fr 0.6fr 0.15fr;
+        gap: 10px;
+        justify-items: start;
+        align-items: center;
+        width: calc(100vw - 25px);
+        margin-left: -5px;
+    }
+
+    .amount {
+        justify-self: end;
+    }
+
+    .edit {
+        justify-self: end;
+    }
+
+    .edit img {
+        height: 15px;
+    }
+
+    .delete img {
+        height: 20px;
+    }
+
+    button,
+    button:active,
+    button:visited,
+    button:enabled,
+    button:focus {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        outline: 0;
+        min-width: 0px;
+    }
+
+    .update-expense {
+        grid-column: 1/5;
+        grid-row: 2;
+    }
+</style>

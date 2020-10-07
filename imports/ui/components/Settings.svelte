@@ -68,8 +68,15 @@
 </script>
 
 <div class="container">
-    <Heading>Transactions</Heading>
+    <Heading>Settings</Heading>
+
+    <!-- List of base budgets -->
+    <BudgetList on:recalculateBudgets={calculateBaseBudgets} />
+    <h3>Total Budgeted Monthly: {$baseBudgetSumStore}</h3>
+
+    <!-- User settings -->
     <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
+        <h3>User Settings:</h3>
         <!-- <input
             type="text"
             placeholder={updateduserinfo.firstName}
@@ -82,32 +89,31 @@
         <select id="base-currency" bind:value={usersetting.baseCurrency}>
             <CurrenciesList />
         </select> -->
-        <label for="currency-options">Currency Options:</label>
-        <select
-            id="currency-options"
-            bind:value={usersetting.currencyOptions}
-            multiple>
-            <CurrenciesList />
-        </select>
-        <button on:click|preventDefault={updateUserSettings}>
-            Update User Settings
-        </button>
-        {#each $usersettings.map(parseUserInfo) as userinfo}
+        <div class="select-currencies">
+            <label for="currency-options">Update Available Currency Options:</label>
+            <select
+                id="currency-options"
+                bind:value={usersetting.currencyOptions}
+                >
+                <CurrenciesList />
+            </select>
+            <button on:click|preventDefault={updateUserSettings}>
+                Update User Settings
+            </button>
+            {#each $usersettings.map(parseUserInfo) as userinfo}
             <div />
         {/each}
+        </div>
+       
+        
+        <div class="settings-info">
         <!-- <div>First Name: {updateduserinfo.firstName}</div>
         <div>Last Name: {updateduserinfo.lastName}</div> -->
         <div>Base Currency: {updateduserinfo.baseCurrency}</div>
         <div>Currency Options: {updateduserinfo.currencyOptions}</div>
+        </div>
+        
     </form>
-
-    <!-- List of base budgets -->
-    <BudgetList on:recalculateBudgets={calculateBaseBudgets} />
-    <h3>Total Budgeted: {$baseBudgetSumStore}</h3>
-
-    <!-- Form to add budgets -->
-    <h3>Add in a base budget:</h3>
-    <AddBudgetForm on:recalculateBudgets={calculateBaseBudgets} />
 </div>
 
 <div class="logout">
@@ -117,5 +123,52 @@
 <style>
     .container {
         margin-bottom: 60px;
+    }
+    h3 {
+        font-size: 16px;
+        color: black;
+        font-weight: 500;
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .user-settings {
+        width: 100%;
+        background-color: white;
+    }
+
+    .user-settings h3 {
+        font-size: 20px;
+    }
+
+    .select-currencies {
+        margin: 15px 20px 15px 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .select-currencies select {
+        width: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        justify-self: center;
+    }
+
+    button {
+        width: 60%;
+        justify-self: center;
+        height: 35px;
+        grid-column: 1/3;
+        border-radius: 10px;
+        cursor: pointer;
+        border: 0;
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+        background: green;
+        color: white;
+        margin-top: 15px;
+    }
+
+    .settings-info {
+        text-align: center;
+        margin-bottom: 15px;
     }
 </style>
