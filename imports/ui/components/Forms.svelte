@@ -103,4 +103,8 @@
         border-top-right-radius: 10px;
         width: calc(100% - 60px);
     }
+
+    li {
+        list-style-type: none;
+    }
 </style>
