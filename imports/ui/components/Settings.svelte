@@ -70,6 +70,10 @@
 </script>
 
 <div class="container">
+    {#each $usersettings.map(parseUserInfo) as userinfo}
+        <div />
+    {/each}
+
     <Heading>Settings</Heading>
 
     <!-- List of base budgets -->
@@ -86,15 +90,27 @@
         <input
             type="text"
             placeholder={updateduserinfo.lastName}
-            bind:value={usersetting.lastName} />
-        <label for="base-currency">Base Currency:</label>
-        <select id="base-currency" bind:value={usersetting.baseCurrency}>
-            <CurrenciesList />
-        </select> -->
+            bind:value={usersetting.lastName} /> -->
+        {#if updateduserinfo.baseCurrency === undefined}
+            <label for="currency-options">Set Base Currency (Your Base Currency can only be set once, choose carefully.):</label>
+            <div class="ui search selection dropdown multiple base-currency-dropdown">
+                <select
+                    id="search-select" name='base-currency' multiple class='ui selection dropdown multiple'
+                    bind:value={usersetting.baseCurrency}
+                    >
+                    <CurrenciesList />
+                </select>
+                <input name="currencies" type='hidden'>
+                <i class='dropdown icon'></i>
+                <div class="default text">Base Currency</div>
+                <div class="menu">
+                    <CurrenciesListDivs />
+                </div>    
+            </div>
+        {/if}
+        <br>
         <label for="currency-options">Update Available Currency Options:</label>
-        
-
-        <div class="ui search selection dropdown multiple">
+        <div class="ui search selection dropdown multiple currencies-select">
             <select
                 id="multi-select" multiple name='currencies' class='ui selection multiple dropdown'
                 bind:value={usersetting.currencyOptions}
@@ -107,22 +123,22 @@
             <div class="menu">
                 <CurrenciesListDivs />
             </div>  
-        </div>
-            
-            <button on:click|preventDefault={updateUserSettings} class='ui green button'>
-                Update User Settings
-            </button>
-            {#each $usersettings.map(parseUserInfo) as userinfo}
-                <div />
-            {/each}
-        
+        </div> 
+        <button on:click|preventDefault={updateUserSettings}>
+            Update User Settings
+        </button>
        
         
         <div class="settings-info">
         <!-- <div>First Name: {updateduserinfo.firstName}</div>
         <div>Last Name: {updateduserinfo.lastName}</div> -->
-        <div>Base Currency: {updateduserinfo.baseCurrency}</div>
-        <div>Currency Options: {updateduserinfo.currencyOptions}</div>
+        {#if updateduserinfo.baseCurrency === undefined || updateduserinfo.currencyOptions === undefined}
+            <div>Base Currency: Base Currency not yet set.</div>
+            <div>Currency Options: Currency Options not yet set.</div>
+        {:else}
+            <div>Base Currency: {updateduserinfo.baseCurrency}</div>
+            <div>Currency Options: {updateduserinfo.currencyOptions}</div>
+        {/if}
         </div>
         
     </form>
@@ -135,6 +151,7 @@
 <style>
     .container {
         margin-bottom: 60px;
+        overflow-x: visible;
     }
     h3 {
         font-size: 16px;
@@ -147,10 +164,20 @@
     .user-settings {
         width: 100%;
         background-color: white;
+        overflow-x: visible;
+        text-align: center;
     }
 
     .user-settings h3 {
         font-size: 20px;
+    }
+
+    .base-currency-dropdown {
+        overflow-x: visible;
+    }
+
+    .currencies-select {
+        overflow-x: visible;
     }
 
     /* .select-currencies {
@@ -165,7 +192,7 @@
         justify-self: center;
     } */
 
-    /* button {
+    button {
         width: 60%;
         justify-self: center;
         height: 35px;
@@ -177,7 +204,7 @@
         background: green;
         color: white;
         margin-top: 15px;
-    } */
+    }
 
     .settings-info {
         text-align: center;
