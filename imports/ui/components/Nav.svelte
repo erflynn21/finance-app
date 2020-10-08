@@ -16,7 +16,7 @@
     import { startDate, endDate } from '../stores/CurrentDateStore';
     import AddButton from './AddButton.svelte';
 
-    let current = 'settings';
+    let current = 'overview';
 
     const currencyDict = {
         EUR: '€',

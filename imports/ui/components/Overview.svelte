@@ -132,7 +132,7 @@
         position: absolute;
         top: 0;
         z-index: 2;
-        height: 50px;
+        height: 52px;
         width: 100vw;
         background: green;
     }
