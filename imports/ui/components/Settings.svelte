@@ -108,7 +108,6 @@
                 </div>    
             </div>
         {/if}
-        <br>
         <label for="currency-options">Update Available Currency Options:</label>
         <div class="ui search selection dropdown multiple currencies-select">
             <select
@@ -157,7 +156,7 @@
         font-size: 16px;
         color: black;
         font-weight: 500;
-        margin: 10px 0;
+        margin: 15px 0;
         text-align: center;
     }
 
@@ -166,6 +165,7 @@
         background-color: white;
         overflow-x: visible;
         text-align: center;
+        padding-top: 2px;
     }
 
     .user-settings h3 {
@@ -173,24 +173,14 @@
     }
 
     .base-currency-dropdown {
+        margin-top: 10px;
         overflow-x: visible;
     }
 
     .currencies-select {
+        margin-top: 10px;
         overflow-x: visible;
     }
-
-    /* .select-currencies {
-        margin: 15px 20px 15px 20px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .select-currencies select {
-        width: 50%;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        justify-self: center;
-    } */
 
     button {
         width: 60%;
@@ -204,10 +194,12 @@
         background: green;
         color: white;
         margin-top: 15px;
+        margin-bottom: 10px;
     }
 
     .settings-info {
         text-align: center;
         margin-bottom: 15px;
+        padding-bottom: 10px;
     }
 </style>
