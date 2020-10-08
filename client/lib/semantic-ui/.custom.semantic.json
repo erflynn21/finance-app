@@ -4,7 +4,11 @@
       "ad"        : true,
       "api"       : true,
       "site"      : true,
-      "button"    : true
+      "button"    : true,
+      "dropdown"  : true,
+      "transition" : true,
+      "label"     : true,
+      "icon"      : true
 
     },
     "themes": {

@@ -38,7 +38,6 @@ Meteor.methods({
         UserSettings.update(usersettingId, { $set: {
             firstName: usersetting.firstName,
             lastName: usersetting.lastName,
-            baseCurrency: usersetting.baseCurrency,
             currencyOptions: usersetting.currencyOptions,
             owner: Meteor.userId(),
         }});

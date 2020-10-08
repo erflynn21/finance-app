@@ -142,7 +142,7 @@
     {/if}
 </div>
 
-<footer>
+<!-- <footer>
     <AddButton on:recalculateExpenses={calculateExpenses} />
     <div class="bottom-nav-container">
         <div class="tab-nav-container">
@@ -177,8 +177,7 @@
             </button>
         </div>
     </div>
-</footer>
-
+</footer> -->
 <style>
     .content {
         min-height: calc(100vh - 50px);

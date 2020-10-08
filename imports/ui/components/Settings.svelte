@@ -8,8 +8,9 @@
     import { baseBudgetSumStore } from '../stores/BaseBudgetSumStore';
     import CurrenciesList from '../shared/CurrenciesList.svelte';
     import BudgetList from './BudgetList.svelte';
-    import AddBudgetForm from './AddBudgetForm.svelte';
     import Heading from '../shared/Heading.svelte';
+    import jq from 'jquery';
+    import CurrenciesListDivs from '../shared/CurrenciesListDivs.svelte';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -64,6 +65,7 @@
         Meteor.subscribe('budgets', function () {
             calculateBaseBudgets();
         });
+        jq('.ui.dropdown').dropdown();
     });
 </script>
 
@@ -89,21 +91,31 @@
         <select id="base-currency" bind:value={usersetting.baseCurrency}>
             <CurrenciesList />
         </select> -->
-        <div class="select-currencies">
-            <label for="currency-options">Update Available Currency Options:</label>
+        <label for="currency-options">Update Available Currency Options:</label>
+        
+
+        <div class="ui search selection dropdown multiple">
             <select
-                id="currency-options"
+                id="multi-select" multiple name='currencies' class='ui selection multiple dropdown'
                 bind:value={usersetting.currencyOptions}
                 >
                 <CurrenciesList />
             </select>
-            <button on:click|preventDefault={updateUserSettings} class='ui button'>
+            <input name="currencies" type='hidden'>
+            <i class='dropdown icon'></i>
+            <div class="default text">Currencies</div>
+            <div class="menu">
+                <CurrenciesListDivs />
+            </div>  
+        </div>
+            
+            <button on:click|preventDefault={updateUserSettings} class='ui green button'>
                 Update User Settings
             </button>
             {#each $usersettings.map(parseUserInfo) as userinfo}
-            <div />
-        {/each}
-        </div>
+                <div />
+            {/each}
+        
        
         
         <div class="settings-info">
@@ -141,7 +153,7 @@
         font-size: 20px;
     }
 
-    .select-currencies {
+    /* .select-currencies {
         margin: 15px 20px 15px 20px;
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -151,7 +163,7 @@
         width: 50%;
         border: 1px solid rgba(0, 0, 0, 0.2);
         justify-self: center;
-    }
+    } */
 
     /* button {
         width: 60%;
