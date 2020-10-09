@@ -16,6 +16,24 @@
     import { startDate, endDate } from '../stores/CurrentDateStore';
     import AddButton from './AddButton.svelte';
 
+    // setting budget month
+    const date = new Date();
+    const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ];
+    const currentMonth = months[date.getMonth()];
+
     let current = 'transactions';
 
     const currencyDict = {
@@ -116,7 +134,7 @@
 
     $: budgetSum = 0;
     const calculateBudgets = () => {
-        let totalBudgets = MonthlyBudgets.find({}).fetch();
+        let totalBudgets = MonthlyBudgets.find({ month: currentMonth }).fetch();
         let budgets = [];
         totalBudgets.forEach((budget) => {
             budgets = [...budgets, budget.amount];

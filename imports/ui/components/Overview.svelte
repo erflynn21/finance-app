@@ -128,11 +128,11 @@
     .heading {
         padding-top: 10px;
         padding-bottom: 10px;
-        padding-right: 15px;
+        /* padding-right: 15px; */
         position: absolute;
         top: 0;
         z-index: 2;
-        height: 52px;
+        height: 55px;
         width: 100vw;
         background: green;
     }
