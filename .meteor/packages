@@ -34,3 +34,5 @@ semantic:ui-dropdown
 semantic:ui-transition
 semantic:ui-label
 semantic:ui-icon
+semantic:ui-modal
+semantic:ui-dimmer

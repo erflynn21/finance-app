@@ -8,7 +8,9 @@
       "dropdown"  : true,
       "transition" : true,
       "label"     : true,
-      "icon"      : true
+      "icon"      : true,
+      "modal"     : true,
+      "dimmer"    : true
 
     },
     "themes": {

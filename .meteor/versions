@@ -83,9 +83,11 @@ retry@1.1.0
 routepolicy@1.1.0
 semantic:ui@2.3.1
 semantic:ui-data@2.3.1
+semantic:ui-dimmer@2.1.7
 semantic:ui-dropdown@2.1.7
 semantic:ui-icon@2.1.4
 semantic:ui-label@2.1.7
+semantic:ui-modal@2.2.10
 semantic:ui-transition@2.1.7
 service-configuration@1.0.11
 session@1.2.0

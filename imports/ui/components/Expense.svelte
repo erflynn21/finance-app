@@ -5,12 +5,21 @@
     export let expense;
     import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
+
+    import DeletePopUp from '../shared/DeletePopUp.svelte';
     let dispatch = createEventDispatcher();
 
     const deleteExpense = () => {
+        console.log(expense._id);
         Meteor.call('expenses.remove', expense._id);
         dispatch('delete', expense);
     };
+
+    const toggleDelete = () => {
+        deleteTab = !deleteTab;
+    };
+
+    let deleteTab = false;
 
     let isHidden = true;
 
@@ -32,7 +41,7 @@
 <div class="container">
     <ListItem>
         <div class="expense">
-            <button class="delete" on:click={deleteExpense}>
+            <button class="delete" on:click={toggleDelete}>
                 <img src="/img/delete.svg" alt="" />
             </button>
 
@@ -53,6 +62,12 @@
         </div>
     </ListItem>
 </div>
+
+{#if deleteTab === true}
+    <div class="deleteTab">
+        <DeletePopUp on:collapse={toggleDelete} on:delete={deleteExpense} />
+    </div>
+{/if}
 
 <style>
     .container {
