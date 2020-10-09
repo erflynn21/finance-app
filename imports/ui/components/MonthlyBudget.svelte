@@ -13,8 +13,29 @@
     import ListItem from '../shared/ListItem.svelte';
     import { startDate, endDate } from '../stores/CurrentDateStore';
 
+    // setting budget month
+    const date = new Date();
+    const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ];
+    const currentMonth = months[date.getMonth()];
+    const year = date.getFullYear();
+
     // getting budget and expense info
-    $: baseBudgets = useTracker(() => Budgets.find({}).fetch());
+    $: monthlyBudgets = useTracker(() =>
+        MonthlyBudgets.find({ month: currentMonth }).fetch()
+    );
 
     $: expenseSum = 0;
     const calculateExpenses = () => {
@@ -33,7 +54,8 @@
 
     $: budgetSum = 0;
     const calculateTotalBudgets = () => {
-        let totalBudgets = MonthlyBudgets.find({}).fetch();
+        let totalBudgets = MonthlyBudgets.find({ month: currentMonth }).fetch();
+        console.log(totalBudgets);
         let budgets = [];
         totalBudgets.forEach((budget) => {
             budgets = [...budgets, budget.amount];
@@ -45,25 +67,6 @@
         ).toFixed(2);
         budgetSumStore.set(budgetSum);
     };
-
-    // setting budget month
-    const date = new Date();
-    const months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    ];
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
 
     onMount(() => {
         Meteor.subscribe('expenses', function () {
@@ -88,7 +91,7 @@
         <ListItem>
             <div class="grid row-one">
                 <div class="budget">
-                    <h4>{month} {year}</h4>
+                    <h4>{currentMonth} {year}</h4>
                 </div>
                 <div class="amount-summary">
                     {$userCurrencySymbol}{$expenseSumStore}
@@ -106,10 +109,10 @@
     </div>
 
     <div class="budget-list">
-        {#each $baseBudgets as budget (budget._id)}
+        {#each $monthlyBudgets as budget (budget._id)}
             <MonthlyBudgetCategory
                 {budget}
-                {month}
+                {currentMonth}
                 {year}
                 on:calculate={calculateExpenses} />
         {/each}
