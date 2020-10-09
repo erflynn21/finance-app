@@ -23,6 +23,7 @@
         category: budget.category,
         amount: budget.amount,
         currency: budget.currency,
+        originalCurrency: budget.originalCurrency,
         id: null,
     };
 
@@ -31,8 +32,6 @@
     };
 
     let editTab = false;
-
-    let isHidden = true;
 
     let isDropdown = true;
 
@@ -58,7 +57,7 @@
                 category: newmonthlybudget.category,
                 amount: newmonthlybudget.amount,
                 currency: newmonthlybudget.currency,
-                color: newmonthlybudget.color,
+                originalCurrency: newmonthlybudget.originalCurrency,
                 id: newmonthlybudget._id,
             };
         } else {
@@ -68,7 +67,7 @@
                 category: monthlybudget.category,
                 amount: monthlybudget.amount,
                 currency: monthlybudget.currency,
-                color: monthlybudget.color,
+                originalCurrency: monthlybudget.originalCurrency,
                 id: monthlybudget._id,
             };
         }

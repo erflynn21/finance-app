@@ -21,6 +21,7 @@
         // check whether budget needs to be converted to base currency
         if (budget.currency === '' || budget.currency === $userCurrency) {
             budget.currency = $userCurrency;
+            budget.originalCurrency = null;
         } else {
             await convertAmount();
         }

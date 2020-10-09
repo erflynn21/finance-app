@@ -18,6 +18,7 @@
         budgetId: monthlyBudget.id,
         currency: monthlyBudget.currency,
         amount: monthlyBudget.amount,
+        originalCurrency: monthlyBudget.originalCurrency,
     };
 
     const updateMonthlyBudget = () => {
