@@ -6,6 +6,7 @@
     import ListItem from '../shared/ListItem.svelte';
     import DeletePopUp from '../shared/DeletePopUp.svelte';
     import UpdateIncomeForm from './UpdateIncomeForm.svelte';
+    import EditPopUp from '../shared/EditPopUp.svelte';
     let dispatch = createEventDispatcher();
 
     const deleteIncome = () => {
@@ -18,6 +19,12 @@
     };
 
     let deleteTab = false;
+
+    const toggleEdit = () => {
+        editTab = !editTab;
+    };
+
+    let editTab = false;
 
     let isHidden = true;
 
@@ -47,19 +54,22 @@
             <span class="amount">{$userCurrencySymbol}{income.amount}</span>
             <!-- {#if income.originalAmount !== null}{/if} -->
 
-            <div class:hidden={isHidden} class="update-income">
+            <!-- <div class:hidden={isHidden} class="update-income">
                 <UpdateIncomeForm
                     {income}
                     on:collapse={() => (isHidden = !isHidden)}
                     on:incomeEdited />
-            </div>
-            <button class="edit" on:click={() => (isHidden = !isHidden)}>
+            </div> -->
+            <button class="edit" on:click={toggleEdit}>
                 <img src="/img/edit.svg" alt="" />
             </button>
         </div>
     </ListItem>
 </div>
 
+{#if editTab === true}
+    <EditPopUp on:collapse={toggleEdit} {income} />
+{/if}
 {#if deleteTab === true}
     <div class="deleteTab">
         <DeletePopUp on:collapse={toggleDelete} on:delete={deleteIncome} />
@@ -116,10 +126,5 @@
         background: transparent;
         outline: 0;
         min-width: 0px;
-    }
-
-    .update-income {
-        grid-column: 1/5;
-        grid-row: 2;
     }
 </style>

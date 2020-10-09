@@ -6,6 +6,7 @@
     import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
     import DeletePopUp from '../shared/DeletePopUp.svelte';
+    import EditPopUp from '../shared/EditPopUp.svelte';
     let dispatch = createEventDispatcher();
 
     const deleteExpense = () => {
@@ -18,6 +19,12 @@
     };
 
     let deleteTab = false;
+
+    const toggleEdit = () => {
+        editTab = !editTab;
+    };
+
+    let editTab = false;
 
     let isHidden = true;
 
@@ -48,18 +55,24 @@
             <span class="amount">{$userCurrencySymbol}{expense.amount}</span>
             <!-- {#if expense.originalAmount !== null}{/if} -->
 
-            <div class:hidden={isHidden} class="update-expense">
-                <UpdateExpenseForm
-                    {expense}
-                    on:collapse={() => (isHidden = !isHidden)}
-                    on:expenseEdited />
-            </div>
-            <button class="edit" on:click={() => (isHidden = !isHidden)}>
+            <!-- <div class:hidden={isHidden} class="update-expense">
+                
+                    <UpdateExpenseForm
+                        {expense}
+                        on:collapse={() => (isHidden = !isHidden)}
+                        on:expenseEdited />
+                
+            </div> -->
+            <button class="edit" on:click={toggleEdit}>
                 <img src="/img/edit.svg" alt="" />
             </button>
         </div>
     </ListItem>
 </div>
+
+{#if editTab === true}
+    <EditPopUp on:collapse={toggleEdit} {expense} />
+{/if}
 
 {#if deleteTab === true}
     <div class="deleteTab">
@@ -119,8 +132,8 @@
         min-width: 0px;
     }
 
-    .update-expense {
+    /* .update-expense {
         grid-column: 1/5;
         grid-row: 2;
-    }
+    } */
 </style>

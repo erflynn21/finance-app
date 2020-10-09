@@ -28,6 +28,10 @@
         dispatch('collapse');
     };
 
+    const exitUpdate = () => {
+        dispatch('collapse');
+    };
+
     onMount(() => {
         Meteor.subscribe('monthlybudgets');
     });
@@ -55,5 +59,31 @@
             {/each}
         {/each}
     </select>
-    <button on:click|preventDefault={updateMonthlyBudget}>Edit</button>
+    <button class="no" on:click|preventDefault={exitUpdate}>Exit</button>
+    <button
+        class="yes"
+        on:click|preventDefault={updateMonthlyBudget}>Update</button>
 </form>
+
+<style>
+    button {
+        width: 30%;
+        justify-self: center;
+        height: 35px;
+        grid-column: 1/3;
+        border-radius: 10px;
+        cursor: pointer;
+        border: 0;
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+        color: white;
+        margin: 10px;
+    }
+
+    .yes {
+        background: green;
+    }
+
+    .no {
+        background: red;
+    }
+</style>

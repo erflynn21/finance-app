@@ -14,6 +14,7 @@
     import ListItem from '../shared/ListItem.svelte';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     import { startDate, endDate } from '../stores/CurrentDateStore';
+    import EditPopUp from '../shared/EditPopUp.svelte';
     let dispatch = createEventDispatcher();
 
     $: monthlyBudget = {
@@ -25,6 +26,12 @@
         color: budget.color,
         id: null,
     };
+
+    const toggleEdit = () => {
+        editTab = !editTab;
+    };
+
+    let editTab = false;
 
     let isHidden = true;
 
@@ -107,17 +114,17 @@
                 {$userCurrencySymbol}{expenseSum}
                 of
                 {$userCurrencySymbol}{monthlyBudget.amount}
-                <button class="edit" on:click={() => (isHidden = !isHidden)}>
+                <button class="edit" on:click={toggleEdit}>
                     <img src="/img/edit.svg" alt="" />
                 </button>
             </div>
         </div>
-        <div class:hidden={isHidden}>
+        <!-- <div class:hidden={isHidden}>
             <UpdateMonthlyBudgetForm
                 {monthlyBudget}
                 on:collapse={() => (isHidden = !isHidden)}
                 on:updateBudgets={(calculateCategoryExpenses, checkMonthlyBudget)} />
-        </div>
+        </div> -->
         <div class="grid row-two">
             <div class="percentage">
                 {#if percentage <= 70}
@@ -157,6 +164,13 @@
         </div>
     </ListItem>
 </div>
+
+{#if editTab === true}
+    <EditPopUp
+        on:collapse={toggleEdit}
+        {monthlyBudget}
+        on:updateBudgets={(calculateCategoryExpenses, checkMonthlyBudget)} />
+{/if}
 
 <style>
     .container {
