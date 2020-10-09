@@ -4,6 +4,7 @@
     export let budget;
     import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
+    import DeletePopUp from '../shared/DeletePopUp.svelte';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
 
     let dispatch = createEventDispatcher();
@@ -13,13 +14,19 @@
         dispatch('recalculateBudgets');
     };
 
+    const toggleDelete = () => {
+        deleteTab = !deleteTab;
+    };
+
+    let deleteTab = false;
+
     let isHidden = true;
 </script>
 
 <div class="container">
     <ListItem>
         <div class="budget">
-            <button class="delete" on:click={deleteBudget}>
+            <button class="delete" on:click={toggleDelete}>
                 <img src="/img/delete.svg" alt="" />
             </button>
 
@@ -39,6 +46,12 @@
         </div>
     </ListItem>
 </div>
+
+{#if deleteTab === true}
+    <div class="deleteTab">
+        <DeletePopUp on:collapse={toggleDelete} on:delete={deleteBudget} />
+    </div>
+{/if}
 
 <style>
     .container {

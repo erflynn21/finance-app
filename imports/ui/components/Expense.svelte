@@ -5,12 +5,10 @@
     export let expense;
     import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
-
     import DeletePopUp from '../shared/DeletePopUp.svelte';
     let dispatch = createEventDispatcher();
 
     const deleteExpense = () => {
-        console.log(expense._id);
         Meteor.call('expenses.remove', expense._id);
         dispatch('delete', expense);
     };
