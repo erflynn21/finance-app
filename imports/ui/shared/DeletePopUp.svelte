@@ -14,7 +14,7 @@
 
 <div class="container" transition:fade={{ duration: 100 }}>
     <div class="background" on:click={dispatchCollapse} />
-    <div class="delete" transition:fly={{ y: 100 }}>
+    <div class="delete" transition:fly={{ duration: 200, y: 100 }}>
         <p>Are you sure you want to delete this? This cannot be undone.</p>
         <button class="no" on:click={dispatchCollapse}>No</button>
         <button class="yes" on:click={dispatchDelete}>Yes</button>

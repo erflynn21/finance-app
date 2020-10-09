@@ -1,6 +1,7 @@
 <script>
     import AddExpenseForm from './AddExpenseForm.svelte';
     import AddIncomeForm from './AddIncomeForm.svelte';
+    import { fly, fade } from 'svelte/transition';
     import { createEventDispatcher } from 'svelte';
     import AddBudgetForm from './AddBudgetForm.svelte';
     let dispatch = createEventDispatcher();
@@ -12,9 +13,9 @@
     let active = 'expense';
 </script>
 
-<div class="container">
+<div class="container" transition:fade={{ duration: 100 }}>
     <div class="background" on:click={dispatchCollapse} />
-    <div class="forms">
+    <div class="forms" transition:fly={{ duration: 200, y: 100 }}>
         <div class="selector">
             <ul>
                 <li
