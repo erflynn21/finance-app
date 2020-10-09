@@ -22,6 +22,7 @@
         if (budget.currency === '' || budget.currency === $userCurrency) {
             budget.currency = $userCurrency;
             budget.originalCurrency = null;
+            budget.originalAmount = null;
         } else {
             await convertAmount();
         }

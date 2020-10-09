@@ -25,6 +25,7 @@
         currency: budget.currency,
         originalCurrency: budget.originalCurrency,
         id: null,
+        originalAmount: budget.originalAmount,
     };
 
     const toggleEdit = () => {
@@ -59,6 +60,7 @@
                 currency: newmonthlybudget.currency,
                 originalCurrency: newmonthlybudget.originalCurrency,
                 id: newmonthlybudget._id,
+                originalAmount: newmonthlybudget.originalAmount,
             };
         } else {
             monthlyBudget = {
@@ -69,6 +71,7 @@
                 currency: monthlybudget.currency,
                 originalCurrency: monthlybudget.originalCurrency,
                 id: monthlybudget._id,
+                originalAmount: monthlybudget.originalAmount,
             };
         }
         dispatch('updateBudgets');

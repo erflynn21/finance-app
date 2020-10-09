@@ -26,6 +26,7 @@ Meteor.methods({
             amount: monthlybudget.amount,
             owner: Meteor.userId(),
             originalCurrency: monthlybudget.originalCurrency,
+            originalAmount: monthlybudget.originalAmount,
         });
     },
     
@@ -45,6 +46,7 @@ Meteor.methods({
             amount: monthlybudget.amount,
             owner: Meteor.userId(),
             originalCurrency: monthlybudget.originalCurrency,
+            originalAmount: monthlybudget.originalAmount,
         });
     }
 });

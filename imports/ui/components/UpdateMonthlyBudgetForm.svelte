@@ -19,6 +19,7 @@
         currency: monthlyBudget.currency,
         amount: monthlyBudget.amount,
         originalCurrency: monthlyBudget.originalCurrency,
+        originalAmount: monthlyBudget.originalAmount,
     };
 
     const updateMonthlyBudget = () => {
@@ -38,6 +39,10 @@
     onMount(() => {
         Meteor.subscribe('monthlybudgets');
     });
+
+    if (updatedMonthlyBudget.originalAmount === null) {
+        console.log(updatedMonthlyBudget);
+    }
 </script>
 
 <div class="big-title">Edit {monthlyBudget.category} for {month}, {year}</div>
@@ -47,28 +52,48 @@
     on:submit|preventDefault={updateMonthlyBudget}>
     <div class="amount">
         <label for="amount">Amount: </label>
-        <input
-            type="number"
-            placeholder={monthlyBudget.amount}
-            bind:value={updatedMonthlyBudget.amount} />
+        {#if updatedMonthlyBudget.originalAmount === null}
+            <input
+                type="number"
+                placeholder={updatedMonthlyBudget.amount}
+                bind:value={updatedMonthlyBudget.amount} />
+        {:else}
+            <input
+                type="number"
+                placeholder={updatedMonthlyBudget.originalAmount}
+                bind:value={updatedMonthlyBudget.originalAmount} />
+        {/if}
     </div>
 
     <div class="currency">
         <label for="currency">Currency: </label>
-        <select id="budget-currency" bind:value={updatedMonthlyBudget.currency}>
-            {#each $usersettings as usersetting (usersetting._id)}
-                <option value={monthlyBudget.currency}>
-                    {monthlyBudget.currency}
-                </option>
-                {#if monthlyBudget.currency !== $userCurrency}
-                    <option value={usersetting.baseCurrency}>
-                        {usersetting.baseCurrency}
-                    </option>
-                {/if}
-                {#each usersetting.currencyOptions as currencyOption}
-                    <option value={currencyOption}>{currencyOption}</option>
+        <select
+            id="expense-currency"
+            bind:value={updatedMonthlyBudget.currency}>
+            {#if updatedMonthlyBudget.originalCurrency === null}
+                {#each $usersettings as usersetting (usersetting._id)}
+                    <option value={$userCurrency}>{$userCurrency}</option>
+                    {#each usersetting.currencyOptions as currencyOption}
+                        <option value={currencyOption}>{currencyOption}</option>
+                    {/each}
                 {/each}
-            {/each}
+            {:else}
+                {#each $usersettings as usersetting (usersetting._id)}
+                    <option value={updatedMonthlyBudget.originalCurrency}>
+                        {updatedMonthlyBudget.originalCurrency}
+                    </option>
+                    <option value={$userCurrency}>{$userCurrency}</option>
+                    {#each usersetting.currencyOptions as currencyOption}
+                        {#if currencyOption === updatedMonthlyBudget.originalCurrency}
+                            <div />
+                        {:else}
+                            <option value={currencyOption}>
+                                {currencyOption}
+                            </option>
+                        {/if}
+                    {/each}
+                {/each}
+            {/if}
         </select>
     </div>
 

@@ -84,7 +84,7 @@
             <input
                 type="number"
                 placeholder={updatedExpense.originalAmount}
-                bind:value={updatedExpense.originalamount} />
+                bind:value={updatedExpense.originalAmount} />
         {:else}
             <input
                 type="number"
