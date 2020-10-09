@@ -52,7 +52,7 @@
 
     $: budgetSum = 0;
     const calculateTotalBudgets = () => {
-        let totalBudgets = Budgets.find({}).fetch();
+        let totalBudgets = MonthlyBudgets.find({ month: month }).fetch();
         let budgets = [];
         totalBudgets.forEach((budget) => {
             budgets = [...budgets, budget.amount];
@@ -111,7 +111,8 @@
                 {budget}
                 {month}
                 {year}
-                on:calculate={calculateExpenses} />
+                on:calculate={calculateExpenses}
+                on:updateBudgets={calculateTotalBudgets} />
         {/each}
     </div>
 </div>

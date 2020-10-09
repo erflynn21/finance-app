@@ -23,7 +23,6 @@
         category: budget.category,
         amount: budget.amount,
         currency: budget.currency,
-        color: budget.color,
         id: null,
     };
 
@@ -73,6 +72,7 @@
                 id: monthlybudget._id,
             };
         }
+        dispatch('updateBudgets');
     };
 
     onMount(() => {
@@ -171,7 +171,7 @@
         {monthlyBudget}
         {month}
         {year}
-        on:updateBudgets={(calculateCategoryExpenses, checkMonthlyBudget)} />
+        on:updateBudgets={checkMonthlyBudget} />
 {/if}
 
 <style>

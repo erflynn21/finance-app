@@ -10,8 +10,10 @@
     import { Expenses } from '../../api/expenses';
     import { Incomes } from '../../api/incomes';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
+    import { Budgets } from '../../api/budgets';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { incomeSumStore } from '../stores/IncomeSumStore';
+    import { baseBudgetSumStore } from '../stores/BaseBudgetSumStore';
     import { budgetSumStore } from '../stores/BudgetSumStore';
     import { startDate, endDate } from '../stores/CurrentDateStore';
     import AddButton from './AddButton.svelte';
@@ -97,6 +99,9 @@
             calculateIncomes();
         });
         Meteor.subscribe('monthlybudgets', function () {
+            calculateMonthlyBudgets();
+        });
+        Meteor.subscribe('budgets', function () {
             calculateBudgets();
         });
     });
@@ -132,19 +137,34 @@
         incomeSumStore.set(incomeSum);
     };
 
-    $: budgetSum = 0;
+    $: baseBudgetSum = 0;
     const calculateBudgets = () => {
+        let totalBudgets = Budgets.find({}).fetch();
+        let budgets = [];
+        totalBudgets.forEach((budget) => {
+            budgets = [...budgets, budget.amount];
+        });
+        baseBudgetSum = Number(
+            budgets.reduce(function (a, b) {
+                return a + b;
+            }, 0)
+        ).toFixed(2);
+        baseBudgetSumStore.set(baseBudgetSum);
+    };
+
+    $: monthlyBudgetSum = 0;
+    const calculateMonthlyBudgets = () => {
         let totalBudgets = MonthlyBudgets.find({ month: currentMonth }).fetch();
         let budgets = [];
         totalBudgets.forEach((budget) => {
             budgets = [...budgets, budget.amount];
         });
-        budgetSum = Number(
+        monthlyBudgetSum = Number(
             budgets.reduce(function (a, b) {
                 return a + b;
             }, 0)
         ).toFixed(2);
-        budgetSumStore.set(budgetSum);
+        budgetSumStore.set(monthlyBudgetSum);
     };
 </script>
 
