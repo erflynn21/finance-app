@@ -80,10 +80,17 @@
 
     <div class="amount">
         <label for="amount">Amount: </label>
-        <input
-            type="number"
-            placeholder={updatedExpense.amount}
-            bind:value={updatedExpense.amount} />
+        {#if updatedExpense.originalAmount !== updatedExpense.amount}
+            <input
+                type="number"
+                placeholder={updatedExpense.originalAmount}
+                bind:value={updatedExpense.originalamount} />
+        {:else}
+            <input
+                type="number"
+                placeholder={updatedExpense.amount}
+                bind:value={updatedExpense.amount} />
+        {/if}
     </div>
 
     <div class="category">
@@ -101,12 +108,30 @@
     <div class="currency">
         <label for="currency">Currency: </label>
         <select id="expense-currency" bind:value={updatedExpense.currency}>
-            {#each $usersettings as usersetting (usersetting._id)}
-                <option value={$userCurrency}>{$userCurrency}</option>
-                {#each usersetting.currencyOptions as currencyOption}
-                    <option value={currencyOption}>{currencyOption}</option>
+            {#if updatedExpense.originalCurrency == $userCurrency.toString()}
+                {#each $usersettings as usersetting (usersetting._id)}
+                    <option value={$userCurrency}>{$userCurrency}</option>
+                    {#each usersetting.currencyOptions as currencyOption}
+                        <option value={currencyOption}>{currencyOption}</option>
+                    {/each}
                 {/each}
-            {/each}
+            {:else}
+                {#each $usersettings as usersetting (usersetting._id)}
+                    <option value={updatedExpense.originalCurrency}>
+                        {updatedExpense.originalCurrency}
+                    </option>
+                    <option value={$userCurrency}>{$userCurrency}</option>
+                    {#each usersetting.currencyOptions as currencyOption}
+                        {#if currencyOption === updatedExpense.originalCurrency}
+                            <div />
+                        {:else}
+                            <option value={currencyOption}>
+                                {currencyOption}
+                            </option>
+                        {/if}
+                    {/each}
+                {/each}
+            {/if}
         </select>
     </div>
     <span class="buttons">
@@ -122,7 +147,6 @@
         text-align: center;
         margin-bottom: 10px;
         width: 100%;
-        /* margin: 0 15px; */
         font-size: 18px;
     }
 
