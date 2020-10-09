@@ -1,5 +1,7 @@
 <script>
     import { fly, fade } from 'svelte/transition';
+    export let month;
+    export let year;
     export let expense;
     export let income;
     export let monthlyBudget;
@@ -25,7 +27,9 @@
             <UpdateMonthlyBudgetForm
                 {monthlyBudget}
                 on:collapse
-                on:updateBudgets />
+                on:updateBudgets
+                {month}
+                {year} />
         {/if}
     </div>
 </div>
@@ -53,6 +57,5 @@
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         width: calc(100% - 60px);
-        text-align: center;
     }
 </style>

@@ -54,34 +54,117 @@
     };
 </script>
 
+<div class="big-title">Edit Income</div>
+<div class="border" />
 <form class="update-income" on:submit|preventDefault={updatedIncome}>
-    <input
-        type="text"
-        placeholder={income.title}
-        bind:value={updatedIncome.title} />
-    <input type="date" bind:value={updatedIncome.date} />
-    <input
-        type="number"
-        placeholder={income.amount}
-        bind:value={updatedIncome.amount} />
-    <select id="income-currency" bind:value={updatedIncome.currency}>
-        <option value={$userCurrency}>{$userCurrency}</option>
-        {#each $usersettings as usersetting (usersetting._id)}
-            {#each usersetting.currencyOptions as currencyOption}
-                <option value={currencyOption}>{currencyOption}</option>
+    <div class="date">
+        <label for="date">Date: </label>
+        <input type="date" bind:value={updatedIncome.date} />
+    </div>
+
+    <div class="title">
+        <label for="title">Expense: </label>
+        <input
+            type="text"
+            placeholder={income.title}
+            bind:value={updatedIncome.title} />
+    </div>
+
+    <div class="amount">
+        <label for="amount">Amount: </label>
+        <input
+            type="number"
+            placeholder={income.amount}
+            bind:value={updatedIncome.amount} />
+    </div>
+
+    <div class="currency">
+        <label for="currency">Currency: </label>
+        <select id="income-currency" bind:value={updatedIncome.currency}>
+            <option value={$userCurrency}>{$userCurrency}</option>
+            {#each $usersettings as usersetting (usersetting._id)}
+                {#each usersetting.currencyOptions as currencyOption}
+                    <option value={currencyOption}>{currencyOption}</option>
+                {/each}
             {/each}
-        {/each}
-    </select>
-    <button class="no" on:click|preventDefault={exitUpdate}>Exit</button>
-    <button class="yes" on:click|preventDefault={updateIncome}>Update</button>
+        </select>
+    </div>
+
+    <span class="buttons">
+        <button class="no" on:click|preventDefault={exitUpdate}>Exit</button>
+        <button
+            class="yes"
+            on:click|preventDefault={updateIncome}>Update</button>
+    </span>
 </form>
 
 <style>
-    button {
+    .big-title {
+        text-align: center;
+        margin-bottom: 10px;
+        width: 100%;
+        /* margin: 0 15px; */
+        font-size: 18px;
+    }
+
+    .border {
+        border: 1px solid #f2f2f2;
+    }
+    .update-income {
+        width: 100%;
+        background: white;
+    }
+
+    .update-income div {
+        margin: 15px 0 10px 0;
+        display: grid;
+        grid-template-columns: 0.5fr 1fr;
+    }
+
+    input {
+        border: none;
+        background: transparent;
+    }
+
+    select {
+        background: transparent;
+    }
+
+    input:active {
+        border: none;
+    }
+
+    .date input {
+        width: 65%;
+    }
+
+    .title input {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding-bottom: 5px;
+    }
+
+    .amount input {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding-bottom: 5px;
+    }
+
+    .currency select {
         width: 30%;
-        justify-self: center;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .currency {
+        padding-bottom: 15px;
+    }
+
+    .buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    button {
+        width: 80%;
         height: 35px;
-        grid-column: 1/3;
         border-radius: 10px;
         cursor: pointer;
         border: 0;

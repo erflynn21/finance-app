@@ -169,6 +169,8 @@
     <EditPopUp
         on:collapse={toggleEdit}
         {monthlyBudget}
+        {month}
+        {year}
         on:updateBudgets={(calculateCategoryExpenses, checkMonthlyBudget)} />
 {/if}
 

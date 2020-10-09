@@ -29,13 +29,11 @@
         'November',
         'December',
     ];
-    const currentMonth = months[date.getMonth()];
+    const month = months[date.getMonth()];
     const year = date.getFullYear();
 
     // getting budget and expense info
-    $: monthlyBudgets = useTracker(() =>
-        MonthlyBudgets.find({ month: currentMonth }).fetch()
-    );
+    $: budgets = useTracker(() => Budgets.find({}).fetch());
 
     $: expenseSum = 0;
     const calculateExpenses = () => {
@@ -54,8 +52,7 @@
 
     $: budgetSum = 0;
     const calculateTotalBudgets = () => {
-        let totalBudgets = MonthlyBudgets.find({ month: currentMonth }).fetch();
-        console.log(totalBudgets);
+        let totalBudgets = Budgets.find({}).fetch();
         let budgets = [];
         totalBudgets.forEach((budget) => {
             budgets = [...budgets, budget.amount];
@@ -91,7 +88,7 @@
         <ListItem>
             <div class="grid row-one">
                 <div class="budget">
-                    <h4>{currentMonth} {year}</h4>
+                    <h4>{month} {year}</h4>
                 </div>
                 <div class="amount-summary">
                     {$userCurrencySymbol}{$expenseSumStore}
@@ -109,10 +106,10 @@
     </div>
 
     <div class="budget-list">
-        {#each $monthlyBudgets as budget (budget._id)}
+        {#each $budgets as budget (budget._id)}
             <MonthlyBudgetCategory
                 {budget}
-                {currentMonth}
+                {month}
                 {year}
                 on:calculate={calculateExpenses} />
         {/each}

@@ -122,6 +122,11 @@
 
     input {
         border: none;
+        background: transparent;
+    }
+
+    select {
+        background: transparent;
     }
 
     input:active {
