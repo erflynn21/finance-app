@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Expenses } from '../../api/expenses';
+    import { MonthlyExpenses } from '../../api/monthlyexpenses';
     import Expense from '../components/Expense.svelte';
     import { startDate, endDate } from '../stores/CurrentDateStore';
     import { createEventDispatcher } from 'svelte';
@@ -17,12 +18,48 @@
         ).fetch()
     );
 
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+
+    // check whether or not a recurring expense is already in the expenses db for this month
+    const checkrecurringexpenses = () => {
+        let recurringExpenses = MonthlyExpenses.find({}).fetch();
+        let expensesList = Expenses.find({
+            date: { $gte: $startDate, $lte: $endDate },
+        }).fetch();
+
+        recurringExpenses.forEach((recurringExpense) => {
+            let expensedate = `${year}-${month}-${recurringExpense.recurringdate}`;
+            newExpenseFromRecurring = {
+                title: recurringExpense.title,
+                amount: recurringExpense.amount,
+                category: recurringExpense.category,
+                date: expensedate,
+                currency: recurringExpense.currency,
+                originalAmount: recurringExpense.originalAmount,
+                originalCurrency: recurringExpense.originalCurrency,
+            };
+            const result = expensesList.find(
+                (item) => item.title === recurringExpense.title
+            );
+            if (result === undefined) {
+                Meteor.call('expenses.insert', newExpenseFromRecurring);
+            } else {
+                return;
+            }
+        });
+    };
+
     const dispatchCalc = () => {
         dispatch('calculateExpenses');
     };
 
     onMount(() => {
         Meteor.subscribe('expenses');
+        Meteor.subscribe('monthlyexpenses', function () {
+            checkrecurringexpenses();
+        });
     });
 </script>
 
