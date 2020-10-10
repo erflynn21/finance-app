@@ -143,7 +143,7 @@
                     animateScale: true,
                 },
                 legend: {
-                    position: 'right',
+                    position: 'bottom',
                     align: 'center',
                     labels: {
                         boxWidth: 10,

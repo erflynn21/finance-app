@@ -36,7 +36,7 @@
     ];
     const currentMonth = months[date.getMonth()];
 
-    let current = 'settings';
+    let current = 'overview';
 
     const currencyDict = {
         EUR: '€',

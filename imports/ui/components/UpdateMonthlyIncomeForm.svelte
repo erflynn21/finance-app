@@ -22,37 +22,15 @@
     };
 
     async function updateIncome() {
-        // check whether expense needs to be converted;
-
         // update the currency
         Meteor.call(
             'monthlyincomes.update',
             monthlyincome._id,
             updatedMonthlyIncome
         );
-        // dispatch('expenseEdited', updatedMonthlyExpense);
 
-        // collapse the update menu
         dispatch('collapse');
     }
-
-    // async function convertAmount() {
-    //     if (updatedMonthlyExpense.originalAmount === null) {
-    //         updatedMonthlyExpense.originalAmount = updatedMonthlyExpense.amount;
-    //         updatedMonthlyExpense.originalCurrency =
-    //             updatedMonthlyExpense.currency;
-    //     }
-    //     let url = `https://api.exchangeratesapi.io/${updatedMonthlyExpense.date}?base=${$userCurrency}&symbols=${updatedMonthlyExpense.originalCurrency}`;
-    //     let response = await fetch(url);
-    //     let data = await response.json();
-    //     let rates = JSON.stringify(data.rates);
-    //     let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-    //     updatedMonthlyExpense.amount = Number(
-    //         (updatedMonthlyExpense.originalAmount / exchangeRate).toFixed(2)
-    //     );
-    //     console.log(updatedMonthlyExpense.amount);
-    //     updatedMonthlyExpense.currency = $userCurrency;
-    // }
 
     const exitUpdate = () => {
         dispatch('collapse');
@@ -108,10 +86,6 @@
             <option value="30">30</option>
             <option value="31">31</option>
         </select>
-        <!-- <input
-            type="text"
-            bind:value={updatedMonthlyExpense.recurringdate}
-            placeholder={updatedMonthlyExpense.recurringdate} /> -->
     </div>
 
     <div class="title">

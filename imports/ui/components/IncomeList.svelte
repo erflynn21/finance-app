@@ -44,8 +44,6 @@
             );
             if (result === undefined) {
                 if (newIncomeFromRecurring.amount === null) {
-                    // console.log('got here');
-                    // await convertAmount();
                     await (async () => {
                         newIncomeFromRecurring.amount =
                             newIncomeFromRecurring.originalAmount;

@@ -78,7 +78,7 @@
 
     <Heading>Settings</Heading>
 
-    <!-- List of base budgets -->
+    <!-- Lists -->
     <BudgetList on:recalculateBudgets={calculateBaseBudgets} />
 
     <RecurringExpensesList />
@@ -92,14 +92,6 @@
     <!-- User settings -->
     <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
         <h3>User Settings:</h3>
-        <!-- <input
-            type="text"
-            placeholder={updateduserinfo.firstName}
-            bind:value={usersetting.firstName} />
-        <input
-            type="text"
-            placeholder={updateduserinfo.lastName}
-            bind:value={usersetting.lastName} /> -->
         {#if updateduserinfo.baseCurrency === undefined}
             <label for="currency-options">Set Base Currency (Your Base Currency can only be set once, choose carefully.):</label>
             <div class="ui search selection dropdown multiple base-currency-dropdown">
@@ -138,8 +130,6 @@
        
         
         <div class="settings-info">
-        <!-- <div>First Name: {updateduserinfo.firstName}</div>
-        <div>Last Name: {updateduserinfo.lastName}</div> -->
         {#if updateduserinfo.baseCurrency === undefined || updateduserinfo.currencyOptions === undefined}
             <div>Base Currency: Base Currency not yet set.</div>
             <div>Currency Options: Currency Options not yet set.</div>

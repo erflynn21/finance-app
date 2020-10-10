@@ -6,7 +6,6 @@
     import { tweened } from 'svelte/motion';
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import DoughnutChart from './DoughnutChart.svelte';
-    import { onMount } from 'svelte';
 
     // setting budget month
     const date = new Date();
@@ -82,8 +81,13 @@
                 </div>
                 <div class="grid cash-flow-summary">
                     <div class="exp-inc">
-                        <h5>{$userCurrencySymbol}{$incomeSumStore} Earned</h5>
-                        <h5>-{$userCurrencySymbol}{$expenseSumStore} Spent</h5>
+                        <h5>
+                            Earned:
+                            {$userCurrencySymbol}{Math.floor($incomeSumStore)}
+                        </h5>
+                        <h5>
+                            Spent: -{$userCurrencySymbol}{Math.floor($expenseSumStore)}
+                        </h5>
                     </div>
                     <div class="cash-flow-sum">
                         {#if cashflow >= 0}
@@ -110,6 +114,7 @@
                 </div>
             </ListItem>
         </div>
+        <div class="small-spacer" />
     </div>
 </div>
 
@@ -265,6 +270,10 @@
     .doughnut {
         max-width: 100%;
         height: auto;
-        margin: -40px 20px 0 0;
+        margin: 0 20px 0 0;
+    }
+
+    .small-spacer {
+        height: 70px;
     }
 </style>
