@@ -79,9 +79,10 @@
 
     <!-- List of base budgets -->
     <BudgetList on:recalculateBudgets={calculateBaseBudgets} />
-    <h3>Total Budgeted Monthly: {$baseBudgetSumStore}</h3>
 
     <RecurringExpensesList />
+
+    <div class="spacer" />
 
     <!-- User settings -->
     <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
@@ -204,5 +205,9 @@
         text-align: center;
         margin-bottom: 15px;
         padding-bottom: 10px;
+    }
+
+    .spacer {
+        height: 15px;
     }
 </style>

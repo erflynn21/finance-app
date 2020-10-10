@@ -33,9 +33,9 @@
                 <img src="/img/delete.svg" alt="" />
             </button>
 
-            <span
+            <!-- <span
                 datetime={monthlyexpense.date}
-                class="date">{monthlyexpense.recurringdate}th</span>
+                class="date">{monthlyexpense.recurringdate}</span> -->
             <span class="title">{monthlyexpense.title}</span>
             {#if monthlyexpense.currency !== null}
                 <span
@@ -76,7 +76,7 @@
     }
     .expense {
         display: grid;
-        grid-template-columns: 0.15fr 0.3fr 1fr 0.6fr 0.15fr;
+        grid-template-columns: 0.15fr 1fr 0.6fr 0.15fr;
         gap: 10px;
         justify-items: start;
         align-items: center;
