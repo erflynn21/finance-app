@@ -5,6 +5,7 @@
     import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
     import DeletePopUp from '../shared/DeletePopUp.svelte';
+    import EditPopUp from '../shared/EditPopUp.svelte';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
 
     let dispatch = createEventDispatcher();
@@ -19,6 +20,12 @@
     };
 
     let deleteTab = false;
+
+    const toggleEdit = () => {
+        editTab = !editTab;
+    };
+
+    let editTab = false;
 
     let isHidden = true;
 </script>
@@ -40,12 +47,16 @@
                     on:expenseEdited />
             </div>
 
-            <button class="edit" on:click={() => (isHidden = !isHidden)}>
+            <button class="edit" on:click={toggleEdit}>
                 <img src="/img/edit.svg" alt="" />
             </button>
         </div>
     </ListItem>
 </div>
+
+{#if editTab === true}
+    <EditPopUp on:collapse={toggleEdit} {budget} />
+{/if}
 
 {#if deleteTab === true}
     <div class="deleteTab">
@@ -105,7 +116,7 @@
         min-width: 0px;
     }
 
-    .update-expense {
+    .update-budget {
         grid-column: 1/5;
         grid-row: 2;
     }

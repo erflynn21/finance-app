@@ -6,8 +6,6 @@
     import { createEventDispatcher, onMount } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
-    import { Expenses } from '../../api/expenses';
-    import EditPopUp from '../shared/EditPopUp.svelte';
 
     $: budgets = useTracker(() => Budgets.find({}).fetch());
 

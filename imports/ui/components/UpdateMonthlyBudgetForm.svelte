@@ -11,9 +11,6 @@
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
-    const date = new Date();
-    const currentMonth = date.getMonth() + 1;
-
     let updatedMonthlyBudget = {
         month: monthlyBudget.month,
         year: monthlyBudget.year,
@@ -92,9 +89,7 @@
 
     <div class="currency">
         <label for="currency">Currency: </label>
-        <select
-            id="expense-currency"
-            bind:value={updatedMonthlyBudget.currency}>
+        <select id="budget-currency" bind:value={updatedMonthlyBudget.currency}>
             {#if updatedMonthlyBudget.originalCurrency === null}
                 {#each $usersettings as usersetting (usersetting._id)}
                     <option value={$userCurrency}>{$userCurrency}</option>
