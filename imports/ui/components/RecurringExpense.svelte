@@ -1,8 +1,7 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import UpdateExpenseForm from './UpdateExpenseForm.svelte';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
-    export let expense;
+    export let monthlyexpense;
     import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
     import DeletePopUp from '../shared/DeletePopUp.svelte';
@@ -10,8 +9,8 @@
     let dispatch = createEventDispatcher();
 
     const deleteExpense = () => {
-        Meteor.call('expenses.remove', expense._id);
-        dispatch('delete', expense);
+        Meteor.call('monthlyexpenses.remove', monthlyexpense._id);
+        // dispatch('delete', expense);
     };
 
     const toggleDelete = () => {
@@ -25,22 +24,6 @@
     };
 
     let editTab = false;
-
-    let isHidden = true;
-
-    let date;
-    let date1 = expense.date.split('-');
-    let date2 = date1[1] + '/' + date1[2];
-    if (date2.startsWith('0')) {
-        let date3 = date2.split('0');
-        if (date3[2] === undefined) {
-            date = date3[1];
-        } else {
-            date = date3[1] + date3[2];
-        }
-    } else {
-        date = date2;
-    }
 </script>
 
 <div class="container">
@@ -50,9 +33,17 @@
                 <img src="/img/delete.svg" alt="" />
             </button>
 
-            <time datetime={expense.date} class="date">{date}</time>
-            <span class="title">{expense.title}</span>
-            <span class="amount">{$userCurrencySymbol}{expense.amount}</span>
+            <span
+                datetime={monthlyexpense.date}
+                class="date">{monthlyexpense.recurringdate}th</span>
+            <span class="title">{monthlyexpense.title}</span>
+            {#if monthlyexpense.currency !== null}
+                <span
+                    class="amount">{$userCurrencySymbol}{monthlyexpense.amount}</span>
+            {:else}
+                <span class="amount">{monthlyexpense.originalCurrency}
+                    {monthlyexpense.originalAmount}</span>
+            {/if}
             <button class="edit" on:click={toggleEdit}>
                 <img src="/img/edit.svg" alt="" />
             </button>
@@ -61,7 +52,7 @@
 </div>
 
 {#if editTab === true}
-    <EditPopUp on:collapse={toggleEdit} {expense} />
+    <EditPopUp on:collapse={toggleEdit} {monthlyexpense} />
 {/if}
 
 {#if deleteTab === true}
@@ -121,9 +112,4 @@
         outline: 0;
         min-width: 0px;
     }
-
-    /* .update-expense {
-        grid-column: 1/5;
-        grid-row: 2;
-    } */
 </style>

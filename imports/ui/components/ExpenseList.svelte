@@ -6,6 +6,7 @@
     import { MonthlyExpenses } from '../../api/monthlyexpenses';
     import Expense from '../components/Expense.svelte';
     import { startDate, endDate } from '../stores/CurrentDateStore';
+    import { userCurrency } from '../stores/UserCurrencyStore';
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
 
@@ -23,13 +24,13 @@
     const month = date.getMonth() + 1;
 
     // check whether or not a recurring expense is already in the expenses db for this month
-    const checkrecurringexpenses = () => {
+    async function checkrecurringexpenses() {
         let recurringExpenses = MonthlyExpenses.find({}).fetch();
         let expensesList = Expenses.find({
             date: { $gte: $startDate, $lte: $endDate },
         }).fetch();
 
-        recurringExpenses.forEach((recurringExpense) => {
+        recurringExpenses.forEach(async (recurringExpense) => {
             let expensedate = `${year}-${month}-${recurringExpense.recurringdate}`;
             newExpenseFromRecurring = {
                 title: recurringExpense.title,
@@ -44,12 +45,36 @@
                 (item) => item.title === recurringExpense.title
             );
             if (result === undefined) {
+                if (newExpenseFromRecurring.amount === null) {
+                    // console.log('got here');
+                    // await convertAmount();
+                    await (async () => {
+                        newExpenseFromRecurring.amount =
+                            newExpenseFromRecurring.originalAmount;
+                        newExpenseFromRecurring.currency =
+                            newExpenseFromRecurring.originalCurrency;
+                        let url = `https://api.exchangeratesapi.io/${newExpenseFromRecurring.date}?base=${$userCurrency}&symbols=${newExpenseFromRecurring.originalCurrency}`;
+                        let response = await fetch(url);
+                        let data = await response.json();
+                        let rates = JSON.stringify(data.rates);
+                        let exchangeRate = Number(
+                            rates.replace(/[^\d.-]/g, '')
+                        );
+                        newExpenseFromRecurring.amount = Number(
+                            (
+                                newExpenseFromRecurring.originalAmount /
+                                exchangeRate
+                            ).toFixed(2)
+                        );
+                        newExpenseFromRecurring.currency = $userCurrency;
+                    })();
+                }
                 Meteor.call('expenses.insert', newExpenseFromRecurring);
             } else {
                 return;
             }
         });
-    };
+    }
 
     const dispatchCalc = () => {
         dispatch('calculateExpenses');

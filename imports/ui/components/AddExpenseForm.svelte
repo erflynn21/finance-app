@@ -59,7 +59,10 @@
         ) {
             expense.currency = $userCurrency;
         } else {
-            await convertAmount();
+            expense.originalAmount = expense.amount;
+            expense.originalCurrency = expense.currency;
+            expense.currency = null;
+            expense.amount = null;
         }
 
         expense.recurringdate = expense.date.slice(-2);

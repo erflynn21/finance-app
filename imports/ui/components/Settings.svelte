@@ -11,6 +11,7 @@
     import Heading from '../shared/Heading.svelte';
     import jq from 'jquery';
     import CurrenciesListDivs from '../shared/CurrenciesListDivs.svelte';
+    import RecurringExpensesList from './RecurringExpensesList.svelte';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -79,6 +80,8 @@
     <!-- List of base budgets -->
     <BudgetList on:recalculateBudgets={calculateBaseBudgets} />
     <h3>Total Budgeted Monthly: {$baseBudgetSumStore}</h3>
+
+    <RecurringExpensesList />
 
     <!-- User settings -->
     <form class="user-settings" on:submit|preventDefault={updateUserSettings}>

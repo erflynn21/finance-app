@@ -6,11 +6,13 @@
     export let income;
     export let monthlyBudget;
     export let budget;
+    export let monthlyexpense;
     import { createEventDispatcher } from 'svelte';
     import UpdateExpenseForm from '../components/UpdateExpenseForm.svelte';
     import UpdateIncomeForm from '../components/UpdateIncomeForm.svelte';
     import UpdateMonthlyBudgetForm from '../components/UpdateMonthlyBudgetForm.svelte';
     import UpdateBudgetForm from '../components/UpdateBudgetForm.svelte';
+    import UpdateMonthlyExpenseForm from '../components/UpdateMonthlyExpenseForm.svelte';
     let dispatch = createEventDispatcher();
 
     const dispatchCollapse = () => {
@@ -34,6 +36,8 @@
                 {year} />
         {:else if budget != undefined}
             <UpdateBudgetForm {budget} on:collapse on:recalculateBudgets />
+        {:else if monthlyexpense != undefined}
+            <UpdateMonthlyExpenseForm {monthlyexpense} on:collapse />
         {/if}
     </div>
 </div>
