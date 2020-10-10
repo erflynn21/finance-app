@@ -12,6 +12,8 @@
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
+    let recurring = false;
+
     let expense = {
         title: '',
         amount: '',
@@ -47,6 +49,34 @@
 
         dispatch('collapse');
         dispatch('recalculateExpenses');
+    }
+
+    async function handleAddMonthlyExpense() {
+        // check whether expense needs to be converted to base currency
+        if (
+            expense.currency === '' ||
+            expense.currency[0] === $userCurrency[0]
+        ) {
+            expense.currency = $userCurrency;
+        } else {
+            await convertAmount();
+        }
+
+        expense.recurringdate = expense.date.slice(-2);
+
+        // add the expense
+        Meteor.call('monthlyexpenses.insert', expense);
+
+        // clear form
+        expense.title = '';
+        expense.date = new Date().toISOString().substr(0, 10);
+        expense.category = '';
+        expense.amount = '';
+        expense.currency = $userCurrency;
+        expense.originalCurrency = null;
+        expense.originalAmount = null;
+
+        dispatch('collapse');
     }
 
     async function convertAmount() {
@@ -108,7 +138,21 @@
         </select>
     </div>
 
-    <div><button on:click|preventDefault={handleAddExpense}>Add</button></div>
+    <span class="recurring">
+        <input type="checkbox" bind:value={recurring} />
+        <label for="recurring">This is a monthly recurring expense.</label>
+    </span>
+
+    {#if recurring === false}
+        <div>
+            <button on:click|preventDefault={handleAddExpense}>Add</button>
+        </div>
+    {:else}
+        <div>
+            <button
+                on:click|preventDefault={handleAddMonthlyExpense}>Add</button>
+        </div>
+    {/if}
 </form>
 
 <style>

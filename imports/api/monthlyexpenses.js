@@ -2,25 +2,25 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
-export const Expenses = new Mongo.Collection('expenses');
+export const MonthlyExpenses = new Mongo.Collection('monthlyexpenses');
 
 if (Meteor.isServer) {
-    Meteor.publish('expenses', function expensesPublication() {
-        return Expenses.find( { owner: this.userId });
+    Meteor.publish('monthlyexpenses', function monthlyexpensesPublication() {
+        return MonthlyExpenses.find( { owner: this.userId });
     });
 }
 
 Meteor.methods({
-    'expenses.insert'(expense) {
+    'monthlyexpenses.insert'(expense) {
         check(expense, Object);
 
         if (!this.userId) {
             throw new Meteor.Error('not authorized');
         }
 
-        Expenses.insert({
+        MonthlyExpenses.insert({
             title: expense.title,
-            date: expense.date,
+            recurringdate: expense.recurringdate,
             amount: expense.amount,
             category: expense.category,
             originalAmount: expense.originalAmount,
@@ -30,13 +30,13 @@ Meteor.methods({
         });
     },
 
-    'expenses.remove' (expenseId) {
+    'monthlyexpenses.remove' (expenseId) {
         check(expenseId, String);
 
-        Expenses.remove(expenseId);
+        MonthlyExpenses.remove(expenseId);
     },
 
-    'expenses.update' (expenseId, expense) {
+    'monthlyexpenses.update' (expenseId, expense) {
         check(expenseId, String);
         check(expense, Object);
 
@@ -44,9 +44,9 @@ Meteor.methods({
             throw new Meteor.Error('not authorized');
         }
 
-        Expenses.update(expenseId, {
+        MonthlyExpenses.update(expenseId, {
             title: expense.title,
-            date: expense.date,
+            recurringdate: expense.recurringdate,
             amount: expense.amount,
             category: expense.category,
             originalAmount: expense.originalAmount,
