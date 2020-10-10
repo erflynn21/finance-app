@@ -2,7 +2,7 @@
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Budgets } from '../../api/budgets';
     import { UserSettings } from '../../api/usersettings';
-    export let monthlyexpense;
+    export let monthlyincome;
     import { createEventDispatcher, onMount } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
@@ -11,25 +11,24 @@
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
-    let updatedMonthlyExpense = {
-        title: monthlyexpense.title,
-        recurringdate: monthlyexpense.recurringdate,
-        amount: monthlyexpense.amount,
-        category: monthlyexpense.category,
-        originalAmount: monthlyexpense.originalAmount,
-        currency: monthlyexpense.currency,
-        originalCurrency: monthlyexpense.originalCurrency,
-        _id: monthlyexpense._id,
+    let updatedMonthlyIncome = {
+        title: monthlyincome.title,
+        recurringdate: monthlyincome.recurringdate,
+        amount: monthlyincome.amount,
+        originalAmount: monthlyincome.originalAmount,
+        currency: monthlyincome.currency,
+        originalCurrency: monthlyincome.originalCurrency,
+        _id: monthlyincome._id,
     };
 
-    async function updateExpense() {
+    async function updateIncome() {
         // check whether expense needs to be converted;
 
         // update the currency
         Meteor.call(
-            'monthlyexpenses.update',
-            monthlyexpense._id,
-            updatedMonthlyExpense
+            'monthlyincomes.update',
+            monthlyincome._id,
+            updatedMonthlyIncome
         );
         // dispatch('expenseEdited', updatedMonthlyExpense);
 
@@ -65,16 +64,16 @@
     });
 </script>
 
-<div class="big-title">Edit Monthly Expense</div>
+<div class="big-title">Edit Monthly Income</div>
 <div class="border" />
-<form class="update-expense" on:submit|preventDefault={updateExpense}>
+<form class="update-income" on:submit|preventDefault={updateIncome}>
     <div class="date">
         <label for="date">Monthly On: </label>
         <select
             id="recurring-date"
-            bind:value={updatedMonthlyExpense.recurringdate}>
-            <option value={updatedMonthlyExpense.recurringdate}>
-                {updatedMonthlyExpense.recurringdate}
+            bind:value={updatedMonthlyIncome.recurringdate}>
+            <option value={updatedMonthlyIncome.recurringdate}>
+                {updatedMonthlyIncome.recurringdate}
             </option>
             <option value="01">01</option>
             <option value="02">02</option>
@@ -119,45 +118,29 @@
         <label for="title">Expense: </label>
         <input
             type="text"
-            placeholder={updatedMonthlyExpense.title}
-            bind:value={updatedMonthlyExpense.title} />
+            placeholder={updatedMonthlyIncome.title}
+            bind:value={updatedMonthlyIncome.title} />
     </div>
 
     <div class="amount">
         <label for="amount">Amount: </label>
-        {#if updatedMonthlyExpense.originalCurrency === null}
+        {#if updatedMonthlyIncome.originalCurrency === null}
             <input
                 type="number"
-                placeholder={updatedMonthlyExpense.amount}
-                bind:value={updatedMonthlyExpense.amount} />
+                placeholder={updatedMonthlyIncome.amount}
+                bind:value={updatedMonthlyIncome.amount} />
         {:else}
             <input
                 type="number"
-                placeholder={updatedMonthlyExpense.originalAmount}
-                bind:value={updatedMonthlyExpense.originalAmount} />
+                placeholder={updatedMonthlyIncome.originalAmount}
+                bind:value={updatedMonthlyIncome.originalAmount} />
         {/if}
-    </div>
-
-    <div class="category">
-        <label for="category">Category: </label>
-        <select id="category" bind:value={updatedMonthlyExpense.category}>
-            <option value={monthlyexpense.category}>
-                {monthlyexpense.category}
-            </option>
-            {#each $budgets as budget (budget._id)}
-                {#if budget.category !== monthlyexpense.category}
-                    <option value={budget.category}>{budget.category}</option>
-                {/if}
-            {/each}
-        </select>
     </div>
 
     <div class="currency">
         <label for="currency">Currency: </label>
-        <select
-            id="expense-currency"
-            bind:value={updatedMonthlyExpense.currency}>
-            {#if updatedMonthlyExpense.originalCurrency == null}
+        <select id="income-currency" bind:value={updatedMonthlyIncome.currency}>
+            {#if updatedMonthlyIncome.originalCurrency == null}
                 {#each $usersettings as usersetting (usersetting._id)}
                     <option value={$userCurrency}>{$userCurrency}</option>
                     {#each usersetting.currencyOptions as currencyOption}
@@ -166,12 +149,12 @@
                 {/each}
             {:else}
                 {#each $usersettings as usersetting (usersetting._id)}
-                    <option value={updatedMonthlyExpense.originalCurrency}>
-                        {updatedMonthlyExpense.originalCurrency}
+                    <option value={updatedMonthlyIncome.originalCurrency}>
+                        {updatedMonthlyIncome.originalCurrency}
                     </option>
                     <option value={$userCurrency}>{$userCurrency}</option>
                     {#each usersetting.currencyOptions as currencyOption}
-                        {#if currencyOption === updatedMonthlyExpense.originalCurrency}
+                        {#if currencyOption === updatedMonthlyIncome.originalCurrency}
                             <div />
                         {:else}
                             <option value={currencyOption}>
@@ -187,7 +170,7 @@
         <button class="no" on:click|preventDefault={exitUpdate}>Exit</button>
         <button
             class="yes"
-            on:click|preventDefault={updateExpense}>Update</button>
+            on:click|preventDefault={updateIncome}>Update</button>
     </span>
 </form>
 
@@ -202,12 +185,12 @@
     .border {
         border: 1px solid #f2f2f2;
     }
-    .update-expense {
+    .update-income {
         width: 100%;
         background: white;
     }
 
-    .update-expense div {
+    .update-income div {
         margin: 15px 0 10px 0;
         display: grid;
         grid-template-columns: 0.5fr 1fr;

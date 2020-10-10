@@ -12,6 +12,7 @@
     import jq from 'jquery';
     import CurrenciesListDivs from '../shared/CurrenciesListDivs.svelte';
     import RecurringExpensesList from './RecurringExpensesList.svelte';
+    import RecurringIncomeList from './RecurringIncomeList.svelte';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -81,6 +82,10 @@
     <BudgetList on:recalculateBudgets={calculateBaseBudgets} />
 
     <RecurringExpensesList />
+
+    <div class="spacer" />
+
+    <RecurringIncomeList />
 
     <div class="spacer" />
 

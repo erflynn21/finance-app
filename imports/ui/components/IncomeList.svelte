@@ -6,6 +6,7 @@
     import { MonthlyIncomes } from '../../api/monthlyincomes';
     import Income from '../components/Income.svelte';
     import { startDate, endDate } from '../stores/CurrentDateStore';
+    import { userCurrency } from '../stores/UserCurrencyStore';
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
 
@@ -20,14 +21,14 @@
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
 
-    // check whether or not a recurring income is already in the expenses db for this month
-    const checkrecurringincomes = () => {
+    // check whether or not a recurring income is already in the incomes db for this month
+    async function checkrecurringincomes() {
         let recurringIncomes = MonthlyIncomes.find({}).fetch();
         let incomesList = Incomes.find({
             date: { $gte: $startDate, $lte: $endDate },
         }).fetch();
 
-        recurringIncomes.forEach((recurringIncome) => {
+        recurringIncomes.forEach(async (recurringIncome) => {
             let incomedate = `${year}-${month}-${recurringIncome.recurringdate}`;
             newIncomeFromRecurring = {
                 title: recurringIncome.title,
@@ -42,12 +43,36 @@
                 (item) => item.title === recurringIncome.title
             );
             if (result === undefined) {
+                if (newIncomeFromRecurring.amount === null) {
+                    // console.log('got here');
+                    // await convertAmount();
+                    await (async () => {
+                        newIncomeFromRecurring.amount =
+                            newIncomeFromRecurring.originalAmount;
+                        newIncomeFromRecurring.currency =
+                            newIncomeFromRecurring.originalCurrency;
+                        let url = `https://api.exchangeratesapi.io/${newIncomeFromRecurring.date}?base=${$userCurrency}&symbols=${newIncomeFromRecurring.originalCurrency}`;
+                        let response = await fetch(url);
+                        let data = await response.json();
+                        let rates = JSON.stringify(data.rates);
+                        let exchangeRate = Number(
+                            rates.replace(/[^\d.-]/g, '')
+                        );
+                        newIncomeFromRecurring.amount = Number(
+                            (
+                                newIncomeFromRecurring.originalAmount /
+                                exchangeRate
+                            ).toFixed(2)
+                        );
+                        newIncomeFromRecurring.currency = $userCurrency;
+                    })();
+                }
                 Meteor.call('incomes.insert', newIncomeFromRecurring);
             } else {
                 return;
             }
         });
-    };
+    }
 
     const dispatchCalc = () => {
         dispatch('calculateIncomes');

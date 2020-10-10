@@ -47,7 +47,10 @@
         if (income.currency === '' || income.currency[0] === $userCurrency[0]) {
             income.currency = $userCurrency;
         } else {
-            await convertAmount();
+            income.originalAmount = income.amount;
+            income.originalCurrency = income.currency;
+            income.currency = null;
+            income.amount = null;
         }
 
         income.recurringdate = income.date.slice(-2);
