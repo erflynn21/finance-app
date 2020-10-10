@@ -20,7 +20,7 @@
 
     async function handleAddIncome() {
         // check whether expense needs to be converted to base currency
-        if (income.currency === '' || income.currency === $userCurrency) {
+        if (income.currency === '' || income.currency[0] === $userCurrency[0]) {
             income.currency = $userCurrency;
         } else {
             await convertAmount();

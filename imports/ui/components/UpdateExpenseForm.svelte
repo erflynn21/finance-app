@@ -26,7 +26,7 @@
 
     async function updateExpense() {
         // check whether expense needs to be converted;
-        if (updatedExpense.currency !== $userCurrency) {
+        if (updatedExpense.originalCurrency !== null) {
             await convertAmount();
         }
 
@@ -39,8 +39,10 @@
     }
 
     async function convertAmount() {
-        updatedExpense.originalAmount = updatedExpense.amount;
-        updatedExpense.originalCurrency = updatedExpense.currency;
+        if (updatedExpense.originalAmount === null) {
+            updatedExpense.originalAmount = updatedExpense.amount;
+            updatedExpense.originalCurrency = updatedExpense.currency;
+        }
         let url = `https://api.exchangeratesapi.io/${updatedExpense.date}?base=${$userCurrency}&symbols=${updatedExpense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
@@ -49,6 +51,7 @@
         updatedExpense.amount = Number(
             (updatedExpense.originalAmount / exchangeRate).toFixed(2)
         );
+        console.log(updatedExpense.amount);
         updatedExpense.currency = $userCurrency;
     }
 
@@ -80,16 +83,16 @@
 
     <div class="amount">
         <label for="amount">Amount: </label>
-        {#if updatedExpense.originalAmount !== updatedExpense.amount}
-            <input
-                type="number"
-                placeholder={updatedExpense.originalAmount}
-                bind:value={updatedExpense.originalAmount} />
-        {:else}
+        {#if updatedExpense.originalAmount === null}
             <input
                 type="number"
                 placeholder={updatedExpense.amount}
                 bind:value={updatedExpense.amount} />
+        {:else}
+            <input
+                type="number"
+                placeholder={updatedExpense.originalAmount}
+                bind:value={updatedExpense.originalAmount} />
         {/if}
     </div>
 
@@ -108,7 +111,7 @@
     <div class="currency">
         <label for="currency">Currency: </label>
         <select id="expense-currency" bind:value={updatedExpense.currency}>
-            {#if updatedExpense.originalCurrency == $userCurrency.toString()}
+            {#if updatedExpense.originalCurrency == null}
                 {#each $usersettings as usersetting (usersetting._id)}
                     <option value={$userCurrency}>{$userCurrency}</option>
                     {#each usersetting.currencyOptions as currencyOption}

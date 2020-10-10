@@ -4,7 +4,6 @@
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
-    import Colors from '../shared/Colors.svelte';
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
 
@@ -19,7 +18,7 @@
 
     async function handleAddBudget() {
         // check whether budget needs to be converted to base currency
-        if (budget.currency === '' || budget.currency === $userCurrency) {
+        if (budget.currency === '' || budget.currency[0] == $userCurrency[0]) {
             budget.currency = $userCurrency;
             budget.originalCurrency = null;
             budget.originalAmount = null;

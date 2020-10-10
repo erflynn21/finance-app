@@ -23,11 +23,11 @@
 
     async function updateIncome() {
         // check whether income needs to be converted;
-        if (updatedIncome.currency !== $userCurrency) {
+        if (updatedIncome.originalCurrency !== null) {
             await convertAmount();
         }
 
-        // update the currency
+        // update the income
         Meteor.call('incomes.update', income._id, updatedIncome);
         dispatch('incomeEdited', updatedIncome);
 
@@ -36,8 +36,10 @@
     }
 
     async function convertAmount() {
-        updatedIncome.originalAmount = updatedIncome.amount;
-        updatedIncome.originalCurrency = updatedIncome.currency;
+        if (updateIncome.originalAmount === null) {
+            updatedIncome.originalAmount = updatedIncome.amount;
+            updatedIncome.originalCurrency = updatedIncome.currency;
+        }
         let url = `https://api.exchangeratesapi.io/${updatedIncome.date}?base=${$userCurrency}&symbols=${updatedIncome.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
@@ -72,23 +74,23 @@
 
     <div class="amount">
         <label for="amount">Amount: </label>
-        {#if updatedIncome.originalAmount !== updatedIncome.amount}
-            <input
-                type="number"
-                placeholder={updatedIncome.originalAmount}
-                bind:value={updatedIncome.originalAmount} />
-        {:else}
+        {#if updatedIncome.originalAmount === null}
             <input
                 type="number"
                 placeholder={updatedIncome.amount}
                 bind:value={updatedIncome.amount} />
+        {:else}
+            <input
+                type="number"
+                placeholder={updatedIncome.originalAmount}
+                bind:value={updatedIncome.originalAmount} />
         {/if}
     </div>
 
     <div class="currency">
         <label for="currency">Currency: </label>
         <select id="expense-currency" bind:value={updatedIncome.currency}>
-            {#if updatedIncome.originalCurrency == $userCurrency.toString()}
+            {#if updatedIncome.originalCurrency == null}
                 {#each $usersettings as usersetting (usersetting._id)}
                     <option value={$userCurrency}>{$userCurrency}</option>
                     {#each usersetting.currencyOptions as currencyOption}

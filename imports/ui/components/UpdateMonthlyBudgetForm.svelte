@@ -11,6 +11,9 @@
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
+    const date = new Date();
+    const currentMonth = date.getMonth() + 1;
+
     let updatedMonthlyBudget = {
         month: monthlyBudget.month,
         year: monthlyBudget.year,
@@ -20,17 +23,43 @@
         amount: monthlyBudget.amount,
         originalCurrency: monthlyBudget.originalCurrency,
         originalAmount: monthlyBudget.originalAmount,
+        date: new Date().toISOString().substr(0, 10),
     };
 
-    const updateMonthlyBudget = () => {
+    async function updateMonthlyBudget() {
+        // check whether monthly budget needs to be converted
+        if (updatedMonthlyBudget.originalCurrency !== null) {
+            await convertAmount();
+        }
+
+        // update the
         Meteor.call(
             'monthlybudgets.update',
             monthlyBudget.id,
             updatedMonthlyBudget
         );
         dispatch('updateBudgets');
+
+        // collapse update menu
         dispatch('collapse');
-    };
+    }
+
+    async function convertAmount() {
+        if (updatedMonthlyBudget.originalAmount === null) {
+            updatedMonthlyBudget.originalAmount = updatedMonthlyBudget.amount;
+            updatedMonthlyBudget.originalCurrency =
+                updatedMonthlyBudget.currency;
+        }
+        let url = `https://api.exchangeratesapi.io/${updatedMonthlyBudget.date}?base=${$userCurrency}&symbols=${updatedMonthlyBudget.originalCurrency}`;
+        let response = await fetch(url);
+        let data = await response.json();
+        let rates = JSON.stringify(data.rates);
+        let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
+        updatedMonthlyBudget.amount = Number(
+            (updatedMonthlyBudget.originalAmount / exchangeRate).toFixed(2)
+        );
+        updatedMonthlyBudget.currency = $userCurrency;
+    }
 
     const exitUpdate = () => {
         dispatch('collapse');
@@ -39,10 +68,6 @@
     onMount(() => {
         Meteor.subscribe('monthlybudgets');
     });
-
-    if (updatedMonthlyBudget.originalAmount === null) {
-        console.log(updatedMonthlyBudget);
-    }
 </script>
 
 <div class="big-title">Edit {monthlyBudget.category} for {month}, {year}</div>

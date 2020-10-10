@@ -24,7 +24,10 @@
 
     async function handleAddExpense() {
         // check whether expense needs to be converted to base currency
-        if (expense.currency === '' || expense.currency === $userCurrency) {
+        if (
+            expense.currency === '' ||
+            expense.currency[0] === $userCurrency[0]
+        ) {
             expense.currency = $userCurrency;
         } else {
             await convertAmount();
