@@ -92,12 +92,12 @@
 
         if ($selectedMonth !== currentmonth) {
             selectedMonth.set(month);
-            selectedYear.set(year);
+            selectedYear.set(parseInt(year));
             startDate.set(`${year}-${month}-01`);
             endDate.set(`${year}-${month}-31`);
         } else {
             selectedMonth.set(month);
-            selectedYear.set(year);
+            selectedYear.set(parseInt(year));
             startDate.set(`${year}-${month}-01`);
             endDate.set(`${year}-${month}-${day}`);
         }

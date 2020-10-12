@@ -11,7 +11,12 @@
     import { MonthlyBudgets } from '../../api/monthlybudgets';
     import { tweened } from 'svelte/motion';
     import ListItem from '../shared/ListItem.svelte';
-    import { startDate, endDate } from '../stores/CurrentDateStore';
+    import {
+        startDate,
+        endDate,
+        selectedMonth,
+        selectedYear,
+    } from '../stores/CurrentDateStore';
 
     // setting budget month
     const date = new Date();
@@ -51,8 +56,11 @@
     };
 
     $: budgetSum = 0;
+    let totalBudgets = MonthlyBudgets.find({
+        month: months[$selectedMonth - 1],
+        year: $selectedYear,
+    }).fetch();
     const calculateTotalBudgets = () => {
-        let totalBudgets = MonthlyBudgets.find({ month: month }).fetch();
         let budgets = [];
         totalBudgets.forEach((budget) => {
             budgets = [...budgets, budget.amount];
@@ -98,7 +106,22 @@
             </div>
             <div class="grid row-two">
                 <div class="percentage">
-                    <div class="percent" style="width: {$tweenedPercentage}%" />
+                    {#if percentage <= 70}
+                        <div
+                            class="percent"
+                            style="width: {$tweenedPercentage}%; background-color: green" />
+                        <span>{percentage}%</span>
+                    {:else if percentage > 70 && percentage <= 90}
+                        <div
+                            class="percent"
+                            style="width: {$tweenedPercentage}%; background-color: yellow" />
+                        <span style="color: gray">{percentage}%</span>
+                    {:else}
+                        <div
+                            class="percent"
+                            style="width: {$tweenedPercentage}%; background-color: red" />
+                        <span>{percentage}%</span>
+                    {/if}
                     <span>{percentage}%</span>
                 </div>
             </div>
@@ -106,14 +129,25 @@
     </div>
 
     <div class="budget-list">
-        {#each $budgets as budget (budget._id)}
-            <MonthlyBudgetCategory
-                {budget}
-                {month}
-                {year}
-                on:calculate={calculateExpenses}
-                on:updateBudgets={calculateTotalBudgets} />
-        {/each}
+        {#if month === months[$selectedMonth - 1]}
+            {#each $budgets as budget (budget._id)}
+                <MonthlyBudgetCategory
+                    {budget}
+                    {month}
+                    {year}
+                    on:calculate={calculateExpenses}
+                    on:updateBudgets={calculateTotalBudgets} />
+            {/each}
+        {:else}
+            {#each totalBudgets as budget (budget._id)}
+                <MonthlyBudgetCategory
+                    {budget}
+                    {month}
+                    {year}
+                    on:calculate={calculateExpenses}
+                    on:updateBudgets={calculateTotalBudgets} />
+            {/each}
+        {/if}
     </div>
 </div>
 

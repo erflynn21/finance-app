@@ -161,9 +161,8 @@
     const calculateMonthlyBudgets = () => {
         let totalBudgets = MonthlyBudgets.find({
             month: months[$selectedMonth - 1],
-            // year: $selectedYear,
+            year: $selectedYear,
         }).fetch();
-        console.log($selectedYear);
         let budgets = [];
         totalBudgets.forEach((budget) => {
             budgets = [...budgets, budget.amount];
