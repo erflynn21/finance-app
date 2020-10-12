@@ -48,7 +48,7 @@
                     <div class="budget">
                         <h3>BUDGET</h3>
                     </div>
-                    <MonthPicker />
+                    <MonthPicker on:recalculate />
                 </div>
                 <div class="grid row-two">
                     <div class="percentage">

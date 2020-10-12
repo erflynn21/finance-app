@@ -5,8 +5,11 @@
     import {
         startDate,
         endDate,
-        selectedmonth,
+        selectedMonth,
+        selectedYear,
     } from '../stores/CurrentDateStore';
+    import { createEventDispatcher } from 'svelte';
+    let dispatch = createEventDispatcher();
 
     // setting budget month
     const date = new Date();
@@ -45,7 +48,7 @@
 
     let monthOptions = [];
     let option = {};
-    let selectedBudget = months[$selectedmonth - 1] + ', ' + year;
+    let selectedBudget = months[$selectedMonth - 1] + ', ' + $selectedYear;
 
     const getBudgetOptions = () => {
         let totalMonthlyBudgets = MonthlyBudgets.find({}).fetch();
@@ -87,18 +90,18 @@
 
         // changing lookup parameters for rest of app
 
-        if ($selectedmonth !== currentmonth) {
-            selectedmonth.set(month);
+        if ($selectedMonth !== currentmonth) {
+            selectedMonth.set(month);
+            selectedYear.set(year);
             startDate.set(`${year}-${month}-01`);
             endDate.set(`${year}-${month}-31`);
         } else {
-            selectedmonth.set(month);
+            selectedMonth.set(month);
+            selectedYear.set(year);
             startDate.set(`${year}-${month}-01`);
             endDate.set(`${year}-${month}-${day}`);
         }
-        console.log($selectedmonth);
-        console.log($startDate);
-        console.log($endDate);
+        dispatch('recalculate');
     };
 
     onMount(() => {

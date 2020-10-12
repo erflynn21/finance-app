@@ -15,7 +15,12 @@
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import { baseBudgetSumStore } from '../stores/BaseBudgetSumStore';
     import { budgetSumStore } from '../stores/BudgetSumStore';
-    import { startDate, endDate } from '../stores/CurrentDateStore';
+    import {
+        startDate,
+        endDate,
+        selectedMonth,
+        selectedYear,
+    } from '../stores/CurrentDateStore';
     import AddButton from './AddButton.svelte';
 
     // setting budget month
@@ -34,7 +39,7 @@
         'November',
         'December',
     ];
-    const currentMonth = months[date.getMonth()];
+    const currentMonth = months[$selectedMonth - 1];
 
     let current = 'overview';
 
@@ -109,8 +114,6 @@
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
     const calculateExpenses = () => {
-        console.log($startDate);
-        console.log($endDate);
         let totalExpenses = Expenses.find({
             date: { $gte: $startDate, $lte: $endDate },
         }).fetch();
@@ -156,7 +159,11 @@
 
     $: monthlyBudgetSum = 0;
     const calculateMonthlyBudgets = () => {
-        let totalBudgets = MonthlyBudgets.find({ month: currentMonth }).fetch();
+        let totalBudgets = MonthlyBudgets.find({
+            month: months[$selectedMonth - 1],
+            // year: $selectedYear,
+        }).fetch();
+        console.log($selectedYear);
         let budgets = [];
         totalBudgets.forEach((budget) => {
             budgets = [...budgets, budget.amount];
@@ -172,7 +179,10 @@
 
 <div class="content">
     {#if current === 'overview'}
-        <Overview />
+        <Overview
+            on:recalculate={calculateExpenses}
+            on:recalculate={calculateMonthlyBudgets}
+            on:recalculate={calculateIncomes} />
     {:else if current === 'budget'}
         <MonthlyBudget />
     {:else if current === 'transactions'}

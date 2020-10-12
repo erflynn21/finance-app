@@ -2,7 +2,8 @@ import { writable } from 'svelte/store';
 
 const startDate = writable('');
 const endDate = writable('');
-const selectedmonth = writable('');
+const selectedMonth = writable('');
+const selectedYear = writable('');
 
 // getting current date
 const date = new Date();
@@ -26,8 +27,9 @@ const end = currentYear + '-' + currentMonth + '-' + today;
 
 startDate.set(`${start}`);
 endDate.set(`${end}`);
-selectedmonth.set(currentMonth);
+selectedMonth.set(currentMonth);
+selectedYear.set(currentYear);
 
 
 
-export {startDate, endDate, selectedmonth};
+export {startDate, endDate, selectedMonth, selectedYear};
