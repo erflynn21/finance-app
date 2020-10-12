@@ -36,7 +36,11 @@
 
     let isDropdown = true;
 
-    $: expenses = useTracker(() => Expenses.find({}).fetch());
+    $: expenses = useTracker(() =>
+        Expenses.find({
+            date: { $gte: $startDate, $lte: $endDate },
+        }).fetch()
+    );
 
     const checkMonthlyBudget = () => {
         let monthlybudget = MonthlyBudgets.findOne({
@@ -121,12 +125,6 @@
                 </button>
             </div>
         </div>
-        <!-- <div class:hidden={isHidden}>
-            <UpdateMonthlyBudgetForm
-                {monthlyBudget}
-                on:collapse={() => (isHidden = !isHidden)}
-                on:updateBudgets={(calculateCategoryExpenses, checkMonthlyBudget)} />
-        </div> -->
         <div class="grid row-two">
             <div class="percentage">
                 {#if percentage <= 70}
