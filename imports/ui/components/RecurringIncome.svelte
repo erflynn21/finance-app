@@ -9,7 +9,7 @@
     let dispatch = createEventDispatcher();
 
     const deleteIncome = () => {
-        Meteor.call('monthlyincome.remove', monthlyincome._id);
+        Meteor.call('monthlyincomes.remove', monthlyincome._id);
         // dispatch('delete', expense);
     };
 

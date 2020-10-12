@@ -198,11 +198,6 @@
         padding-bottom: 5px;
     }
 
-    .category select {
-        width: 80%;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
     .currency select {
         width: 30%;
         border: 1px solid rgba(0, 0, 0, 0.2);
