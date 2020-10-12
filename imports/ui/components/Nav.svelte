@@ -188,7 +188,8 @@
                 <div
                     class="tab {current === 'overview' ? 'active' : ''}"
                     on:click={() => (current = 'overview')}>
-                    <img src="/img/overview.svg" alt="" />
+                    <i class="chart pie icon" />
+                    <!-- <img src="/img/overview.svg" alt="" /> -->
                 </div>
             </button>
 
@@ -196,21 +197,24 @@
                 <div
                     class="tab {current === 'budget' ? 'active' : ''}"
                     on:click={() => (current = 'budget')}>
-                    <img src="/img/budget.svg" alt="" />
+                    <i class="calculator icon"></i>
+                    <!-- <img src="/img/budget.svg" alt="" /> -->
                 </div>
             </button>
             <button>
                 <div
                     class="tab {current === 'transactions' ? 'active' : ''}"
                     on:click={() => (current = 'transactions')}>
-                    <img src="/img/wallet.svg" alt="" />
+                    <i class="dollar sign icon" />
+                    <!-- <img src="/img/wallet.svg" alt="" /> -->
                 </div>
             </button>
             <button>
                 <div
                     class="tab {current === 'settings' ? 'active' : ''}"
                     on:click={() => (current = 'settings')}>
-                    <img src="/img/settings.svg" alt="" />
+                    <i class="cog icon" />
+                    <!-- <img src="/img/settings.svg" alt="" /> -->
                 </div>
             </button>
         </div>
@@ -252,8 +256,17 @@
         padding: 0;
     }
 
-    .tab img {
+    /* .tab img {
         height: 30px;
+    } */
+
+    .tab i {
+        font-size: 26px;
+        color: rgb(128, 128, 128);
+    }
+
+    .active i {
+        color: green;
     }
 
     button,
