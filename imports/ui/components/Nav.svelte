@@ -109,6 +109,8 @@
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
     const calculateExpenses = () => {
+        console.log($startDate);
+        console.log($endDate);
         let totalExpenses = Expenses.find({
             date: { $gte: $startDate, $lte: $endDate },
         }).fetch();

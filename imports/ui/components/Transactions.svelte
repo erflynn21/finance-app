@@ -19,9 +19,11 @@
         totalExpenses.forEach((expense) => {
             expenses = [...expenses, expense.amount];
         });
-        expenseSum = expenses.reduce(function (a, b) {
-            return a + b;
-        }, 0);
+        expenseSum = expenses
+            .reduce(function (a, b) {
+                return a + b;
+            }, 0)
+            .toFixed(2);
         expenseSumStore.set(expenseSum);
     };
 
@@ -34,9 +36,11 @@
         totalIncomes.forEach((expense) => {
             incomes = [...incomes, expense.amount];
         });
-        incomeSum = incomes.reduce(function (a, b) {
-            return a + b;
-        }, 0);
+        incomeSum = incomes
+            .reduce(function (a, b) {
+                return a + b;
+            }, 0)
+            .toFixed(2);
         incomeSumStore.set(incomeSum);
     };
 

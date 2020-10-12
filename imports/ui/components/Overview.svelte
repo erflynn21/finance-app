@@ -6,6 +6,7 @@
     import { tweened } from 'svelte/motion';
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import DoughnutChart from './DoughnutChart.svelte';
+    import MonthPicker from './MonthPicker.svelte';
 
     // setting budget month
     const date = new Date();
@@ -24,6 +25,7 @@
         'December',
     ];
     const month = months[date.getMonth()];
+    const year = date.getFullYear();
 
     // percentage and tweened values
     $: percentage = Math.floor((100 / $budgetSumStore) * $expenseSumStore) || 0;
@@ -38,18 +40,15 @@
     <h1>Overview</h1>
 </div>
 <div class="spacer" />
-
 <div class="outer-container">
     <div class="container">
         <div class="budget-summary rounded">
             <ListItem>
                 <div class="grid row-one">
                     <div class="budget">
-                        <h3>BUDGETS</h3>
+                        <h3>BUDGET</h3>
                     </div>
-                    <div class="month">
-                        <h4>{month}</h4>
-                    </div>
+                    <MonthPicker />
                 </div>
                 <div class="grid row-two">
                     <div class="percentage">
@@ -128,12 +127,10 @@
         top: 0;
         z-index: 0;
         height: 120px;
-        overflow: hidden;
     }
     .heading {
         padding-top: 10px;
         padding-bottom: 10px;
-        /* padding-right: 15px; */
         position: absolute;
         top: 0;
         z-index: 2;
@@ -177,15 +174,6 @@
         font-weight: 500;
     }
 
-    .month {
-        justify-self: end;
-        align-self: center;
-    }
-    .month h4 {
-        font-size: 16px;
-        font-weight: 400;
-    }
-
     .budget-summary {
         margin-bottom: 10px;
     }
@@ -199,6 +187,7 @@
     .row-one {
         grid-template-columns: 1fr 1fr;
         margin-bottom: 5px;
+        width: calc(100% - 25px);
     }
 
     .row-two {
