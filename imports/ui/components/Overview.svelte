@@ -33,10 +33,16 @@
     $: tweenedPercentage.set(percentage);
 
     $: cashflow = Number($incomeSumStore - $expenseSumStore).toFixed(2);
+
+    let fadedHeader = false;
+
+    const fadeHeader = () => {
+        fadedHeader = !fadedHeader;
+    };
 </script>
 
 <div class="background" />
-<div class="heading">
+<div class="heading" class:faded={fadedHeader === true}>
     <h1>Overview</h1>
 </div>
 <div class="spacer" />
@@ -48,7 +54,7 @@
                     <div class="budget">
                         <h3>BUDGET</h3>
                     </div>
-                    <MonthPicker on:recalculate />
+                    <MonthPicker on:recalculate on:fade={fadeHeader} on:fade />
                 </div>
                 <div class="grid row-two">
                     <div class="percentage">
@@ -137,6 +143,10 @@
         height: 55px;
         width: 100vw;
         background: green;
+    }
+
+    .faded {
+        z-index: 0;
     }
 
     .heading h1 {

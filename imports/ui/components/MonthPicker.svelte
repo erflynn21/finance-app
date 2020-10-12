@@ -8,6 +8,7 @@
         selectedMonth,
         selectedYear,
     } from '../stores/CurrentDateStore';
+    import jq from 'jquery';
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
 
@@ -72,12 +73,14 @@
     };
 
     let pickerOpen = false;
-    const togglePicker = () => {
+    const openPicker = () => {
         pickerOpen = true;
+        dispatch('fade');
     };
 
     const collapse = () => {
         pickerOpen = false;
+        dispatch('fade');
     };
 
     const changeMonth = () => {
@@ -104,45 +107,51 @@
         dispatch('recalculate');
     };
 
+    jq('.ui.dropdown').dropdown();
+
     onMount(() => {
         Meteor.subscribe('monthlybudgets', function () {
             getBudgetOptions();
         });
+        jq('.ui.dropdown').dropdown();
     });
 </script>
 
 <div class="date">
     <h4>
         {selectedBudget}
-        <i class="angle down icon" on:click={togglePicker} />
+        {#if pickerOpen === false}
+            <i class="angle down icon" on:click={openPicker} />
+        {:else}<i class="angle up icon" />{/if}
     </h4>
-    {#if pickerOpen === true}
-        <div class="container" transition:fade={{ duration: 100 }}>
-            <div class="background" on:click={collapse} />
-            <div
-                class="budget-options"
-                transition:fly={{ duration: 200, y: 100 }}>
-                <div class="months">
-                    <form on:submit|preventDefault={changeMonth}>
-                        <label for="months">Select month you'd like to view:
-                        </label>
-                        <select name="months" id="" bind:value={selectedBudget}>
+</div>
+
+{#if pickerOpen === true}
+    <div class="container" transition:fade={{ duration: 100 }}>
+        <div class="background" on:click={collapse} />
+        <div class="budget-options" transition:fly={{ duration: 200, y: 100 }}>
+            <div class="months">
+                <div class="big-title">Select Month</div>
+                <div class="border" />
+                <form on:submit|preventDefault={changeMonth}>
+                    <!-- <label for="months">Select month you'd like to view:
+                        </label> -->
+                    <select name="months" id="select" bind:value={selectedBudget} class='ui selection dropdown'>
                             {#each monthOptions as option}
                                 <option value="{option.month}, {option.year}">
                                     {option.month},
                                     {option.year}
                                 </option>
                             {/each}
-                        </select>
-                        <button>Select</button>
-                    </form>
-                </div>
+                    </select>
+                    <button>Select</button>
+                </form>
             </div>
         </div>
-    {:else}
-        <div />
-    {/if}
-</div>
+    </div>
+{:else}
+    <div />
+{/if}
 
 <style>
     .date {
@@ -154,17 +163,28 @@
         font-weight: 400;
     }
 
+    .big-title {
+        text-align: center;
+        margin-bottom: 10px;
+        width: 100%;
+        font-size: 18px;
+    }
+
+    .border {
+        border: 1px solid #f2f2f2;
+        margin-bottom: 15px;
+    }
+
     .container {
         width: 100%;
         position: absolute;
-        z-index: 10;
-        height: 100vh;
+        z-index: 4;
         top: 0;
         left: 0;
     }
 
     .background {
-        z-index: 500;
+        /* z-index: 50000000; */
         height: 100vh;
         background: rgba(0, 0, 0, 0.5);
     }
@@ -177,13 +197,13 @@
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         width: calc(100% - 60px);
-        height: 100px;
+        height: auto;
         text-align: center;
         z-index: 50;
     }
 
     button {
-        width: 80%;
+        width: 60%;
         height: 35px;
         border-radius: 10px;
         cursor: pointer;

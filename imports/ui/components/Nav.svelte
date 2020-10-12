@@ -174,6 +174,12 @@
         ).toFixed(2);
         budgetSumStore.set(monthlyBudgetSum);
     };
+
+    let fadedButton = false;
+
+    const fadeButton = () => {
+        fadedButton = !fadedButton;
+    };
 </script>
 
 <div class="content">
@@ -181,7 +187,8 @@
         <Overview
             on:recalculate={calculateExpenses}
             on:recalculate={calculateMonthlyBudgets}
-            on:recalculate={calculateIncomes} />
+            on:recalculate={calculateIncomes}
+            on:fade={fadeButton} />
     {:else if current === 'budget'}
         <MonthlyBudget />
     {:else if current === 'transactions'}
@@ -192,7 +199,9 @@
 </div>
 
 <footer>
-    <AddButton on:recalculateExpenses={calculateExpenses} />
+    <div class:faded={fadedButton === true}>
+        <AddButton on:recalculateExpenses={calculateExpenses} />
+    </div>
     <div class="bottom-nav-container">
         <div class="tab-nav-container">
             <button>
@@ -291,5 +300,9 @@
         background: transparent;
         outline: 0;
         min-width: 0px;
+    }
+
+    .faded {
+        visibility: hidden;
     }
 </style>
