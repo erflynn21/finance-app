@@ -22,6 +22,9 @@
         selectedYear,
     } from '../stores/CurrentDateStore';
     import AddButton from './AddButton.svelte';
+    import Loading from '../shared/Loading.svelte';
+
+    let loading = false;
 
     // setting budget month
     const date = new Date();
@@ -80,12 +83,15 @@
     };
 
     const setUserCurrency = () => {
+        loading = true;
+
         usersetting = UserSettings.findOne({});
         if (usersetting === undefined) {
             return;
         } else {
             userCurrency.set(usersetting.baseCurrency);
         }
+        loading = false;
     };
 
     const setUserCurrencySymbol = () => {
@@ -114,6 +120,7 @@
     // getting summary of total amounts for expenses, income and budgets
     $: expenseSum = 0;
     const calculateExpenses = () => {
+        loading = true;
         let totalExpenses = Expenses.find({
             date: { $gte: $startDate, $lte: $endDate },
         }).fetch();
@@ -125,10 +132,12 @@
             return a + b;
         }, 0);
         expenseSumStore.set(expenseSum);
+        loading = false;
     };
 
     $: incomeSum = 0;
     const calculateIncomes = () => {
+        loading = true;
         let totalIncomes = Incomes.find({
             date: { $gte: $startDate, $lte: $endDate },
         }).fetch();
@@ -140,10 +149,12 @@
             return a + b;
         }, 0);
         incomeSumStore.set(incomeSum);
+        loading = false;
     };
 
     $: baseBudgetSum = 0;
     const calculateBudgets = () => {
+        loading = true;
         let totalBudgets = Budgets.find({}).fetch();
         let budgets = [];
         totalBudgets.forEach((budget) => {
@@ -155,10 +166,12 @@
             }, 0)
         ).toFixed(2);
         baseBudgetSumStore.set(baseBudgetSum);
+        loading = false;
     };
 
     $: monthlyBudgetSum = 0;
     const calculateMonthlyBudgets = () => {
+        loading = true;
         let totalBudgets = MonthlyBudgets.find({
             month: months[$selectedMonth - 1],
             year: $selectedYear,
@@ -173,6 +186,7 @@
             }, 0)
         ).toFixed(2);
         budgetSumStore.set(monthlyBudgetSum);
+        loading = false;
     };
 
     let fadedButton = false;
@@ -182,21 +196,27 @@
     };
 </script>
 
-<div class="content">
-    {#if current === 'overview'}
-        <Overview
-            on:recalculate={calculateExpenses}
-            on:recalculate={calculateMonthlyBudgets}
-            on:recalculate={calculateIncomes}
-            on:fade={fadeButton} />
-    {:else if current === 'budget'}
-        <MonthlyBudget />
-    {:else if current === 'transactions'}
-        <Transactions />
-    {:else if current === 'settings'}
-        <Settings on:recalculateBudgets={calculateBudgets} />
-    {/if}
-</div>
+{#if loading === true}
+    <div class="content">
+        <Loading />
+    </div>
+{:else}
+    <div class="content">
+        {#if current === 'overview'}
+            <Overview
+                on:recalculate={calculateExpenses}
+                on:recalculate={calculateMonthlyBudgets}
+                on:recalculate={calculateIncomes}
+                on:fade={fadeButton} />
+        {:else if current === 'budget'}
+            <MonthlyBudget />
+        {:else if current === 'transactions'}
+            <Transactions />
+        {:else if current === 'settings'}
+            <Settings on:recalculateBudgets={calculateBudgets} />
+        {/if}
+    </div>
+{/if}
 
 <footer>
     <div class:faded={fadedButton === true}>
