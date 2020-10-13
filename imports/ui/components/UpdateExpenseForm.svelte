@@ -22,7 +22,15 @@
         _id: expense._id,
     };
 
+    let error = '';
+
     async function updateExpense() {
+        if (updatedExpense.title === '' || updatedExpense.amount === null) {
+            error = `Please fill in all fields before updating this income.`;
+            return;
+        } else {
+            error = '';
+        }
         // check whether expense needs to be converted;
         if (updatedExpense.originalCurrency !== null) {
             await convertAmount();
@@ -135,6 +143,11 @@
             {/if}
         </select>
     </div>
+
+    <span class="error">
+        <p>{error}</p>
+    </span>
+
     <span class="buttons">
         <button class="no" on:click|preventDefault={exitUpdate}>Exit</button>
         <button

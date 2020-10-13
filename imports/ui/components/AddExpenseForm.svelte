@@ -24,7 +24,16 @@
         originalCurrency: null,
     };
 
+    let error = '';
+
     async function handleAddExpense() {
+        if (expense.title === '' || expense.amount === null) {
+            error = `Please fill in all fields before submitting an expense`;
+            return;
+        } else {
+            error = '';
+        }
+
         // check whether expense needs to be converted to base currency
         if (
             expense.currency === '' ||
@@ -52,6 +61,12 @@
     }
 
     async function handleAddMonthlyExpense() {
+        if (expense.title === '' || expense.amount === null) {
+            error = `Please fill in all fields before submitting an expense`;
+            return;
+        } else {
+            error = '';
+        }
         // check whether expense needs to be converted to base currency
         if (
             expense.currency === '' ||
@@ -144,6 +159,10 @@
     <span class="recurring">
         <input type="checkbox" bind:value={recurring} />
         <label for="recurring">This is a monthly recurring expense.</label>
+    </span>
+
+    <span class="error">
+        <p>{error}</p>
     </span>
 
     {#if recurring === false}

@@ -22,7 +22,19 @@
         _id: monthlyexpense._id,
     };
 
+    let error = '';
+
     async function updateExpense() {
+        if (
+            updatedMonthlyExpense.title === '' ||
+            updatedMonthlyExpense.amount === null
+        ) {
+            error = `Please fill in all fields before updating this recurring expense.`;
+            return;
+        } else {
+            error = '';
+        }
+
         // update the currency
         Meteor.call(
             'monthlyexpenses.update',
@@ -158,6 +170,11 @@
             {/if}
         </select>
     </div>
+
+    <span class="error">
+        <p>{error}</p>
+    </span>
+
     <span class="buttons">
         <button class="no" on:click|preventDefault={exitUpdate}>Exit</button>
         <button

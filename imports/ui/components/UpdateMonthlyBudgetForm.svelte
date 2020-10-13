@@ -23,7 +23,16 @@
         date: new Date().toISOString().substr(0, 10),
     };
 
+    let error = '';
+
     async function updateMonthlyBudget() {
+        if (updatedMonthlyBudget.amount === null) {
+            error = `Please fill in all fields before updating this budget category.`;
+            return;
+        } else {
+            error = '';
+        }
+
         // check whether monthly budget needs to be converted
         if (updatedMonthlyBudget.originalCurrency !== null) {
             await convertAmount();
@@ -116,6 +125,10 @@
             {/if}
         </select>
     </div>
+
+    <span class="error">
+        <p>{error}</p>
+    </span>
 
     <span class="buttons">
         <button class="no" on:click|preventDefault={exitUpdate}>Exit</button>

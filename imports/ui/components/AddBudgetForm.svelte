@@ -16,7 +16,15 @@
         date: new Date().toISOString().substr(0, 10),
     };
 
+    let error = '';
+
     async function handleAddBudget() {
+        if (budget.category === '' || budget.amount === null) {
+            error = `Please fill in all fields before submitting a budget.`;
+            return;
+        } else {
+            error = '';
+        }
         // check whether budget needs to be converted to base currency
         if (budget.currency === '' || budget.currency[0] == $userCurrency[0]) {
             budget.currency = $userCurrency;
@@ -82,6 +90,11 @@
             {/each}
         </select>
     </div>
+
+    <span class="error">
+        <p>{error}</p>
+    </span>
+
     <div><button on:click|preventDefault={handleAddBudget}>Add</button></div>
 </form>
 

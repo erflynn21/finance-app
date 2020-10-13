@@ -24,7 +24,7 @@
 
     async function handleAddIncome() {
         if (income.title === '' || income.amount === null) {
-            error = `Please fill in all fields before submitting an expense`;
+            error = `Please fill in all fields before submitting an income.`;
             return;
         } else {
             error = '';

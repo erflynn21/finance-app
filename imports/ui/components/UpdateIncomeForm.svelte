@@ -1,13 +1,10 @@
 <script>
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Budgets } from '../../api/budgets';
     import { UserSettings } from '../../api/usersettings';
     export let income;
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
-
-    $: budgets = useTracker(() => Budgets.find({}).fetch());
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -21,7 +18,16 @@
         originalCurrency: income.originalCurrency,
     };
 
+    let error = '';
+
     async function updateIncome() {
+        if (updatedIncome.title === '' || updatedIncome.amount === null) {
+            error = `Please fill in all fields before updating this income.`;
+            return;
+        } else {
+            error = '';
+        }
+
         // check whether income needs to be converted;
         if (updatedIncome.originalCurrency !== null) {
             await convertAmount();
@@ -116,6 +122,10 @@
             {/if}
         </select>
     </div>
+
+    <span class="error">
+        <p>{error}</p>
+    </span>
 
     <span class="buttons">
         <button class="no" on:click|preventDefault={exitUpdate}>Exit</button>

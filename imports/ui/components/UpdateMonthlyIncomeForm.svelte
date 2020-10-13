@@ -21,7 +21,19 @@
         _id: monthlyincome._id,
     };
 
+    let error = '';
+
     async function updateIncome() {
+        if (
+            updatedMonthlyIncome.title === '' ||
+            updatedMonthlyIncome.amount === null
+        ) {
+            error = `Please fill in all fields before updating this recurring income.`;
+            return;
+        } else {
+            error = '';
+        }
+
         // update the currency
         Meteor.call(
             'monthlyincomes.update',
@@ -140,6 +152,11 @@
             {/if}
         </select>
     </div>
+
+    <span class="error">
+        <p>{error}</p>
+    </span>
+
     <span class="buttons">
         <button class="no" on:click|preventDefault={exitUpdate}>Exit</button>
         <button
