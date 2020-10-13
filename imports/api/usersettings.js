@@ -42,4 +42,13 @@ Meteor.methods({
             owner: Meteor.userId(),
         }});
     },
+
+    'usersettings.delete'(owner) {
+        check(owner, String)
+        if (!this.userId) {
+            throw new Meteor.error('not authorized');
+        }
+
+        UserSettings.remove({owner: owner});
+    }
 });

@@ -61,6 +61,17 @@
         Meteor.logout();
     };
 
+    const deleteAccount = () => {
+        Meteor.call('usersettings.delete', Meteor.user()._id);
+        Meteor.call('monthlyincomes.delete', Meteor.user()._id);
+        Meteor.call('monthlyexpenses.delete', Meteor.user()._id);
+        Meteor.call('monthlybudgets.delete', Meteor.user()._id);
+        Meteor.call('incomes.delete', Meteor.user()._id);
+        Meteor.call('expenses.delete', Meteor.user()._id);
+        Meteor.call('budgets.delete', Meteor.user()._id);
+        Meteor.users.remove(Meteor.user()._id);
+    };
+
     onMount(() => {
         Meteor.subscribe('usersettings');
         Meteor.subscribe('budgets', function () {
@@ -139,9 +150,13 @@
         </div>
         
     </form>
-</div>
+    <div class="logout"><button on:click={logout}>Logout</button></div>
 
-<div class="logout"><button on:click={logout}>Logout</button></div>
+    <div class="delete-account">
+        <h5>Danger Zone!</h5>
+        <button class="delete" on:click={deleteAccount}>Delete Account</button>
+    </div>
+</div>
 
 <style>
     .container {
@@ -168,11 +183,6 @@
         font-size: 20px;
     }
 
-    /* .base-currency-dropdown {
-        margin-top: 10px;
-        overflow-x: visible;
-    } */
-
     .currencies-select {
         margin-top: 10px;
         overflow-x: visible;
@@ -182,7 +192,6 @@
         width: 60%;
         justify-self: center;
         height: 35px;
-        grid-column: 1/3;
         border-radius: 10px;
         cursor: pointer;
         border: 0;
@@ -201,5 +210,24 @@
 
     .spacer {
         height: 15px;
+    }
+
+    .logout {
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .delete-account {
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .delete-account h5 {
+        margin-top: 20px;
+    }
+
+    .delete {
+        background: red;
+        margin-top: 5px;
     }
 </style>

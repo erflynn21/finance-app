@@ -54,5 +54,13 @@ Meteor.methods({
             originalCurrency: expense.originalCurrency,
             owner: Meteor.userId(),
         });
+    },
+
+    'expenses.delete' (owner) {
+        check(owner, String)
+        if (!this.userId) {
+            throw new Meteor.error('not authorized');
+        }
+        Expenses.remove({owner: owner});
     }
 });

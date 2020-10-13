@@ -48,5 +48,13 @@ Meteor.methods({
             originalCurrency: monthlybudget.originalCurrency,
             originalAmount: monthlybudget.originalAmount,
         });
+    },
+
+    'monthlybudgets.delete' (owner) {
+        check(owner, String);
+        if (!this.userId) {
+            throw new Meteor.error('not authorized');
+        }
+        MonthlyBudgets.remove({owner: owner});
     }
 });
