@@ -20,7 +20,16 @@
         originalCurrency: null,
     };
 
+    let error = '';
+
     async function handleAddIncome() {
+        if (income.title === '' || income.amount === null) {
+            error = `Please fill in all fields before submitting an expense`;
+            return;
+        } else {
+            error = '';
+        }
+
         // check whether expense needs to be converted to base currency
         if (income.currency === '' || income.currency[0] === $userCurrency[0]) {
             income.currency = $userCurrency;
@@ -43,6 +52,12 @@
     }
 
     async function handleAddMonthlyIncome() {
+        if (income.title === '' || income.amount === null) {
+            error = `Please fill in all fields before submitting an expense`;
+            return;
+        } else {
+            error = '';
+        }
         // check whether expense needs to be converted to base currency
         if (income.currency === '' || income.currency[0] === $userCurrency[0]) {
             income.currency = $userCurrency;
@@ -124,6 +139,11 @@
         <label for="recurring">This is a monthly recurring expense.</label>
     </span>
 
+    <span class="error">
+        <p>{error}</p>
+    </span>
+
+    <div class="recurring" />
     {#if recurring === false}
         <div>
             <button on:click|preventDefault={handleAddIncome}>Add</button>
