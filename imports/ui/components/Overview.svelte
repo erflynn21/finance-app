@@ -7,6 +7,7 @@
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import DoughnutChart from './DoughnutChart.svelte';
     import MonthPicker from './MonthPicker.svelte';
+    import Initializer from './Initializer.svelte';
 
     // setting budget month
     const date = new Date();

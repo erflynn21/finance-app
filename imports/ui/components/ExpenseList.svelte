@@ -46,8 +46,6 @@
             );
             if (result === undefined) {
                 if (newExpenseFromRecurring.amount === null) {
-                    // console.log('got here');
-                    // await convertAmount();
                     await (async () => {
                         newExpenseFromRecurring.amount =
                             newExpenseFromRecurring.originalAmount;

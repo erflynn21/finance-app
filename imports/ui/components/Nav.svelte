@@ -24,6 +24,10 @@
     import AddButton from './AddButton.svelte';
     import SetBaseCurrency from './SetBaseCurrency.svelte';
     import Loading from '../shared/Loading.svelte';
+    import Initializer from './Initializer.svelte';
+    import { expensesStore } from '../stores/ExpensesStore';
+
+    // console.log($expensesStore);
 
     let loading = false;
 
