@@ -12,6 +12,7 @@
     import CurrenciesListDivs from '../shared/CurrenciesListDivs.svelte';
     import RecurringExpensesList from './RecurringExpensesList.svelte';
     import RecurringIncomeList from './RecurringIncomeList.svelte';
+    import DeleteAccountPopUp from './DeleteAccountPopUp.svelte';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -61,15 +62,9 @@
         Meteor.logout();
     };
 
+    let deletePopUp = false;
     const deleteAccount = () => {
-        Meteor.call('usersettings.delete', Meteor.user()._id);
-        Meteor.call('monthlyincomes.delete', Meteor.user()._id);
-        Meteor.call('monthlyexpenses.delete', Meteor.user()._id);
-        Meteor.call('monthlybudgets.delete', Meteor.user()._id);
-        Meteor.call('incomes.delete', Meteor.user()._id);
-        Meteor.call('expenses.delete', Meteor.user()._id);
-        Meteor.call('budgets.delete', Meteor.user()._id);
-        Meteor.users.remove(Meteor.user()._id);
+        deletePopUp = !deletePopUp;
     };
 
     onMount(() => {
@@ -102,23 +97,6 @@
     <!-- User settings -->
     <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
         <h3>User Settings:</h3>
-        <!-- {#if updateduserinfo.baseCurrency === undefined}
-            <label for="currency-options">Set Base Currency (Your Base Currency can only be set once, choose carefully.):</label>
-            <div class="ui search selection dropdown multiple base-currency-dropdown">
-                <select
-                    id="search-select" name='base-currency' multiple class='ui selection dropdown multiple'
-                    bind:value={usersetting.baseCurrency}
-                    >
-                    <CurrenciesList />
-                </select>
-                <input name="currencies" type='hidden'>
-                <i class='dropdown icon'></i>
-                <div class="default text">Base Currency</div>
-                <div class="menu">
-                    <CurrenciesListDivs />
-                </div>    
-            </div>
-        {/if} -->
         <label for="currency-options">Update Available Currency Options:</label>
         <div class="ui search selection dropdown multiple currencies-select">
             <select
@@ -157,6 +135,13 @@
         <button class="delete" on:click={deleteAccount}>Delete Account</button>
     </div>
 </div>
+
+{#if deletePopUp === true}
+    <div class="deleteTab">
+        <DeleteAccountPopUp on:collapse={deleteAccount} />
+        <!-- <DeleteAccoPopUp on:collapse={toggleDelete} on:delete={deleteExpense} /> -->
+    </div>
+{/if}
 
 <style>
     .container {
