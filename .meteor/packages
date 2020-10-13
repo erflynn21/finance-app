@@ -36,3 +36,6 @@ semantic:ui-label
 semantic:ui-icon
 semantic:ui-modal
 semantic:ui-dimmer
+useraccounts:semantic-ui
+useraccounts:core
+aldeed:template-extension

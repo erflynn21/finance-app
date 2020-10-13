@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import Overview from './Overview.svelte';
     import MonthlyBudget from './MonthlyBudget.svelte';
     import Settings from './Settings.svelte';
@@ -22,6 +22,7 @@
         selectedYear,
     } from '../stores/CurrentDateStore';
     import AddButton from './AddButton.svelte';
+    import SetBaseCurrency from './SetBaseCurrency.svelte';
     import Loading from '../shared/Loading.svelte';
 
     let loading = false;
@@ -82,14 +83,19 @@
         ZAR: 'R',
     };
 
+    $: baseCurrencySet = true;
+
     const setUserCurrency = () => {
         loading = true;
-
-        usersetting = UserSettings.findOne({});
+        let usersetting = UserSettings.findOne({});
         if (usersetting === undefined) {
-            return;
+            baseCurrencySet = false;
+        } else if (usersetting.baseCurrency[0]) {
+            userCurrency.set(usersetting.baseCurrency[0]);
+            setUserCurrencySymbol();
+            baseCurrencySet = true;
         } else {
-            userCurrency.set(usersetting.baseCurrency);
+            setUserCurrency();
         }
         loading = false;
     };
@@ -200,6 +206,8 @@
     <div class="content">
         <Loading />
     </div>
+{:else if baseCurrencySet === false}
+    <SetBaseCurrency on:currencySet={setUserCurrency} />
 {:else}
     <div class="content">
         {#if current === 'overview'}
@@ -218,22 +226,23 @@
     </div>
 {/if}
 
-<footer>
-    <div class:faded={fadedButton === true}>
-        <AddButton on:recalculateExpenses={calculateExpenses} />
-    </div>
-    <div class="bottom-nav-container">
-        <div class="tab-nav-container">
-            <button>
-                <div
-                    class="tab {current === 'overview' ? 'active' : ''}"
-                    on:click={() => (current = 'overview')}>
-                    <i class="chart pie icon" />
-                    <!-- <img src="/img/overview.svg" alt="" /> -->
-                </div>
-            </button>
+{#if baseCurrencySet === true}
+    <footer>
+        <div class:faded={fadedButton === true}>
+            <AddButton on:recalculateExpenses={calculateExpenses} />
+        </div>
+        <div class="bottom-nav-container">
+            <div class="tab-nav-container">
+                <button>
+                    <div
+                        class="tab {current === 'overview' ? 'active' : ''}"
+                        on:click={() => (current = 'overview')}>
+                        <i class="chart pie icon" />
+                        <!-- <img src="/img/overview.svg" alt="" /> -->
+                    </div>
+                </button>
 
-            <button>
+                <button>
                 <div
                     class="tab {current === 'budget' ? 'active' : ''}"
                     on:click={() => (current = 'budget')}>
@@ -241,15 +250,15 @@
                     <!-- <img src="/img/budget.svg" alt="" /> -->
                 </div>
             </button>
-            <button>
-                <div
-                    class="tab {current === 'transactions' ? 'active' : ''}"
-                    on:click={() => (current = 'transactions')}>
-                    <i class="dollar sign icon" />
-                    <!-- <img src="/img/wallet.svg" alt="" /> -->
-                </div>
-            </button>
-            <button>
+                <button>
+                    <div
+                        class="tab {current === 'transactions' ? 'active' : ''}"
+                        on:click={() => (current = 'transactions')}>
+                        <i class="dollar sign icon" />
+                        <!-- <img src="/img/wallet.svg" alt="" /> -->
+                    </div>
+                </button>
+                <button>
                 <div
                     class="tab {current === 'settings' ? 'active' : ''}"
                     on:click={() => (current = 'settings')}>
@@ -257,9 +266,10 @@
                     <!-- <img src="/img/settings.svg" alt="" /> -->
                 </div>
             </button>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
+{/if}
 
 <style>
     .content {

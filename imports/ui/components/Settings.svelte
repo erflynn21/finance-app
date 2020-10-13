@@ -3,7 +3,6 @@
     import { onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { UserSettings } from '../../api/usersettings';
-    import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
     import { Budgets } from '../../api/budgets';
     import { baseBudgetSumStore } from '../stores/BaseBudgetSumStore';
     import CurrenciesList from '../shared/CurrenciesList.svelte';
@@ -17,8 +16,6 @@
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
     let usersetting = {
-        firstName: '',
-        lastName: '',
         baseCurrency: '',
         currencyOptions: '',
     };
@@ -27,8 +24,6 @@
 
     const parseUserInfo = (userinfo) => {
         updateduserinfo = {
-            firstName: userinfo.firstName,
-            lastName: userinfo.lastName,
             baseCurrency: userinfo.baseCurrency,
             currencyOptions: userinfo.currencyOptions,
             owner: userinfo.owner,
@@ -62,6 +57,10 @@
         baseBudgetSumStore.set(budgetSum);
     };
 
+    const logout = () => {
+        Meteor.logout();
+    };
+
     onMount(() => {
         Meteor.subscribe('usersettings');
         Meteor.subscribe('budgets', function () {
@@ -92,7 +91,7 @@
     <!-- User settings -->
     <form class="user-settings" on:submit|preventDefault={updateUserSettings}>
         <h3>User Settings:</h3>
-        {#if updateduserinfo.baseCurrency === undefined}
+        <!-- {#if updateduserinfo.baseCurrency === undefined}
             <label for="currency-options">Set Base Currency (Your Base Currency can only be set once, choose carefully.):</label>
             <div class="ui search selection dropdown multiple base-currency-dropdown">
                 <select
@@ -108,7 +107,7 @@
                     <CurrenciesListDivs />
                 </div>    
             </div>
-        {/if}
+        {/if} -->
         <label for="currency-options">Update Available Currency Options:</label>
         <div class="ui search selection dropdown multiple currencies-select">
             <select
@@ -142,9 +141,7 @@
     </form>
 </div>
 
-<div class="logout">
-    <BlazeTemplate template="loginButtons" />
-</div>
+<div class="logout"><button on:click={logout}>Logout</button></div>
 
 <style>
     .container {
@@ -171,10 +168,10 @@
         font-size: 20px;
     }
 
-    .base-currency-dropdown {
+    /* .base-currency-dropdown {
         margin-top: 10px;
         overflow-x: visible;
-    }
+    } */
 
     .currencies-select {
         margin-top: 10px;
