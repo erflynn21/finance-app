@@ -24,8 +24,6 @@
     import AddButton from './AddButton.svelte';
     import SetBaseCurrency from './SetBaseCurrency.svelte';
     import Loading from '../shared/Loading.svelte';
-    import Initializer from './Initializer.svelte';
-    import { expensesStore } from '../stores/ExpensesStore';
 
     // console.log($expensesStore);
 
@@ -51,153 +49,7 @@
 
     let current = 'overview';
 
-    const currencyDict = {
-        EUR: '€',
-        CNY: '¥',
-        USD: '$',
-        JPY: '¥',
-        BGN: 'лв',
-        CZK: 'Kč',
-        DKK: 'kr',
-        GBP: '£',
-        HUF: 'Ft',
-        PLN: 'zł',
-        RON: 'lei',
-        SEK: 'kr',
-        CHF: 'CHF',
-        ISK: 'kr',
-        NOK: 'kr',
-        HRK: 'kn',
-        RUB: '₽',
-        TRY: '₺',
-        AUD: '$',
-        BRL: 'R$',
-        CAD: '$',
-        HKD: '$',
-        IDR: 'Rp',
-        ILS: '₪',
-        INR: '₹',
-        KRW: '₩',
-        MXN: '$',
-        MYR: 'RM',
-        NZD: '$',
-        PHP: '₱',
-        SGD: '$',
-        THB: '฿',
-        ZAR: 'R',
-    };
-
     $: baseCurrencySet = true;
-
-    const setUserCurrency = () => {
-        loading = true;
-        let usersetting = UserSettings.findOne({});
-        if (usersetting === undefined) {
-            baseCurrencySet = false;
-        } else if (usersetting.baseCurrency[0]) {
-            userCurrency.set(usersetting.baseCurrency[0]);
-            setUserCurrencySymbol();
-            baseCurrencySet = true;
-        } else {
-            setUserCurrency();
-        }
-        loading = false;
-    };
-
-    const setUserCurrencySymbol = () => {
-        userCurrencySymbol.set(currencyDict[$userCurrency]);
-    };
-
-    onMount(() => {
-        Meteor.subscribe('usersettings', function () {
-            setUserCurrency();
-            setUserCurrencySymbol();
-        });
-        Meteor.subscribe('expenses', function () {
-            calculateExpenses();
-        });
-        Meteor.subscribe('incomes', function () {
-            calculateIncomes();
-        });
-        Meteor.subscribe('monthlybudgets', function () {
-            calculateMonthlyBudgets();
-        });
-        Meteor.subscribe('budgets', function () {
-            calculateBudgets();
-        });
-    });
-
-    // getting summary of total amounts for expenses, income and budgets
-    $: expenseSum = 0;
-    const calculateExpenses = () => {
-        loading = true;
-        let totalExpenses = Expenses.find({
-            date: { $gte: $startDate, $lte: $endDate },
-        }).fetch();
-        let expenses = [];
-        totalExpenses.forEach((expense) => {
-            expenses = [...expenses, expense.amount];
-        });
-        expenseSum = expenses.reduce(function (a, b) {
-            return a + b;
-        }, 0);
-        expenseSumStore.set(expenseSum);
-        loading = false;
-    };
-
-    $: incomeSum = 0;
-    const calculateIncomes = () => {
-        loading = true;
-        let totalIncomes = Incomes.find({
-            date: { $gte: $startDate, $lte: $endDate },
-        }).fetch();
-        let incomes = [];
-        totalIncomes.forEach((expense) => {
-            incomes = [...incomes, expense.amount];
-        });
-        incomeSum = incomes.reduce(function (a, b) {
-            return a + b;
-        }, 0);
-        incomeSumStore.set(incomeSum);
-        loading = false;
-    };
-
-    $: baseBudgetSum = 0;
-    const calculateBudgets = () => {
-        loading = true;
-        let totalBudgets = Budgets.find({}).fetch();
-        let budgets = [];
-        totalBudgets.forEach((budget) => {
-            budgets = [...budgets, budget.amount];
-        });
-        baseBudgetSum = Number(
-            budgets.reduce(function (a, b) {
-                return a + b;
-            }, 0)
-        ).toFixed(2);
-        baseBudgetSumStore.set(baseBudgetSum);
-        loading = false;
-    };
-
-    $: monthlyBudgetSum = 0;
-    const calculateMonthlyBudgets = () => {
-        loading = true;
-        let totalBudgets = MonthlyBudgets.find({
-            month: months[$selectedMonth - 1],
-            year: $selectedYear,
-        }).fetch();
-        let budgets = [];
-        totalBudgets.forEach((budget) => {
-            budgets = [...budgets, budget.amount];
-        });
-        monthlyBudgetSum = Number(
-            budgets.reduce(function (a, b) {
-                return a + b;
-            }, 0)
-        ).toFixed(2);
-        budgetSumStore.set(monthlyBudgetSum);
-        loading = false;
-    };
 
     let fadedButton = false;
 
@@ -211,21 +63,17 @@
         <Loading />
     </div>
 {:else if baseCurrencySet === false}
-    <SetBaseCurrency on:currencySet={setUserCurrency} />
+    <SetBaseCurrency />
 {:else}
     <div class="content">
         {#if current === 'overview'}
-            <Overview
-                on:recalculate={calculateExpenses}
-                on:recalculate={calculateMonthlyBudgets}
-                on:recalculate={calculateIncomes}
-                on:fade={fadeButton} />
+            <Overview on:fade={fadeButton} />
         {:else if current === 'budget'}
             <MonthlyBudget />
         {:else if current === 'transactions'}
             <Transactions />
         {:else if current === 'settings'}
-            <Settings on:recalculateBudgets={calculateBudgets} />
+            <Settings />
         {/if}
     </div>
 {/if}
@@ -233,7 +81,7 @@
 {#if baseCurrencySet === true}
     <footer>
         <div class:faded={fadedButton === true}>
-            <AddButton on:recalculateExpenses={calculateExpenses} />
+            <AddButton />
         </div>
         <div class="bottom-nav-container">
             <div class="tab-nav-container">
