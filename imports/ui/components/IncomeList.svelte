@@ -1,21 +1,10 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { onMount } from 'svelte';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Incomes } from '../../api/incomes';
-    import { MonthlyIncomes } from '../../api/monthlyincomes';
+    import { afterUpdate } from 'svelte';
     import Income from '../components/Income.svelte';
-    import { startDate, endDate } from '../stores/CurrentDateStore';
+    import { incomesStore } from '../stores/IncomesStore';
+    import { monthlyIncomesStore } from '../stores/MonthlyIncomesStore';
     import { userCurrency } from '../stores/UserCurrencyStore';
-    import { createEventDispatcher } from 'svelte';
-    let dispatch = createEventDispatcher();
-
-    $: incomes = useTracker(() =>
-        Incomes.find(
-            { date: { $gte: $startDate, $lte: $endDate } },
-            { sort: { date: -1 } }
-        ).fetch()
-    );
 
     const date = new Date();
     const year = date.getFullYear();
@@ -23,10 +12,8 @@
 
     // check whether or not a recurring income is already in the incomes db for this month
     async function checkrecurringincomes() {
-        let recurringIncomes = MonthlyIncomes.find({}).fetch();
-        let incomesList = Incomes.find({
-            date: { $gte: $startDate, $lte: $endDate },
-        }).fetch();
+        let recurringIncomes = $monthlyIncomesStore;
+        let incomesList = $incomesStore;
 
         recurringIncomes.forEach(async (recurringIncome) => {
             let incomedate = `${year}-${month}-${recurringIncome.recurringdate}`;
@@ -72,24 +59,14 @@
         });
     }
 
-    const dispatchCalc = () => {
-        dispatch('calculateIncomes');
-    };
-
-    onMount(() => {
-        Meteor.subscribe('incomes');
-        Meteor.subscribe('monthlyincomes', function () {
-            checkrecurringincomes();
-        });
+    afterUpdate(() => {
+        checkrecurringincomes();
     });
 </script>
 
 <div>
     <!-- List of incomes -->
-    {#each $incomes as income (income._id)}
-        {#each [dispatchCalc(income)] as income}
-            <div />
-        {/each}
+    {#each $incomesStore as income (income._id)}
         <Income {income} on:delete on:incomeEdited />
     {/each}
 </div>

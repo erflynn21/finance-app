@@ -2,16 +2,12 @@
     import { Meteor } from 'meteor/meteor';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     export let income;
-    import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
     import DeletePopUp from '../shared/DeletePopUp.svelte';
-    import UpdateIncomeForm from './UpdateIncomeForm.svelte';
     import EditPopUp from '../shared/EditPopUp.svelte';
-    let dispatch = createEventDispatcher();
 
     const deleteIncome = () => {
         Meteor.call('incomes.remove', income._id);
-        dispatch('delete', income);
     };
 
     const toggleDelete = () => {
@@ -25,8 +21,6 @@
     };
 
     let editTab = false;
-
-    let isHidden = true;
 
     let date;
     let date1 = income.date.split('-');
@@ -52,14 +46,6 @@
             <time datetime={income.date} class="date">{date}</time>
             <span class="title">{income.title}</span>
             <span class="amount">{$userCurrencySymbol}{income.amount}</span>
-            <!-- {#if income.originalAmount !== null}{/if} -->
-
-            <!-- <div class:hidden={isHidden} class="update-income">
-                <UpdateIncomeForm
-                    {income}
-                    on:collapse={() => (isHidden = !isHidden)}
-                    on:incomeEdited />
-            </div> -->
             <button class="edit" on:click={toggleEdit}>
                 <img src="/img/edit.svg" alt="" />
             </button>

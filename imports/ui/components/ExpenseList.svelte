@@ -1,6 +1,6 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { afterUpdate, onMount } from 'svelte';
+    import { afterUpdate } from 'svelte';
     import Expense from '../components/Expense.svelte';
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { expensesStore } from '../stores/ExpensesStore';

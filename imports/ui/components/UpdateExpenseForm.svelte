@@ -1,6 +1,6 @@
 <script>
     export let expense;
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
@@ -16,8 +16,6 @@
         originalCurrency: expense.originalCurrency,
         _id: expense._id,
     };
-
-    console.log(updatedExpense);
 
     let error = '';
 
@@ -107,7 +105,7 @@
 
     <div class="currency">
         <label for="currency">Currency: </label>
-        {#if $userSettingsStore.originalCurrency === null}
+        {#if updatedExpense.originalCurrency === null}
             <select id="expense-currency" bind:value={updatedExpense.currency}>
                 {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={$userCurrency}>{$userCurrency}</option>
