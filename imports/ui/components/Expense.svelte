@@ -1,17 +1,13 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import UpdateExpenseForm from './UpdateExpenseForm.svelte';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     export let expense;
-    import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
     import DeletePopUp from '../shared/DeletePopUp.svelte';
     import EditPopUp from '../shared/EditPopUp.svelte';
-    let dispatch = createEventDispatcher();
 
     const deleteExpense = () => {
         Meteor.call('expenses.remove', expense._id);
-        dispatch('delete', expense);
     };
 
     const toggleDelete = () => {
@@ -25,8 +21,6 @@
     };
 
     let editTab = false;
-
-    let isHidden = true;
 
     let date;
     let date1 = expense.date.split('-');

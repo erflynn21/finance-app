@@ -1,53 +1,37 @@
 <script>
-    import { afterUpdate, onMount } from 'svelte';
     import Overview from './Overview.svelte';
     import MonthlyBudget from './MonthlyBudget.svelte';
     import Settings from './Settings.svelte';
     import Transactions from './Transactions.svelte';
-    import { UserSettings } from '../../api/usersettings';
-    import { userCurrency } from '../stores/UserCurrencyStore';
-    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
-    import { Expenses } from '../../api/expenses';
-    import { Incomes } from '../../api/incomes';
-    import { MonthlyBudgets } from '../../api/monthlybudgets';
-    import { Budgets } from '../../api/budgets';
-    import { expenseSumStore } from '../stores/ExpenseSumStore';
-    import { incomeSumStore } from '../stores/IncomeSumStore';
-    import { baseBudgetSumStore } from '../stores/BaseBudgetSumStore';
-    import { budgetSumStore } from '../stores/BudgetSumStore';
-    import {
-        startDate,
-        endDate,
-        selectedMonth,
-        selectedYear,
-    } from '../stores/CurrentDateStore';
     import AddButton from './AddButton.svelte';
     import SetBaseCurrency from './SetBaseCurrency.svelte';
     import Loading from '../shared/Loading.svelte';
 
     let loading = false;
 
-    // setting budget month
-    const date = new Date();
-    const months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    ];
-    const currentMonth = months[$selectedMonth - 1];
+    // // setting budget month
+    // const date = new Date();
+    // const months = [
+    //     'January',
+    //     'February',
+    //     'March',
+    //     'April',
+    //     'May',
+    //     'June',
+    //     'July',
+    //     'August',
+    //     'September',
+    //     'October',
+    //     'November',
+    //     'December',
+    // ];
+    // const currentMonth = months[$selectedMonth - 1];
 
-    let current = 'overview';
+    let current = 'transactions';
 
     $: baseCurrencySet = true;
+
+    // add in check to see if base currency has been set based on the user currency store
 
     let fadedButton = false;
 
@@ -65,11 +49,6 @@
 {:else}
     <div class="content">
         {#if current === 'overview'}
-            <!-- <Overview
-                on:recalculate={calculateExpenses}
-                on:recalculate={calculateMonthlyBudgets}
-                on:recalculate={calculateIncomes}
-                on:fade={fadeButton} /> -->
             <Overview on:fade={fadeButton} />
         {:else if current === 'budget'}
             <MonthlyBudget />
@@ -85,7 +64,6 @@
     <footer>
         <div class:faded={fadedButton === true}>
             <AddButton />
-            <!-- <AddButton on:recalculateExpenses={calculateExpenses} /> -->
         </div>
         <div class="bottom-nav-container">
             <div class="tab-nav-container">
@@ -94,34 +72,30 @@
                         class="tab {current === 'overview' ? 'active' : ''}"
                         on:click={() => (current = 'overview')}>
                         <i class="chart pie icon" />
-                        <!-- <img src="/img/overview.svg" alt="" /> -->
                     </div>
                 </button>
 
                 <button>
-                <div
-                    class="tab {current === 'budget' ? 'active' : ''}"
-                    on:click={() => (current = 'budget')}>
-                    <i class="calculator icon"></i>
-                    <!-- <img src="/img/budget.svg" alt="" /> -->
-                </div>
-            </button>
+                    <div
+                        class="tab {current === 'budget' ? 'active' : ''}"
+                        on:click={() => (current = 'budget')}>
+                        <i class="calculator icon" />
+                    </div>
+                </button>
                 <button>
                     <div
                         class="tab {current === 'transactions' ? 'active' : ''}"
                         on:click={() => (current = 'transactions')}>
                         <i class="dollar sign icon" />
-                        <!-- <img src="/img/wallet.svg" alt="" /> -->
                     </div>
                 </button>
                 <button>
-                <div
-                    class="tab {current === 'settings' ? 'active' : ''}"
-                    on:click={() => (current = 'settings')}>
-                    <i class="cog icon" />
-                    <!-- <img src="/img/settings.svg" alt="" /> -->
-                </div>
-            </button>
+                    <div
+                        class="tab {current === 'settings' ? 'active' : ''}"
+                        on:click={() => (current = 'settings')}>
+                        <i class="cog icon" />
+                    </div>
+                </button>
             </div>
         </div>
     </footer>

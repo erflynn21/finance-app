@@ -4,45 +4,7 @@
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
-    import { startDate, endDate } from '../stores/CurrentDateStore';
-    import { Expenses } from '../../api/expenses';
-    import { Incomes } from '../../api/incomes';
     import Heading from '../shared/Heading.svelte';
-
-    // getting summary of total amounts for expenses, income and budgets
-    $: expenseSum = 0;
-    const calculateExpenses = () => {
-        let totalExpenses = Expenses.find({
-            date: { $gte: $startDate, $lte: $endDate },
-        }).fetch();
-        let expenses = [];
-        totalExpenses.forEach((expense) => {
-            expenses = [...expenses, expense.amount];
-        });
-        expenseSum = expenses
-            .reduce(function (a, b) {
-                return a + b;
-            }, 0)
-            .toFixed(2);
-        expenseSumStore.set(expenseSum);
-    };
-
-    $: incomeSum = 0;
-    const calculateIncomes = () => {
-        let totalIncomes = Incomes.find({
-            date: { $gte: $startDate, $lte: $endDate },
-        }).fetch();
-        let incomes = [];
-        totalIncomes.forEach((expense) => {
-            incomes = [...incomes, expense.amount];
-        });
-        incomeSum = incomes
-            .reduce(function (a, b) {
-                return a + b;
-            }, 0)
-            .toFixed(2);
-        incomeSumStore.set(incomeSum);
-    };
 
     $: remainingTotal = Number(($incomeSumStore - $expenseSumStore).toFixed(2));
 </script>
@@ -53,17 +15,11 @@
         <!-- List of expenses -->
         <h1>Expenses:</h1>
         <h3>Total Expenses: {$userCurrencySymbol}{$expenseSumStore}</h3>
-        <ExpenseList
-            on:delete={calculateExpenses}
-            on:expenseEdited={calculateExpenses}
-            on:calculateExpenses={calculateExpenses} />
+        <ExpenseList />
         <!-- List of incomes -->
         <h1>Income:</h1>
         <h3>Total Income: {$userCurrencySymbol}{$incomeSumStore}</h3>
-        <IncomeList
-            on:delete={calculateIncomes}
-            on:incomeEdited={calculateIncomes}
-            on:calculateIncomes={calculateIncomes} />
+        <IncomeList />
         <h3>Remaining: {$userCurrencySymbol}{remainingTotal}</h3>
     </div>
 </div>

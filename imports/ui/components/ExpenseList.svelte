@@ -1,23 +1,14 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { onMount } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { Expenses } from '../../api/expenses';
     import { MonthlyExpenses } from '../../api/monthlyexpenses';
     import Expense from '../components/Expense.svelte';
     import { startDate, endDate } from '../stores/CurrentDateStore';
     import { userCurrency } from '../stores/UserCurrencyStore';
-    import { createEventDispatcher } from 'svelte';
-    let dispatch = createEventDispatcher();
-
-    $: expenses = useTracker(() =>
-        Expenses.find(
-            {
-                date: { $gte: $startDate, $lte: $endDate },
-            },
-            { sort: { date: -1 } }
-        ).fetch()
-    );
+    import { expensesStore } from '../stores/ExpensesStore';
+    import { monthlyExpensesStore } from '../stores/MonthlyExpensesStore';
 
     const date = new Date();
     const year = date.getFullYear();
@@ -25,10 +16,8 @@
 
     // check whether or not a recurring expense is already in the expenses db for this month
     async function checkrecurringexpenses() {
-        let recurringExpenses = MonthlyExpenses.find({}).fetch();
-        let expensesList = Expenses.find({
-            date: { $gte: $startDate, $lte: $endDate },
-        }).fetch();
+        let recurringExpenses = $monthlyExpensesStore;
+        let expensesList = $expensesStore;
 
         recurringExpenses.forEach(async (recurringExpense) => {
             let expensedate = `${year}-${month}-${recurringExpense.recurringdate}`;
@@ -74,24 +63,14 @@
         });
     }
 
-    const dispatchCalc = () => {
-        dispatch('calculateExpenses');
-    };
-
-    onMount(() => {
-        Meteor.subscribe('expenses');
-        Meteor.subscribe('monthlyexpenses', function () {
-            checkrecurringexpenses();
-        });
+    afterUpdate(() => {
+        checkrecurringexpenses();
     });
 </script>
 
 <div>
     <!-- List of expenses -->
-    {#each $expenses as expense (expense._id)}
-        {#each [dispatchCalc(expense)] as expense}
-            <div />
-        {/each}
+    {#each $expensesStore as expense (expense._id)}
         <Expense {expense} on:delete on:expenseEdited />
     {/each}
 </div>

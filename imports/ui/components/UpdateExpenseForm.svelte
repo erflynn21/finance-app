@@ -1,15 +1,10 @@
 <script>
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Budgets } from '../../api/budgets';
-    import { UserSettings } from '../../api/usersettings';
     export let expense;
     import { createEventDispatcher, onMount } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
-
-    $: budgets = useTracker(() => Budgets.find({}).fetch());
-
-    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
+    import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
+    import { userSettingsStore } from '../stores/UserSettingsStore';
 
     let updatedExpense = {
         title: expense.title,
@@ -21,6 +16,8 @@
         originalCurrency: expense.originalCurrency,
         _id: expense._id,
     };
+
+    console.log(updatedExpense);
 
     let error = '';
 
@@ -38,7 +35,6 @@
 
         // update the currency
         Meteor.call('expenses.update', expense._id, updatedExpense);
-        dispatch('expenseEdited', updatedExpense);
 
         // collapse the update menu
         dispatch('collapse');
@@ -64,11 +60,6 @@
     const exitUpdate = () => {
         dispatch('collapse');
     };
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-        Meteor.subscribe('budgets');
-    });
 </script>
 
 <div class="big-title">Edit Expense</div>
@@ -106,8 +97,8 @@
         <label for="category">Category: </label>
         <select id="category" bind:value={updatedExpense.category}>
             <option value={expense.category}>{expense.category}</option>
-            {#each $budgets as budget (budget._id)}
-                {#if budget.category !== expense.category}
+            {#each $baseBudgetsStore as budget (budget._id)}
+                {#if budget.category !== updatedExpense.category}
                     <option value={budget.category}>{budget.category}</option>
                 {/if}
             {/each}
@@ -116,16 +107,20 @@
 
     <div class="currency">
         <label for="currency">Currency: </label>
-        <select id="expense-currency" bind:value={updatedExpense.currency}>
-            {#if updatedExpense.originalCurrency == null}
-                {#each $usersettings as usersetting (usersetting._id)}
+        {#if $userSettingsStore.originalCurrency === null}
+            <select id="expense-currency" bind:value={updatedExpense.currency}>
+                {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={$userCurrency}>{$userCurrency}</option>
                     {#each usersetting.currencyOptions as currencyOption}
                         <option value={currencyOption}>{currencyOption}</option>
                     {/each}
                 {/each}
-            {:else}
-                {#each $usersettings as usersetting (usersetting._id)}
+            </select>
+        {:else}
+            <select
+                id="expense-currency"
+                bind:value={updatedExpense.originalCurrency}>
+                {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={updatedExpense.originalCurrency}>
                         {updatedExpense.originalCurrency}
                     </option>
@@ -140,8 +135,8 @@
                         {/if}
                     {/each}
                 {/each}
-            {/if}
-        </select>
+            </select>
+        {/if}
     </div>
 
     <span class="error">

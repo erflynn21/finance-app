@@ -26,7 +26,7 @@
     <div class="background" on:click={dispatchCollapse} />
     <div class="edit" transition:fly={{ duration: 200, y: 100 }}>
         {#if expense != undefined}
-            <UpdateExpenseForm {expense} on:collapse on:expenseEdited />
+            <UpdateExpenseForm {expense} on:collapse />
         {:else if income != undefined}
             <UpdateIncomeForm {income} on:collapse on:incomeEdited />
         {:else if monthlyBudget != undefined}
