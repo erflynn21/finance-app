@@ -1,10 +1,8 @@
 <script>
     import Chart from 'chart.js';
     import { afterUpdate, onMount } from 'svelte';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Expenses } from '../../api/expenses';
-    import { MonthlyBudgets } from '../../api/monthlybudgets';
-    import { startDate, endDate } from '../stores/CurrentDateStore';
+    import { monthlyBudgetsStore } from '../stores/MonthlyBudgetsStore';
+    import { expensesStore } from '../stores/ExpensesStore';
 
     $: categoryLabels = [];
 
@@ -61,35 +59,8 @@
         '#a2cf6e',
     ];
 
-    // getting current month
-    const date = new Date();
-    const months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    ];
-    const currentMonth = months[date.getMonth()];
-
-    $: expenses = useTracker(() =>
-        Expenses.find(
-            {
-                date: { $gte: $startDate, $lte: $endDate },
-            },
-            { sort: { date: -1 } }
-        ).fetch()
-    );
-
     const initateLabels = () => {
-        let budgets = MonthlyBudgets.find({ month: currentMonth }).fetch();
+        let budgets = $monthlyBudgetsStore;
         categoryLabels = [];
         categoryExpenses = [];
         budgets.forEach((budget) => {
@@ -99,7 +70,7 @@
         let categoryExpenseTotal = 0;
 
         budgets.forEach((budget) => {
-            $expenses.forEach((expense) => {
+            $expensesStore.forEach((expense) => {
                 if (expense.category === budget.category) {
                     categoryExpenseTotal =
                         categoryExpenseTotal + expense.amount;

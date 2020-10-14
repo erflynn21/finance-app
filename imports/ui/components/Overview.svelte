@@ -9,24 +9,24 @@
     import MonthPicker from './MonthPicker.svelte';
     import { afterUpdate } from 'svelte';
 
-    // setting budget month
-    const date = new Date();
-    const months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    ];
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
+    // // setting budget month
+    // const date = new Date();
+    // const months = [
+    //     'January',
+    //     'February',
+    //     'March',
+    //     'April',
+    //     'May',
+    //     'June',
+    //     'July',
+    //     'August',
+    //     'September',
+    //     'October',
+    //     'November',
+    //     'December',
+    // ];
+    // const month = months[date.getMonth()];
+    // const year = date.getFullYear();
 
     const getInfo = () => {
         percentage =
@@ -38,8 +38,6 @@
     $: percentage = 0;
     const tweenedPercentage = tweened(0);
     $: tweenedPercentage.set(percentage);
-
-    console.log($incomeSumStore);
 
     $: cashflow = 0;
 

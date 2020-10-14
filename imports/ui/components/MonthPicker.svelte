@@ -134,15 +134,17 @@
                 <div class="big-title">Select Month</div>
                 <div class="border" />
                 <form on:submit|preventDefault={changeMonth}>
-                    <!-- <label for="months">Select month you'd like to view:
-                        </label> -->
-                    <select name="months" id="select" bind:value={selectedBudget} class='ui selection dropdown'>
-                            {#each monthOptions as option}
-                                <option value="{option.month}, {option.year}">
-                                    {option.month},
-                                    {option.year}
-                                </option>
-                            {/each}
+                    <select
+                        name="months"
+                        id="select"
+                        bind:value={selectedBudget}
+                        class="ui selection dropdown">
+                        {#each monthOptions as option}
+                            <option value="{option.month}, {option.year}">
+                                {option.month},
+                                {option.year}
+                            </option>
+                        {/each}
                     </select>
                     <button>Select</button>
                 </form>
