@@ -8,6 +8,7 @@
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
+    import { userSettingsStore } from '../stores/UserSettingsStore';
 
     $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
@@ -15,13 +16,15 @@
         month: monthlyBudget.month,
         year: monthlyBudget.year,
         category: monthlyBudget.category,
-        budgetId: monthlyBudget.id,
         currency: monthlyBudget.currency,
         amount: monthlyBudget.amount,
         originalCurrency: monthlyBudget.originalCurrency,
         originalAmount: monthlyBudget.originalAmount,
         date: new Date().toISOString().substr(0, 10),
+        _id: monthlyBudget._id,
     };
+
+    console.log(updatedMonthlyBudget);
 
     let error = '';
 
@@ -41,10 +44,9 @@
         // update the
         Meteor.call(
             'monthlybudgets.update',
-            monthlyBudget.id,
+            monthlyBudget._id,
             updatedMonthlyBudget
         );
-        dispatch('updateBudgets');
 
         // collapse update menu
         dispatch('collapse');
@@ -100,14 +102,14 @@
         <label for="currency">Currency: </label>
         <select id="budget-currency" bind:value={updatedMonthlyBudget.currency}>
             {#if updatedMonthlyBudget.originalCurrency === null}
-                {#each $usersettings as usersetting (usersetting._id)}
+                {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={$userCurrency}>{$userCurrency}</option>
                     {#each usersetting.currencyOptions as currencyOption}
                         <option value={currencyOption}>{currencyOption}</option>
                     {/each}
                 {/each}
             {:else}
-                {#each $usersettings as usersetting (usersetting._id)}
+                {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={updatedMonthlyBudget.originalCurrency}>
                         {updatedMonthlyBudget.originalCurrency}
                     </option>

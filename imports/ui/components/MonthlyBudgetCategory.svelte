@@ -1,21 +1,19 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { onMount } from 'svelte';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Expenses } from '../../api/expenses';
+    import { afterUpdate } from 'svelte';
     import Expense from './Expense.svelte';
     export let budget;
     export let month;
     export let year;
     import { tweened } from 'svelte/motion';
-    import UpdateMonthlyBudgetForm from './UpdateMonthlyBudgetForm.svelte';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
-    import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
-    import { startDate, endDate } from '../stores/CurrentDateStore';
     import EditPopUp from '../shared/EditPopUp.svelte';
-    let dispatch = createEventDispatcher();
+    import { expensesStore } from '../stores/ExpensesStore';
+    import { monthlyBudgetsStore } from '../stores/MonthlyBudgetsStore';
+    import Budget from './Budget.svelte';
+    import MonthlyBudget from './MonthlyBudget.svelte';
 
     $: monthlyBudget = {
         month: month,
@@ -24,8 +22,8 @@
         amount: budget.amount,
         currency: budget.currency,
         originalCurrency: budget.originalCurrency,
-        id: null,
         originalAmount: budget.originalAmount,
+        _id: null,
     };
 
     const toggleEdit = () => {
@@ -36,78 +34,85 @@
 
     let isDropdown = true;
 
-    $: expenses = useTracker(() =>
-        Expenses.find({
-            date: { $gte: $startDate, $lte: $endDate },
-        }).fetch()
-    );
-
+    let monthlybudget = [];
     const checkMonthlyBudget = () => {
-        let monthlybudget = MonthlyBudgets.findOne({
-            year: year,
-            month: month,
-            category: monthlyBudget.category,
-        });
-
-        if (monthlybudget === undefined) {
-            Meteor.call('monthlybudgets.insert', monthlyBudget);
-            const newmonthlybudget = MonthlyBudgets.findOne({
-                year: year,
-                month: month,
-                category: monthlyBudget.category,
-            });
-            monthlyBudget = {
-                month: newmonthlybudget.month,
-                year: newmonthlybudget.year,
-                category: newmonthlybudget.category,
-                amount: newmonthlybudget.amount,
-                currency: newmonthlybudget.currency,
-                originalCurrency: newmonthlybudget.originalCurrency,
-                id: newmonthlybudget._id,
-                originalAmount: newmonthlybudget.originalAmount,
-            };
+        if (monthlyBudget.month === undefined) {
+            return;
         } else {
-            monthlyBudget = {
-                month: monthlybudget.month,
-                year: monthlybudget.year,
-                category: monthlybudget.category,
-                amount: monthlybudget.amount,
-                currency: monthlybudget.currency,
-                originalCurrency: monthlybudget.originalCurrency,
-                id: monthlybudget._id,
-                originalAmount: monthlybudget.originalAmount,
-            };
+            if ($monthlyBudgetsStore.length !== 0) {
+                monthlybudget = $monthlyBudgetsStore.filter(
+                    (budget) => budget.category === monthlyBudget.category
+                );
+                // console.log(monthlybudget[0]);
+                if (monthlybudget[0] === undefined) {
+                    Meteor.call('monthlybudgets.insert', monthlyBudget);
+                    const newmonthlybudget = MonthlyBudgets.findOne({
+                        year: year,
+                        month: month,
+                        category: monthlyBudget.category,
+                    });
+                    monthlyBudget = {
+                        month: newmonthlybudget.month,
+                        year: newmonthlybudget.year,
+                        category: newmonthlybudget.category,
+                        amount: newmonthlybudget.amount,
+                        currency: newmonthlybudget.currency,
+                        originalCurrency: newmonthlybudget.originalCurrency,
+                        _id: newmonthlybudget._id,
+                        originalAmount: newmonthlybudget.originalAmount,
+                    };
+                } else {
+                    monthlyBudget = {
+                        month: monthlybudget[0].month,
+                        year: monthlybudget[0].year,
+                        category: monthlybudget[0].category,
+                        amount: monthlybudget[0].amount,
+                        currency: monthlybudget[0].currency,
+                        originalCurrency: monthlybudget[0].originalCurrency,
+                        _id: monthlybudget[0]._id,
+                        originalAmount: monthlybudget[0].originalAmount,
+                    };
+                    // console.log(monthlyBudget);
+                }
+            }
         }
-        dispatch('updateBudgets');
     };
 
-    onMount(() => {
-        Meteor.subscribe('monthlybudgets', function () {
-            checkMonthlyBudget();
-        });
+    afterUpdate(() => {
+        checkMonthlyBudget();
         calculateCategoryExpenses();
+        setPercentages();
     });
 
     $: expenseSum = 0;
     const calculateCategoryExpenses = () => {
-        let totalExpenses = Expenses.find({
-            category: monthlyBudget.category,
-            date: { $gte: $startDate, $lte: $endDate },
-        }).fetch();
-        let expenses = [];
-        totalExpenses.forEach((expense) => {
-            expenses = [...expenses, expense.amount];
-        });
-        expenseSum = expenses.reduce(function (a, b) {
-            return a + b;
-        }, 0);
-        dispatch('calculate');
+        if (monthlyBudget.amount === undefined) {
+        } else {
+            let expenses = [];
+            $expensesStore.forEach((expense) => {
+                if (expense.category === monthlyBudget.category) {
+                    expenses = [...expenses, expense.amount];
+                }
+            });
+            expenseSum = expenses.reduce(function (a, b) {
+                return a + b;
+            }, 0);
+        }
     };
 
-    // percentage and tweened values
-    $: percentage = Math.floor((100 / monthlyBudget.amount) * expenseSum) || 0;
+    $: percentage = 0;
     const tweenedPercentage = tweened(0);
     $: tweenedPercentage.set(percentage);
+    const setPercentages = () => {
+        if (monthlyBudget.amount === undefined) {
+            return;
+        } else {
+            percentage =
+                Math.floor((100 / monthlyBudget.amount) * expenseSum) || 0;
+            tweenedPercentage.set(percentage);
+        }
+    };
+    // percentage and tweened values
 </script>
 
 <div class="container">
@@ -149,12 +154,9 @@
             </div>
         </div>
         <div class:isDropdown class="expense-dropdown">
-            {#each $expenses as expense (expense._id)}
+            {#each $expensesStore as expense (expense._id)}
                 {#if expense.category === budget.category}
-                    <Expense
-                        {expense}
-                        on:delete={calculateCategoryExpenses}
-                        on:expenseEdited={calculateCategoryExpenses} />
+                    <Expense {expense} />
                     {#each [calculateCategoryExpenses(expense)] as expense}
                         <div />
                     {/each}
@@ -166,12 +168,7 @@
 </div>
 
 {#if editTab === true}
-    <EditPopUp
-        on:collapse={toggleEdit}
-        {monthlyBudget}
-        {month}
-        {year}
-        on:updateBudgets={checkMonthlyBudget} />
+    <EditPopUp on:collapse={toggleEdit} {monthlyBudget} {month} {year} />
 {/if}
 
 <style>

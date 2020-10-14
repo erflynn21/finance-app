@@ -1,22 +1,14 @@
 <script>
-    import { onMount } from 'svelte';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Budgets } from '../../api/budgets';
     import MonthlyBudgetCategory from './MonthlyBudgetCategory.svelte';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
     import { budgetSumStore } from '../stores/BudgetSumStore';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
-    import { Expenses } from '../../api/expenses';
     import Heading from '../shared/Heading.svelte';
-    import { MonthlyBudgets } from '../../api/monthlybudgets';
     import { tweened } from 'svelte/motion';
     import ListItem from '../shared/ListItem.svelte';
-    import {
-        startDate,
-        endDate,
-        selectedMonth,
-        selectedYear,
-    } from '../stores/CurrentDateStore';
+    import { selectedMonth, selectedYear } from '../stores/CurrentDateStore';
+    import { monthlyBudgetsStore } from '../stores/MonthlyBudgetsStore';
+    import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
 
     // setting budget month
     const date = new Date();
@@ -37,52 +29,6 @@
     const month = months[date.getMonth()];
     const year = date.getFullYear();
 
-    // getting budget and expense info
-    $: budgets = useTracker(() => Budgets.find({}).fetch());
-
-    $: expenseSum = 0;
-    const calculateExpenses = () => {
-        let totalExpenses = Expenses.find({
-            date: { $gte: $startDate, $lte: $endDate },
-        }).fetch();
-        let expenses = [];
-        totalExpenses.forEach((expense) => {
-            expenses = [...expenses, expense.amount];
-        });
-        expenseSum = expenses.reduce(function (a, b) {
-            return a + b;
-        }, 0);
-        expenseSumStore.set(expenseSum);
-    };
-
-    $: budgetSum = 0;
-    let totalBudgets = MonthlyBudgets.find({
-        month: months[$selectedMonth - 1],
-        year: $selectedYear,
-    }).fetch();
-    const calculateTotalBudgets = () => {
-        let budgets = [];
-        totalBudgets.forEach((budget) => {
-            budgets = [...budgets, budget.amount];
-        });
-        budgetSum = Number(
-            budgets.reduce(function (a, b) {
-                return a + b;
-            }, 0)
-        ).toFixed(2);
-        budgetSumStore.set(budgetSum);
-    };
-
-    onMount(() => {
-        Meteor.subscribe('expenses', function () {
-            calculateExpenses();
-        });
-        Meteor.subscribe('budgets');
-        Meteor.subscribe('monthlybudgets', function () {
-            calculateTotalBudgets();
-        });
-    });
-
     // percentage and tweened values
     $: percentage = Math.floor((100 / $budgetSumStore) * $expenseSumStore) || 0;
     const tweenedPercentage = tweened(0);
@@ -96,7 +42,7 @@
         <ListItem>
             <div class="grid row-one">
                 <div class="budget">
-                    <h4>{month} {year}</h4>
+                    <h4>{months[$selectedMonth - 1]} {$selectedYear}</h4>
                 </div>
                 <div class="amount-summary">
                     {$userCurrencySymbol}{$expenseSumStore}
@@ -130,22 +76,12 @@
 
     <div class="budget-list">
         {#if month === months[$selectedMonth - 1]}
-            {#each $budgets as budget (budget._id)}
-                <MonthlyBudgetCategory
-                    {budget}
-                    {month}
-                    {year}
-                    on:calculate={calculateExpenses}
-                    on:updateBudgets={calculateTotalBudgets} />
+            {#each $baseBudgetsStore as budget (budget._id)}
+                <MonthlyBudgetCategory {budget} {month} {year} />
             {/each}
         {:else}
-            {#each totalBudgets as budget (budget._id)}
-                <MonthlyBudgetCategory
-                    {budget}
-                    {month}
-                    {year}
-                    on:calculate={calculateExpenses}
-                    on:updateBudgets={calculateTotalBudgets} />
+            {#each $monthlyBudgetsStore as budget (budget._id)}
+                <MonthlyBudgetCategory {budget} {month} {year} />
             {/each}
         {/if}
     </div>
