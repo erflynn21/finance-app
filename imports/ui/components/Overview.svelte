@@ -7,6 +7,7 @@
     import { incomeSumStore } from '../stores/IncomeSumStore';
     import DoughnutChart from './DoughnutChart.svelte';
     import MonthPicker from './MonthPicker.svelte';
+    import { afterUpdate } from 'svelte';
 
     // setting budget month
     const date = new Date();
@@ -27,18 +28,30 @@
     const month = months[date.getMonth()];
     const year = date.getFullYear();
 
+    const getInfo = () => {
+        percentage =
+            Math.floor((100 / $budgetSumStore) * $expenseSumStore) || 0;
+        tweenedPercentage.set(percentage);
+        cashflow = Number($incomeSumStore - $expenseSumStore).toFixed(2);
+    };
     // percentage and tweened values
-    $: percentage = Math.floor((100 / $budgetSumStore) * $expenseSumStore) || 0;
+    $: percentage = 0;
     const tweenedPercentage = tweened(0);
     $: tweenedPercentage.set(percentage);
 
-    $: cashflow = Number($incomeSumStore - $expenseSumStore).toFixed(2);
+    console.log($incomeSumStore);
+
+    $: cashflow = 0;
 
     let fadedHeader = false;
 
     const fadeHeader = () => {
         fadedHeader = !fadedHeader;
     };
+
+    afterUpdate(() => {
+        getInfo();
+    });
 </script>
 
 <div class="background" />
@@ -54,7 +67,7 @@
                     <div class="budget">
                         <h3>BUDGET</h3>
                     </div>
-                    <MonthPicker on:recalculate on:fade={fadeHeader} on:fade />
+                    <MonthPicker on:fade={fadeHeader} on:fade />
                 </div>
                 <div class="grid row-two">
                     <div class="percentage">

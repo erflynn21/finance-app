@@ -1,4 +1,5 @@
 <script>
+    import { Meteor } from 'meteor/meteor';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import {
         startDate,
@@ -12,7 +13,7 @@
     import { MonthlyBudgets } from '../../api/monthlybudgets';
     import { MonthlyExpenses } from '../../api/monthlyexpenses';
     import { MonthlyIncomes } from '../../api/monthlyincomes';
-    import { afterUpdate } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import { expensesStore } from '../stores/ExpensesStore';
     import { incomesStore } from '../stores/IncomesStore';
     import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
@@ -26,6 +27,7 @@
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     import { UserSettings } from '../../api/usersettings';
     import { expenseSumStore } from '../stores/ExpenseSumStore';
+    import { incomeSumStore } from '../stores/IncomeSumStore';
 
     const months = [
         'January',
@@ -89,9 +91,7 @@
 
     $: incomes = useTracker(() =>
         Incomes.find(
-            {
-                date: { $gte: $startDate, $lte: $endDate },
-            },
+            { date: { $gte: $startDate, $lte: $endDate } },
             { sort: { date: -1 } }
         ).fetch()
     );
@@ -149,7 +149,7 @@
         incomesSum = totalIncomes.reduce(function (a, b) {
             return a + b;
         }, 0);
-        expenseSumStore.set(incomesSum);
+        incomeSumStore.set(incomesSum);
 
         // computing and setting base budgets sum
         totalBaseBudgets = [];
@@ -184,6 +184,14 @@
             });
         }
     };
+
+    onMount(() => {
+        Meteor.subscribe('incomes');
+        Meteor.subscribe('expenses');
+        Meteor.subscribe('budgets');
+        Meteor.subscribe('monthlybudgets');
+        Meteor.subscribe('usersettings');
+    });
 
     afterUpdate(() => {
         setStores();

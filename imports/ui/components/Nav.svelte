@@ -25,8 +25,6 @@
     import SetBaseCurrency from './SetBaseCurrency.svelte';
     import Loading from '../shared/Loading.svelte';
 
-    // console.log($expensesStore);
-
     let loading = false;
 
     // setting budget month
@@ -67,6 +65,11 @@
 {:else}
     <div class="content">
         {#if current === 'overview'}
+            <!-- <Overview
+                on:recalculate={calculateExpenses}
+                on:recalculate={calculateMonthlyBudgets}
+                on:recalculate={calculateIncomes}
+                on:fade={fadeButton} /> -->
             <Overview on:fade={fadeButton} />
         {:else if current === 'budget'}
             <MonthlyBudget />
@@ -82,6 +85,7 @@
     <footer>
         <div class:faded={fadedButton === true}>
             <AddButton />
+            <!-- <AddButton on:recalculateExpenses={calculateExpenses} /> -->
         </div>
         <div class="bottom-nav-container">
             <div class="tab-nav-container">
@@ -157,10 +161,6 @@
         justify-content: center;
         padding: 0;
     }
-
-    /* .tab img {
-        height: 30px;
-    } */
 
     .tab i {
         font-size: 26px;
