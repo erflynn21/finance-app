@@ -12,8 +12,6 @@
     import EditPopUp from '../shared/EditPopUp.svelte';
     import { expensesStore } from '../stores/ExpensesStore';
     import { monthlyBudgetsStore } from '../stores/MonthlyBudgetsStore';
-    import Budget from './Budget.svelte';
-    import MonthlyBudget from './MonthlyBudget.svelte';
 
     $: monthlyBudget = {
         month: month,

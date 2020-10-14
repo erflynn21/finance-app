@@ -2,15 +2,10 @@
     export let monthlyBudget;
     export let month;
     export let year;
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { onMount } from 'svelte';
-    import { UserSettings } from '../../api/usersettings';
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { userSettingsStore } from '../stores/UserSettingsStore';
-
-    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
     let updatedMonthlyBudget = {
         month: monthlyBudget.month,
@@ -23,8 +18,6 @@
         date: new Date().toISOString().substr(0, 10),
         _id: monthlyBudget._id,
     };
-
-    console.log(updatedMonthlyBudget);
 
     let error = '';
 
@@ -72,10 +65,6 @@
     const exitUpdate = () => {
         dispatch('collapse');
     };
-
-    onMount(() => {
-        Meteor.subscribe('monthlybudgets');
-    });
 </script>
 
 <div class="big-title">Edit {monthlyBudget.category} for {month}, {year}</div>
