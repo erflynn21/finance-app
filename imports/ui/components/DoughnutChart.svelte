@@ -3,6 +3,7 @@
     import { afterUpdate, onMount } from 'svelte';
     import { monthlyBudgetsStore } from '../stores/MonthlyBudgetsStore';
     import { expensesStore } from '../stores/ExpensesStore';
+    import { budgetSumStore } from '../stores/BudgetSumStore';
 
     $: categoryLabels = [];
 
@@ -60,6 +61,9 @@
     ];
 
     const initateLabels = () => {
+        if ($budgetSumStore === 0) {
+            return;
+        }
         let budgets = $monthlyBudgetsStore;
         categoryLabels = [];
         categoryExpenses = [];
@@ -125,17 +129,11 @@
     };
 
     onMount(() => {
-        Meteor.subscribe('expenses');
-        Meteor.subscribe('monthlybudgets', function () {
-            initateLabels();
-        });
-
         initiateChart();
     });
 
     afterUpdate(() => {
         initateLabels();
-        initiateChart();
     });
 </script>
 
