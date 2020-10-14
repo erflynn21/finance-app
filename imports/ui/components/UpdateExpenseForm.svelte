@@ -80,7 +80,7 @@
 
     <div class="amount">
         <label for="amount">Amount: </label>
-        {#if updatedExpense.originalAmount === null}
+        {#if updatedExpense.originalCurrency === null}
             <input
                 type="number"
                 placeholder={updatedExpense.amount}

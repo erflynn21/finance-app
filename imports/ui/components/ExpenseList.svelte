@@ -1,11 +1,7 @@
 <script>
     import { Meteor } from 'meteor/meteor';
     import { afterUpdate, onMount } from 'svelte';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Expenses } from '../../api/expenses';
-    import { MonthlyExpenses } from '../../api/monthlyexpenses';
     import Expense from '../components/Expense.svelte';
-    import { startDate, endDate } from '../stores/CurrentDateStore';
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { expensesStore } from '../stores/ExpensesStore';
     import { monthlyExpensesStore } from '../stores/MonthlyExpensesStore';
