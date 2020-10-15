@@ -1,6 +1,5 @@
 <script>
     import Forms from './Forms.svelte';
-    import { Meteor } from 'meteor/meteor';
 
     let forms = false;
 
@@ -11,8 +10,6 @@
     const collapse = () => {
         forms = false;
     };
-
-    Meteor.subscribe('budgets');
 </script>
 
 <div class="act-btn">
@@ -22,7 +19,7 @@
 
 {#if forms === true}
     <div class="forms">
-        <Forms on:collapse={collapse} on:recalculateExpenses />
+        <Forms on:collapse={collapse} />
     </div>
 {/if}
 

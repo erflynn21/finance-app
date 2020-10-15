@@ -6,20 +6,43 @@
     import AddButton from './AddButton.svelte';
     import SetBaseCurrency from './SetBaseCurrency.svelte';
     import Loading from '../shared/Loading.svelte';
+    import { afterUpdate } from 'svelte';
+    import { userSettingsStore } from '../stores/UserSettingsStore';
 
     let loading = false;
 
-    let current = 'settings';
+    let current = 'overview';
 
-    $: baseCurrencySet = true;
+    $: baseCurrencySet = null;
 
     // add in check to see if base currency has been set based on the user currency store
+    const checkBaseCurrency = () => {
+        if ($userSettingsStore.length === 0) {
+            baseCurrencySet = false;
+            return;
+        }
+        if (
+            $userSettingsStore[0].baseCurrency === undefined ||
+            $userSettingsStore[0].currencyOptions === ''
+        ) {
+            baseCurrencySet = false;
+        } else if (
+            $userSettingsStore[0].baseCurrency.length !== undefined &&
+            $userSettingsStore[0].currencyOptions.length !== undefined
+        ) {
+            baseCurrencySet = true;
+        }
+    };
 
     let fadedButton = false;
 
     const fadeButton = () => {
         fadedButton = !fadedButton;
     };
+
+    afterUpdate(() => {
+        checkBaseCurrency();
+    });
 </script>
 
 {#if loading === true}
@@ -27,7 +50,7 @@
         <Loading />
     </div>
 {:else if baseCurrencySet === false}
-    <SetBaseCurrency />
+    <SetBaseCurrency on:currencySet={() => (baseCurrencySet = true)} />
 {:else}
     <div class="content">
         {#if current === 'overview'}

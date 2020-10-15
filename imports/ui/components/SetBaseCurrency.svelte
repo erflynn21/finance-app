@@ -1,11 +1,10 @@
 <script>
     import CurrenciesList from '../shared/CurrenciesList.svelte';
     import CurrenciesListDivs from '../shared/CurrenciesListDivs.svelte';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { UserSettings } from '../../api/usersettings';
     import jq from 'jquery';
     import { afterUpdate, onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
+    import { userSettingsStore } from '../stores/UserSettingsStore';
     let dispatch = createEventDispatcher();
 
     let usersetting = {
@@ -13,12 +12,14 @@
         currencyOptions: '',
     };
 
-    $: usersettings = useTracker(() => UserSettings.findOne({}));
-
     const updateUserSettings = () => {
-        if ($usersettings !== undefined) {
+        if ($userSettingsStore.length !== 0) {
             // if yes, update settings
-            Meteor.call('usersettings.update', usersetting, $usersettings._id);
+            Meteor.call(
+                'usersettings.update',
+                usersetting,
+                $userSettingsStore[0]._id
+            );
             dispatch('currencySet');
         } else {
             // if no, add settings and dispatch
@@ -35,7 +36,7 @@
     });
 </script>
 
-{#if $usersettings === undefined}
+{#if $userSettingsStore.length === 0}
     <div class="content">
         <div class="form">
             <label for="currency-options">Before you start fiddling with your
