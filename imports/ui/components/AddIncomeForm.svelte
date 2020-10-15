@@ -1,8 +1,7 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { userCurrency } from '../stores/UserCurrencyStore';
+    import { userCurrency, userSettingsStore } from '../stores/stores';
     import { createEventDispatcher } from 'svelte';
-    import { userSettingsStore } from '../stores/UserSettingsStore';
     let dispatch = createEventDispatcher();
 
     let recurring = false;

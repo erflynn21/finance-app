@@ -1,14 +1,17 @@
 <script>
     import MonthlyBudgetCategory from './MonthlyBudgetCategory.svelte';
-    import { expenseSumStore } from '../stores/ExpenseSumStore';
-    import { budgetSumStore } from '../stores/BudgetSumStore';
-    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
+    import {
+        expenseSumStore,
+        budgetSumStore,
+        userCurrencySymbol,
+        selectedMonth,
+        selectedYear,
+        monthlyBudgetsStore,
+        baseBudgetsStore,
+    } from '../stores/stores';
     import Heading from '../shared/Heading.svelte';
     import { tweened } from 'svelte/motion';
     import ListItem from '../shared/ListItem.svelte';
-    import { selectedMonth, selectedYear } from '../stores/CurrentDateStore';
-    import { monthlyBudgetsStore } from '../stores/MonthlyBudgetsStore';
-    import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
 
     // setting budget month
     const date = new Date();

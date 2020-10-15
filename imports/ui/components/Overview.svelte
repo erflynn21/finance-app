@@ -1,10 +1,12 @@
 <script>
     import ListItem from '../shared/ListItem.svelte';
-    import { expenseSumStore } from '../stores/ExpenseSumStore';
-    import { budgetSumStore } from '../stores/BudgetSumStore';
-    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
+    import {
+        expenseSumStore,
+        budgetSumStore,
+        userCurrencySymbol,
+        incomeSumStore,
+    } from '../stores/stores';
     import { tweened } from 'svelte/motion';
-    import { incomeSumStore } from '../stores/IncomeSumStore';
     import DoughnutChart from './DoughnutChart.svelte';
     import MonthPicker from './MonthPicker.svelte';
     import { afterUpdate } from 'svelte';

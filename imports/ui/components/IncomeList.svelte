@@ -2,9 +2,11 @@
     import { Meteor } from 'meteor/meteor';
     import { afterUpdate } from 'svelte';
     import Income from '../components/Income.svelte';
-    import { incomesStore } from '../stores/IncomesStore';
-    import { monthlyIncomesStore } from '../stores/MonthlyIncomesStore';
-    import { userCurrency } from '../stores/UserCurrencyStore';
+    import {
+        incomesStore,
+        monthlyIncomesStore,
+        userCurrency,
+    } from '../stores/stores';
 
     const date = new Date();
     const year = date.getFullYear();

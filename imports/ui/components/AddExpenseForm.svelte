@@ -1,8 +1,10 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
-    import { userCurrency } from '../stores/UserCurrencyStore';
-    import { userSettingsStore } from '../stores/UserSettingsStore';
+    import {
+        baseBudgetsStore,
+        userCurrency,
+        userSettingsStore,
+    } from '../stores/stores';
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
 

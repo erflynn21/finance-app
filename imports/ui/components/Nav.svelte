@@ -7,7 +7,7 @@
     import SetBaseCurrency from './SetBaseCurrency.svelte';
     import Loading from '../shared/Loading.svelte';
     import { afterUpdate } from 'svelte';
-    import { userSettingsStore } from '../stores/UserSettingsStore';
+    import { userSettingsStore } from '../stores/stores';
 
     let loading = false;
 

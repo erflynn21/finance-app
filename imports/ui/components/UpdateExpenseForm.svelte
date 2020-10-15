@@ -2,9 +2,11 @@
     export let expense;
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
-    import { userCurrency } from '../stores/UserCurrencyStore';
-    import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
-    import { userSettingsStore } from '../stores/UserSettingsStore';
+    import {
+        userCurrency,
+        baseBudgetsStore,
+        userSettingsStore,
+    } from '../stores/stores';
 
     let updatedExpense = {
         title: expense.title,

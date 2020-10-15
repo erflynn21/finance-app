@@ -9,7 +9,7 @@
     import RecurringExpensesList from './RecurringExpensesList.svelte';
     import RecurringIncomeList from './RecurringIncomeList.svelte';
     import DeleteAccountPopUp from './DeleteAccountPopUp.svelte';
-    import { userSettingsStore } from '../stores/UserSettingsStore';
+    import { userSettingsStore } from '../stores/stores';
 
     // getting and updating user settings
     $: userSettings = {};

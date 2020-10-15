@@ -1,9 +1,11 @@
 <script>
     import ExpenseList from './ExpenseList.svelte';
     import IncomeList from './IncomeList.svelte';
-    import { expenseSumStore } from '../stores/ExpenseSumStore';
-    import { incomeSumStore } from '../stores/IncomeSumStore';
-    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
+    import {
+        expenseSumStore,
+        incomeSumStore,
+        userCurrencySymbol,
+    } from '../stores/stores';
     import Heading from '../shared/Heading.svelte';
 
     $: remainingTotal = Number(($incomeSumStore - $expenseSumStore).toFixed(2));

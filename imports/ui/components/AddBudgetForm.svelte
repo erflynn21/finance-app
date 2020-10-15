@@ -1,7 +1,6 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { userCurrency } from '../stores/UserCurrencyStore';
-    import { userSettingsStore } from '../stores/UserSettingsStore';
+    import { userCurrency, userSettingsStore } from '../stores/stores';
 
     let budget = {
         category: '',

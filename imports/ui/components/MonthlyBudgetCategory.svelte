@@ -8,10 +8,12 @@
     import { tweened } from 'svelte/motion';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
     import ListItem from '../shared/ListItem.svelte';
-    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
+    import {
+        userCurrencySymbol,
+        expensesStore,
+        monthlyBudgetsStore,
+    } from '../stores/stores';
     import EditPopUp from '../shared/EditPopUp.svelte';
-    import { expensesStore } from '../stores/ExpensesStore';
-    import { monthlyBudgetsStore } from '../stores/MonthlyBudgetsStore';
 
     $: monthlyBudget = {
         month: month,
@@ -37,41 +39,37 @@
         if (monthlyBudget.month === undefined) {
             return;
         } else {
-            if ($monthlyBudgetsStore.length !== 0) {
-                monthlybudget = $monthlyBudgetsStore.filter(
-                    (budget) => budget.category === monthlyBudget.category
-                );
-                // console.log(monthlybudget[0]);
-                if (monthlybudget[0] === undefined) {
-                    Meteor.call('monthlybudgets.insert', monthlyBudget);
-                    const newmonthlybudget = MonthlyBudgets.findOne({
-                        year: year,
-                        month: month,
-                        category: monthlyBudget.category,
-                    });
-                    monthlyBudget = {
-                        month: newmonthlybudget.month,
-                        year: newmonthlybudget.year,
-                        category: newmonthlybudget.category,
-                        amount: newmonthlybudget.amount,
-                        currency: newmonthlybudget.currency,
-                        originalCurrency: newmonthlybudget.originalCurrency,
-                        _id: newmonthlybudget._id,
-                        originalAmount: newmonthlybudget.originalAmount,
-                    };
-                } else {
-                    monthlyBudget = {
-                        month: monthlybudget[0].month,
-                        year: monthlybudget[0].year,
-                        category: monthlybudget[0].category,
-                        amount: monthlybudget[0].amount,
-                        currency: monthlybudget[0].currency,
-                        originalCurrency: monthlybudget[0].originalCurrency,
-                        _id: monthlybudget[0]._id,
-                        originalAmount: monthlybudget[0].originalAmount,
-                    };
-                    // console.log(monthlyBudget);
-                }
+            monthlybudget = $monthlyBudgetsStore.filter(
+                (budget) => budget.category === monthlyBudget.category
+            );
+            if (monthlybudget[0] === undefined) {
+                Meteor.call('monthlybudgets.insert', monthlyBudget);
+                const newmonthlybudget = MonthlyBudgets.findOne({
+                    year: year,
+                    month: month,
+                    category: monthlyBudget.category,
+                });
+                monthlyBudget = {
+                    month: newmonthlybudget.month,
+                    year: newmonthlybudget.year,
+                    category: newmonthlybudget.category,
+                    amount: newmonthlybudget.amount,
+                    currency: newmonthlybudget.currency,
+                    originalCurrency: newmonthlybudget.originalCurrency,
+                    _id: newmonthlybudget._id,
+                    originalAmount: newmonthlybudget.originalAmount,
+                };
+            } else {
+                monthlyBudget = {
+                    month: monthlybudget[0].month,
+                    year: monthlybudget[0].year,
+                    category: monthlybudget[0].category,
+                    amount: monthlybudget[0].amount,
+                    currency: monthlybudget[0].currency,
+                    originalCurrency: monthlybudget[0].originalCurrency,
+                    _id: monthlybudget[0]._id,
+                    originalAmount: monthlybudget[0].originalAmount,
+                };
             }
         }
     };

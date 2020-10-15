@@ -4,7 +4,7 @@
     import jq from 'jquery';
     import { afterUpdate, onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
-    import { userSettingsStore } from '../stores/UserSettingsStore';
+    import { userSettingsStore } from '../stores/stores';
     let dispatch = createEventDispatcher();
 
     let usersetting = {

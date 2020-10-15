@@ -1,6 +1,5 @@
 <script>
-    import { userCurrency } from '../stores/UserCurrencyStore';
-    import { userSettingsStore } from '../stores/UserSettingsStore';
+    import { userCurrency, userSettingsStore } from '../stores/stores';
     export let budget;
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();

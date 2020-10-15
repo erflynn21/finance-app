@@ -7,7 +7,7 @@
         endDate,
         selectedMonth,
         selectedYear,
-    } from '../stores/CurrentDateStore';
+    } from '../stores/stores';
     import jq from 'jquery';
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();

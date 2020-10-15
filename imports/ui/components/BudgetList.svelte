@@ -1,7 +1,6 @@
 <script>
     import Budget from './Budget.svelte';
-    import { baseBudgetSumStore } from '../stores/BaseBudgetSumStore';
-    import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
+    import { baseBudgetSumStore, baseBudgetsStore } from '../stores/stores';
 </script>
 
 <div>

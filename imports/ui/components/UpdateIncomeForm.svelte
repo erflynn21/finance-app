@@ -2,8 +2,7 @@
     export let income;
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
-    import { userCurrency } from '../stores/UserCurrencyStore';
-    import { userSettingsStore } from '../stores/UserSettingsStore';
+    import { userCurrency, userSettingsStore } from '../stores/stores';
 
     let updatedIncome = {
         title: income.title,

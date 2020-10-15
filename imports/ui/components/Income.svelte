@@ -1,6 +1,6 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
+    import { userCurrencySymbol } from '../stores/stores';
     export let income;
     import ListItem from '../shared/ListItem.svelte';
     import DeletePopUp from '../shared/DeletePopUp.svelte';

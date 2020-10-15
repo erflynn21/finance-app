@@ -5,7 +5,7 @@
     import ListItem from '../shared/ListItem.svelte';
     import DeletePopUp from '../shared/DeletePopUp.svelte';
     import EditPopUp from '../shared/EditPopUp.svelte';
-    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
+    import { userCurrencySymbol } from '../stores/stores';
 
     const deleteBudget = () => {
         Meteor.call('budgets.remove', budget._id);

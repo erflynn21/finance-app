@@ -1,33 +1,33 @@
 <script>
     import { Meteor } from 'meteor/meteor';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import {
-        startDate,
-        endDate,
-        selectedMonth,
-        selectedYear,
-    } from '../stores/CurrentDateStore';
     import { Expenses } from '../../api/expenses';
     import { Incomes } from '../../api/incomes';
     import { Budgets } from '../../api/budgets';
     import { MonthlyBudgets } from '../../api/monthlybudgets';
     import { MonthlyExpenses } from '../../api/monthlyexpenses';
     import { MonthlyIncomes } from '../../api/monthlyincomes';
-    import { afterUpdate, onMount } from 'svelte';
-    import { expensesStore } from '../stores/ExpensesStore';
-    import { incomesStore } from '../stores/IncomesStore';
-    import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
-    import { baseBudgetSumStore } from '../stores/BaseBudgetSumStore';
-    import { monthlyBudgetsStore } from '../stores/MonthlyBudgetsStore';
-    import { monthlyExpensesStore } from '../stores/MonthlyExpensesStore';
-    import { monthlyIncomesStore } from '../stores/MonthlyIncomesStore';
-    import { userSettingsStore } from '../stores/UserSettingsStore';
-    import { budgetSumStore } from '../stores/BudgetSumStore';
-    import { userCurrency } from '../stores/UserCurrencyStore';
-    import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     import { UserSettings } from '../../api/usersettings';
-    import { expenseSumStore } from '../stores/ExpenseSumStore';
-    import { incomeSumStore } from '../stores/IncomeSumStore';
+    import { afterUpdate, onMount } from 'svelte';
+    import {
+        startDate,
+        endDate,
+        selectedMonth,
+        selectedYear,
+        expensesStore,
+        incomesStore,
+        baseBudgetsStore,
+        baseBudgetSumStore,
+        monthlyBudgetsStore,
+        monthlyExpensesStore,
+        monthlyIncomesStore,
+        userSettingsStore,
+        budgetSumStore,
+        userCurrency,
+        userCurrencySymbol,
+        expenseSumStore,
+        incomeSumStore,
+    } from '../stores/stores';
 
     const months = [
         'January',

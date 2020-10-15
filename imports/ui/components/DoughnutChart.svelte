@@ -1,9 +1,11 @@
 <script>
     import Chart from 'chart.js';
     import { afterUpdate, onMount } from 'svelte';
-    import { monthlyBudgetsStore } from '../stores/MonthlyBudgetsStore';
-    import { expensesStore } from '../stores/ExpensesStore';
-    import { budgetSumStore } from '../stores/BudgetSumStore';
+    import {
+        monthlyBudgetsStore,
+        expensesStore,
+        budgetSumStore,
+    } from '../stores/stores';
 
     $: categoryLabels = [];
 

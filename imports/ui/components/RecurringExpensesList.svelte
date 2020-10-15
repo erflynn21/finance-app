@@ -1,6 +1,6 @@
 <script>
     import RecurringExpense from './RecurringExpense.svelte';
-    import { monthlyExpensesStore } from '../stores/MonthlyExpensesStore';
+    import { monthlyExpensesStore } from '../stores/stores';
 </script>
 
 <div>
