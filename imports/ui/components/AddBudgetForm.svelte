@@ -1,13 +1,7 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { onMount } from 'svelte';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
-    import { createEventDispatcher } from 'svelte';
-    let dispatch = createEventDispatcher();
-
-    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
+    import { userSettingsStore } from '../stores/UserSettingsStore';
 
     let budget = {
         category: '',
@@ -36,7 +30,6 @@
 
         // add the budget
         Meteor.call('budgets.insert', budget);
-        dispatch('recalculateBudgets');
 
         // clear form
         budget.category = '';
@@ -57,10 +50,6 @@
         );
         budget.currency = $userCurrency;
     }
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-    });
 </script>
 
 <form class="new-budget" on:submit|preventDefault={handleAddBudget}>
@@ -80,7 +69,7 @@
     <div class="currency">
         <label for="currency">Currency: </label>
         <select id="budget-currency" bind:value={budget.currency}>
-            {#each $usersettings as usersetting (usersetting._id)}
+            {#each $userSettingsStore as usersetting (usersetting._id)}
                 <option value={usersetting.baseCurrency}>
                     {usersetting.baseCurrency}
                 </option>

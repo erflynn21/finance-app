@@ -1,16 +1,10 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { onMount } from 'svelte';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Budgets } from '../../api/budgets';
-    import { UserSettings } from '../../api/usersettings';
+    import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
     import { userCurrency } from '../stores/UserCurrencyStore';
+    import { userSettingsStore } from '../stores/UserSettingsStore';
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
-
-    $: budgets = useTracker(() => Budgets.find({}).fetch());
-
-    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
     let recurring = false;
 
@@ -57,7 +51,6 @@
         expense.originalAmount = null;
 
         dispatch('collapse');
-        dispatch('recalculateExpenses');
     }
 
     async function handleAddMonthlyExpense() {
@@ -110,10 +103,6 @@
         );
         expense.currency = $userCurrency;
     }
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-    });
 </script>
 
 <form class="new-expense" on:submit|preventDefault={handleAddExpense}>
@@ -136,7 +125,7 @@
         <label for="category">Category: </label>
         <select id="category" bind:value={expense.category}>
             <option disabled selected value>-- select a category --</option>
-            {#each $budgets as budget (budget._id)}
+            {#each $baseBudgetsStore as budget (budget._id)}
                 <option value={budget.category}>{budget.category}</option>
             {/each}
         </select>
@@ -145,7 +134,7 @@
     <div class="currency">
         <label for="currency">Currency: </label>
         <select id="expense-currency" bind:value={expense.currency}>
-            {#each $usersettings as usersetting (usersetting._id)}
+            {#each $userSettingsStore as usersetting (usersetting._id)}
                 <option value={usersetting.baseCurrency}>
                     {usersetting.baseCurrency}
                 </option>

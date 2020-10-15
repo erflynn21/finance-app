@@ -1,10 +1,6 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { afterUpdate, onMount } from 'svelte';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { UserSettings } from '../../api/usersettings';
-    import { Budgets } from '../../api/budgets';
-    import { baseBudgetSumStore } from '../stores/BaseBudgetSumStore';
+    import { afterUpdate } from 'svelte';
     import CurrenciesList from '../shared/CurrenciesList.svelte';
     import BudgetList from './BudgetList.svelte';
     import Heading from '../shared/Heading.svelte';

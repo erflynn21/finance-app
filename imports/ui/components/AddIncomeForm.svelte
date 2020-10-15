@@ -1,13 +1,9 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { onMount } from 'svelte';
-    import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
     import { createEventDispatcher } from 'svelte';
+    import { userSettingsStore } from '../stores/UserSettingsStore';
     let dispatch = createEventDispatcher();
-
-    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
     let recurring = false;
 
@@ -98,10 +94,6 @@
         );
         income.currency = $userCurrency;
     }
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-    });
 </script>
 
 <form class="new-income" on:submit|preventDefault={handleAddIncome}>
@@ -123,7 +115,7 @@
     <div class="currency">
         <label for="currency">Currency: </label>
         <select id="income-currency" bind:value={income.currency}>
-            {#each $usersettings as usersetting (usersetting._id)}
+            {#each $userSettingsStore as usersetting (usersetting._id)}
                 <option value={usersetting.baseCurrency}>
                     {usersetting.baseCurrency}
                 </option>
