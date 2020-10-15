@@ -191,6 +191,8 @@
         Meteor.subscribe('budgets');
         Meteor.subscribe('monthlybudgets');
         Meteor.subscribe('usersettings');
+        Meteor.subscribe('monthlyexpenses');
+        Meteor.subscribe('monthlyincomes');
     });
 
     afterUpdate(() => {

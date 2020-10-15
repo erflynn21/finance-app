@@ -1,22 +1,11 @@
 <script>
-    import { Meteor } from 'meteor/meteor';
-    import { onMount } from 'svelte';
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { MonthlyIncomes } from '../../api/monthlyincomes';
-    import { createEventDispatcher } from 'svelte';
     import RecurringIncome from './RecurringIncome.svelte';
-    let dispatch = createEventDispatcher();
-
-    $: monthlyincomes = useTracker(() => MonthlyIncomes.find({}).fetch());
-
-    onMount(() => {
-        Meteor.subscribe('monthlyincomes');
-    });
+    import { monthlyIncomesStore } from '../stores/MonthlyIncomesStore';
 </script>
 
 <div>
     <h1>Monthly Incomes:</h1>
-    {#each $monthlyincomes as monthlyincome (monthlyincome._id)}
+    {#each $monthlyIncomesStore as monthlyincome (monthlyincome._id)}
         <RecurringIncome {monthlyincome} />
     {/each}
 </div>

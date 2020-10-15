@@ -2,15 +2,12 @@
     import { Meteor } from 'meteor/meteor';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
     export let monthlyincome;
-    import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
     import DeletePopUp from '../shared/DeletePopUp.svelte';
     import EditPopUp from '../shared/EditPopUp.svelte';
-    let dispatch = createEventDispatcher();
 
     const deleteIncome = () => {
         Meteor.call('monthlyincomes.remove', monthlyincome._id);
-        // dispatch('delete', expense);
     };
 
     const toggleDelete = () => {
@@ -32,10 +29,6 @@
             <button class="delete" on:click={toggleDelete}>
                 <img src="/img/delete.svg" alt="" />
             </button>
-
-            <!-- <span
-                datetime={monthlyexpense.date}
-                class="date">{monthlyexpense.recurringdate}</span> -->
             <span class="title">{monthlyincome.title}</span>
             {#if monthlyincome.currency !== null}
                 <span
