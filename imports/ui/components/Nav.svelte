@@ -9,7 +9,7 @@
 
     let loading = false;
 
-    let current = 'budget';
+    let current = 'settings';
 
     $: baseCurrencySet = true;
 

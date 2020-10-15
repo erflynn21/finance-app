@@ -1,6 +1,6 @@
 <script>
     import { Meteor } from 'meteor/meteor';
-    import { onMount } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import { useTracker } from 'meteor/rdb:svelte-meteor-data';
     import { UserSettings } from '../../api/usersettings';
     import { Budgets } from '../../api/budgets';
@@ -13,33 +13,39 @@
     import RecurringExpensesList from './RecurringExpensesList.svelte';
     import RecurringIncomeList from './RecurringIncomeList.svelte';
     import DeleteAccountPopUp from './DeleteAccountPopUp.svelte';
+    import { userSettingsStore } from '../stores/UserSettingsStore';
 
-    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
+    $: userSettings = {};
 
-    let usersetting = {
-        baseCurrency: '',
+    $: updatedCurrencyOptions = {
         currencyOptions: '',
     };
 
-    $: updateduserinfo = {};
-
-    const parseUserInfo = (userinfo) => {
-        updateduserinfo = {
-            baseCurrency: userinfo.baseCurrency,
-            currencyOptions: userinfo.currencyOptions,
-            owner: userinfo.owner,
-            id: userinfo._id,
-        };
+    const getUserSettings = () => {
+        if ($userSettingsStore[0] === undefined) {
+            return;
+        } else {
+            userSettings = {
+                baseCurrency: $userSettingsStore[0].baseCurrency,
+                currencyOptions: $userSettingsStore[0].currencyOptions,
+                owner: $userSettingsStore[0].owner,
+                id: $userSettingsStore[0]._id,
+            };
+        }
     };
 
     const updateUserSettings = () => {
         // check if user already has settings in database
-        if (updateduserinfo.owner) {
+        if (userSettings.owner) {
             // if yes, update settings
-            Meteor.call('usersettings.update', usersetting, updateduserinfo.id);
+            Meteor.call(
+                'usersettings.update',
+                updatedCurrencyOptions,
+                userSettings.id
+            );
         } else {
             // if no, add settings
-            Meteor.call('usersettings.insert', usersetting);
+            Meteor.call('usersettings.insert', updatedCurrencyOptions);
         }
     };
 
@@ -74,12 +80,17 @@
         });
         jq('.ui.dropdown').dropdown();
     });
+
+    afterUpdate(() => {
+        getUserSettings();
+        jq('.ui.dropdown').dropdown();
+    });
 </script>
 
 <div class="container">
-    {#each $usersettings.map(parseUserInfo) as userinfo}
+    <!-- {#each $usersettings.map(parseUserInfo) as userinfo}
         <div />
-    {/each}
+    {/each} -->
 
     <Heading>Settings</Heading>
 
@@ -99,34 +110,33 @@
         <h3>User Settings:</h3>
         <label for="currency-options">Update Available Currency Options:</label>
         <div class="ui search selection dropdown multiple currencies-select">
-            <select
-                id="multi-select" multiple name='currencies' class='ui selection multiple dropdown'
-                bind:value={usersetting.currencyOptions}
-                >
-                <CurrenciesList />
-            </select>
-            <input name="currencies" type='hidden'>
-            <i class='dropdown icon'></i>
-            <div class="default text">Currencies</div>
-            <div class="menu">
-                <CurrenciesListDivs />
-            </div>  
-        </div> 
+                <select
+                        id="multi-select" multiple name='currencies' class='ui selection multiple dropdown'
+                        bind:value={updatedCurrencyOptions.currencyOptions}
+                        >
+                        <CurrenciesList />
+                    </select>
+
+                <input name="currencies" type="hidden" />
+                <i class="dropdown icon" />
+                <div class="default text">Currencies</div>
+                <div class="menu">
+                    <CurrenciesListDivs />
+                </div>
+        </div>
         <button on:click|preventDefault={updateUserSettings}>
             Update User Settings
         </button>
-       
-        
+
         <div class="settings-info">
-        {#if updateduserinfo.baseCurrency === undefined || updateduserinfo.currencyOptions === undefined}
-            <div>Base Currency: Base Currency not yet set.</div>
-            <div>Currency Options: Currency Options not yet set.</div>
-        {:else}
-            <div>Base Currency: {updateduserinfo.baseCurrency}</div>
-            <div>Currency Options: {updateduserinfo.currencyOptions}</div>
-        {/if}
+            {#if userSettings.baseCurrency === undefined || userSettings.currencyOptions === undefined}
+                <div>Base Currency: Base Currency not yet set.</div>
+                <div>Currency Options: Currency Options not yet set.</div>
+            {:else}
+                <div>Base Currency: {userSettings.baseCurrency}</div>
+                <div>Currency Options: {userSettings.currencyOptions}</div>
+            {/if}
         </div>
-        
     </form>
     <div class="logout"><button on:click={logout}>Logout</button></div>
 
