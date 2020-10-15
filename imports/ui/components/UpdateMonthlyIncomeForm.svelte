@@ -1,15 +1,9 @@
 <script>
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Budgets } from '../../api/budgets';
-    import { UserSettings } from '../../api/usersettings';
     export let monthlyincome;
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
-
-    $: budgets = useTracker(() => Budgets.find({}).fetch());
-
-    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
+    import { userSettingsStore } from '../stores/UserSettingsStore';
 
     let updatedMonthlyIncome = {
         title: monthlyincome.title,
@@ -47,11 +41,6 @@
     const exitUpdate = () => {
         dispatch('collapse');
     };
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-        Meteor.subscribe('budgets');
-    });
 </script>
 
 <div class="big-title">Edit Monthly Income</div>
@@ -126,14 +115,14 @@
         <label for="currency">Currency: </label>
         <select id="income-currency" bind:value={updatedMonthlyIncome.currency}>
             {#if updatedMonthlyIncome.originalCurrency == null}
-                {#each $usersettings as usersetting (usersetting._id)}
+                {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={$userCurrency}>{$userCurrency}</option>
                     {#each usersetting.currencyOptions as currencyOption}
                         <option value={currencyOption}>{currencyOption}</option>
                     {/each}
                 {/each}
             {:else}
-                {#each $usersettings as usersetting (usersetting._id)}
+                {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={updatedMonthlyIncome.originalCurrency}>
                         {updatedMonthlyIncome.originalCurrency}
                     </option>

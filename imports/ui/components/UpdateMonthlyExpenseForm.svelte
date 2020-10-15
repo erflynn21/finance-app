@@ -1,15 +1,10 @@
 <script>
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { Budgets } from '../../api/budgets';
-    import { UserSettings } from '../../api/usersettings';
     export let monthlyexpense;
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
     import { userCurrency } from '../stores/UserCurrencyStore';
-
-    $: budgets = useTracker(() => Budgets.find({}).fetch());
-
-    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
+    import { baseBudgetsStore } from '../stores/BaseBudgetsStore';
+    import { userSettingsStore } from '../stores/UserSettingsStore';
 
     let updatedMonthlyExpense = {
         title: monthlyexpense.title,
@@ -49,11 +44,6 @@
     const exitUpdate = () => {
         dispatch('collapse');
     };
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-        Meteor.subscribe('budgets');
-    });
 </script>
 
 <div class="big-title">Edit Monthly Expense</div>
@@ -130,7 +120,7 @@
             <option value={monthlyexpense.category}>
                 {monthlyexpense.category}
             </option>
-            {#each $budgets as budget (budget._id)}
+            {#each $baseBudgetsStore as budget (budget._id)}
                 {#if budget.category !== monthlyexpense.category}
                     <option value={budget.category}>{budget.category}</option>
                 {/if}
@@ -144,14 +134,14 @@
             id="expense-currency"
             bind:value={updatedMonthlyExpense.currency}>
             {#if updatedMonthlyExpense.originalCurrency == null}
-                {#each $usersettings as usersetting (usersetting._id)}
+                {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={$userCurrency}>{$userCurrency}</option>
                     {#each usersetting.currencyOptions as currencyOption}
                         <option value={currencyOption}>{currencyOption}</option>
                     {/each}
                 {/each}
             {:else}
-                {#each $usersettings as usersetting (usersetting._id)}
+                {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={updatedMonthlyExpense.originalCurrency}>
                         {updatedMonthlyExpense.originalCurrency}
                     </option>

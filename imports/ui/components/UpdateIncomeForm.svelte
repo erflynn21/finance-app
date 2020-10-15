@@ -141,7 +141,6 @@
         text-align: center;
         margin-bottom: 10px;
         width: 100%;
-        /* margin: 0 15px; */
         font-size: 18px;
     }
 
