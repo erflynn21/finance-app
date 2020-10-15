@@ -15,6 +15,7 @@
     import DeleteAccountPopUp from './DeleteAccountPopUp.svelte';
     import { userSettingsStore } from '../stores/UserSettingsStore';
 
+    // getting and updating user settings
     $: userSettings = {};
 
     $: updatedCurrencyOptions = {
@@ -49,37 +50,14 @@
         }
     };
 
-    $: budgetSum = 0;
-    const calculateBaseBudgets = () => {
-        let totalBudgets = Budgets.find({}).fetch();
-        let budgets = [];
-        totalBudgets.forEach((budget) => {
-            budgets = [...budgets, budget.amount];
-        });
-        budgetSum = Number(
-            budgets.reduce(function (a, b) {
-                return a + b;
-            }, 0)
-        ).toFixed(2);
-        baseBudgetSumStore.set(budgetSum);
-    };
-
     const logout = () => {
         Meteor.logout();
     };
 
     let deletePopUp = false;
-    const deleteAccount = () => {
+    const toggleDelete = () => {
         deletePopUp = !deletePopUp;
     };
-
-    onMount(() => {
-        Meteor.subscribe('usersettings');
-        Meteor.subscribe('budgets', function () {
-            calculateBaseBudgets();
-        });
-        jq('.ui.dropdown').dropdown();
-    });
 
     afterUpdate(() => {
         getUserSettings();
@@ -88,14 +66,10 @@
 </script>
 
 <div class="container">
-    <!-- {#each $usersettings.map(parseUserInfo) as userinfo}
-        <div />
-    {/each} -->
-
     <Heading>Settings</Heading>
 
     <!-- Lists -->
-    <BudgetList on:recalculateBudgets={calculateBaseBudgets} />
+    <BudgetList />
 
     <RecurringExpensesList />
 
@@ -142,14 +116,13 @@
 
     <div class="delete-account">
         <h5>Danger Zone!</h5>
-        <button class="delete" on:click={deleteAccount}>Delete Account</button>
+        <button class="delete" on:click={toggleDelete}>Delete Account</button>
     </div>
 </div>
 
 {#if deletePopUp === true}
     <div class="deleteTab">
-        <DeleteAccountPopUp on:collapse={deleteAccount} />
-        <!-- <DeleteAccoPopUp on:collapse={toggleDelete} on:delete={deleteExpense} /> -->
+        <DeleteAccountPopUp on:collapse={toggleDelete} />
     </div>
 {/if}
 

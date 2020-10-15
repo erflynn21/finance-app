@@ -1,13 +1,9 @@
 <script>
-    import { useTracker } from 'meteor/rdb:svelte-meteor-data';
-    import { UserSettings } from '../../api/usersettings';
     import { userCurrency } from '../stores/UserCurrencyStore';
-    import { onMount } from 'svelte';
+    import { userSettingsStore } from '../stores/UserSettingsStore';
     export let budget;
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher();
-
-    $: usersettings = useTracker(() => UserSettings.find({}).fetch());
 
     let updatedBudget = {
         amount: budget.amount,
@@ -38,7 +34,6 @@
 
         // collapse the update menu
         dispatch('collapse');
-        dispatch('recalculateBudgets');
     }
 
     async function convertAmount() {
@@ -60,13 +55,9 @@
     const exitUpdate = () => {
         dispatch('collapse');
     };
-
-    onMount(() => {
-        Meteor.subscribe('monthlybudgets');
-    });
 </script>
 
-<div class="big-title">Edit Expense</div>
+<div class="big-title">Edit {budget.category} Budget Category</div>
 <div class="border" />
 <form class="update-budget" on:submit|preventDefault={updateBudget}>
     <div class="title">
@@ -94,16 +85,20 @@
 
     <div class="currency">
         <label for="currency">Currency: </label>
-        <select id="budget-currency" bind:value={updatedBudget.currency}>
-            {#if updatedBudget.originalCurrency === null}
-                {#each $usersettings as usersetting (usersetting._id)}
+        {#if updatedBudget.originalCurrency === null}
+            <select id="expense-currency" bind:value={updatedBudget.currency}>
+                {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={$userCurrency}>{$userCurrency}</option>
                     {#each usersetting.currencyOptions as currencyOption}
                         <option value={currencyOption}>{currencyOption}</option>
                     {/each}
                 {/each}
-            {:else}
-                {#each $usersettings as usersetting (usersetting._id)}
+            </select>
+        {:else}
+            <select
+                id="expense-currency"
+                bind:value={updatedBudget.originalCurrency}>
+                {#each $userSettingsStore as usersetting (usersetting._id)}
                     <option value={updatedBudget.originalCurrency}>
                         {updatedBudget.originalCurrency}
                     </option>
@@ -118,8 +113,8 @@
                         {/if}
                     {/each}
                 {/each}
-            {/if}
-        </select>
+            </select>
+        {/if}
     </div>
 
     <span class="error">

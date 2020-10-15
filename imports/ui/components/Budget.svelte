@@ -2,30 +2,24 @@
     import { Meteor } from 'meteor/meteor';
     import UpdateBudgetForm from './UpdateBudgetForm.svelte';
     export let budget;
-    import { createEventDispatcher } from 'svelte';
     import ListItem from '../shared/ListItem.svelte';
     import DeletePopUp from '../shared/DeletePopUp.svelte';
     import EditPopUp from '../shared/EditPopUp.svelte';
     import { userCurrencySymbol } from '../stores/UserCurrencySymbolStore';
 
-    let dispatch = createEventDispatcher();
-
     const deleteBudget = () => {
         Meteor.call('budgets.remove', budget._id);
-        dispatch('recalculateBudgets');
     };
 
+    let deleteTab = false;
     const toggleDelete = () => {
         deleteTab = !deleteTab;
     };
 
-    let deleteTab = false;
-
+    let editTab = false;
     const toggleEdit = () => {
         editTab = !editTab;
     };
-
-    let editTab = false;
 
     let isHidden = true;
 </script>
@@ -43,8 +37,7 @@
             <div class:hidden={isHidden} class="update-budget">
                 <UpdateBudgetForm
                     {budget}
-                    on:collapse={() => (isHidden = !isHidden)}
-                    on:expenseEdited />
+                    on:collapse={() => (isHidden = !isHidden)} />
             </div>
 
             <button class="edit" on:click={toggleEdit}>
