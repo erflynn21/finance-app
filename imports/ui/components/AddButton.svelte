@@ -35,6 +35,9 @@
         height: 50px;
     }
 
+    .act-btn input:not(:checked) {
+        border: none;
+    }
     .act-btn:focus {
         -webkit-tap-highlight-color: transparent;
     }

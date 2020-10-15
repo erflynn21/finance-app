@@ -11,7 +11,7 @@
 
     let loading = false;
 
-    let current = 'overview';
+    let current = 'transactions';
 
     $: baseCurrencySet = null;
 
@@ -111,6 +111,13 @@
         min-height: calc(100vh - 51px);
         max-height: calc(100vh - 51px);
         background-color: #eeeeeee7;
+    }
+
+    @media (pointer: coarse) {
+        .content {
+            min-height: calc(100vh - 165px);
+            max-height: calc(100vh - 165px);
+        }
     }
     .bottom-nav-container {
         background-color: #fff;

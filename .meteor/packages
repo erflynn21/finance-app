@@ -23,8 +23,8 @@ static-html
 accounts-ui@1.3.1
 accounts-password@1.6.2
 svelte:blaze-integration
-accounts-google@1.3.3
-google-config-ui@1.0.1
+# accounts-google@1.3.3
+# google-config-ui@1.0.1
 semantic:ui
 less
 juliancwirko:postcss
