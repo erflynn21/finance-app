@@ -19,12 +19,19 @@
         }
     };
 
+    const checkCurrentUser = () => {
+        if ($currentUser === null) {
+            loading = false;
+        }
+    };
+
     onMount(() => {
         checkLoading();
     });
 
     afterUpdate(() => {
         checkLoading();
+        checkCurrentUser();
     });
 </script>
 
