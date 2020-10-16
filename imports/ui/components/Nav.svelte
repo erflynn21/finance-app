@@ -9,7 +9,7 @@
     import { afterUpdate } from 'svelte';
     import { userSettingsStore } from '../stores/stores';
 
-    let loading = false;
+    let loading = true;
 
     let current = 'overview';
 
@@ -41,6 +41,7 @@
         ) {
             baseCurrencySet = true;
         }
+        loading = false;
     };
 
     let fadedButton = false;
@@ -56,7 +57,7 @@
 </script>
 
 {#if loading === true}
-    <div class="content" style="min-height: {vh}; max-height: {vh};">
+    <div class="content" style="height: 100vh">
         <Loading />
     </div>
 {:else if baseCurrencySet === false}
@@ -73,64 +74,52 @@
             <Settings />
         {/if}
     </div>
-{/if}
-
-{#if baseCurrencySet === true}
-    <footer>
-        <div class:faded={fadedButton === true}>
-            <AddButton />
-        </div>
-        <div class="bottom-nav-container">
-            <div class="tab-nav-container">
-                <button>
-                    <div
-                        class="tab {current === 'overview' ? 'active' : ''}"
-                        on:click={() => (current = 'overview')}>
-                        <i class="chart pie icon" />
-                    </div>
-                </button>
-
-                <button>
-                    <div
-                        class="tab {current === 'budget' ? 'active' : ''}"
-                        on:click={() => (current = 'budget')}>
-                        <i class="calculator icon" />
-                    </div>
-                </button>
-                <button>
-                    <div
-                        class="tab {current === 'transactions' ? 'active' : ''}"
-                        on:click={() => (current = 'transactions')}>
-                        <i class="dollar sign icon" />
-                    </div>
-                </button>
-                <button>
-                    <div
-                        class="tab {current === 'settings' ? 'active' : ''}"
-                        on:click={() => (current = 'settings')}>
-                        <i class="cog icon" />
-                    </div>
-                </button>
+    {#if baseCurrencySet === true}
+        <footer>
+            <div class:faded={fadedButton === true}>
+                <AddButton />
             </div>
-        </div>
-    </footer>
+            <div class="bottom-nav-container">
+                <div class="tab-nav-container">
+                    <button>
+                        <div
+                            class="tab {current === 'overview' ? 'active' : ''}"
+                            on:click={() => (current = 'overview')}>
+                            <i class="chart pie icon" />
+                        </div>
+                    </button>
+
+                    <button>
+                        <div
+                            class="tab {current === 'budget' ? 'active' : ''}"
+                            on:click={() => (current = 'budget')}>
+                            <i class="calculator icon" />
+                        </div>
+                    </button>
+                    <button>
+                        <div
+                            class="tab {current === 'transactions' ? 'active' : ''}"
+                            on:click={() => (current = 'transactions')}>
+                            <i class="dollar sign icon" />
+                        </div>
+                    </button>
+                    <button>
+                        <div
+                            class="tab {current === 'settings' ? 'active' : ''}"
+                            on:click={() => (current = 'settings')}>
+                            <i class="cog icon" />
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </footer>
+    {/if}
 {/if}
 
 <style>
     .content {
-        /* min-height: calc(var(--vh, 1vh) * 100);
-        max-height: calc(var(--vh, 1vh) * 100); */
-        /* min-height: calc(100vh - 51px);
-        max-height: calc(100vh - 51px); */
         background-color: #eeeeeee7;
     }
-
-    /* @media (pointer: coarse) {
-        .content {
-            min-height: calc(100vh - 165px);
-            max-height: calc(100vh - 165px);
-        }
-    } */
 
     .bottom-nav-container {
         background-color: #fff;
