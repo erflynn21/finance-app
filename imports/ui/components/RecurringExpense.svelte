@@ -27,7 +27,7 @@
     <ListItem>
         <div class="expense">
             <button class="delete" on:click={toggleDelete}>
-                <img src="/img/delete.svg" alt="" />
+                <i class="trash alternate outline icon" />
             </button>
             <span class="title">{monthlyexpense.title}</span>
             {#if monthlyexpense.currency !== null}
@@ -38,7 +38,7 @@
                     {monthlyexpense.originalAmount}</span>
             {/if}
             <button class="edit" on:click={toggleEdit}>
-                <img src="/img/edit.svg" alt="" />
+                <i class="edit outline icon" />
             </button>
         </div>
     </ListItem>
