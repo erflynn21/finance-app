@@ -8,7 +8,12 @@
     import { MonthlyExpenses } from '../../api/monthlyexpenses';
     import { MonthlyIncomes } from '../../api/monthlyincomes';
     import { UserSettings } from '../../api/usersettings';
-    import { afterUpdate, onDestroy, onMount } from 'svelte';
+    import {
+        afterUpdate,
+        onDestroy,
+        onMount,
+        createEventDispatcher,
+    } from 'svelte';
     import {
         startDate,
         endDate,
@@ -28,6 +33,7 @@
         expenseSumStore,
         incomeSumStore,
     } from '../stores/stores';
+    let dispatch = createEventDispatcher();
 
     const months = [
         'January',
@@ -186,13 +192,21 @@
     };
 
     onMount(() => {
-        Meteor.subscribe('incomes');
-        Meteor.subscribe('expenses');
-        Meteor.subscribe('budgets');
-        Meteor.subscribe('monthlybudgets');
-        Meteor.subscribe('usersettings');
-        Meteor.subscribe('monthlyexpenses');
-        Meteor.subscribe('monthlyincomes');
+        const handles = [
+            Meteor.subscribe('incomes'),
+            Meteor.subscribe('expenses'),
+            Meteor.subscribe('budgets'),
+            Meteor.subscribe('monthlybudgets'),
+            Meteor.subscribe('usersettings'),
+            Meteor.subscribe('monthlyexpenses'),
+            Meteor.subscribe('monthlyincomes'),
+        ];
+        Tracker.autorun(() => {
+            const dataReady = handles.every((handle) => handle.ready());
+            if (dataReady) {
+                dispatch('dataReady');
+            }
+        });
     });
 
     afterUpdate(() => {

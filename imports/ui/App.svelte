@@ -11,31 +11,18 @@
     let loading = true;
     $: currentUser = useTracker(() => Meteor.user());
 
-    const checkLoading = () => {
-        if ($userSettingsStore.length === 0) {
-            loading = true;
-        } else {
-            loading = false;
-        }
-    };
-
     const checkCurrentUser = () => {
         if ($currentUser === null) {
             loading = false;
         }
     };
 
-    onMount(() => {
-        checkLoading();
-    });
-
     afterUpdate(() => {
-        checkLoading();
         checkCurrentUser();
     });
 </script>
 
-<Data />
+<Data on:dataReady={() => (loading = false)} />
 {#if loading === true}
     <div class="content" style="height: 100vh">
         <Loading />
