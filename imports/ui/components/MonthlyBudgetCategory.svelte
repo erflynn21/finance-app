@@ -122,7 +122,7 @@
                 of
                 {$userCurrencySymbol}{monthlyBudget.amount}
                 <button class="edit" on:click={toggleEdit}>
-                    <img src="/img/edit.svg" alt="" />
+                    <i class="edit outline icon" />
                 </button>
             </div>
         </div>
@@ -145,8 +145,11 @@
                     <span>{percentage}%</span>
                 {/if}
             </div>
+
             <div class="dropdown" on:click={() => (isDropdown = !isDropdown)}>
-                <img src="/img/dropdown.svg" alt="" />
+                {#if isDropdown === false}
+                    <i class="angle up icon" />
+                {:else}<i class="angle down icon" />{/if}
             </div>
         </div>
         <div class:isDropdown class="expense-dropdown">
@@ -185,7 +188,7 @@
         justify-self: end;
     }
 
-    .amount-summary button img {
+    .amount-summary button i {
         height: 15px;
     }
 
@@ -225,7 +228,7 @@
         justify-self: end;
     }
 
-    .dropdown img {
+    .dropdown i {
         height: 20px;
     }
 

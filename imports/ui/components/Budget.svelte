@@ -28,7 +28,7 @@
     <ListItem>
         <div class="budget">
             <button class="delete" on:click={toggleDelete}>
-                <img src="/img/delete.svg" alt="" />
+                <i class="trash alternate outline icon" />
             </button>
 
             <span class="category">{budget.category}</span>
@@ -41,7 +41,7 @@
             </div>
 
             <button class="edit" on:click={toggleEdit}>
-                <img src="/img/edit.svg" alt="" />
+                <i class="edit outline icon" />
             </button>
         </div>
     </ListItem>
@@ -88,11 +88,11 @@
         justify-self: end;
     }
 
-    .edit img {
+    .edit i {
         height: 15px;
     }
 
-    .delete img {
+    .delete i {
         height: 20px;
     }
 

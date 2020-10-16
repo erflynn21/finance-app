@@ -41,14 +41,14 @@
     <ListItem>
         <div class="expense">
             <button class="delete" on:click={toggleDelete}>
-                <img src="/img/delete.svg" alt="" />
+                <i class="trash alternate outline icon" />
             </button>
 
             <time datetime={expense.date} class="date">{date}</time>
             <span class="title">{expense.title}</span>
             <span class="amount">{$userCurrencySymbol}{expense.amount}</span>
             <button class="edit" on:click={toggleEdit}>
-                <img src="/img/edit.svg" alt="" />
+                <i class="edit outline icon" />
             </button>
         </div>
     </ListItem>
@@ -95,11 +95,11 @@
         justify-self: end;
     }
 
-    .edit img {
+    .edit i {
         height: 15px;
     }
 
-    .delete img {
+    .delete i {
         height: 20px;
     }
 
