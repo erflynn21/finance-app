@@ -1,6 +1,6 @@
 <script>
     import { fly, fade } from 'svelte/transition';
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     let dispatch = createEventDispatcher();
 
     const dispatchDelete = () => {
@@ -10,9 +10,23 @@
     const dispatchCollapse = () => {
         dispatch('collapse');
     };
+
+    let vh = 0;
+    const setHeight = () => {
+        vh = window.innerHeight * 1 - 51 + 'px';
+        console.log(vh);
+    };
+
+    window.addEventListener('resize', () => {
+        setHeight();
+    });
+
+    onMount(() => {
+        setHeight();
+    });
 </script>
 
-<div class="container" transition:fade={{ duration: 100 }}>
+<div class="container" transition:fade={{ duration: 100 }} style="height: {vh}">
     <div class="background" on:click={dispatchCollapse} />
     <div class="delete" transition:fly={{ duration: 200, y: 100 }}>
         <p>Are you sure you want to delete this? This cannot be undone.</p>
@@ -26,7 +40,6 @@
         width: 100%;
         position: absolute;
         z-index: 3;
-        height: 100vh;
         top: 0;
         left: 0;
     }

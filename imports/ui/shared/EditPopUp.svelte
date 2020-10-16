@@ -8,7 +8,7 @@
     export let budget;
     export let monthlyexpense;
     export let monthlyincome;
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     import UpdateExpenseForm from '../components/UpdateExpenseForm.svelte';
     import UpdateIncomeForm from '../components/UpdateIncomeForm.svelte';
     import UpdateMonthlyBudgetForm from '../components/UpdateMonthlyBudgetForm.svelte';
@@ -20,9 +20,23 @@
     const dispatchCollapse = () => {
         dispatch('collapse');
     };
+
+    let vh = 0;
+    const setHeight = () => {
+        vh = window.innerHeight * 1 - 51 + 'px';
+        console.log(vh);
+    };
+
+    window.addEventListener('resize', () => {
+        setHeight();
+    });
+
+    onMount(() => {
+        setHeight();
+    });
 </script>
 
-<div class="container" transition:fade={{ duration: 100 }}>
+<div class="container" transition:fade={{ duration: 100 }} style="height: {vh}">
     <div class="background" on:click={dispatchCollapse} />
     <div class="edit" transition:fly={{ duration: 200, y: 100 }}>
         {#if expense != undefined}
