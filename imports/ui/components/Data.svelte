@@ -8,7 +8,7 @@
     import { MonthlyExpenses } from '../../api/monthlyexpenses';
     import { MonthlyIncomes } from '../../api/monthlyincomes';
     import { UserSettings } from '../../api/usersettings';
-    import { afterUpdate, onMount } from 'svelte';
+    import { afterUpdate, onDestroy, onMount } from 'svelte';
     import {
         startDate,
         endDate,
@@ -197,5 +197,15 @@
 
     afterUpdate(() => {
         setStores();
+    });
+
+    onDestroy(() => {
+        Meteor.unsubscribe('incomes');
+        Meteor.unsubscribe('expenses');
+        Meteor.unsubscribe('budgets');
+        Meteor.unsubscribe('monthlybudgets');
+        Meteor.unsubscribe('usersettings');
+        Meteor.unsubscribe('monthlyexpenses');
+        Meteor.unsubscribe('monthlyincomes');
     });
 </script>

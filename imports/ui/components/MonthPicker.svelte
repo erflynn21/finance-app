@@ -186,7 +186,6 @@
     }
 
     .background {
-        /* z-index: 50000000; */
         height: 100vh;
         background: rgba(0, 0, 0, 0.5);
     }

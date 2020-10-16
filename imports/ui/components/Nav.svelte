@@ -15,51 +15,14 @@
 
     $: baseCurrencySet = null;
 
-    let brave = false;
-
-    const detectBraveBrowser = () => {
-        return new Promise((resolve, reject) => {
-            if (!navigator.userAgent.includes('Chrome')) {
-                return resolve(false);
-            }
-
-            const xhr = new XMLHttpRequest();
-            const onload = () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    const response = JSON.parse(xhr.responseText);
-
-                    if (!response) {
-                        return resolve(false);
-                    }
-                    if (!response.Answer) {
-                        return resolve(false);
-                    }
-                    if (!response.Answer.includes('Brave')) {
-                        return resolve(false);
-                    }
-
-                    return resolve(true);
-                } else {
-                    return reject(JSON.parse(xhr.responseText));
-                }
-            };
-
-            xhr.onload = onload;
-            xhr.open(
-                'GET',
-                'https://api.duckduckgo.com/?q=useragent&format=json'
-            );
-            xhr.send();
-        });
+    let vh = 0;
+    const setHeight = () => {
+        vh = window.innerHeight * 1 - 51 + 'px';
     };
 
-    detectBraveBrowser()
-        .then((isBrave) => {
-            console.log('isBrave', isBrave);
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+    window.addEventListener('resize', () => {
+        setHeight();
+    });
 
     // add in check to see if base currency has been set based on the user currency store
     const checkBaseCurrency = () => {
@@ -88,17 +51,18 @@
 
     afterUpdate(() => {
         checkBaseCurrency();
+        setHeight();
     });
 </script>
 
 {#if loading === true}
-    <div class="content">
+    <div class="content" style="min-height: {vh}; max-height: {vh};">
         <Loading />
     </div>
 {:else if baseCurrencySet === false}
     <SetBaseCurrency on:currencySet={() => (baseCurrencySet = true)} />
 {:else}
-    <div class="content">
+    <div class="content" style="min-height: {vh}; max-height: {vh};">
         {#if current === 'overview'}
             <Overview on:fade={fadeButton} />
         {:else if current === 'budget'}
@@ -116,7 +80,7 @@
         <div class:faded={fadedButton === true}>
             <AddButton />
         </div>
-        <div class="bottom-nav-container" class:brave={brave === true}>
+        <div class="bottom-nav-container">
             <div class="tab-nav-container">
                 <button>
                     <div
@@ -154,22 +118,19 @@
 
 <style>
     .content {
-        min-height: calc(100vh - 51px);
-        max-height: calc(100vh - 51px);
+        /* min-height: calc(var(--vh, 1vh) * 100);
+        max-height: calc(var(--vh, 1vh) * 100); */
+        /* min-height: calc(100vh - 51px);
+        max-height: calc(100vh - 51px); */
         background-color: #eeeeeee7;
     }
 
-    @media (pointer: coarse) {
+    /* @media (pointer: coarse) {
         .content {
             min-height: calc(100vh - 165px);
             max-height: calc(100vh - 165px);
         }
-    }
-
-    .brave {
-        min-height: calc(100vh - 51px);
-        max-height: calc(100vh - 51px);
-    }
+    } */
 
     .bottom-nav-container {
         background-color: #fff;
