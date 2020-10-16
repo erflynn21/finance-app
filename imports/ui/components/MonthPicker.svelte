@@ -72,6 +72,16 @@
         });
     };
 
+    let vh = 0;
+    const setHeight = () => {
+        vh = window.innerHeight * 1 - 51 + 'px';
+        console.log(vh);
+    };
+
+    window.addEventListener('resize', () => {
+        setHeight();
+    });
+
     let pickerOpen = false;
     const openPicker = () => {
         pickerOpen = true;
@@ -114,6 +124,7 @@
             getBudgetOptions();
         });
         jq('.ui.dropdown').dropdown();
+        setHeight();
     });
 </script>
 
@@ -127,7 +138,10 @@
 </div>
 
 {#if pickerOpen === true}
-    <div class="container" transition:fade={{ duration: 100 }}>
+    <div
+        class="container"
+        transition:fade={{ duration: 100 }}
+        style="height: {vh}">
         <div class="background" on:click={collapse} />
         <div class="budget-options" transition:fly={{ duration: 200, y: 100 }}>
             <div class="months">
