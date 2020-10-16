@@ -5,11 +5,9 @@
     import Transactions from './Transactions.svelte';
     import AddButton from './AddButton.svelte';
     import SetBaseCurrency from './SetBaseCurrency.svelte';
-    import Loading from '../shared/Loading.svelte';
+
     import { afterUpdate } from 'svelte';
     import { userSettingsStore } from '../stores/stores';
-
-    let loading = true;
 
     let current = 'overview';
 
@@ -41,7 +39,6 @@
         ) {
             baseCurrencySet = true;
         }
-        loading = false;
     };
 
     let fadedButton = false;
@@ -56,11 +53,7 @@
     });
 </script>
 
-{#if loading === true}
-    <div class="content" style="height: 100vh">
-        <Loading />
-    </div>
-{:else if baseCurrencySet === false}
+{#if baseCurrencySet === false}
     <SetBaseCurrency on:currencySet={() => (baseCurrencySet = true)} />
 {:else}
     <div class="content" style="min-height: {vh}; max-height: {vh};">
