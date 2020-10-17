@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte';
     import Forms from './Forms.svelte';
 
     let forms = false;
@@ -10,9 +11,23 @@
     const collapse = () => {
         forms = false;
     };
+
+    let vh = 0;
+    const setHeight = () => {
+        vh = window.innerHeight * 1 - 115 + 'px';
+        console.log(vh);
+    };
+
+    window.addEventListener('resize', () => {
+        setHeight();
+    });
+
+    onMount(() => {
+        setHeight();
+    });
 </script>
 
-<div class="act-btn">
+<div class="act-btn" style="top: {vh}">
     <input type="checkbox" id="toggle" on:click={showForms} />
     <label class="button" for="toggle" />
 </div>
@@ -26,19 +41,12 @@
 <style>
     .act-btn {
         position: absolute;
-        bottom: 65px;
         right: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 1;
         height: 50px;
-    }
-
-    @media (pointer: coarse) {
-        .act-btn {
-            bottom: 180px;
-        }
     }
 
     .act-btn input:not(:checked) {
