@@ -26,13 +26,19 @@
 <style>
     .act-btn {
         position: absolute;
-        bottom: 60px;
+        bottom: 65px;
         right: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 1;
         height: 50px;
+    }
+
+    @media (pointer: coarse) {
+        .act-btn {
+            bottom: 180px;
+        }
     }
 
     .act-btn input:not(:checked) {

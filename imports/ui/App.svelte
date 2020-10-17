@@ -6,7 +6,7 @@
     import Nav from './components/Nav.svelte';
     import Loading from './shared/Loading.svelte';
     import { afterUpdate, onMount } from 'svelte';
-    import { userSettingsStore } from './stores/stores';
+    import jq from 'jquery';
 
     let loading = true;
     $: currentUser = useTracker(() => Meteor.user());
@@ -16,6 +16,10 @@
             loading = false;
         }
     };
+
+    setTimeout(function () {
+        jq(window).scrollTop(0);
+    }, 0);
 
     afterUpdate(() => {
         checkCurrentUser();

@@ -9,6 +9,14 @@
   display: none;
 }
 
+@media (pointer: coarse) {
+  html {
+      scrollbar-width: none;
+      /* overflow-y: hidden; */
+      max-height: 51px;
+  }
+}
+
 
 *:focus {
   outline: none;
@@ -21,7 +29,7 @@ body {
   height: 100%;
   width: 100vw;
   min-height: 100vh;
-  /* min-height: -webkit-stretch; */
+  position: fixed;
 }
 
 html {

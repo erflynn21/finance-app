@@ -1,8 +1,22 @@
 <script>
     import { BlazeTemplate } from 'meteor/svelte:blaze-integration';
+    import { onMount } from 'svelte';
+
+    let vh = 0;
+    const setHeight = () => {
+        vh = window.innerHeight * 1 + 'px';
+    };
+
+    window.addEventListener('resize', () => {
+        setHeight();
+    });
+
+    onMount(() => {
+        setHeight();
+    });
 </script>
 
-<div class="container">
+<div class="container" style="min-height: {vh}; max-height: {vh};">
     <div class="intro">
         <h1>Expat Expenses</h1>
         <p>

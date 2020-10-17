@@ -127,6 +127,7 @@
         padding: 10px 40px;
         position: sticky;
         border-top: 1px solid #e4e0e0;
+        max-height: 51px;
     }
 
     .tab-nav-container {
