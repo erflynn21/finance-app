@@ -141,7 +141,7 @@
         class="container"
         transition:fade={{ duration: 100 }}
         style="height: {vh}">
-        <div class="background" on:click={collapse} />
+        <div class="background" on:click={collapse} style="height: {vh}" />
         <div class="budget-options" transition:fly={{ duration: 200, y: 100 }}>
             <div class="months">
                 <div class="big-title">Select Month</div>
@@ -199,12 +199,17 @@
     }
 
     .background {
-        height: 100vh;
+        /* height: 100vh; */
         background: rgba(0, 0, 0, 0.5);
     }
 
-    @media (pointer: course) {
+    @media (pointer: coarse) {
+        /* .container {
+            position: fixed;
+        } */
+
         .background {
+            position: static;
             top: 0;
             left: 0;
         }

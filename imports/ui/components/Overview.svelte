@@ -128,11 +128,13 @@
         z-index: 0;
         height: 120px;
     }
+
     .heading {
         padding-top: 10px;
         padding-bottom: 10px;
-        position: absolute;
+        position: fixed;
         top: 0;
+        left: 0;
         z-index: 2;
         height: 55px;
         width: 100vw;
@@ -141,6 +143,16 @@
 
     .faded {
         z-index: 0;
+    }
+
+    @media (pointer: coarse) {
+        /* .faded {
+            position: fixed;
+        } */
+
+        /* .heading {
+            position: fixed;
+        } */
     }
 
     .heading h1 {

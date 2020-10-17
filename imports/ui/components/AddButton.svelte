@@ -57,6 +57,12 @@
         -webkit-appearance: none;
     }
 
+    @media (pointer: course) {
+        .forms {
+            position: fixed;
+        }
+    }
+
     .button {
         width: 50px;
         height: 50px;

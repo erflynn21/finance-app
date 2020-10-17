@@ -26,7 +26,7 @@
 </script>
 
 <div class="container" transition:fade={{ duration: 100 }} style="height: {vh}">
-    <div class="background" on:click={dispatchCollapse} />
+    <div class="background" on:click={dispatchCollapse} style="height: {vh}" />
     <div class="delete" transition:fly={{ duration: 200, y: 100 }}>
         <p>Are you sure you want to delete this? This cannot be undone.</p>
         <button class="no" on:click={dispatchCollapse}>No</button>
@@ -46,6 +46,14 @@
     .background {
         height: 100vh;
         background: rgba(0, 0, 0, 0.5);
+    }
+
+    @media (pointer: coarse) {
+        .background {
+            position: static;
+            top: 0;
+            left: 0;
+        }
     }
 
     .delete {

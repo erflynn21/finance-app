@@ -27,7 +27,7 @@
 </script>
 
 <div class="container" transition:fade={{ duration: 100 }} style="height: {vh}">
-    <div class="background" on:click={dispatchCollapse} />
+    <div class="background" on:click={dispatchCollapse} style="height: {vh}" />
     <div class="forms" transition:fly={{ duration: 200, y: 100 }}>
         <div class="selector">
             <ul>
@@ -73,8 +73,15 @@
     }
 
     .background {
-        height: calc(100vh - 100px);
         background: rgba(0, 0, 0, 0.5);
+    }
+
+    @media (pointer: coarse) {
+        .background {
+            position: static;
+            top: 0;
+            left: 0;
+        }
     }
 
     .selector {
