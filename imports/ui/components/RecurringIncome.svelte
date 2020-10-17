@@ -85,11 +85,11 @@
         justify-self: end;
     }
 
-    .edit img {
+    .edit i {
         height: 15px;
     }
 
-    .delete img {
+    .delete i {
         height: 20px;
     }
 

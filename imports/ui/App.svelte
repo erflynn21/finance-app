@@ -22,7 +22,6 @@
     });
 </script>
 
-<Data on:dataReady={() => (loading = false)} />
 {#if loading === true}
     <div class="content" style="height: 100vh">
         <Loading />
@@ -32,3 +31,4 @@
 {:else}
     <Auth />
 {/if}
+<Data on:dataReady={() => (loading = false)} />

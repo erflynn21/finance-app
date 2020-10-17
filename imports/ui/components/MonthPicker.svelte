@@ -75,7 +75,6 @@
     let vh = 0;
     const setHeight = () => {
         vh = window.innerHeight * 1 - 51 + 'px';
-        console.log(vh);
     };
 
     window.addEventListener('resize', () => {
