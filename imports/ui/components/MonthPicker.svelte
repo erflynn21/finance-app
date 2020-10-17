@@ -203,6 +203,13 @@
         background: rgba(0, 0, 0, 0.5);
     }
 
+    @media (pointer: course) {
+        .background {
+            top: 0;
+            left: 0;
+        }
+    }
+
     .budget-options {
         position: absolute;
         background: white;

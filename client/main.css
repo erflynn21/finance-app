@@ -12,7 +12,7 @@
 @media (pointer: coarse) {
   html {
       scrollbar-width: none;
-      /* overflow-y: hidden; */
+      overflow-y: hidden;
       max-height: 51px;
   }
 }
