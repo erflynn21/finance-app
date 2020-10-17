@@ -199,15 +199,10 @@
     }
 
     .background {
-        /* height: 100vh; */
         background: rgba(0, 0, 0, 0.5);
     }
 
     @media (pointer: coarse) {
-        /* .container {
-            position: fixed;
-        } */
-
         .background {
             position: static;
             top: 0;

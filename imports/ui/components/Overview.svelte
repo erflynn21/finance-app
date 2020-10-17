@@ -35,11 +35,12 @@
     });
 </script>
 
-<div class="background" />
+<div class="spacer" class:spacerfaded={fadedHeader === true} />
+<div class="background" class:faded={fadedHeader === true} />
 <div class="heading" class:faded={fadedHeader === true}>
     <h1>Overview</h1>
 </div>
-<div class="spacer" />
+
 <div class="outer-container">
     <div class="container">
         <div class="budget-summary rounded">
@@ -143,16 +144,6 @@
 
     .faded {
         z-index: 0;
-    }
-
-    @media (pointer: coarse) {
-        /* .faded {
-            position: fixed;
-        } */
-
-        /* .heading {
-            position: fixed;
-        } */
     }
 
     .heading h1 {
@@ -280,5 +271,17 @@
 
     .small-spacer {
         height: 70px;
+    }
+
+    @media (pointer: coarse) {
+        .spacerfaded {
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 5;
+            position: block;
+        }
+
+        .faded {
+            z-index: -1;
+        }
     }
 </style>
