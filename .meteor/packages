@@ -38,3 +38,4 @@ useraccounts:semantic-ui
 useraccounts:core
 aldeed:template-extension
 service-configuration
+force-ssl
