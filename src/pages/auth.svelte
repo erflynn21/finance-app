@@ -1,19 +1,15 @@
 <script>
     import { Page, Navbar } from 'framework7-svelte';
-    import { userStore } from '../stores/userstore';
+    import { userAccountStore } from '../stores/UserAccount';
 
     let username, password;
 
     const signUp = () => {
-        userbase
-            .signUp({ username, password })
-            .then((user) => userStore.set(user));
+        userAccountStore.signUp(username, password, true);
     };
 
     const signIn = () => {
-        userbase
-            .signIn({ username, password })
-            .then((user) => userStore.set(user));
+        userAccountStore.signIn(username, password, true);
     };
 </script>
 

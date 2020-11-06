@@ -1,9 +1,9 @@
 <script>
     import { Page, Navbar, NavTitleLarge } from 'framework7-svelte';
-    import { userStore } from '../stores/userstore';
+    import { userAccountStore, userStore } from '../stores/UserAccount';
 
     const signOut = () => {
-        userbase.signOut().then((user) => userStore.set(user));
+        userAccountStore.signOut();
     };
 </script>
 

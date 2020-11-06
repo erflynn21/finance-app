@@ -9,9 +9,7 @@
         Link,
     } from 'framework7-svelte';
     import routes from '../js/routes';
-    import { userStore } from '../stores/userstore';
     import Auth from '../pages/auth.svelte';
-    import Accordion from 'framework7-svelte/components/accordion.svelte';
     const userbase = window.userbase;
 
     // Framework7 Parameters
@@ -27,28 +25,24 @@
         },
     };
 
-    let initPromise;
-    const initUserbase = () => {
-        initPromise = userbase
-            .init({ appId: '5b975c6f-3f35-48f4-b92f-904372fbcb3b' })
-            .then(({ user }) => userStore.set(user));
-    };
+    // State
+    import { userAccountStore } from '../stores/UserAccount.js';
+    $: initialized = $userAccountStore.initialized;
+    $: signedIn = $userAccountStore.signedIn;
+    $: username = $userAccountStore.username;
+    $: error = $userAccountStore.error;
 
     onMount(() => {
         f7ready(() => {
             // Call F7 APIs here
         });
-        initUserbase();
+        userAccountStore.initialize();
     });
 </script>
 
 <App params={f7params}>
-    {#await initPromise}
-        <div style="margin-top: 50px;">Loading....</div>
-    {:then _}
-        {#if !$userStore}
-            <Auth />
-        {:else}
+    {#if initialized}
+        {#if signedIn}
             <!-- Views/Tabs container -->
             <Views tabs class="safe-areas">
                 <!-- Tabbar for switching views-tabs -->
@@ -88,6 +82,12 @@
                 <!-- Settings View -->
                 <View id="view-settings" name="settings" tab url="/settings/" />
             </Views>
+        {:else}
+            <Auth />
         {/if}
-    {/await}
+    {:else}Loading...{/if}
+
+    {#if error}
+        <div class="error">{error}</div>
+    {/if}
 </App>
