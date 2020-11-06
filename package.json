@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.10.4",
+    "@capacitor/cli": "^2.4.2",
+    "@capacitor/core": "^2.4.2",
     "bcrypt": "^5.0.0",
     "chart.js": "^2.9.3",
     "jquery": "^3.5.1",
@@ -38,6 +40,7 @@
     "autoprefixer": "^6.7.7",
     "postcss": "^6.0.23",
     "postcss-easy-import": "^3.0.0",
-    "postcss-load-config": "^1.2.0"
+    "postcss-load-config": "^1.2.0",
+    "xcode": "^3.0.1"
   }
 }

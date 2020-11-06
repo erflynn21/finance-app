@@ -30,7 +30,7 @@
         }
         if (
             $userSettingsStore[0].baseCurrency === undefined ||
-            $userSettingsStore[0].currencyOptions === ''
+            $userSettingsStore[0].currencyOptions === undefined
         ) {
             baseCurrencySet = false;
         } else if (

@@ -57,6 +57,6 @@
     .auth {
         margin: 0 auto;
         width: 80%;
-        text-align: centererfl;
+        text-align: center;
     }
 </style>
