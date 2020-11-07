@@ -28,8 +28,8 @@
         },
     };
 
+    // initialize Userbase
     import { userStore } from '../stores/userStore.js';
-
     let initialized;
     const initUserbase = () => {
         initialized = userbase

@@ -7,10 +7,13 @@
     import List from 'framework7-svelte/components/list.svelte';
     import LoginScreenTitle from 'framework7-svelte/components/login-screen-title.svelte';
     import { userStore } from '../stores/userStore';
+    import { f7 } from 'framework7-svelte';
 
     let username, email, password, password2, error;
 
-    const signUp = () => {
+    // sign up
+    const signUp = async () => {
+        f7.dialog.preloader('Creating an account for you...');
         if (!username || !email || !password) {
             error = 'Please provide a valid username, email, and password';
         } else if (password.length < 8) {
@@ -18,22 +21,26 @@
         } else if (password !== password2) {
             error = 'Passwords must be identical';
         } else {
-            userbase
+            await userbase
                 .signUp({ username, email, password, rememberMe: 'local' })
                 .then((user) => userStore.set(user))
                 .catch((e) => (error = e));
         }
+        f7.dialog.close();
     };
 
-    const signIn = () => {
+    // sign in
+    const signIn = async () => {
+        f7.dialog.preloader('Signing you in...');
         if (!username || !password) {
             error = 'Please provide a username and password';
         } else {
-            userbase
+            await userbase
                 .signIn({ username, password, rememberMe: 'local' })
                 .then((user) => userStore.set(user))
                 .catch((e) => (error = e));
         }
+        f7.dialog.close();
     };
 
     let login = true;
