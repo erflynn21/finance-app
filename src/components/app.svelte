@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import {
         f7ready,
         App,
@@ -10,6 +10,9 @@
     } from 'framework7-svelte';
     import routes from '../js/routes';
     import Auth from '../pages/auth.svelte';
+    import { Plugins } from '@capacitor/core';
+    const { SplashScreen } = Plugins;
+
     const userbase = window.userbase;
 
     // Framework7 Parameters
@@ -25,14 +28,15 @@
         },
     };
 
-    // State
     import { userStore } from '../stores/userStore.js';
 
     let initialized;
     const initUserbase = () => {
         initialized = userbase
             .init({ appId: '5b975c6f-3f35-48f4-b92f-904372fbcb3b' })
-            .then(({ user }) => userStore.set(user));
+            .then(({ user }) => userStore.set(user))
+            .catch((e) => console.log(e))
+            .finally(() => SplashScreen.hide());
     };
 
     onMount(() => {
@@ -47,9 +51,7 @@
     {#await initialized}
         Loading...
     {:then _}
-        {#if !$userStore}
-            <Auth />
-        {:else}
+        {#if $userStore}
             <!-- Views/Tabs container -->
             <Views tabs class="safe-areas">
                 <!-- Tabbar for switching views-tabs -->
@@ -89,6 +91,8 @@
                 <!-- Settings View -->
                 <View id="view-settings" name="settings" tab url="/settings/" />
             </Views>
+        {:else}
+            <Auth />
         {/if}
     {/await}
     <!-- {#if error}

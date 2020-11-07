@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">expat-expenses</string>
+    <string name="title_activity_main">expat-expenses</string>
+    <string name="package_name">com.evanflynn.expatexpenses</string>
+    <string name="custom_url_scheme">com.evanflynn.expatexpenses</string>
+</resources>
