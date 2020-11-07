@@ -26,23 +26,30 @@
     };
 
     // State
-    import { userAccountStore } from '../stores/UserAccount.js';
-    $: initialized = $userAccountStore.initialized;
-    $: signedIn = $userAccountStore.signedIn;
-    $: username = $userAccountStore.username;
-    $: error = $userAccountStore.error;
+    import { userStore } from '../stores/userStore.js';
+
+    let initialized;
+    const initUserbase = () => {
+        initialized = userbase
+            .init({ appId: '5b975c6f-3f35-48f4-b92f-904372fbcb3b' })
+            .then(({ user }) => userStore.set(user));
+    };
 
     onMount(() => {
         f7ready(() => {
             // Call F7 APIs here
         });
-        userAccountStore.initialize();
+        initUserbase();
     });
 </script>
 
 <App params={f7params}>
-    {#if initialized}
-        {#if signedIn}
+    {#await initialized}
+        Loading...
+    {:then _}
+        {#if !$userStore}
+            <Auth />
+        {:else}
             <!-- Views/Tabs container -->
             <Views tabs class="safe-areas">
                 <!-- Tabbar for switching views-tabs -->
@@ -82,12 +89,9 @@
                 <!-- Settings View -->
                 <View id="view-settings" name="settings" tab url="/settings/" />
             </Views>
-        {:else}
-            <Auth />
         {/if}
-    {:else}Loading...{/if}
-
-    {#if error}
+    {/await}
+    <!-- {#if error}
         <div class="error">{error}</div>
-    {/if}
+    {/if} -->
 </App>
