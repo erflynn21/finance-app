@@ -10,6 +10,7 @@
     } from 'framework7-svelte';
     import routes from '../js/routes';
     import Auth from '../pages/auth.svelte';
+    import Preloader from 'framework7-svelte/components/preloader.svelte';
     import { Plugins } from '@capacitor/core';
     const { SplashScreen } = Plugins;
 
@@ -30,12 +31,14 @@
 
     // initialize Userbase
     import { userStore } from '../stores/userStore.js';
-    let initialized;
+    import Page from 'framework7-svelte/components/page.svelte';
+
+    let initialized, error;
     const initUserbase = () => {
         initialized = userbase
             .init({ appId: '5b975c6f-3f35-48f4-b92f-904372fbcb3b' })
             .then(({ user }) => userStore.set(user))
-            .catch((e) => console.log(e))
+            .catch((e) => (error = e))
             .finally(() => SplashScreen.hide());
     };
 
@@ -49,7 +52,9 @@
 
 <App params={f7params}>
     {#await initialized}
-        Loading...
+        <Page noNavbar class="safe-areas loader">
+            <Preloader color="green" size={100} />
+        </Page>
     {:then _}
         {#if $userStore}
             <!-- Views/Tabs container -->
@@ -95,7 +100,17 @@
             <Auth />
         {/if}
     {/await}
-    <!-- {#if error}
+    {#if error}
         <div class="error">{error}</div>
-    {/if} -->
+    {/if}
 </App>
+
+<style>
+    :global(.loader) {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
