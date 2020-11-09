@@ -4,12 +4,19 @@
     import Button from 'framework7-svelte/components/button.svelte';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import List from 'framework7-svelte/components/list.svelte';
+    import f7 from 'framework7-svelte/utils/f7';
     import CurrenciesList from '../shared/currenciesList.svelte';
 
     let baseCurrency;
     let currencyOptions;
+    let baseSelect;
+    let currencyOptionsSelect;
 
     const addCurrencies = () => {
+        const baseCurrencySelect = baseSelect.smartSelectInstance();
+        const optionsSelect = currencyOptionsSelect.smartSelectInstance();
+        baseCurrency = baseCurrencySelect.getValue();
+        currencyOptions = optionsSelect.getValue();
         console.log(baseCurrency);
         console.log(currencyOptions);
     };
@@ -32,8 +39,8 @@
         <ListItem
             title="Budget Currency"
             smartSelect
-            smartSelectParams={{ openIn: 'popover' }}
-            bind:selected={baseCurrency}>
+            bind:this={baseSelect}
+            smartSelectParams={{ openIn: 'popover', closeOnSelect: 'true' }}>
             <select name="baseCurrency">
                 <CurrenciesList />
             </select>
@@ -42,7 +49,7 @@
             title="Currency Options"
             smartSelect
             smartSelectParams={{ openIn: 'popover' }}
-            bind:selected={currencyOptions}>
+            bind:this={currencyOptionsSelect}>
             <select name="baseCurrency" multiple>
                 <CurrenciesList />
             </select>
