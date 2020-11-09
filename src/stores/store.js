@@ -40,8 +40,8 @@ const incomeSumStore = writable('');
 const monthlyBudgetsStore = writable('');
 const monthlyExpensesStore = writable('');
 const monthlyIncomesStore = writable('');
-const userCurrency = writable('');
-const userCurrencySymbol = writable('');
+const baseCurrency = writable('');
+const baseCurrencySymbol = writable('');
 const userSettingsStore = writable('');
 
-export {baseBudgetsStore, baseBudgetSumStore, budgetSumStore, startDate, endDate, selectedMonth, selectedYear, expensesStore, expenseSumStore, incomesStore, incomeSumStore, monthlyBudgetsStore, monthlyExpensesStore, monthlyIncomesStore, userCurrency, userCurrencySymbol, userSettingsStore};
+export {baseBudgetsStore, baseBudgetSumStore, budgetSumStore, startDate, endDate, selectedMonth, selectedYear, expensesStore, expenseSumStore, incomesStore, incomeSumStore, monthlyBudgetsStore, monthlyExpensesStore, monthlyIncomesStore, baseCurrency, baseCurrencySymbol, userSettingsStore};

@@ -32,14 +32,34 @@
     // initialize Userbase
     import { userStore } from '../stores/userStore.js';
     import Page from 'framework7-svelte/components/page.svelte';
+    import SetCurrencies from '../pages/setCurrencies.svelte';
 
     let initialized, error;
     const initUserbase = () => {
         initialized = userbase
             .init({ appId: '5b975c6f-3f35-48f4-b92f-904372fbcb3b' })
-            .then(({ user }) => userStore.set(user))
+            .then(({ user }) => {
+                userStore.set(user);
+                checkBaseCurrency(user);
+            })
             .catch((e) => (error = e))
             .finally(() => SplashScreen.hide());
+    };
+
+    // checking if user has set base currency and currency options
+    let currencies = [];
+    let currenciesSet = false;
+    const databaseName = 'currencies';
+    function changeHandler(items) {
+        currencies = items;
+    }
+    $: if ($userStore) userbase.openDatabase({ databaseName, changeHandler });
+    const checkBaseCurrency = async () => {
+        if (currencies.length === 0) {
+            return;
+        } else {
+            currenciesSet = true;
+        }
     };
 
     onMount(() => {
@@ -56,7 +76,9 @@
             <Preloader color="green" size={100} />
         </Page>
     {:then _}
-        {#if $userStore}
+        {#if currenciesSet === false}
+            <SetCurrencies />
+        {:else if $userStore}
             <!-- Views/Tabs container -->
             <Views tabs class="safe-areas">
                 <!-- Tabbar for switching views-tabs -->
@@ -81,7 +103,7 @@
                 </Toolbar>
 
                 <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
-                <View id="view-overview" main tab tabActive url="/" />
+                <View id="view-overview" tab url="/" />
 
                 <!-- Budget View -->
                 <View id="view-budget" name="budget" tab url="/budget/" />
@@ -94,7 +116,13 @@
                     url="/transactions/" />
 
                 <!-- Settings View -->
-                <View id="view-settings" name="settings" tab url="/settings/" />
+                <View
+                    id="view-settings"
+                    main
+                    name="settings"
+                    tab
+                    tabActive
+                    url="/settings/" />
             </Views>
         {:else}
             <Auth />

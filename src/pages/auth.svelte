@@ -47,7 +47,7 @@
 </script>
 
 <Page noNavbar loginScreen>
-    <LoginScreenTitle>Expat Expenses</LoginScreenTitle>
+    <LoginScreenTitle>Expats Expenses</LoginScreenTitle>
     {#if login === true}
         <List form>
             <ListInput
