@@ -32,7 +32,8 @@
     "framework7-icons": "^3.0.1",
     "framework7-svelte": "^5.7.13",
     "svelte": "^3.29.4",
-    "template7": "^1.4.2"
+    "template7": "^1.4.2",
+    "userbase-js": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

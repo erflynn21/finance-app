@@ -14,7 +14,7 @@
     import { Plugins } from '@capacitor/core';
     const { SplashScreen } = Plugins;
 
-    const userbase = window.userbase;
+    // const userbase = window.userbase;
 
     // Framework7 Parameters
     let f7params = {
@@ -40,26 +40,40 @@
             .init({ appId: '5b975c6f-3f35-48f4-b92f-904372fbcb3b' })
             .then(({ user }) => {
                 userStore.set(user);
-                checkBaseCurrency(user);
             })
             .catch((e) => (error = e))
             .finally(() => SplashScreen.hide());
     };
 
     // checking if user has set base currency and currency options
-    let currencies = [];
-    let currenciesSet = false;
+    let currencies = null;
+    let currenciesSet;
+    let currenciesDB;
     const databaseName = 'currencies';
-    function changeHandler(items) {
-        currencies = items;
-    }
-    $: if ($userStore) userbase.openDatabase({ databaseName, changeHandler });
-    const checkBaseCurrency = async () => {
+    $: if ($userStore)
+        currenciesDB = userbase
+            .openDatabase({
+                databaseName,
+                changeHandler: function (items) {
+                    currencies = items;
+                },
+            })
+            .then(() => {
+                checkBaseCurrency();
+            });
+
+    const checkBaseCurrency = () => {
         if (currencies.length === 0) {
-            return;
+            currenciesSet = false;
         } else {
             currenciesSet = true;
         }
+    };
+
+    const setCurrency = (e) => {
+        const userCurrencies = e.detail;
+        userbase.insertItem({ databaseName, item: userCurrencies });
+        checkBaseCurrency();
     };
 
     onMount(() => {
@@ -76,54 +90,65 @@
             <Preloader color="green" size={100} />
         </Page>
     {:then _}
-        {#if currenciesSet === false}
-            <SetCurrencies />
-        {:else if $userStore}
-            <!-- Views/Tabs container -->
-            <Views tabs class="safe-areas">
-                <!-- Tabbar for switching views-tabs -->
-                <Toolbar tabbar labels bottom>
-                    <Link
-                        tabLink="#view-overview"
-                        tabLinkActive
-                        iconF7="chart_pie"
-                        text="Overview" />
-                    <Link
-                        tabLink="#view-budget"
-                        iconF7="doc_text"
-                        text="Budget" />
-                    <Link
-                        tabLink="#view-transactions"
-                        iconF7="money_dollar_circle"
-                        text="Transactions" />
-                    <Link
-                        tabLink="#view-settings"
-                        iconF7="gear"
-                        text="Settings" />
-                </Toolbar>
+        {#if $userStore}
+            {#await currenciesDB}
+                <Page noNavbar class="safe-areas loader">
+                    <Preloader color="green" size={100} />
+                </Page>
+            {:then _}
+                {#if currenciesSet === false}
+                    <SetCurrencies on:setCurrency={setCurrency} />
+                {:else}
+                    <!-- Views/Tabs container -->
+                    <Views tabs class="safe-areas">
+                        <!-- Tabbar for switching views-tabs -->
+                        <Toolbar tabbar labels bottom>
+                            <Link
+                                tabLink="#view-overview"
+                                tabLinkActive
+                                iconF7="chart_pie"
+                                text="Overview" />
+                            <Link
+                                tabLink="#view-budget"
+                                iconF7="doc_text"
+                                text="Budget" />
+                            <Link
+                                tabLink="#view-transactions"
+                                iconF7="money_dollar_circle"
+                                text="Transactions" />
+                            <Link
+                                tabLink="#view-settings"
+                                iconF7="gear"
+                                text="Settings" />
+                        </Toolbar>
 
-                <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
-                <View id="view-overview" tab url="/" />
+                        <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
+                        <View id="view-overview" tab tabActive url="/" />
 
-                <!-- Budget View -->
-                <View id="view-budget" name="budget" tab url="/budget/" />
+                        <!-- Budget View -->
+                        <View
+                            id="view-budget"
+                            name="budget"
+                            tab
+                            url="/budget/" />
 
-                <!-- Transactions View -->
-                <View
-                    id="view-transactions"
-                    name="transactions"
-                    tab
-                    url="/transactions/" />
+                        <!-- Transactions View -->
+                        <View
+                            id="view-transactions"
+                            name="transactions"
+                            tab
+                            url="/transactions/" />
 
-                <!-- Settings View -->
-                <View
-                    id="view-settings"
-                    main
-                    name="settings"
-                    tab
-                    tabActive
-                    url="/settings/" />
-            </Views>
+                        <!-- Settings View -->
+                        <View
+                            id="view-settings"
+                            main
+                            name="settings"
+                            tab
+                            url="/settings/" />
+                    </Views>
+                {/if}
+            {/await}
         {:else}
             <Auth />
         {/if}

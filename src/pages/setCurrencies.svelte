@@ -4,8 +4,9 @@
     import Button from 'framework7-svelte/components/button.svelte';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import List from 'framework7-svelte/components/list.svelte';
-    import f7 from 'framework7-svelte/utils/f7';
     import CurrenciesList from '../shared/currenciesList.svelte';
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
 
     let baseCurrency;
     let currencyOptions;
@@ -17,8 +18,11 @@
         const optionsSelect = currencyOptionsSelect.smartSelectInstance();
         baseCurrency = baseCurrencySelect.getValue();
         currencyOptions = optionsSelect.getValue();
-        console.log(baseCurrency);
-        console.log(currencyOptions);
+        const data = {
+            baseCurrency,
+            currencyOptions,
+        };
+        dispatch('setCurrency', data);
     };
 </script>
 
