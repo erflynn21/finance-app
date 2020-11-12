@@ -34,6 +34,10 @@
     import { userStore } from '../stores/userStore.js';
     import Page from 'framework7-svelte/components/page.svelte';
     import SetCurrencies from '../pages/setCurrencies.svelte';
+    import Fab from 'framework7-svelte/components/fab.svelte';
+    import Icon from 'framework7-svelte/components/icon.svelte';
+    import FabButtons from 'framework7-svelte/components/fab-buttons.svelte';
+    import FabButton from 'framework7-svelte/components/fab-button.svelte';
 
     let initialized, error;
     const initUserbase = () => {
@@ -102,6 +106,19 @@
                 {:else}
                     <!-- Views/Tabs container -->
                     <Views tabs class="safe-areas">
+                        <Fab position="right-bottom">
+                            <Icon ios="f7:plus" md="material:add" />
+                            <Icon ios="f7:xmark" md="material:close" />
+                            <FabButtons position="top">
+                                <FabButton label="Add Expense">
+                                    <Icon material="create" />
+                                </FabButton>
+                                <FabButton label="Add Income">
+                                    <Icon material="today" />
+                                </FabButton>
+                            </FabButtons>
+                        </Fab>
+
                         <!-- Tabbar for switching views-tabs -->
                         <Toolbar tabbar bottom bgColor="white">
                             <Link
@@ -161,6 +178,15 @@
     {#if error}
         <div class="error">{error}</div>
     {/if}
+
+    <!-- <Fab position="right-bottom">
+        <Icon ios="f7:xmark" aurora="f7:xmark" md="material:close">
+            <FabButtons position="top">
+                <FabButton label="Add Expense" />
+                <FabButton label="Add Income" />
+            </FabButtons>
+        </Icon>
+    </Fab> -->
 </App>
 
 <style>
@@ -178,5 +204,10 @@
 
     :global(.tab-link-active .icon) {
         color: #008000;
+    }
+
+    :global(.fab-right-bottom) {
+        z-index: 5002;
+        bottom: calc(var(--f7-fab-margin) + var(--f7-safe-area-bottom) + 45px);
     }
 </style>
