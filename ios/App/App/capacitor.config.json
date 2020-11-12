@@ -6,7 +6,9 @@
   "webDir": "www",
   "plugins": {
     "SplashScreen": {
-      "launchAutoHide": false
+      "launchAutoHide": false,
+      "showSpinner": true,
+      "spinnerColor": "#ffffff"
     }
   },
   "cordova": {},

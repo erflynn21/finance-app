@@ -103,24 +103,28 @@
                     <!-- Views/Tabs container -->
                     <Views tabs class="safe-areas">
                         <!-- Tabbar for switching views-tabs -->
-                        <Toolbar tabbar labels bottom>
+                        <Toolbar tabbar bottom bgColor="white">
                             <Link
                                 tabLink="#view-overview"
                                 tabLinkActive
                                 iconF7="chart_pie"
-                                text="Overview" />
+                                iconColor="gray"
+                                iconSize="30px" />
                             <Link
                                 tabLink="#view-budget"
                                 iconF7="doc_text"
-                                text="Budget" />
+                                iconColor="gray"
+                                iconSize="30px" />
                             <Link
                                 tabLink="#view-transactions"
                                 iconF7="money_dollar_circle"
-                                text="Transactions" />
+                                iconColor="gray"
+                                iconSize="30px" />
                             <Link
                                 tabLink="#view-settings"
                                 iconF7="gear"
-                                text="Settings" />
+                                iconColor="gray"
+                                iconSize="30px" />
                         </Toolbar>
 
                         <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
@@ -166,5 +170,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    :global(.toolbar-inner) {
+        padding-top: 15px;
+    }
+
+    :global(.tab-link-active .icon) {
+        color: #008000;
     }
 </style>
