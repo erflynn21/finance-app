@@ -1,5 +1,5 @@
 <script>
-    import { afterUpdate, onMount } from 'svelte';
+    import { onMount } from 'svelte';
     import {
         f7ready,
         App,
@@ -11,6 +11,7 @@
     import routes from '../js/routes';
     import Auth from '../pages/auth.svelte';
     import Preloader from 'framework7-svelte/components/preloader.svelte';
+    import userbase from 'userbase-js';
     import { Plugins } from '@capacitor/core';
     const { SplashScreen } = Plugins;
 

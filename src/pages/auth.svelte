@@ -1,4 +1,5 @@
 <script>
+    import userbase from 'userbase-js';
     import { Page } from 'framework7-svelte';
     import BlockFooter from 'framework7-svelte/components/block-footer.svelte';
     import Button from 'framework7-svelte/components/button.svelte';

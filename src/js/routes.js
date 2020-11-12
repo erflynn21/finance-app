@@ -10,7 +10,7 @@ import MonthlyIncomes from '../pages/monthlyIncomes.svelte';
 
 import NotFoundPage from '../pages/404.svelte';
 
-var routes = [
+let routes = [
   {
     path: '/',
     component: OverviewPage,

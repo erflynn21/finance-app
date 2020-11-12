@@ -1,10 +1,11 @@
 <script>
     import { Page, Navbar } from 'framework7-svelte';
     import { userStore } from '../stores/userStore';
-    import { f7 } from 'framework7-svelte';
+    import { f7, f7router } from 'framework7-svelte';
     import Button from 'framework7-svelte/components/button.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
+    import userbase from 'userbase-js';
 
     // sign out
     const signOut = async () => {
@@ -30,3 +31,6 @@
     </List>
     <Button on:click={signOut}>Sign Out</Button>
 </Page>
+
+<style>
+</style>
