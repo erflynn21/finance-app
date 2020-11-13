@@ -1,30 +1,38 @@
 import {writable} from 'svelte/store';
 import userbase from 'userbase-js';
 import { selectedMonth, selectedYear } from '../stores/store';
+import { userStore } from './userStore.js';
+import { get } from "svelte/store";
 
+let expenses = writable([]);
+const databaseName = `${selectedMonth}${selectedYear}expenses`;
+function changeHandler(items) {expenses = items};
 
-const createExpensesStore = () => {
-    const {subscribe, set} = writable('');
-    const databaseName = `${selectedMonth}${selectedYear}expenses`;
-    
-    let expenses = [];
-    function changeHandler(items) {expenses = items};
-    userbase.openDatabase({ databaseName, changeHandler })
-        .then(() => set(expenses));
-    ;
-
-    return {
-        subscribe,
-        addExpense: (expense) => {
-            userbase.insertItem({ databaseName, item: expense });
-        },
-        updateExpense: (expense, expenseId) => {
-            userbase.updateItem({ databaseName, item: expense, itemId: expenseId });
-        },
-        deleteExpense: (expenseId) => {
-            userbase.deleteItem({ databaseName, itemId: expenseId });
-        }
-    };
+const openDatabase = () => {
+    let user = get(userStore);
+    if (user !== null) {
+        userbase.openDatabase({ databaseName, changeHandler: function (items) {
+            expenses.set(items);
+        }})
+        .catch((e) => console.log(e));
+    } else {
+        setTimeout(openDatabase, 500)
+    } 
 }
 
-export const expensesStore = createExpensesStore();
+openDatabase();
+
+const addExpense = (expense) => {
+    userbase.insertItem({ databaseName, item: expense })
+            .then(() => console.log(expenses));
+};
+
+const updateExpense = (expense, expenseId) => {
+    userbase.updateItem({ databaseName, item: expense, itemId: expenseId });
+};
+
+const deleteExpense = (expenseId) => {
+    userbase.deleteItem({ databaseName, itemId: expenseId });
+}
+
+export {expenses, addExpense, updateExpense, deleteExpense};

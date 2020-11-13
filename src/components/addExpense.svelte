@@ -5,6 +5,7 @@
     //     userSettingsStore,
     // } from '../stores/stores.js';
     import { createEventDispatcher } from 'svelte';
+    import { addExpense } from '../stores/expensesStore';
     let dispatch = createEventDispatcher();
 
     let recurring = false;
@@ -19,42 +20,36 @@
         originalCurrency: null,
     };
 
-    // $: userCurrency = 'CNY';
+    $: userCurrency = 'CNY';
 
     let error = '';
 
     async function handleAddExpense() {
-        console.log(expense);
-        // if (expense.title === '' || expense.amount === null) {
-        //     error = `Please fill in all fields before submitting an expense`;
-        //     return;
-        // } else {
-        //     error = '';
-        // }
+        if (expense.title === '' || expense.amount === null) {
+            error = `Please fill in all fields before submitting an expense`;
+            return;
+        } else {
+            error = '';
+        }
+        // check whether expense needs to be converted to base currency
+        if (expense.currency === '' || expense.currency[0] === userCurrency) {
+            expense.currency = userCurrency;
+        } else {
+            await convertAmount();
+        }
+        // add the expense
+        addExpense(expense);
 
-        // // check whether expense needs to be converted to base currency
-        // if (
-        //     expense.currency === ''
-        //     // expense.currency[0] === $userCurrency[0]
-        // ) {
-        //     // expense.currency = $userCurrency;
-        // } else {
-        //     await convertAmount();
-        // }
+        // clear form
+        expense.title = '';
+        expense.date = new Date().toISOString().substr(0, 10);
+        expense.category = '';
+        expense.amount = '';
+        expense.currency = userCurrency;
+        expense.originalCurrency = null;
+        expense.originalAmount = null;
 
-        // // add the expense
-        // // Meteor.call('expenses.insert', expense);
-
-        // // clear form
-        // expense.title = '';
-        // expense.date = new Date().toISOString().substr(0, 10);
-        // expense.category = '';
-        // expense.amount = '';
-        // expense.currency = $userCurrency;
-        // expense.originalCurrency = null;
-        // expense.originalAmount = null;
-
-        // dispatch('collapse');
+        dispatch('collapse');
     }
 
     async function handleAddMonthlyExpense() {
@@ -93,17 +88,17 @@
     }
 
     async function convertAmount() {
-        // expense.originalAmount = expense.amount;
-        // expense.originalCurrency = expense.currency;
-        // let url = `https://api.exchangeratesapi.io/${expense.date}?base=${$userCurrency}&symbols=${expense.originalCurrency}`;
-        // let response = await fetch(url);
-        // let data = await response.json();
-        // let rates = JSON.stringify(data.rates);
-        // let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-        // expense.amount = Number(
-        //     (expense.originalAmount / exchangeRate).toFixed(2)
-        // );
-        // expense.currency = $userCurrency;
+        expense.originalAmount = expense.amount;
+        expense.originalCurrency = expense.currency;
+        let url = `https://api.exchangeratesapi.io/${expense.date}?base=${userCurrency}&symbols=${expense.originalCurrency}`;
+        let response = await fetch(url);
+        let data = await response.json();
+        let rates = JSON.stringify(data.rates);
+        let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
+        expense.amount = Number(
+            (expense.originalAmount / exchangeRate).toFixed(2)
+        );
+        expense.currency = userCurrency;
     }
 </script>
 
@@ -127,6 +122,7 @@
         <label for="category">Category: </label>
         <select id="category" bind:value={expense.category}>
             <option disabled selected value>-- select a category --</option>
+            <option value="groceries">Groceries</option>
             <!-- {#each $baseBudgetsStore as budget (budget._id)}
                 <option value={budget.category}>{budget.category}</option>
             {/each} -->
@@ -136,6 +132,8 @@
     <div class="currency">
         <label for="currency">Currency: </label>
         <select id="expense-currency" bind:value={expense.currency}>
+            <option value="CNY">CNY</option>
+            <option value="USD">USD</option>
             <!-- {#each $userSettingsStore as usersetting (usersetting._id)}
                 <option value={usersetting.baseCurrency}>
                     {usersetting.baseCurrency}
