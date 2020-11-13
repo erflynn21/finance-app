@@ -38,6 +38,9 @@
     import Icon from 'framework7-svelte/components/icon.svelte';
     import FabButtons from 'framework7-svelte/components/fab-buttons.svelte';
     import FabButton from 'framework7-svelte/components/fab-button.svelte';
+    import FabBackdrop from 'framework7-svelte/components/fab-backdrop.svelte';
+    import Sheet from 'framework7-svelte/components/sheet.svelte';
+    import Button from 'framework7-svelte/components/button.svelte';
 
     let initialized, error;
     const initUserbase = () => {
@@ -106,18 +109,7 @@
                 {:else}
                     <!-- Views/Tabs container -->
                     <Views tabs class="safe-areas">
-                        <Fab position="right-bottom">
-                            <Icon ios="f7:plus" md="material:add" />
-                            <Icon ios="f7:xmark" md="material:close" />
-                            <FabButtons position="top">
-                                <FabButton label="Add Expense">
-                                    <Icon material="create" />
-                                </FabButton>
-                                <FabButton label="Add Income">
-                                    <Icon material="today" />
-                                </FabButton>
-                            </FabButtons>
-                        </Fab>
+                        <FabBackdrop />
 
                         <!-- Tabbar for switching views-tabs -->
                         <Toolbar tabbar bottom bgColor="white">
@@ -168,6 +160,55 @@
                             name="settings"
                             tab
                             url="/settings/" />
+
+                        <Fab position="right-bottom">
+                            <Icon ios="f7:plus" md="material:add" />
+                            <Icon ios="f7:xmark" md="material:close" />
+                            <FabButtons position="top">
+                                <FabButton label="Add Expense" fabClose>
+                                    <Button sheetOpen=".add-expense">
+                                        <Icon material="create" />
+                                    </Button>
+                                </FabButton>
+                                <FabButton label="Add Income" fabClose>
+                                    <Button sheetOpen=".add-income">
+                                        <Icon material="today" />
+                                    </Button>
+                                </FabButton>
+                            </FabButtons>
+                        </Fab>
+
+                        <Sheet
+                            class="add-expense"
+                            style="height: auto;"
+                            swipeToClose
+                            backdrop>
+                            <div class="swipe-handler" />
+                            <p>
+                                Lorem, ipsum dolor sit amet consectetur
+                                adipisicing elit. Voluptatem ullam, vitae
+                                mollitia quae, saepe optio aliquid ea
+                                reprehenderit velit ipsam atque earum officiis
+                                aperiam. Voluptas quo voluptatibus ducimus
+                                neque! Aut!
+                            </p>
+                        </Sheet>
+
+                        <Sheet
+                            class="add-income"
+                            style="height: auto;"
+                            swipeToClose
+                            backdrop>
+                            <div class="swipe-handler" />
+                            <p>
+                                Lorem, ipsum dolor sit amet consectetur
+                                adipisicing elit. Voluptatem ullam, vitae
+                                mollitia quae, saepe optio aliquid ea
+                                reprehenderit velit ipsam atque earum officiis
+                                aperiam. Voluptas quo voluptatibus ducimus
+                                neque! Aut!
+                            </p>
+                        </Sheet>
                     </Views>
                 {/if}
             {/await}
@@ -178,15 +219,6 @@
     {#if error}
         <div class="error">{error}</div>
     {/if}
-
-    <!-- <Fab position="right-bottom">
-        <Icon ios="f7:xmark" aurora="f7:xmark" md="material:close">
-            <FabButtons position="top">
-                <FabButton label="Add Expense" />
-                <FabButton label="Add Income" />
-            </FabButtons>
-        </Icon>
-    </Fab> -->
 </App>
 
 <style>
@@ -208,6 +240,16 @@
 
     :global(.fab-right-bottom) {
         z-index: 5002;
-        bottom: calc(var(--f7-fab-margin) + var(--f7-safe-area-bottom) + 45px);
+        bottom: calc(var(--f7-fab-margin) + var(--f7-safe-area-bottom));
+    }
+
+    :global(.fab-backdrop) {
+        z-index: 5002;
+    }
+
+    :global(.fab > a, .fab-buttons a) {
+        box-shadow: none;
+        transition-delay: 0;
+        transition-duration: 200ms;
     }
 </style>
