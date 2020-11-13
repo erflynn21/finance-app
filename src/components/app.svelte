@@ -41,6 +41,8 @@
     import FabBackdrop from 'framework7-svelte/components/fab-backdrop.svelte';
     import Sheet from 'framework7-svelte/components/sheet.svelte';
     import Button from 'framework7-svelte/components/button.svelte';
+    import AddExpense from './addExpense.svelte';
+    import AddIncome from './addIncome.svelte';
 
     let initialized, error;
     const initUserbase = () => {
@@ -184,14 +186,7 @@
                             swipeToClose
                             backdrop>
                             <div class="swipe-handler" />
-                            <p>
-                                Lorem, ipsum dolor sit amet consectetur
-                                adipisicing elit. Voluptatem ullam, vitae
-                                mollitia quae, saepe optio aliquid ea
-                                reprehenderit velit ipsam atque earum officiis
-                                aperiam. Voluptas quo voluptatibus ducimus
-                                neque! Aut!
-                            </p>
+                            <AddExpense />
                         </Sheet>
 
                         <Sheet
@@ -200,14 +195,7 @@
                             swipeToClose
                             backdrop>
                             <div class="swipe-handler" />
-                            <p>
-                                Lorem, ipsum dolor sit amet consectetur
-                                adipisicing elit. Voluptatem ullam, vitae
-                                mollitia quae, saepe optio aliquid ea
-                                reprehenderit velit ipsam atque earum officiis
-                                aperiam. Voluptas quo voluptatibus ducimus
-                                neque! Aut!
-                            </p>
+                            <AddIncome />
                         </Sheet>
                     </Views>
                 {/if}
