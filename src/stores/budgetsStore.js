@@ -1,6 +1,5 @@
 import {writable} from 'svelte/store';
 import userbase from 'userbase-js';
-import { selectedMonth, selectedYear } from '../stores/store';
 import { userStore } from './userStore.js';
 import { get } from "svelte/store";
 
@@ -22,15 +21,15 @@ const openDatabase = () => {
 openDatabase();
 
 const addBudget = (budget) => {
-    userbase.insertItem({ databaseName, item: budget });
+    return userbase.insertItem({ databaseName, item: budget });
 };
 
 const updateBudget = (budget, budgetId) => {
-    userbase.updateItem({ databaseName, item: budget, itemId: budgetId });
+    return userbase.updateItem({ databaseName, item: budget, itemId: budgetId });
 };
 
 const deleteBudget = (budgetId) => {
-    userbase.deleteItem({ databaseName, itemId: budgetId });
+    return userbase.deleteItem({ databaseName, itemId: budgetId });
 }
 
 export {expenses, addBudget, updateBudget, deleteBudget};

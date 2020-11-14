@@ -1,7 +1,6 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import { baseCurrency } from '../stores/currenciesStore';
     import { addExpense } from '../stores/expensesStore';
-    let dispatch = createEventDispatcher();
 
     let recurring = false;
 
@@ -15,20 +14,22 @@
         originalCurrency: null,
     };
 
-    $: userCurrency = 'CNY';
-
     let error = '';
 
     async function handleAddExpense() {
-        if (expense.title === '' || expense.amount === null) {
+        if (
+            expense.title === '' ||
+            expense.amount === null ||
+            expense.category === '-- Select a Category --'
+        ) {
             error = `Please fill in all fields before submitting an expense`;
             return;
         } else {
             error = '';
         }
         // check whether expense needs to be converted to base currency
-        if (expense.currency === '' || expense.currency[0] === userCurrency) {
-            expense.currency = userCurrency;
+        if (expense.currency === '' || expense.currency[0] === $baseCurrency) {
+            expense.currency = $baseCurrency;
         } else {
             await convertAmount();
         }
@@ -39,7 +40,7 @@
             expense.date = new Date().toISOString().substr(0, 10);
             expense.category = '';
             expense.amount = '';
-            expense.currency = userCurrency;
+            expense.currency = $baseCurrency;
             expense.originalCurrency = null;
             expense.originalAmount = null;
         });
@@ -83,7 +84,7 @@
     async function convertAmount() {
         expense.originalAmount = expense.amount;
         expense.originalCurrency = expense.currency;
-        let url = `https://api.exchangeratesapi.io/${expense.date}?base=${userCurrency}&symbols=${expense.originalCurrency}`;
+        let url = `https://api.exchangeratesapi.io/${expense.date}?base=${$baseCurrency}&symbols=${expense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
         let rates = JSON.stringify(data.rates);
@@ -114,7 +115,7 @@
     <div class="category">
         <label for="category">Category: </label>
         <select id="category" bind:value={expense.category}>
-            <option disabled selected value>-- select a category --</option>
+            <option disabled selected value>-- Select a Category --</option>
             <option value="groceries">Groceries</option>
             <!-- {#each $baseBudgetsStore as budget (budget._id)}
                 <option value={budget.category}>{budget.category}</option>

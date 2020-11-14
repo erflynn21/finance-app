@@ -1,6 +1,10 @@
 <script>
     import { Page, Navbar } from 'framework7-svelte';
-    import { expenses } from '../stores/expensesStore';
+    import {
+        deleteExpense,
+        expenses,
+        expensesSum,
+    } from '../stores/expensesStore';
 </script>
 
 <Page name="home">
@@ -10,6 +14,8 @@
         {item.title}
         {item.amount}
         {item.category}
+        <button on:click={() => deleteExpense(itemId)}>X</button>
         <br />
     {/each}
+    {$expensesSum}
 </Page>

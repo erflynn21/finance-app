@@ -5,13 +5,23 @@ import { userStore } from './userStore.js';
 import { get } from "svelte/store";
 
 let expenses = writable([]);
-const databaseName = `${selectedMonth}${selectedYear}expenses`;
+let expensesSum = writable(0);
+const databaseName = `${selectedMonth}-${selectedYear}-expenses`;
 
 const openDatabase = () => {
     let user = get(userStore);
     if (user !== null) {
         userbase.openDatabase({ databaseName, changeHandler: function (items) {
-            expenses.set(items);
+            expenses.set(items)
+            let totalExpenses = [];
+            get(expenses).forEach((expense) => {
+                totalExpenses = [...totalExpenses, expense.item.amount];
+            });
+            expensesSum.set(totalExpenses.reduce(function (a, b) {
+                const sum = a + b;
+                const trimmed = Number(sum.toFixed(2));
+                return trimmed;
+            }, 0));
         }})
         .catch((e) => console.log(e));
     } else {
@@ -22,15 +32,15 @@ const openDatabase = () => {
 openDatabase();
 
 const addExpense = (expense) => {
-    userbase.insertItem({ databaseName, item: expense });
+    return userbase.insertItem({ databaseName, item: expense });
 };
 
 const updateExpense = (expense, expenseId) => {
-    userbase.updateItem({ databaseName, item: expense, itemId: expenseId });
+    return userbase.updateItem({ databaseName, item: expense, itemId: expenseId });
 };
 
 const deleteExpense = (expenseId) => {
-    userbase.deleteItem({ databaseName, itemId: expenseId });
+    return userbase.deleteItem({ databaseName, itemId: expenseId });
 }
 
-export {expenses, addExpense, updateExpense, deleteExpense};
+export {expenses, expensesSum, addExpense, updateExpense, deleteExpense};
