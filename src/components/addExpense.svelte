@@ -1,9 +1,4 @@
 <script>
-    // import {
-    //     baseBudgetsStore,
-    //     userCurrency,
-    //     userSettingsStore,
-    // } from '../stores/stores.js';
     import { createEventDispatcher } from 'svelte';
     import { addExpense } from '../stores/expensesStore';
     let dispatch = createEventDispatcher();

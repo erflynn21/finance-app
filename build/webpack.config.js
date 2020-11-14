@@ -218,8 +218,8 @@ module.exports = {
       ],
     }),
 
-    new WorkboxPlugin.InjectManifest({
-      swSrc: resolvePath('src/service-worker.js'),
-    }),
+    // new WorkboxPlugin.InjectManifest({
+    //   swSrc: resolvePath('src/service-worker.js'),
+    // }),
   ],
 };
