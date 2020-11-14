@@ -1,25 +1,16 @@
 import {writable} from 'svelte/store';
 import userbase from 'userbase-js';
 import { selectedMonth, selectedYear } from '../stores/datesStore';
-import { userStore } from './userStore.js';
-import { get } from "svelte/store";
 
 let monthlyBudgets = writable([]);
 const databaseName = `${selectedMonth}-${selectedYear}-monthlyBudgets`;
 
-const openDatabase = () => {
-    let user = get(userStore);
-    if (user !== null) {
-        userbase.openDatabase({ databaseName, changeHandler: function (items) {
-            monthlyBudgets.set(items);
-        }})
-        .catch((e) => console.log(e));
-    } else {
-        setTimeout(openDatabase, 500)
-    } 
+const openMonthlyBudgetsDatabase = () => {
+    userbase.openDatabase({ databaseName, changeHandler: function (items) {
+        monthlyBudgets.set(items);
+    }})
+    .catch((e) => console.log(e));
 }
-
-openDatabase();
 
 const addMonthlyBudget = (monthlyBudget) => {
     return userbase.insertItem({ databaseName, item: monthlyBudget });
@@ -33,4 +24,4 @@ const deleteMonthlyBudget = (monthlyBudgetId) => {
     return userbase.deleteItem({ databaseName, itemId: monthlyBudgetId });
 };
 
-export {expenses, addMonthlyBudget, updateMonthlyBudget, deleteMonthlyBudget};
+export {monthlyBudgets, openMonthlyBudgetsDatabase, addMonthlyBudget, updateMonthlyBudget, deleteMonthlyBudget};

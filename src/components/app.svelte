@@ -30,7 +30,10 @@
     };
 
     import { userStore, initialized } from '../stores/userStore.js';
-    import { currencies } from '../stores/currenciesStore';
+    import {
+        currencies,
+        openCurrenciesDatabase,
+    } from '../stores/currenciesStore';
     import Page from 'framework7-svelte/components/page.svelte';
     import SetCurrencies from '../pages/setCurrencies.svelte';
     import Fab from 'framework7-svelte/components/fab.svelte';
@@ -42,6 +45,12 @@
     import Button from 'framework7-svelte/components/button.svelte';
     import AddExpense from './addExpense.svelte';
     import AddIncome from './addIncome.svelte';
+    import { openExpensesDatabase } from '../stores/expensesStore';
+    import { openBudgetsDatabase } from '../stores/budgetsStore';
+    import { openIncomesDatabase } from '../stores/incomesStore';
+    import { openMonthlyIncomesDatabase } from '../stores/monthlyIncomesStore';
+    import { openMonthlyBudgetsDatabase } from '../stores/monthlyBudgetsStore';
+    import { openMonthlyExpensesDatabase } from '../stores/monthlyExpensesStore';
 
     // checking if user has set base currency and currency options
     let currenciesSet;
@@ -53,6 +62,18 @@
         }
     };
     $: if ($currencies) checkBaseCurrency();
+
+    const initDatabases = () => {
+        openBudgetsDatabase();
+        openCurrenciesDatabase();
+        openExpensesDatabase();
+        openIncomesDatabase();
+        openMonthlyBudgetsDatabase();
+        openMonthlyExpensesDatabase();
+        openMonthlyIncomesDatabase();
+    };
+
+    $: if ($userStore) initDatabases();
 
     onMount(() => {
         f7ready(() => {

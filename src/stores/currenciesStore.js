@@ -1,6 +1,5 @@
 import {writable} from 'svelte/store';
 import userbase from 'userbase-js';
-import { userStore } from './userStore.js';
 import { get } from "svelte/store";
 
 const currencyDict = {
@@ -45,24 +44,17 @@ let baseCurrencySymbol = writable('');
 let currencyOptions = writable('');
 const databaseName = `currencies`;
 
-const openDatabase = () => {
-    let user = get(userStore);
-    if (user !== null) {
-        userbase.openDatabase({ databaseName, changeHandler: function (items) {
-            currencies.set(items);
-        }})
-        .catch((e) => console.log(e))
-        .finally(() => {
-            baseCurrency.set(get(currencies)[0].item.baseCurrency);
-            currencyOptions.set(get(currencies)[0].item.currencyOptions);
-            baseCurrencySymbol.set(currencyDict[get(baseCurrency)]);
-        });
-    } else {
-        setTimeout(openDatabase, 500)
-    } 
+const openCurrenciesDatabase = () => {
+    userbase.openDatabase({ databaseName, changeHandler: function (items) {
+        currencies.set(items);
+    }})
+    .catch((e) => console.log(e))
+    .finally(() => {
+        baseCurrency.set(get(currencies)[0].item.baseCurrency);
+        currencyOptions.set(get(currencies)[0].item.currencyOptions);
+        baseCurrencySymbol.set(currencyDict[get(baseCurrency)]);
+    });
 }
-
-openDatabase();
 
 const addCurrencies = (currencies) => {
     return userbase.insertItem({ databaseName, item: currencies });
@@ -73,4 +65,4 @@ const updateCurrencies = (currencies, currenciesId) => {
 };
 
 
-export {currencies, baseCurrency, baseCurrencySymbol, currencyOptions, addCurrencies, updateCurrencies };
+export {currencies, baseCurrency, baseCurrencySymbol, currencyOptions, openCurrenciesDatabase, addCurrencies, updateCurrencies };

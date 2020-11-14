@@ -1,35 +1,27 @@
 import {writable} from 'svelte/store';
 import userbase from 'userbase-js';
 import { selectedMonth, selectedYear } from '../stores/datesStore';
-import { userStore } from './userStore.js';
 import { get } from "svelte/store";
 
 let expenses = writable([]);
 let expensesSum = writable(0);
 const databaseName = `${selectedMonth}-${selectedYear}-expenses`;
 
-const openDatabase = () => {
-    let user = get(userStore);
-    if (user !== null) {
-        userbase.openDatabase({ databaseName, changeHandler: function (items) {
-            expenses.set(items)
-            let totalExpenses = [];
-            get(expenses).forEach((expense) => {
-                totalExpenses = [...totalExpenses, expense.item.amount];
-            });
-            expensesSum.set(totalExpenses.reduce(function (a, b) {
-                const sum = a + b;
-                const trimmed = Number(sum.toFixed(2));
-                return trimmed;
-            }, 0));
-        }})
-        .catch((e) => console.log(e));
-    } else {
-        setTimeout(openDatabase, 500)
-    } 
+const openExpensesDatabase = () => {
+    userbase.openDatabase({ databaseName, changeHandler: function (items) {
+        expenses.set(items)
+        let totalExpenses = [];
+        get(expenses).forEach((expense) => {
+            totalExpenses = [...totalExpenses, expense.item.amount];
+        });
+        expensesSum.set(totalExpenses.reduce(function (a, b) {
+            const sum = a + b;
+            const trimmed = Number(sum.toFixed(2));
+            return trimmed;
+        }, 0));
+    }})
+    .catch((e) => console.log(e));
 }
-
-openDatabase();
 
 const addExpense = (expense) => {
     return userbase.insertItem({ databaseName, item: expense });
@@ -43,4 +35,4 @@ const deleteExpense = (expenseId) => {
     return userbase.deleteItem({ databaseName, itemId: expenseId });
 }
 
-export {expenses, expensesSum, addExpense, updateExpense, deleteExpense};
+export {expenses, expensesSum, openExpensesDatabase, addExpense, updateExpense, deleteExpense};
