@@ -20,9 +20,7 @@ if (date.getDate() >= 10) {
 const start = currentYear + '-' + currentMonth + '-01';
 const end = currentYear + '-' + currentMonth + '-' + today;
 
-const baseBudgetsStore = writable('');
 const baseBudgetSumStore = writable('');
-const budgetSumStore = writable('');
 const startDate = writable('');
 const endDate = writable('');
 const selectedMonth = writable('');
@@ -33,15 +31,10 @@ endDate.set(`${end}`);
 selectedMonth.set(currentMonth);
 selectedYear.set(currentYear);
 
-const expensesStore = writable('');
 const expenseSumStore = writable('');
-const incomesStore = writable('');
 const incomeSumStore = writable('');
-const monthlyBudgetsStore = writable('');
-const monthlyExpensesStore = writable('');
-const monthlyIncomesStore = writable('');
 const baseCurrency = writable('');
 const baseCurrencySymbol = writable('');
 const userSettingsStore = writable('');
 
-export {baseBudgetsStore, baseBudgetSumStore, budgetSumStore, startDate, endDate, selectedMonth, selectedYear, expensesStore, expenseSumStore, incomesStore, incomeSumStore, monthlyBudgetsStore, monthlyExpensesStore, monthlyIncomesStore, baseCurrency, baseCurrencySymbol, userSettingsStore};
+export {baseBudgetSumStore, startDate, endDate, selectedMonth, selectedYear, expenseSumStore, incomeSumStore, baseCurrency, baseCurrencySymbol, userSettingsStore};

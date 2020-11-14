@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import {
         f7ready,
         App,
@@ -32,6 +32,7 @@
 
     // initialize Userbase
     import { userStore } from '../stores/userStore.js';
+    import { currencies } from '../stores/currenciesStore';
     import Page from 'framework7-svelte/components/page.svelte';
     import SetCurrencies from '../pages/setCurrencies.svelte';
     import Fab from 'framework7-svelte/components/fab.svelte';
@@ -56,35 +57,17 @@
     };
 
     // checking if user has set base currency and currency options
-    let currencies = null;
     let currenciesSet;
-    let currenciesDB;
-    const databaseName = 'currencies';
-    $: if ($userStore)
-        currenciesDB = userbase
-            .openDatabase({
-                databaseName,
-                changeHandler: function (items) {
-                    currencies = items;
-                },
-            })
-            .then(() => {
-                checkBaseCurrency();
-            });
 
     const checkBaseCurrency = () => {
-        if (currencies.length === 0) {
+        if ($currencies.length === 0) {
             currenciesSet = false;
         } else {
             currenciesSet = true;
         }
     };
 
-    const setCurrency = (e) => {
-        const userCurrencies = e.detail;
-        userbase.insertItem({ databaseName, item: userCurrencies });
-        checkBaseCurrency();
-    };
+    $: if ($currencies) checkBaseCurrency();
 
     onMount(() => {
         f7ready(() => {
@@ -101,105 +84,99 @@
         </Page>
     {:then _}
         {#if $userStore}
-            {#await currenciesDB}
+            {#if $currencies === null}
                 <Page noNavbar class="safe-areas loader">
                     <Preloader color="green" size={100} />
                 </Page>
-            {:then _}
-                {#if currenciesSet === false}
-                    <SetCurrencies on:setCurrency={setCurrency} />
-                {:else}
-                    <!-- Views/Tabs container -->
-                    <Views tabs class="safe-areas">
-                        <FabBackdrop />
+            {:else if currenciesSet === false}
+                <SetCurrencies on:CurrencySet={checkBaseCurrency} />
+            {:else}
+                <!-- Views/Tabs container -->
+                <Views tabs class="safe-areas">
+                    <FabBackdrop />
 
-                        <!-- Tabbar for switching views-tabs -->
-                        <Toolbar tabbar bottom bgColor="white">
-                            <Link
-                                tabLink="#view-overview"
-                                tabLinkActive
-                                iconF7="chart_pie"
-                                iconColor="gray"
-                                iconSize="30px" />
-                            <Link
-                                tabLink="#view-budget"
-                                iconF7="doc_text"
-                                iconColor="gray"
-                                iconSize="30px" />
-                            <Link
-                                tabLink="#view-transactions"
-                                iconF7="money_dollar_circle"
-                                iconColor="gray"
-                                iconSize="30px" />
-                            <Link
-                                tabLink="#view-settings"
-                                iconF7="gear"
-                                iconColor="gray"
-                                iconSize="30px" />
-                        </Toolbar>
+                    <!-- Tabbar for switching views-tabs -->
+                    <Toolbar tabbar bottom bgColor="white">
+                        <Link
+                            tabLink="#view-overview"
+                            tabLinkActive
+                            iconF7="chart_pie"
+                            iconColor="gray"
+                            iconSize="30px" />
+                        <Link
+                            tabLink="#view-budget"
+                            iconF7="doc_text"
+                            iconColor="gray"
+                            iconSize="30px" />
+                        <Link
+                            tabLink="#view-transactions"
+                            iconF7="money_dollar_circle"
+                            iconColor="gray"
+                            iconSize="30px" />
+                        <Link
+                            tabLink="#view-settings"
+                            iconF7="gear"
+                            iconColor="gray"
+                            iconSize="30px" />
+                    </Toolbar>
 
-                        <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
-                        <View id="view-overview" tab tabActive url="/" />
+                    <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
+                    <View id="view-overview" tab tabActive url="/" />
 
-                        <!-- Budget View -->
-                        <View
-                            id="view-budget"
-                            name="budget"
-                            tab
-                            url="/budget/" />
+                    <!-- Budget View -->
+                    <View id="view-budget" name="budget" tab url="/budget/" />
 
-                        <!-- Transactions View -->
-                        <View
-                            id="view-transactions"
-                            name="transactions"
-                            tab
-                            url="/transactions/" />
+                    <!-- Transactions View -->
+                    <View
+                        id="view-transactions"
+                        name="transactions"
+                        tab
+                        url="/transactions/" />
 
-                        <!-- Settings View -->
-                        <View
-                            id="view-settings"
-                            main
-                            name="settings"
-                            tab
-                            url="/settings/" />
+                    <!-- Settings View -->
+                    <View
+                        id="view-settings"
+                        main
+                        name="settings"
+                        tab
+                        url="/settings/" />
 
-                        <Fab position="right-bottom">
-                            <Icon ios="f7:plus" md="material:add" />
-                            <Icon ios="f7:xmark" md="material:close" />
-                            <FabButtons position="top">
-                                <FabButton label="Add Expense" fabClose>
-                                    <Button sheetOpen=".add-expense">
-                                        <Icon material="create" />
-                                    </Button>
-                                </FabButton>
-                                <FabButton label="Add Income" fabClose>
-                                    <Button sheetOpen=".add-income">
-                                        <Icon material="today" />
-                                    </Button>
-                                </FabButton>
-                            </FabButtons>
-                        </Fab>
+                    <Fab position="right-bottom">
+                        <Icon ios="f7:plus" md="material:add" />
+                        <Icon ios="f7:xmark" md="material:close" />
+                        <FabButtons position="top">
+                            <FabButton label="Add Expense" fabClose>
+                                <Button sheetOpen=".add-expense">
+                                    <Icon material="create" />
+                                </Button>
+                            </FabButton>
+                            <FabButton label="Add Income" fabClose>
+                                <Button sheetOpen=".add-income">
+                                    <Icon material="today" />
+                                </Button>
+                            </FabButton>
+                        </FabButtons>
+                    </Fab>
 
-                        <Sheet
-                            class="add-expense"
-                            style="height: auto;"
-                            swipeToClose
-                            backdrop>
-                            <div class="swipe-handler" />
-                            <AddExpense />
-                        </Sheet>
+                    <Sheet
+                        class="add-expense"
+                        style="height: auto;"
+                        swipeToClose
+                        backdrop>
+                        <div class="swipe-handler" />
+                        <AddExpense />
+                    </Sheet>
 
-                        <Sheet
-                            class="add-income"
-                            style="height: auto;"
-                            swipeToClose
-                            backdrop>
-                            <div class="swipe-handler" />
-                            <AddIncome />
-                        </Sheet>
-                    </Views>
-                {/if}
-            {/await}
+                    <Sheet
+                        class="add-income"
+                        style="height: auto;"
+                        swipeToClose
+                        backdrop>
+                        <div class="swipe-handler" />
+                        <AddIncome />
+                    </Sheet>
+                </Views>
+            {/if}
         {:else}
             <Auth />
         {/if}

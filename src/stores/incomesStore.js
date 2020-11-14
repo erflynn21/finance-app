@@ -4,14 +4,14 @@ import { selectedMonth, selectedYear } from '../stores/store';
 import { userStore } from './userStore.js';
 import { get } from "svelte/store";
 
-let expenses = writable([]);
-const databaseName = `${selectedMonth}${selectedYear}expenses`;
+let incomes = writable([]);
+const databaseName = `${selectedMonth}${selectedYear}incomes`;
 
 const openDatabase = () => {
     let user = get(userStore);
     if (user !== null) {
         userbase.openDatabase({ databaseName, changeHandler: function (items) {
-            expenses.set(items);
+            incomes.set(items);
         }})
         .catch((e) => console.log(e));
     } else {
@@ -21,16 +21,16 @@ const openDatabase = () => {
 
 openDatabase();
 
-const addExpense = (expense) => {
-    userbase.insertItem({ databaseName, item: expense });
+const addIncome = (income) => {
+    userbase.insertItem({ databaseName, item: income });
 };
 
-const updateExpense = (expense, expenseId) => {
-    userbase.updateItem({ databaseName, item: expense, itemId: expenseId });
+const updateIncome = (income, incomeId) => {
+    userbase.updateItem({ databaseName, item: income, itemId: incomeId });
 };
 
-const deleteExpense = (expenseId) => {
-    userbase.deleteItem({ databaseName, itemId: expenseId });
+const deleteIncome = (incomeId) => {
+    userbase.deleteItem({ databaseName, itemId: incomeId });
 }
 
-export {expenses, addExpense, updateExpense, deleteExpense};
+export {expenses, addIncome, updateIncome, deleteIncome};

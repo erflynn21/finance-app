@@ -5,6 +5,7 @@
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import CurrenciesList from '../shared/currenciesList.svelte';
+    import { addCurrencies } from '../stores/currenciesStore';
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
 
@@ -13,16 +14,16 @@
     let baseSelect;
     let currencyOptionsSelect;
 
-    const addCurrencies = () => {
+    const setCurrencies = () => {
         const baseCurrencySelect = baseSelect.smartSelectInstance();
         const optionsSelect = currencyOptionsSelect.smartSelectInstance();
         baseCurrency = baseCurrencySelect.getValue();
         currencyOptions = optionsSelect.getValue();
-        const data = {
+        const currencies = {
             baseCurrency,
             currencyOptions,
         };
-        dispatch('setCurrency', data);
+        addCurrencies(currencies);
     };
 </script>
 
@@ -60,5 +61,5 @@
         </ListItem>
     </List>
 
-    <Button on:click={addCurrencies} large>Update</Button>
+    <Button on:click={setCurrencies} large>Update</Button>
 </Page>

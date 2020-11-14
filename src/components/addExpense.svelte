@@ -38,18 +38,16 @@
             await convertAmount();
         }
         // add the expense
-        addExpense(expense);
-
-        // clear form
-        expense.title = '';
-        expense.date = new Date().toISOString().substr(0, 10);
-        expense.category = '';
-        expense.amount = '';
-        expense.currency = userCurrency;
-        expense.originalCurrency = null;
-        expense.originalAmount = null;
-
-        dispatch('collapse');
+        addExpense(expense).then(() => {
+            // clear form
+            expense.title = '';
+            expense.date = new Date().toISOString().substr(0, 10);
+            expense.category = '';
+            expense.amount = '';
+            expense.currency = userCurrency;
+            expense.originalCurrency = null;
+            expense.originalAmount = null;
+        });
     }
 
     async function handleAddMonthlyExpense() {
