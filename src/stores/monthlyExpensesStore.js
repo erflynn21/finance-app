@@ -1,6 +1,6 @@
 import {writable} from 'svelte/store';
 import userbase from 'userbase-js';
-import { selectedMonth, selectedYear } from '../stores/store';
+import { selectedMonth, selectedYear } from '../stores/datesStore';
 import { userStore } from './userStore.js';
 import { get } from "svelte/store";
 

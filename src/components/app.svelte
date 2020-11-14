@@ -1,5 +1,5 @@
 <script>
-    import { afterUpdate, onMount } from 'svelte';
+    import { onMount } from 'svelte';
     import {
         f7ready,
         App,
@@ -11,7 +11,6 @@
     import routes from '../js/routes';
     import Auth from '../pages/auth.svelte';
     import Preloader from 'framework7-svelte/components/preloader.svelte';
-    import userbase from 'userbase-js';
     import { Plugins } from '@capacitor/core';
     const { SplashScreen } = Plugins;
 
@@ -30,7 +29,6 @@
         // },
     };
 
-    // initialize Userbase
     import { userStore, initialized } from '../stores/userStore.js';
     import { currencies } from '../stores/currenciesStore';
     import Page from 'framework7-svelte/components/page.svelte';
@@ -47,7 +45,6 @@
 
     // checking if user has set base currency and currency options
     let currenciesSet;
-
     const checkBaseCurrency = () => {
         if ($currencies.length === 0) {
             currenciesSet = false;
@@ -55,7 +52,6 @@
             currenciesSet = true;
         }
     };
-
     $: if ($currencies) checkBaseCurrency();
 
     onMount(() => {
