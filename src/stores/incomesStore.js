@@ -12,7 +12,7 @@ const openIncomesDatabase = () => {
             incomes.set(items)
             let totalIncomes = [];
             get(incomes).forEach((income) => {
-                totalExpenses = [...totalExpenses, income.item.amount];
+                totalIncomes = [...totalIncomes, income.item.amount];
             });
             incomesSum.set(totalIncomes.reduce(function (a, b) {
                 const sum = a + b;

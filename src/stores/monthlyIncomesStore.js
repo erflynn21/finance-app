@@ -11,16 +11,16 @@ const openMonthlyIncomesDatabase = () => {
     .catch((e) => console.log(e));
 }
 
-const addMonthlyIncomes = (monthlyIncome) => {
+const addMonthlyIncome = (monthlyIncome) => {
     return userbase.insertItem({ databaseName, item: monthlyIncome });
 };
 
-const updateMonthlyIncomes = (monthlyIncome, monthlyIncomeId) => {
+const updateMonthlyIncome = (monthlyIncome, monthlyIncomeId) => {
     return userbase.updateItem({ databaseName, item: monthlyIncome, itemId: monthlyIncomeId });
 };
 
-const deleteMonthlyIncomes = (monthlyIncomeId) => {
+const deleteMonthlyIncome = (monthlyIncomeId) => {
     return userbase.deleteItem({ databaseName, itemId: monthlyIncomeId });
 }
 
-export {monthlyIncomes, openMonthlyIncomesDatabase, addMonthlyIncomes, updateMonthlyIncomes, deleteMonthlyIncomes};
+export {monthlyIncomes, openMonthlyIncomesDatabase, addMonthlyIncome, updateMonthlyIncome, deleteMonthlyIncome};
