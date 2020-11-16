@@ -1,9 +1,10 @@
 <script>
     import { Page, Navbar } from 'framework7-svelte';
-    import { get } from 'svelte/store';
+    import SwiperList from '../components/swiperList.svelte';
     import {
         deleteMonthlyExpense,
         monthlyExpenses,
+        updateMonthlyExpense,
     } from '../stores/monthlyExpensesStore';
 </script>
 
@@ -11,12 +12,6 @@
     <!-- Top Navbar -->
     <Navbar title="Monthly Recurring Expenses" backLink="Back" />
     {#each $monthlyExpenses as { item, itemId } (itemId)}
-        {item.currency}
-        {item.title}
-        {item.amount}
-        {item.category}
-        <button on:click={() => deleteMonthlyExpense(itemId)}>X</button>
-        <br />
+        <SwiperList {item} on:deleted={() => deleteMonthlyExpense(itemId)} />
     {/each}
-    hi
 </Page>
