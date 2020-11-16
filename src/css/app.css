@@ -72,3 +72,7 @@ input {
 ::placeholder { /* Recent browsers */
   text-transform: none;
 }
+
+.list {
+  margin: 0;
+}
