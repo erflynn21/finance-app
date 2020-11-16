@@ -1,6 +1,9 @@
 <script>
-    import { baseCurrency } from '../stores/currenciesStore';
+    import { budgets } from '../stores/budgetsStore';
+
+    import { baseCurrency, currencyOptions } from '../stores/currenciesStore';
     import { addExpense } from '../stores/expensesStore';
+    import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
 
     let recurring = false;
 
@@ -28,57 +31,39 @@
             error = '';
         }
         // check whether expense needs to be converted to base currency
-        if (expense.currency === '' || expense.currency[0] === $baseCurrency) {
+        if (expense.currency === '' || expense.currency === $baseCurrency) {
             expense.currency = $baseCurrency;
         } else {
             await convertAmount();
         }
-        // add the expense
-        addExpense(expense).then(() => {
-            // clear form
-            expense.title = '';
-            expense.date = new Date().toISOString().substr(0, 10);
-            expense.category = '';
-            expense.amount = '';
-            expense.currency = $baseCurrency;
-            expense.originalCurrency = null;
-            expense.originalAmount = null;
-        });
-    }
 
-    async function handleAddMonthlyExpense() {
-        console.log(expense);
-        // if (expense.title === '' || expense.amount === null) {
-        //     error = `Please fill in all fields before submitting an expense`;
-        //     return;
-        // } else {
-        //     error = '';
-        // }
-        // // check whether expense needs to be converted to base currency
-        // if (expense.currency === '' || expense.currency[0] === $userCurrency) {
-        //     expense.currency = $userCurrency;
-        // } else {
-        //     expense.originalAmount = expense.amount;
-        //     expense.originalCurrency = expense.currency;
-        //     expense.currency = null;
-        //     expense.amount = null;
-        // }
+        if (recurring === false) {
+            // add the expense
+            addExpense(expense).then(() => {
+                // clear form
+                expense.title = '';
+                expense.date = new Date().toISOString().substr(0, 10);
+                expense.category = '';
+                expense.amount = '';
+                expense.currency = $baseCurrency;
+                expense.originalCurrency = null;
+                expense.originalAmount = null;
+            });
+        } else {
+            expense.recurringdate = expense.date.slice(-2);
 
-        // expense.recurringdate = expense.date.slice(-2);
-
-        // // add the expense
-        // // Meteor.call('monthlyexpenses.insert', expense);
-
-        // // clear form
-        // expense.title = '';
-        // expense.date = new Date().toISOString().substr(0, 10);
-        // expense.category = '';
-        // expense.amount = '';
-        // expense.currency = $userCurrency;
-        // expense.originalCurrency = null;
-        // expense.originalAmount = null;
-
-        // dispatch('collapse');
+            // add the recurring expense
+            addMonthlyExpense(expense).then(() => {
+                // clear form
+                expense.title = '';
+                expense.date = new Date().toISOString().substr(0, 10);
+                expense.category = '';
+                expense.amount = '';
+                expense.currency = $baseCurrency;
+                expense.originalCurrency = null;
+                expense.originalAmount = null;
+            });
+        }
     }
 
     async function convertAmount() {
@@ -92,7 +77,7 @@
         expense.amount = Number(
             (expense.originalAmount / exchangeRate).toFixed(2)
         );
-        expense.currency = userCurrency;
+        expense.currency = $baseCurrency;
     }
 </script>
 
@@ -116,26 +101,19 @@
         <label for="category">Category: </label>
         <select id="category" bind:value={expense.category}>
             <option disabled selected value>-- Select a Category --</option>
-            <option value="groceries">Groceries</option>
-            <!-- {#each $baseBudgetsStore as budget (budget._id)}
-                <option value={budget.category}>{budget.category}</option>
-            {/each} -->
+            {#each $budgets as { item, itemId } (itemId)}
+                <option value={item.category}>{item.category}</option>
+            {/each}
         </select>
     </div>
 
     <div class="currency">
         <label for="currency">Currency: </label>
         <select id="expense-currency" bind:value={expense.currency}>
-            <option value="CNY">CNY</option>
-            <option value="USD">USD</option>
-            <!-- {#each $userSettingsStore as usersetting (usersetting._id)}
-                <option value={usersetting.baseCurrency}>
-                    {usersetting.baseCurrency}
-                </option>
-                {#each usersetting.currencyOptions as currencyOption}
-                    <option value={currencyOption}>{currencyOption}</option>
-                {/each}
-            {/each} -->
+            <option value={$baseCurrency}>{$baseCurrency}</option>
+            {#each $currencyOptions as currencyOption}
+                <option value={currencyOption}>{currencyOption}</option>
+            {/each}
         </select>
     </div>
 
@@ -148,16 +126,7 @@
         <p>{error}</p>
     </span>
 
-    {#if recurring === false}
-        <div>
-            <button on:click|preventDefault={handleAddExpense}>Add</button>
-        </div>
-    {:else}
-        <div>
-            <button
-                on:click|preventDefault={handleAddMonthlyExpense}>Add</button>
-        </div>
-    {/if}
+    <div><button on:click|preventDefault={handleAddExpense}>Add</button></div>
 </form>
 
 <style>
