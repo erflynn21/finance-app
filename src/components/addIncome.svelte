@@ -80,7 +80,11 @@
 
     <div class="title">
         <label for="title">Income: </label>
-        <input type="text" placeholder="Name" bind:value={income.title} />
+        <input
+            type="text"
+            placeholder="Name"
+            bind:value={income.title}
+            autocapitalize="off" />
     </div>
 
     <div class="amount">

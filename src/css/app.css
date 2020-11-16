@@ -54,9 +54,6 @@
 
 /* Your app custom styles here */
 
-input { 
-  text-transform: lowercase;
-}
 ::-webkit-input-placeholder { /* WebKit browsers */
   text-transform: none;
 }
@@ -73,6 +70,14 @@ input {
   text-transform: none;
 }
 
-.list {
+/* .list {
   margin: 0;
+} */
+
+.list ul::before {
+  content: none;
+}
+
+.list ul::after {
+  content: none;
 }

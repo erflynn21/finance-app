@@ -89,7 +89,11 @@
 
     <div class="title">
         <label for="title">Expense: </label>
-        <input type="text" placeholder="Name" bind:value={expense.title} />
+        <input
+            type="text"
+            placeholder="Name"
+            bind:value={expense.title}
+            autocapitalize="off" />
     </div>
 
     <div class="amount">

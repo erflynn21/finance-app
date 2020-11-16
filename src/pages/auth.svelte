@@ -55,7 +55,8 @@
                 label="Username"
                 type="text"
                 placeholder="Your Username"
-                bind:value={username} />
+                bind:value={username}
+                autocapitalize="off" />
             <ListInput
                 label="Password"
                 type="password"
@@ -78,12 +79,14 @@
                 label="Username"
                 type="text"
                 placeholder="Your Username"
-                bind:value={username} />
+                bind:value={username}
+                autocapitalize="off" />
             <ListInput
                 label="Email"
                 type="text"
                 placeholder="Your Email"
-                bind:value={email} />
+                bind:value={email}
+                autocapitalize="off" />
             <ListInput
                 label="Password"
                 type="password"

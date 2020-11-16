@@ -5,8 +5,6 @@
     import SwipeoutButton from 'framework7-svelte/components/swipeout-button.svelte';
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
-
-    console.log(item);
 </script>
 
 <ListItem
@@ -16,17 +14,13 @@
     subtitle="{item.currency}{item.category}"
     onSwipeoutDeleted={() => dispatch('deleted')}>
     <SwipeoutActions left>
-        <SwipeoutButton
-            overswipe
-            color="green"
-            onClick={() => console.log('edit')}>
+        <SwipeoutButton color="green" onClick={() => console.log('edit')}>
             Edit
         </SwipeoutButton>
     </SwipeoutActions>
     <SwipeoutActions right>
         <SwipeoutButton
             delete
-            overswipe
             confirmTitle=" "
             confirmText="Are you sure you want to delete this item?">
             Delete
