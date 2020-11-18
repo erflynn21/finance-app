@@ -3,14 +3,17 @@ import OverviewPage from '../pages/overviewTab.svelte';
 import BudgetPage from '../pages/budgetTab.svelte';
 import TransactionsPage from '../pages/transactionsTab.svelte';
 import SettingsPage from '../pages/settingsTab.svelte';
-import CurrencyOptions from '../pages/currencyOptions.svelte';
-import Budgets from '../pages/budgets.svelte';
-import MonthlyExpenses from '../pages/monthlyExpenses.svelte';
-import MonthlyIncomes from '../pages/monthlyIncomes.svelte';
-
+import CurrencyOptionsPage from '../pages/currencyOptions.svelte';
+import BudgetsPage from '../pages/budgets.svelte';
+import MonthlyExpensesPage from '../pages/monthlyExpenses.svelte';
+import MonthlyIncomesPage from '../pages/monthlyIncomes.svelte';
+import SetCurrenciesPage from '../pages/setCurrencies.svelte';
+import AuthPage from '../pages/auth.svelte';
+import LoadingScreenPage from '../pages/loadingScreen.svelte';
 import NotFoundPage from '../pages/404.svelte';
 
 let routes = [
+
   {
     path: '/',
     component: OverviewPage,
@@ -28,25 +31,40 @@ let routes = [
     component: SettingsPage,
   },
   {
-    path: '/currency-options/',
-    component: CurrencyOptions,
-  },
-  {
     path: '/budgets/',
-    component: Budgets,
+    component: BudgetsPage,
   },
   {
-    path: '/monthly-expenses',
-    component: MonthlyExpenses,
+    path: '/currency-options/',
+    component: CurrencyOptionsPage,
   },
   {
-    path: '/monthly-incomes',
-    component: MonthlyIncomes,
+    path: '/monthly-expenses/',
+    component: MonthlyExpensesPage,
+  },
+  {
+    path: '/monthly-incomes/',
+    component: MonthlyIncomesPage,
+  },
+  {
+    path: '/set-currencies/',
+    popup: {
+      component: SetCurrenciesPage,
+    },
+  },
+  {
+    path: '/auth/',
+    component: AuthPage,
+  },
+  {
+    path: '/loading-screen/',
+    component: LoadingScreenPage,
   },
   {
     path: '(.*)',
     component: NotFoundPage,
   },
+  
 ];
 
 export default routes;

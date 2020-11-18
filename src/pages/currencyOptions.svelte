@@ -2,7 +2,7 @@
     import { Page, Navbar } from 'framework7-svelte';
 </script>
 
-<Page name="currency-options">
+<Page>
     <!-- Top Navbar -->
     <Navbar title="Currency Options" backLink="Back" />
 </Page>

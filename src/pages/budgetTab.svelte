@@ -4,4 +4,5 @@
 
 <Page name="budget">
     <Navbar title="Budget" />
+    hey there from the budget tab
 </Page>
