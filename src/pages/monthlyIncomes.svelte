@@ -8,7 +8,7 @@
     } from '../stores/monthlyIncomesStore';
 </script>
 
-<Page name="monthly-incomes">
+<Page name="monthly-incomes" noToolbar>
     <!-- Top Navbar -->
     <Navbar title="Monthly Recurring Incomes" backLink="Back" />
     <List>

@@ -33,7 +33,7 @@
 <Page name="currency options" noToolbar>
     <Navbar title="Currency Options" backLink="Back" />
 
-    <Block>
+    <Block class="text-align-center">
         <h1>Budget Currency: {$baseCurrency}</h1>
         <h1>Available Currencies: {$currencyOptions}</h1>
 

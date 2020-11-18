@@ -1,11 +1,11 @@
 <script>
     export let item;
+    import { baseCurrencySymbol } from '../stores/currenciesStore';
+    import { currencyDict } from '../stores/currencyDictStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import SwipeoutActions from 'framework7-svelte/components/swipeout-actions.svelte';
     import SwipeoutButton from 'framework7-svelte/components/swipeout-button.svelte';
     import { createEventDispatcher } from 'svelte';
-    import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import { currencyDict } from '../stores/currencyDictStore';
     const dispatch = createEventDispatcher();
 
     let currencySymbol;
@@ -23,11 +23,7 @@
     }
 </script>
 
-<ListItem
-    swipeout
-    title={item.title}
-    after="{currencySymbol}{amount}"
-    subtitle={item.category}>
+<ListItem swipeout title={item.category} after="{currencySymbol}{amount}">
     <SwipeoutActions left>
         <SwipeoutButton color="green" onClick={() => console.log('edit')}>
             Edit
