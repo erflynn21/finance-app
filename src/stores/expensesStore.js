@@ -32,6 +32,7 @@ const updateExpense = (expense, expenseId) => {
 };
 
 const deleteExpense = (expenseId) => {
+    console.log(expenseId);
     return userbase.deleteItem({ databaseName, itemId: expenseId });
 }
 

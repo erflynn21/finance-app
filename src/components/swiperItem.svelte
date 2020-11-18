@@ -11,18 +11,14 @@
     swipeout
     title={item.title}
     after={item.amount}
-    subtitle="{item.currency}{item.category}"
-    onSwipeoutDeleted={() => dispatch('deleted')}>
+    subtitle="{item.currency}{item.category}">
     <SwipeoutActions left>
         <SwipeoutButton color="green" onClick={() => console.log('edit')}>
             Edit
         </SwipeoutButton>
     </SwipeoutActions>
     <SwipeoutActions right>
-        <SwipeoutButton
-            delete
-            confirmTitle=" "
-            confirmText="Are you sure you want to delete this item?">
+        <SwipeoutButton color="red" onClick={() => dispatch('deleted')}>
             Delete
         </SwipeoutButton>
     </SwipeoutActions>

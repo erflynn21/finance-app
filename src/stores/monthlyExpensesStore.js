@@ -1,4 +1,4 @@
-import {writable} from 'svelte/store';
+import {get, writable} from 'svelte/store';
 import userbase from 'userbase-js';
 
 let monthlyExpenses = writable([]);
