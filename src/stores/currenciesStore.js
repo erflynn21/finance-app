@@ -50,18 +50,32 @@ const openCurrenciesDatabase = () => {
     }})
     .catch((e) => console.log(e))
     .finally(() => {
-        baseCurrency.set(get(currencies)[0].item.baseCurrency);
-        currencyOptions.set(get(currencies)[0].item.currencyOptions);
-        baseCurrencySymbol.set(currencyDict[get(baseCurrency)]);
+        setCurrencies();
     });
 }
 
+const setCurrencies = () => {
+    if (get(currencies).length > 0) {
+        baseCurrency.set(get(currencies)[0].item.baseCurrency);
+        currencyOptions.set(get(currencies)[0].item.currencyOptions);
+        baseCurrencySymbol.set(currencyDict[get(baseCurrency)]);
+    } else {
+        return;
+    }
+}
+
 const addCurrencies = (currencies) => {
-    return userbase.insertItem({ databaseName, item: currencies });
+    return userbase.insertItem({ databaseName, item: currencies })
+        .then(() => {
+            setCurrencies();
+        });
 };
 
-const updateCurrencies = (currencies, currenciesId) => {
-    return userbase.updateItem({ databaseName, item: currencies, itemId: currenciesId });
+const updateCurrencies = (updatedCurrencies, updatedCurrenciesId) => {
+    return userbase.updateItem({ databaseName, item: updatedCurrencies, itemId: updatedCurrenciesId })
+        .then(() => {
+            setCurrencies();
+        });
 };
 
 

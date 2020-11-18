@@ -77,7 +77,6 @@
 <App params={f7params}>
     <!-- Views/Tabs container -->
     <Views tabs class="safe-areas">
-        <FabBackdrop />
         {#if $initialized === false && !localStorage.userbaseCurrentSession}
             <Page noNavbar class="safe-areas loader">
                 <Preloader color="green" size={100} />
@@ -99,6 +98,7 @@
 
         <!-- Tabbar for switching views-tabs -->
         {#if $initialized === true && $userStore !== null && currenciesSet === true}
+            <FabBackdrop />
             <Toolbar tabbar bottom bgColor="white">
                 <Link
                     tabLink="#view-overview"

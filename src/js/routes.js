@@ -48,9 +48,7 @@ let routes = [
   },
   {
     path: '/set-currencies/',
-    popup: {
-      component: SetCurrenciesPage,
-    },
+    component: SetCurrenciesPage,
   },
   {
     path: '/auth/',
