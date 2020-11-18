@@ -7,6 +7,8 @@
         View,
         Toolbar,
         Link,
+        Page,
+        Preloader,
     } from 'framework7-svelte';
     import routes from '../js/routes';
     import { userStore, initialized } from '../stores/userStore.js';
@@ -77,16 +79,15 @@
     <Views tabs class="safe-areas">
         <FabBackdrop />
         {#if $initialized === false}
-            <View url="/loading-screen/" class="safe-areas" />
+            <!-- <View url="/loading-screen/" class="safe-areas" /> -->
 
-            <!-- <Page noNavbar class="safe-areas loader">
+            <Page noNavbar class="safe-areas loader">
                 <Preloader color="green" size={100} />
-            </Page> -->
+            </Page>
         {:else if $userStore}
             {#if $currencies === null}
                 <View url="/loading-screen/" class="safe-areas" />
-                <!-- 
-                <Page noNavbar class="safe-areas loader">
+                <!-- <Page noNavbar class="safe-areas loader">
                     <Preloader color="green" size={100} />
                 </Page> -->
             {:else if currenciesSet === false}
@@ -97,7 +98,7 @@
         {/if}
 
         <!-- Tabbar for switching views-tabs -->
-        {#if $initialized === true && $userStore && currenciesSet === true}
+        {#if $initialized === true && $userStore !== null && currenciesSet === true}
             <Toolbar tabbar bottom bgColor="white">
                 <Link
                     tabLink="#view-overview"

@@ -14,7 +14,11 @@
             .signOut()
             .then(() => userStore.set(null))
             .catch((e) => console.log(e))
-            .finally(() => f7.dialog.close());
+            .finally(() => {
+                localStorage.clear();
+                f7.dialog.close();
+                location.reload();
+            });
     };
 </script>
 
