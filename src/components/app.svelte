@@ -31,6 +31,7 @@
     import { openMonthlyIncomesDatabase } from '../stores/monthlyIncomesStore';
     import { openMonthlyBudgetsDatabase } from '../stores/monthlyBudgetsStore';
     import { openMonthlyExpensesDatabase } from '../stores/monthlyExpensesStore';
+    import ActionButton from './actionButton.svelte';
 
     // Framework7 Parameters
     let f7params = {
@@ -98,7 +99,6 @@
 
         <!-- Tabbar for switching views-tabs -->
         {#if $initialized === true && $userStore !== null && currenciesSet === true}
-            <FabBackdrop />
             <Toolbar tabbar bottom bgColor="white">
                 <Link
                     tabLink="#view-overview"
@@ -122,6 +122,8 @@
                     iconColor="gray"
                     iconSize="30px" />
             </Toolbar>
+
+            <ActionButton />
         {/if}
 
         <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
@@ -140,7 +142,7 @@
         <!-- Settings View -->
         <View id="view-settings" name="settings" tab url="/settings/" />
 
-        {#if $initialized === true && $userStore && currenciesSet === true}
+        <!-- {#if $initialized === true && $userStore && currenciesSet === true}
             <Fab position="right-bottom">
                 <Icon ios="f7:plus" md="material:add" />
                 <Icon ios="f7:xmark" md="material:close" />
@@ -175,7 +177,7 @@
                 <div class="swipe-handler" />
                 <AddIncome />
             </Sheet>
-        {/if}
+        {/if} -->
     </Views>
 </App>
 

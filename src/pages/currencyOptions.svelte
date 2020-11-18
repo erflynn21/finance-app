@@ -12,9 +12,8 @@
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import CurrenciesList from '../shared/currenciesList.svelte';
-    import { addCurrencies } from '../stores/currenciesStore';
-    import { createEventDispatcher } from 'svelte';
-    const dispatch = createEventDispatcher();
+    import { onDestroy, onMount } from 'svelte';
+    import { hideFAB, showFAB } from '../js/fab';
 
     let updatedCurrencyOptions;
     let currencyOptionsSelect;
@@ -28,10 +27,17 @@
         };
         updateCurrencies(updatedCurrencies, get(currencies)[0].itemId);
     };
+
+    onMount(() => {
+        hideFAB();
+    });
 </script>
 
 <Page name="currency options" noToolbar>
-    <Navbar title="Currency Options" backLink="Back" />
+    <Navbar
+        title="Currency Options"
+        backLink="Back"
+        on:clickBack={() => showFAB()} />
 
     <Block class="text-align-center">
         <h1>Budget Currency: {$baseCurrency}</h1>

@@ -6,6 +6,7 @@
     import List from 'framework7-svelte/components/list.svelte';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import userbase from 'userbase-js';
+    import ActionButton from '../components/actionButton.svelte';
 
     // sign out
     const signOut = async () => {
@@ -23,6 +24,7 @@
 </script>
 
 <Page name="settings">
+    <!-- <ActionButton /> -->
     <!-- Top Navbar -->
     <Navbar title="Settings" />
     <List>

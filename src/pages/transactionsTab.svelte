@@ -3,6 +3,7 @@
     import BlockHeader from 'framework7-svelte/components/block-header.svelte';
     import BlockTitle from 'framework7-svelte/components/block-title.svelte';
     import List from 'framework7-svelte/components/list.svelte';
+    import ActionButton from '../components/actionButton.svelte';
     import SwiperItem from '../components/swiperItem.svelte';
     import {
         deleteExpense,
@@ -11,6 +12,8 @@
     } from '../stores/expensesStore';
     import { deleteIncome, incomes, incomesSum } from '../stores/incomesStore';
 </script>
+
+<!-- <ActionButton /> -->
 
 <Page name="transactions">
     <Navbar title="Transactions" />

@@ -23,11 +23,7 @@
     }
 </script>
 
-<ListItem
-    swipeout
-    title={item.title}
-    after="{currencySymbol}{amount}"
-    subtitle={item.category}>
+<ListItem swipeout title={item.title} after="{currencySymbol}{amount}">
     <SwipeoutActions left>
         <SwipeoutButton color="green" onClick={() => console.log('edit')}>
             Edit
