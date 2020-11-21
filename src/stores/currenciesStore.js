@@ -7,6 +7,7 @@ let currencies = writable(null);
 let baseCurrency = writable('');
 let baseCurrencySymbol = writable('');
 let currencyOptions = writable('');
+let allCurrencies = writable([]);
 const databaseName = `currencies`;
 
 const openCurrenciesDatabase = () => {
@@ -24,6 +25,13 @@ const setCurrencies = () => {
         baseCurrency.set(get(currencies)[0].item.baseCurrency);
         currencyOptions.set(get(currencies)[0].item.currencyOptions);
         baseCurrencySymbol.set(currencyDict[get(baseCurrency)]);
+
+        let everyCurrency = [];
+        everyCurrency = [...everyCurrency, get(baseCurrency)];
+        get(currencyOptions).forEach(currencyOption => {
+            everyCurrency = [...everyCurrency, currencyOption];
+        });
+        allCurrencies.set(everyCurrency);
     } else {
         return;
     }
@@ -44,4 +52,4 @@ const updateCurrencies = (updatedCurrencies, updatedCurrenciesId) => {
 };
 
 
-export {currencies, baseCurrency, baseCurrencySymbol, currencyOptions, openCurrenciesDatabase, addCurrencies, updateCurrencies };
+export {currencies, baseCurrency, baseCurrencySymbol, currencyOptions, allCurrencies, openCurrenciesDatabase, addCurrencies, updateCurrencies };

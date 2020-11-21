@@ -1,14 +1,27 @@
-import {writable} from 'svelte/store';
+import {get, writable} from 'svelte/store';
 import userbase from 'userbase-js';
 
 let budgets = writable([]);
+let categories = writable([]);
 const databaseName = `budgets`;
 
 const openBudgetsDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
         budgets.set(items);
     }})
-    .catch((e) => console.log(e));
+    .catch((e) => console.log(e))
+    .finally(() => setCategories());
+    ;
+}
+
+const setCategories = () => {
+    if (get(budgets).length > 0) {
+        let budgetCategories = [];
+        get(budgets).forEach((budget) => {
+            budgetCategories = [...budgetCategories, budget.item.category];
+        });
+        categories.set(budgetCategories);
+    }
 }
 
 const addBudget = (budget) => {
@@ -23,4 +36,4 @@ const deleteBudget = (budgetId) => {
     return userbase.deleteItem({ databaseName, itemId: budgetId });
 }
 
-export {budgets, openBudgetsDatabase, addBudget, updateBudget, deleteBudget};
+export {budgets, categories, openBudgetsDatabase, addBudget, updateBudget, deleteBudget};

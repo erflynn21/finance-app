@@ -5,25 +5,28 @@
     import SwipeoutButton from 'framework7-svelte/components/swipeout-button.svelte';
     import { createEventDispatcher } from 'svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import { currencyDict } from '../stores/currencyDictStore';
     const dispatch = createEventDispatcher();
 
-    let currencySymbol;
-    if (item.originalCurrency !== null) {
-        currencySymbol = currencyDict[item.originalCurrency];
+    let date;
+    let date1 = item.date.split('-');
+    let date2 = date1[1] + '/' + date1[2];
+    if (date2.startsWith('0')) {
+        let date3 = date2.split('0');
+        if (date3[2] === undefined) {
+            date = date3[1];
+        } else {
+            date = date3[1] + date3[2];
+        }
     } else {
-        currencySymbol = $baseCurrencySymbol;
-    }
-
-    let amount;
-    if (item.originalAmount !== null) {
-        amount = item.originalAmount;
-    } else {
-        amount = item.amount;
+        date = date2;
     }
 </script>
 
-<ListItem swipeout title={item.title} after="{currencySymbol}{amount}">
+<ListItem
+    swipeout
+    header={date}
+    title={item.title}
+    after="{$baseCurrencySymbol}{item.amount}">
     <SwipeoutActions left>
         <SwipeoutButton color="green" onClick={() => console.log('edit')}>
             Edit

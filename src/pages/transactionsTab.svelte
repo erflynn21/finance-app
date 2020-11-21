@@ -5,6 +5,7 @@
     import List from 'framework7-svelte/components/list.svelte';
     import ActionButton from '../components/actionButton.svelte';
     import SwiperItem from '../components/swiperItem.svelte';
+    import { baseCurrencySymbol } from '../stores/currenciesStore';
     import {
         deleteExpense,
         expenses,
@@ -18,7 +19,7 @@
 <Page name="transactions">
     <Navbar title="Transactions" />
     <h1>Expenses:</h1>
-    <h3>Total Expenses: {$expensesSum}</h3>
+    <h3>Total Expenses: {$baseCurrencySymbol}{$expensesSum}</h3>
 
     <List>
         {#each $expenses as { item, itemId } (itemId)}

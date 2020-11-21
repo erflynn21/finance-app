@@ -1,25 +1,35 @@
 <script>
-    import { budgets } from '../stores/budgetsStore';
-
-    import { baseCurrency, currencyOptions } from '../stores/currenciesStore';
+    import ListInput from 'framework7-svelte/components/list-input.svelte';
+    import List from 'framework7-svelte/components/list.svelte';
+    import { f7 } from 'framework7-svelte';
+    import { categories } from '../stores/budgetsStore';
+    import { allCurrencies, baseCurrency } from '../stores/currenciesStore';
+    import Button from 'framework7-svelte/components/button.svelte';
+    import Block from 'framework7-svelte/components/block.svelte';
+    import BlockTitle from 'framework7-svelte/components/block-title.svelte';
     import { addExpense } from '../stores/expensesStore';
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
 
     let recurring = false;
 
-    let expense = {
-        title: '',
-        amount: '',
-        category: '',
-        date: new Date().toISOString().substr(0, 10),
-        currency: '',
-        originalAmount: null,
-        originalCurrency: null,
-    };
+    let expense = {};
+    $: if ($baseCurrency !== '') {
+        expense = {
+            title: '',
+            amount: '',
+            category: '',
+            date: new Date().toISOString().substr(0, 10),
+            currency: $baseCurrency,
+            originalAmount: null,
+            originalCurrency: null,
+        };
+    }
 
     let error = '';
 
     async function handleAddExpense() {
+        expense.category = expense.category[0];
+        expense.amount = Number(expense.amount);
         if (
             expense.title === '' ||
             expense.amount === null ||
@@ -30,6 +40,7 @@
         } else {
             error = '';
         }
+
         // check whether expense needs to be converted to base currency
         if (expense.currency === '' || expense.currency === $baseCurrency) {
             expense.currency = $baseCurrency;
@@ -68,7 +79,7 @@
 
     async function convertAmount() {
         expense.originalAmount = expense.amount;
-        expense.originalCurrency = expense.currency;
+        expense.originalCurrency = expense.currency[0];
         let url = `https://api.exchangeratesapi.io/${expense.date}?base=${$baseCurrency}&symbols=${expense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
@@ -79,123 +90,103 @@
         );
         expense.currency = $baseCurrency;
     }
+
+    let pickerCategory;
+    let pickerCurrency;
+    let dateCalendar;
+
+    const initPickers = () => {
+        pickerCategory = f7.picker.create({
+            inputEl: '#categoryPicker',
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: $categories,
+                },
+            ],
+            on: {
+                change: function (value) {
+                    expense.category = value.value;
+                },
+            },
+        });
+
+        pickerCurrency = f7.picker.create({
+            inputEl: '#currencyPicker',
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: $allCurrencies,
+                },
+            ],
+            on: {
+                change: function (value) {
+                    expense.currency = value.value;
+                },
+            },
+        });
+
+        dateCalendar = f7.calendar.create({
+            inputEl: '#dateCalendar',
+            on: {
+                change: function () {
+                    expense.date = dateCalendar.value[0].toLocaleDateString();
+                },
+            },
+            dateFormat: 'mm/dd/yyyy',
+        });
+    };
+
+    $: if ($categories.length > 0 && $allCurrencies.length > 0) {
+        initPickers();
+    }
 </script>
 
-<form class="new-expense" on:submit|preventDefault={handleAddExpense}>
-    <div class="date">
-        <label for="date">Date: </label>
-        <input type="date" name="date" bind:value={expense.date} />
-    </div>
-
-    <div class="title">
-        <label for="title">Expense: </label>
-        <input
+<Block>
+    <BlockTitle class="text-align-center">Add Expense</BlockTitle>
+    <List noHairlines>
+        <ListInput
+            outline
+            floatingLabel
+            label="Date:"
+            placeholder="Select Date"
+            readonly
+            inputId="dateCalendar"
+            value={expense.date} />
+        <ListInput
+            outline
+            floatingLabel
+            label="Expense:"
             type="text"
-            placeholder="Name"
+            placeholder="Your Expense"
             bind:value={expense.title}
-            autocapitalize="off" />
-    </div>
+            autocapitalize="off"
+            clearButton />
 
-    <div class="amount">
-        <label for="amount">Amount: </label>
-        <input type="number" placeholder="0.00" bind:value={expense.amount} />
-    </div>
-
-    <div class="category">
-        <label for="category">Category: </label>
-        <select id="category" bind:value={expense.category}>
-            <option disabled selected value>-- Select a Category --</option>
-            {#each $budgets as { item, itemId } (itemId)}
-                <option value={item.category}>{item.category}</option>
-            {/each}
-        </select>
-    </div>
-
-    <div class="currency">
-        <label for="currency">Currency: </label>
-        <select id="expense-currency" bind:value={expense.currency}>
-            <option value={$baseCurrency}>{$baseCurrency}</option>
-            {#each $currencyOptions as currencyOption}
-                <option value={currencyOption}>{currencyOption}</option>
-            {/each}
-        </select>
-    </div>
-
-    <span class="recurring">
-        <input type="checkbox" bind:value={recurring} />
-        <label for="recurring">This is a monthly recurring expense.</label>
-    </span>
-
-    <span class="error">
-        <p>{error}</p>
-    </span>
-
-    <div><button on:click|preventDefault={handleAddExpense}>Add</button></div>
-</form>
-
-<style>
-    .new-expense {
-        width: 100%;
-        background: white;
-    }
-
-    .new-expense div {
-        margin: 15px 0;
-        display: grid;
-        grid-template-columns: 0.5fr 1fr;
-    }
-
-    input {
-        border: none;
-        background: transparent;
-    }
-
-    select {
-        background: transparent;
-    }
-
-    input:active {
-        border: none;
-    }
-
-    .date input {
-        width: 65%;
-    }
-
-    .title input {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        padding-bottom: 5px;
-    }
-
-    .amount input {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        padding-bottom: 5px;
-    }
-
-    .category select {
-        width: 80%;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .currency select {
-        width: 30%;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .currency {
-        padding-bottom: 15px;
-    }
-
-    button {
-        width: 60%;
-        justify-self: center;
-        height: 35px;
-        grid-column: 1/3;
-        border-radius: 10px;
-        cursor: pointer;
-        border: 0;
-        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-        background: green;
-        color: white;
-    }
-</style>
+        <ListInput
+            outline
+            floatingLabel
+            label="Amount:"
+            type="number"
+            bind:value={expense.amount}
+            placeholder="Amount"
+            clearButton />
+        <ListInput
+            outline
+            floatingLabel
+            label="Category"
+            placeholder="Category"
+            readonly
+            value={expense.category}
+            inputId="categoryPicker"
+            clearButton />
+        <ListInput
+            outline
+            floatingLabel
+            label="Currency"
+            value={expense.currency}
+            readonly
+            inputId="currencyPicker" />
+    </List>
+    <Button on:click={handleAddExpense}>Add</Button>
+</Block>
