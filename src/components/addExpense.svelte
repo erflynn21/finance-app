@@ -9,6 +9,7 @@
     import BlockTitle from 'framework7-svelte/components/block-title.svelte';
     import { addExpense } from '../stores/expensesStore';
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
+    import ListItem from 'framework7-svelte/components/list-item.svelte';
 
     let recurring = false;
 
@@ -62,7 +63,6 @@
             });
         } else {
             expense.recurringdate = expense.date.slice(-2);
-
             // add the recurring expense
             addMonthlyExpense(expense).then(() => {
                 // clear form
@@ -187,6 +187,10 @@
             value={expense.currency}
             readonly
             inputId="currencyPicker" />
+        <ListItem
+            checkbox
+            onChange={() => (recurring = !recurring)}
+            title="This is a monthly recurring expense" />
     </List>
     <Button on:click={handleAddExpense}>Add</Button>
 </Block>
