@@ -81,3 +81,20 @@
 .list ul::after {
   content: none;
 }
+
+.modal-margin-top {
+  margin-top: 15px;
+}
+
+.block-title {
+  margin-bottom: 0;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.add-expense-form {
+  margin-bottom: 10px;
+}

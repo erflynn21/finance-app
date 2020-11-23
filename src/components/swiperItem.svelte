@@ -36,7 +36,8 @@
             delete
             color="red"
             overswipe
-            confirmText="Are you sure you want to delete this item?">
+            confirmText="Are you sure you want to delete this item?"
+            confirmTitle=" ">
             Delete
         </SwipeoutButton>
     </SwipeoutActions>
