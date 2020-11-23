@@ -23,6 +23,8 @@
     import { openMonthlyBudgetsDatabase } from '../stores/monthlyBudgetsStore';
     import { openMonthlyExpensesDatabase } from '../stores/monthlyExpensesStore';
     import ActionButton from './actionButton.svelte';
+    import { Plugins, KeyboardInfo } from '@capacitor/core';
+    const { Keyboard } = Plugins;
 
     // Framework7 Parameters
     let f7params = {
@@ -43,6 +45,8 @@
             backdrop: true,
         },
     };
+
+    Keyboard.setAccessoryBarVisible({ isVisible: true });
 
     // checking if user has set base currency and currency options
     let currenciesSet;

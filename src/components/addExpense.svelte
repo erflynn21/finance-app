@@ -11,7 +11,6 @@
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { Plugins, KeyboardInfo } from '@capacitor/core';
-    import BlockHeader from 'framework7-svelte/components/block-header.svelte';
     const { Keyboard } = Plugins;
 
     let recurring = false;
@@ -106,6 +105,9 @@
                 },
             ],
             on: {
+                open: function () {
+                    Keyboard.hide();
+                },
                 change: function (value) {
                     expense.category = value.value;
                     expense.category = expense.category[0];
@@ -122,6 +124,9 @@
                 },
             ],
             on: {
+                open: function () {
+                    Keyboard.hide();
+                },
                 change: function (value) {
                     expense.currency = value.value;
                 },
@@ -131,6 +136,9 @@
         dateCalendar = f7.calendar.create({
             inputEl: '#dateCalendar',
             on: {
+                open: function () {
+                    Keyboard.hide();
+                },
                 change: function () {
                     expense.date = dateCalendar.value[0].toLocaleDateString();
                 },
@@ -168,6 +176,7 @@
             clearButton
             required
             autofocus
+            on:click={Keyboard.show()}
             on:input={() => f7.input.validate('#expenseTitle')}
             validateOnBlur
             errorMessage="Please provide a valid expense name." />
@@ -184,6 +193,7 @@
             clearButton
             required
             validateOnBlur
+            pattern="[0-9]*"
             on:input={() => f7.input.validate('#expenseAmount')}
             errorMessage="Please provide a valid amount." />
 

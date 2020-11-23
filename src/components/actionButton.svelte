@@ -8,6 +8,7 @@
     import AddExpense from './addExpense.svelte';
     import AddIncome from './addIncome.svelte';
     import FabBackdrop from 'framework7-svelte/components/fab-backdrop.svelte';
+    import PageContent from 'framework7-svelte/components/page-content.svelte';
 </script>
 
 <FabBackdrop />
@@ -29,7 +30,7 @@
     </FabButtons>
 </Fab>
 
-<Sheet class="add-expense" style="height: auto;" swipeToClose backdrop>
+<Sheet class="add-expense" style="height: auto; max-height: 80vh" backdrop>
     <div class="swipe-handler" />
     <AddExpense />
 </Sheet>
