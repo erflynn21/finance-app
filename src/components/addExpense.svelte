@@ -22,7 +22,7 @@
             title: null,
             amount: null,
             category: null,
-            date: new Date().toISOString().substr(0, 10),
+            date: new Date().toLocaleDateString(),
             currency: $baseCurrency,
             originalAmount: null,
             originalCurrency: null,

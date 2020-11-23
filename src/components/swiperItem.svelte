@@ -8,8 +8,8 @@
     const dispatch = createEventDispatcher();
 
     let date;
-    let date1 = item.date.split('-');
-    let date2 = date1[1] + '/' + date1[2];
+    let date1 = item.date.split('/');
+    let date2 = date1[0] + '/' + date1[1];
     if (date2.startsWith('0')) {
         let date3 = date2.split('0');
         if (date3[2] === undefined) {
