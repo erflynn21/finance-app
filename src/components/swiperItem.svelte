@@ -26,14 +26,17 @@
     swipeout
     header={date}
     title={item.title}
-    after="{$baseCurrencySymbol}{item.amount}">
-    <SwipeoutActions left>
-        <SwipeoutButton color="green" onClick={() => console.log('edit')}>
+    after="{$baseCurrencySymbol}{item.amount}"
+    on:swipeoutDelete={() => dispatch('deleted')}>
+    <SwipeoutActions right>
+        <SwipeoutButton onClick={() => console.log('edit')}>
             Edit
         </SwipeoutButton>
-    </SwipeoutActions>
-    <SwipeoutActions right>
-        <SwipeoutButton color="red" onClick={() => dispatch('deleted')}>
+        <SwipeoutButton
+            delete
+            color="red"
+            overswipe
+            confirmText="Are you sure you want to delete this item?">
             Delete
         </SwipeoutButton>
     </SwipeoutActions>
