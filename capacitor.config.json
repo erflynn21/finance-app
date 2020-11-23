@@ -9,6 +9,9 @@
       "launchAutoHide": false,
       "showSpinner": true,
       "spinnerColor": "#ffffff"
+    },
+    "Keyboard": {
+      "resize": "native"
     }
   },
   "cordova": {},

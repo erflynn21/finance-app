@@ -10,15 +10,17 @@
     import { addExpense } from '../stores/expensesStore';
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
+    import { Plugins, KeyboardInfo } from '@capacitor/core';
+    const { Keyboard } = Plugins;
 
     let recurring = false;
 
     let expense = {};
     $: if ($baseCurrency !== '') {
         expense = {
-            title: '',
-            amount: '',
-            category: '',
+            title: null,
+            amount: null,
+            category: null,
             date: new Date().toISOString().substr(0, 10),
             currency: $baseCurrency,
             originalAmount: null,
@@ -26,21 +28,23 @@
         };
     }
 
-    let error = '';
-
     async function handleAddExpense() {
-        expense.category = expense.category[0];
-        expense.amount = Number(expense.amount);
+        // validates the different inputs
+        f7.input.validate('#expenseTitle');
+        f7.input.validate('#expenseAmount');
+        f7.input.validate('#categoryPicker');
+
+        // breaks out of function if any inputs are left blank
         if (
-            expense.title === '' ||
+            expense.title === null ||
             expense.amount === null ||
-            expense.category === '-- Select a Category --'
+            expense.category === null
         ) {
-            error = `Please fill in all fields before submitting an expense`;
             return;
-        } else {
-            error = '';
         }
+
+        // formats the amount to a number
+        expense.amount = Number(expense.amount);
 
         // check whether expense needs to be converted to base currency
         if (expense.currency === '' || expense.currency === $baseCurrency) {
@@ -52,30 +56,26 @@
         if (recurring === false) {
             // add the expense
             addExpense(expense).then(() => {
-                // clear form
-                expense.title = '';
-                expense.date = new Date().toISOString().substr(0, 10);
-                expense.category = '';
-                expense.amount = '';
-                expense.currency = $baseCurrency;
-                expense.originalCurrency = null;
-                expense.originalAmount = null;
+                clearForm();
             });
         } else {
             expense.recurringdate = expense.date.slice(-2);
             // add the recurring expense
             addMonthlyExpense(expense).then(() => {
-                // clear form
-                expense.title = '';
-                expense.date = new Date().toISOString().substr(0, 10);
-                expense.category = '';
-                expense.amount = '';
-                expense.currency = $baseCurrency;
-                expense.originalCurrency = null;
-                expense.originalAmount = null;
+                clearForm();
             });
         }
     }
+
+    const clearForm = () => {
+        expense.title = null;
+        expense.date = new Date().toISOString().substr(0, 10);
+        expense.category = null;
+        expense.amount = null;
+        expense.currency = $baseCurrency;
+        expense.originalCurrency = null;
+        expense.originalAmount = null;
+    };
 
     async function convertAmount() {
         expense.originalAmount = expense.amount;
@@ -107,6 +107,7 @@
             on: {
                 change: function (value) {
                     expense.category = value.value;
+                    expense.category = expense.category[0];
                 },
             },
         });
@@ -144,7 +145,7 @@
 
 <Block>
     <BlockTitle class="text-align-center">Add Expense</BlockTitle>
-    <List noHairlines>
+    <List noHairlines class="add-expense-form">
         <ListInput
             outline
             floatingLabel
@@ -153,33 +154,53 @@
             readonly
             inputId="dateCalendar"
             value={expense.date} />
+
         <ListInput
             outline
             floatingLabel
             label="Expense:"
             type="text"
             placeholder="Your Expense"
-            bind:value={expense.title}
             autocapitalize="off"
-            clearButton />
+            inputId="expenseTitle"
+            bind:value={expense.title}
+            clearButton
+            required
+            autofocus
+            on:input={() => f7.input.validate('#expenseTitle')}
+            validateOnBlur
+            errorMessage="Please provide a valid expense name." />
 
         <ListInput
             outline
             floatingLabel
             label="Amount:"
             type="number"
-            bind:value={expense.amount}
             placeholder="Amount"
-            clearButton />
+            autocapitalize="off"
+            inputId="expenseAmount"
+            bind:value={expense.amount}
+            clearButton
+            required
+            validateOnBlur
+            on:input={() => f7.input.validate('#expenseAmount')}
+            errorMessage="Please provide a valid amount." />
+
         <ListInput
             outline
             floatingLabel
             label="Category"
             placeholder="Category"
+            type="text"
             readonly
             value={expense.category}
             inputId="categoryPicker"
-            clearButton />
+            clearButton
+            required
+            validateOnBlur
+            on:input={() => f7.input.validate('#categoryPicker')}
+            errorMessage="Please select a category." />
+
         <ListInput
             outline
             floatingLabel
