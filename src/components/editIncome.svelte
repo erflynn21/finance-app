@@ -58,7 +58,7 @@
     }
 
     async function convertAmount() {
-        let url = `https://api.exchangeratesapi.io/${updatedIncome.date}?base=${$baseCurrency}&symbols=${updatedExpense.originalCurrency}`;
+        let url = `https://api.exchangeratesapi.io/${updatedIncome.date}?base=${$baseCurrency}&symbols=${updatedIncome.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
         let rates = JSON.stringify(data.rates);

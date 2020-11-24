@@ -117,7 +117,7 @@
             },
         });
 
-        editDateCalendar = f7.calendar.create({
+        editExpenseDateCalendar = f7.calendar.create({
             inputEl: '#editExpenseDateCalendar',
             on: {
                 open: function () {
