@@ -42,7 +42,17 @@
     <AddExpense />
 </Sheet>
 
-<Sheet class="add-income" style="height: auto;" swipeToClose backdrop>
+<Sheet
+    class="add-income"
+    style="height: auto; max-height: 70vh"
+    swipeToClose
+    backdrop>
+    <Toolbar>
+        <div class="left">Add New Income</div>
+        <div class="right">
+            <Link sheetClose>Close</Link>
+        </div>
+    </Toolbar>
     <div class="swipe-handler" />
     <AddIncome />
 </Sheet>

@@ -161,7 +161,7 @@
 </script>
 
 <Block>
-    <List noHairlines class="add-expense-form modal-form">
+    <List noHairlines class="add-form modal-form">
         <ListInput
             outline
             floatingLabel

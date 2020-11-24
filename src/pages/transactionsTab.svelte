@@ -26,13 +26,14 @@
         {/each}
     </List>
     <h1>Income:</h1>
-    <h3>Total Income: {$incomesSum}</h3>
+    <h3>Total Income: {$baseCurrencySymbol}{$incomesSum}</h3>
 
     <List>
         {#each $incomes as { item, itemId } (itemId)}
             <SwiperItem
                 {item}
                 {itemId}
+                type="income"
                 on:deleted={() => deleteIncome(itemId)} />
         {/each}
     </List>

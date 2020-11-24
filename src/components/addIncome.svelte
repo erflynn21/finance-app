@@ -1,65 +1,85 @@
 <script>
-    import { baseCurrency, currencyOptions } from '../stores/currenciesStore';
+    import { allCurrencies, baseCurrency } from '../stores/currenciesStore';
+    import { f7 } from 'framework7-svelte';
+    import Button from 'framework7-svelte/components/button.svelte';
+    import Block from 'framework7-svelte/components/block.svelte';
+    import ListInput from 'framework7-svelte/components/list-input.svelte';
+    import List from 'framework7-svelte/components/list.svelte';
+    import { categories } from '../stores/budgetsStore';
     import { addMonthlyIncome } from '../stores/monthlyIncomesStore';
     import { addIncome } from '../stores/incomesStore';
+    import ListItem from 'framework7-svelte/components/list-item.svelte';
+    import { Plugins } from '@capacitor/core';
+    import Row from 'framework7-svelte/components/row.svelte';
+    import Col from 'framework7-svelte/components/col.svelte';
+    const { Keyboard } = Plugins;
 
     let recurring = false;
 
-    let income = {
-        title: '',
-        amount: '',
-        date: new Date().toISOString().substr(0, 10),
-        currency: '',
-        originalAmount: null,
-        originalCurrency: null,
-    };
+    let income = {};
+    $: if ($baseCurrency !== '') {
+        income = {
+            title: null,
+            amount: null,
+            date: new Date().toISOString().substr(0, 10),
+            currency: $baseCurrency,
+            originalAmount: null,
+            originalCurrency: null,
+        };
+    }
 
-    let error = '';
+    const handleAddIncome = async () => {
+        // validates the different inputs
+        f7.input.validate('#incomeTitle');
+        f7.input.validate('#incomeAmount');
 
-    async function handleAddIncome() {
-        if (income.title === '' || income.amount === null) {
-            error = `Please fill in all fields before submitting an income.`;
+        // breaks out of function if any inputs are left blank
+        if (income.title === null || income.amount === null) {
             return;
-        } else {
-            error = '';
         }
+
+        f7.dialog.preloader('Adding expense...');
+        // formats the amount to a number
+        income.amount = Number(income.amount);
 
         // check whether expense needs to be converted to base currency
         if (income.currency === '' || income.currency === $baseCurrency) {
             income.currency = $baseCurrency;
         } else {
-            await convertAmount();
+            f7.dialog.preloader('Converting to ' + $baseCurrency);
+            await convertAmount().then(f7.dialog.close());
         }
 
         if (recurring === false) {
-            // add the income
+            // add the expense
             addIncome(income).then(() => {
-                // clear form
-                income.title = '';
-                income.date = new Date().toISOString().substr(0, 10);
-                income.amount = null;
-                income.currency = $baseCurrency;
-                income.originalCurrency = null;
-                income.originalAmount = null;
+                clearForm();
             });
         } else {
             income.recurringdate = income.date.slice(-2);
-
+            // add the recurring expense
             addMonthlyIncome(income).then(() => {
-                // clear form
-                income.title = '';
-                income.date = new Date().toISOString().substr(0, 10);
-                income.amount = null;
-                income.currency = $baseCurrency;
-                income.originalCurrency = null;
-                income.originalAmount = null;
+                clearForm();
             });
         }
-    }
+
+        f7.dialog.close();
+    };
+
+    const clearForm = () => {
+        income.title = null;
+        income.date = new Date().toISOString().substr(0, 10);
+        income.category = null;
+        income.amount = null;
+        income.currency = $baseCurrency;
+        income.originalCurrency = null;
+        income.originalAmount = null;
+    };
 
     async function convertAmount() {
         income.originalAmount = income.amount;
-        income.originalCurrency = income.currency;
+        income.originalCurrency = income.currency[0];
+
         let url = `https://api.exchangeratesapi.io/${income.date}?base=${$baseCurrency}&symbols=${income.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
@@ -70,103 +90,109 @@
         );
         income.currency = $baseCurrency;
     }
+
+    let incomeCurrencyPicker;
+    let incomeDateCalendar;
+
+    const initPickers = () => {
+        incomeCurrencyPicker = f7.picker.create({
+            inputEl: '#incomeCurrencyPicker',
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: $allCurrencies,
+                },
+            ],
+            on: {
+                open: function () {
+                    Keyboard.hide();
+                },
+                change: function (value) {
+                    income.currency = value.value;
+                },
+            },
+        });
+
+        incomeDateCalendar = f7.calendar.create({
+            inputEl: '#incomeDateCalendar',
+            on: {
+                open: function () {
+                    Keyboard.hide();
+                },
+                change: function () {
+                    income.date = incomeDateCalendar.value[0]
+                        .toISOString()
+                        .substr(0, 10);
+                },
+            },
+        });
+    };
+
+    $: if ($categories.length > 0 && $allCurrencies.length > 0) {
+        initPickers();
+    }
 </script>
 
-<form class="new-income" on:submit|preventDefault={handleAddIncome}>
-    <div class="date">
-        <label for="date">Date: </label>
-        <input type="date" id="today" bind:value={income.date} />
-    </div>
+<Block>
+    <List noHairlines class="add-form modal-form">
+        <ListInput
+            outline
+            floatingLabel
+            label="Date:"
+            placeholder="Select Date"
+            readonly
+            inputId="incomeDateCalendar"
+            value={income.date} />
 
-    <div class="title">
-        <label for="title">Income: </label>
-        <input
+        <ListInput
+            outline
+            floatingLabel
+            label="Expense:"
             type="text"
-            placeholder="Name"
+            placeholder="Your Expense"
+            autocapitalize="off"
+            inputId="incomeTitle"
             bind:value={income.title}
-            autocapitalize="off" />
-    </div>
+            clearButton
+            required
+            autofocus
+            on:input={() => f7.input.validate('#incomeTitle')}
+            errorMessage="Please provide a valid income name." />
 
-    <div class="amount">
-        <label for="amount">Amount: </label>
-        <input type="number" placeholder="0.00" bind:value={income.amount} />
-    </div>
+        <Row>
+            <Col width="66">
+                <ListInput
+                    outline
+                    floatingLabel
+                    label="Amount:"
+                    type="number"
+                    placeholder="Amount"
+                    autocapitalize="off"
+                    inputId="incomeAmount"
+                    step="0.01"
+                    inputmode="decimal"
+                    pattern="[0-9]*"
+                    bind:value={income.amount}
+                    clearButton
+                    required
+                    on:input={() => f7.input.validate('#incomeAmount')}
+                    errorMessage="Please provide a valid amount." />
+            </Col>
+            <Col width="33">
+                <ListInput
+                    outline
+                    floatingLabel
+                    label="Currency"
+                    value={income.currency}
+                    readonly
+                    inputId="incomeCurrencyPicker" />
+            </Col>
+        </Row>
 
-    <div class="currency">
-        <label for="currency">Currency: </label>
-        <select id="income-currency" bind:value={income.currency}>
-            <option value={$baseCurrency}>{$baseCurrency}</option>
-            {#each $currencyOptions as currencyOption}
-                <option value={currencyOption}>{currencyOption}</option>
-            {/each}
-        </select>
-    </div>
-
-    <span class="recurring">
-        <input type="checkbox" bind:value={recurring} />
-        <label for="recurring">This is a monthly recurring expense.</label>
-    </span>
-
-    <span class="error">
-        <p>{error}</p>
-    </span>
-
-    <button on:click|preventDefault={handleAddIncome}>Add</button>
-</form>
-
-<style>
-    .new-income {
-        width: 100%;
-        background: white;
-    }
-
-    .new-income div {
-        margin: 15px 0;
-        display: grid;
-        grid-template-columns: 0.5fr 1fr;
-    }
-
-    input {
-        border: none;
-    }
-
-    input:active {
-        border: none;
-    }
-
-    .date input {
-        width: 65%;
-    }
-
-    .title input {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        padding-bottom: 5px;
-    }
-
-    .amount input {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        padding-bottom: 5px;
-    }
-
-    .currency select {
-        width: 30%;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .currency {
-        padding-bottom: 15px;
-    }
-
-    button {
-        width: 60%;
-        justify-self: center;
-        height: 35px;
-        grid-column: 1/3;
-        border-radius: 10px;
-        cursor: pointer;
-        border: 0;
-        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-        background: green;
-        color: white;
-    }
-</style>
+        <ListItem
+            checkbox
+            onChange={() => (recurring = !recurring)}
+            title="This is a monthly recurring income" />
+    </List>
+    <Button on:click={handleAddIncome}>Add</Button>
+</Block>

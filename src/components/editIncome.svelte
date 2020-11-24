@@ -9,19 +9,18 @@
     import Button from 'framework7-svelte/components/button.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
     import { onDestroy, onMount } from 'svelte';
-    import { updateExpense } from '../stores/expensesStore';
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
+    import { updateIncome } from '../stores/incomesStore';
     const { Keyboard } = Plugins;
 
-    let updatedExpense = {
+    let updatedIncome = {
         title: item.title,
         date: item.date,
         amount: item.amount,
-        category: item.category,
         originalAmount: item.originalAmount,
         currency: item.currency,
         originalCurrency: item.originalCurrency,
@@ -31,31 +30,26 @@
         // validates the different inputs
         f7.input.validate('#editedTitle');
         f7.input.validate('#editedAmount');
-        f7.input.validate('#editCategoryPicker');
 
         // breaks out of function if any inputs are left blank
-        if (
-            updatedExpense.title === null ||
-            updatedExpense.amount === null ||
-            updatedExpense.category === null
-        ) {
+        if (updatedIncome.title === null || updatedIncome.amount === null) {
             return;
         }
 
         f7.dialog.preloader('Updating expense...');
         // formats the amount to a number
-        updatedExpense.amount = Number(updatedExpense.amount);
+        updatedIncome.amount = Number(updatedIncome.amount);
 
         // check whether expense needs to be converted to base currency
-        if (updatedExpense.originalAmount !== item.originalAmount) {
+        if (updatedIncome.originalAmount !== item.originalAmount) {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
-            updatedExpense.amount = updatedExpense.originalAmount;
-            updatedExpense.currency = updatedExpense.originalCurrency;
+            updatedIncome.amount = updatedIncome.originalAmount;
+            updatedIncome.currency = updatedIncome.originalCurrency;
             await convertAmount();
         }
 
         // add the expense
-        updateExpense(updatedExpense, itemId).then(() => {
+        updateIncome(updatedIncome, itemId).then(() => {
             dispatch('collapse');
             f7.dialog.close();
         });
@@ -64,43 +58,23 @@
     }
 
     async function convertAmount() {
-        let url = `https://api.exchangeratesapi.io/${updatedExpense.date}?base=${$baseCurrency}&symbols=${updatedExpense.originalCurrency}`;
+        let url = `https://api.exchangeratesapi.io/${updatedIncome.date}?base=${$baseCurrency}&symbols=${updatedExpense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
         let rates = JSON.stringify(data.rates);
         let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-        updatedExpense.amount = Number(
-            (updatedExpense.originalAmount / exchangeRate).toFixed(2)
+        updatedIncome.amount = Number(
+            (updatedIncome.originalAmount / exchangeRate).toFixed(2)
         );
-        updatedExpense.currency = $baseCurrency;
+        updatedIncome.currency = $baseCurrency;
     }
 
-    let editExpenseCategoryPicker;
-    let editExpenseCurrencyPicker;
-    let editExpenseDateCalendar;
+    let editIncomeCurrencyPicker;
+    let editIncomeDateCalendar;
 
     const initPickers = () => {
-        editExpenseCategoryPicker = f7.picker.create({
-            inputEl: '#editCategoryPicker',
-            cols: [
-                {
-                    textAlign: 'center',
-                    values: $categories,
-                },
-            ],
-            on: {
-                open: function () {
-                    Keyboard.hide();
-                },
-                change: function (value) {
-                    updatedExpense.category = value.value;
-                    updatedExpense.category = updatedExpense.category[0];
-                },
-            },
-        });
-
-        editExpenseCurrencyPicker = f7.picker.create({
-            inputEl: '#editExpenseCurrencyPicker',
+        editIncomeCurrencyPicker = f7.picker.create({
+            inputEl: '#editIncomeCurrencyPicker',
             cols: [
                 {
                     textAlign: 'center',
@@ -112,19 +86,19 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    updatedExpense.currency = value.value;
+                    updatedIncome.currency = value.value;
                 },
             },
         });
 
-        editDateCalendar = f7.calendar.create({
-            inputEl: '#editExpenseDateCalendar',
+        editIncomeDateCalendar = f7.calendar.create({
+            inputEl: '#editIncomeDateCalendar',
             on: {
                 open: function () {
                     Keyboard.hide();
                 },
                 change: function () {
-                    updatedExpense.date = editExpenseDateCalendar.value[0]
+                    updatedIncome.date = editIncomeDateCalendar.value[0]
                         .toISOString()
                         .substr(0, 10);
                 },
@@ -137,9 +111,8 @@
     });
 
     onDestroy(() => {
-        editExpenseCategoryPicker.destroy();
-        editExpenseCurrencyPicker.destroy();
-        editExpenseDateCalendar.destroy();
+        editIncomeCurrencyPicker.destroy();
+        editIncomeDateCalendar.destroy();
     });
 </script>
 
@@ -151,22 +124,22 @@
             label="Date:"
             placeholder="Select Date"
             readonly
-            inputId="editExpenseDateCalendar"
-            value={updatedExpense.date} />
+            inputId="editIncomeDateCalendar"
+            value={updatedIncome.date} />
 
         <ListInput
             outline
             floatingLabel
-            label="Expense:"
+            label="Income:"
             type="text"
-            placeholder="Your Expense"
+            placeholder="Your Income"
             autocapitalize="off"
-            inputId="expenseTitle"
-            bind:value={updatedExpense.title}
+            inputId="incomeTitle"
+            bind:value={updatedIncome.title}
             clearButton
             required
-            on:input={() => f7.input.validate('#expenseTitle')}
-            errorMessage="Please provide a valid expense name." />
+            on:input={() => f7.input.validate('#incomeTitle')}
+            errorMessage="Please provide a valid income name." />
 
         <Row>
             <Col>
@@ -178,14 +151,14 @@
                         type="number"
                         placeholder="Amount"
                         autocapitalize="off"
-                        inputId="expenseAmount"
+                        inputId="incomeAmount"
                         step="0.01"
                         inputmode="decimal"
                         pattern="[0-9]*"
-                        bind:value={updatedExpense.originalAmount}
+                        bind:value={updatedIncome.originalAmount}
                         clearButton
                         required
-                        on:input={() => f7.input.validate('#expenseAmount')}
+                        on:input={() => f7.input.validate('#incomeAmount')}
                         errorMessage="Please provide a valid amount." />
                 {:else}
                     <ListInput
@@ -195,14 +168,14 @@
                         type="number"
                         placeholder="Amount"
                         autocapitalize="off"
-                        inputId="expenseAmount"
+                        inputId="incomeAmount"
                         step="0.01"
                         inputmode="decimal"
                         pattern="[0-9]*"
-                        bind:value={updatedExpense.amount}
+                        bind:value={updatedIncome.amount}
                         clearButton
                         required
-                        on:input={() => f7.input.validate('#expenseAmount')}
+                        on:input={() => f7.input.validate('#incomeAmount')}
                         errorMessage="Please provide a valid amount." />
                 {/if}
             </Col>
@@ -212,35 +185,20 @@
                         outline
                         floatingLabel
                         label="Currency"
-                        value={updatedExpense.originalCurrency}
+                        value={updatedIncome.originalCurrency}
                         readonly
-                        inputId="editCurrencyPicker" />
+                        inputId="editIncomeCurrencyPicker" />
                 {:else}
                     <ListInput
                         outline
                         floatingLabel
                         label="Currency"
-                        value={updatedExpense.currency}
+                        value={updatedIncome.currency}
                         readonly
-                        inputId="editCurrencyPicker" />
+                        inputId="editIncomeCurrencyPicker" />
                 {/if}
             </Col>
         </Row>
-
-        <ListInput
-            outline
-            floatingLabel
-            label="Category"
-            placeholder="Category"
-            type="text"
-            readonly
-            value={updatedExpense.category}
-            inputId="editCategoryPicker"
-            clearButton
-            required
-            validateOnBlur
-            on:input={() => f7.input.validate('#editCategoryPicker')}
-            errorMessage="Please select a category." />
     </List>
     <Button on:click={handleAddExpense}>Update</Button>
 </Block>

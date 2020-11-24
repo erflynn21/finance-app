@@ -11,6 +11,7 @@
     import { baseCurrencySymbol } from '../stores/currenciesStore';
     import { createEventDispatcher } from 'svelte';
     import EditExpense from './editExpense.svelte';
+    import EditIncome from './editIncome.svelte';
     const dispatch = createEventDispatcher();
 
     // opens editing modal
@@ -83,5 +84,25 @@
         </Toolbar>
         <div class="swipe-handler" />
         <EditExpense {item} {itemId} on:collapse={closeModal} />
+    </Sheet>
+{/if}
+
+{#if editing === true && type === 'income'}
+    <Sheet
+        class="edit"
+        style="height: auto; max-height: 70vh"
+        backdrop
+        bind:this={editModal}
+        {item}
+        {itemId}
+        {type}>
+        <Toolbar>
+            <div class="left">Edit Expense</div>
+            <div class="right">
+                <Link sheetClose on:click={() => (editing = false)}>Close</Link>
+            </div>
+        </Toolbar>
+        <div class="swipe-handler" />
+        <EditIncome {item} {itemId} on:collapse={closeModal} />
     </Sheet>
 {/if}
