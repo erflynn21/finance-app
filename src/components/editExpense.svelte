@@ -13,6 +13,8 @@
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
+    import Row from 'framework7-svelte/components/row.svelte';
+    import Col from 'framework7-svelte/components/col.svelte';
     const { Keyboard } = Plugins;
 
     let updatedExpense = {
@@ -163,45 +165,67 @@
             bind:value={updatedExpense.title}
             clearButton
             required
-            on:click={Keyboard.show()}
             on:input={() => f7.input.validate('#expenseTitle')}
             errorMessage="Please provide a valid expense name." />
 
-        {#if item.originalCurrency}
-            <ListInput
-                outline
-                floatingLabel
-                label="Amount:"
-                type="number"
-                placeholder="Amount"
-                autocapitalize="off"
-                inputId="expenseAmount"
-                step="0.01"
-                inputmode="decimal"
-                pattern="[0-9]*"
-                bind:value={updatedExpense.originalAmount}
-                clearButton
-                required
-                on:input={() => f7.input.validate('#expenseAmount')}
-                errorMessage="Please provide a valid amount." />
-        {:else}
-            <ListInput
-                outline
-                floatingLabel
-                label="Amount:"
-                type="number"
-                placeholder="Amount"
-                autocapitalize="off"
-                inputId="expenseAmount"
-                step="0.01"
-                inputmode="decimal"
-                pattern="[0-9]*"
-                bind:value={updatedExpense.amount}
-                clearButton
-                required
-                on:input={() => f7.input.validate('#expenseAmount')}
-                errorMessage="Please provide a valid amount." />
-        {/if}
+        <Row>
+            <Col>
+                {#if item.originalCurrency}
+                    <ListInput
+                        outline
+                        floatingLabel
+                        label="Amount:"
+                        type="number"
+                        placeholder="Amount"
+                        autocapitalize="off"
+                        inputId="expenseAmount"
+                        step="0.01"
+                        inputmode="decimal"
+                        pattern="[0-9]*"
+                        bind:value={updatedExpense.originalAmount}
+                        clearButton
+                        required
+                        on:input={() => f7.input.validate('#expenseAmount')}
+                        errorMessage="Please provide a valid amount." />
+                {:else}
+                    <ListInput
+                        outline
+                        floatingLabel
+                        label="Amount:"
+                        type="number"
+                        placeholder="Amount"
+                        autocapitalize="off"
+                        inputId="expenseAmount"
+                        step="0.01"
+                        inputmode="decimal"
+                        pattern="[0-9]*"
+                        bind:value={updatedExpense.amount}
+                        clearButton
+                        required
+                        on:input={() => f7.input.validate('#expenseAmount')}
+                        errorMessage="Please provide a valid amount." />
+                {/if}
+            </Col>
+            <Col>
+                {#if item.originalCurrency}
+                    <ListInput
+                        outline
+                        floatingLabel
+                        label="Currency"
+                        value={updatedExpense.originalCurrency}
+                        readonly
+                        inputId="editCurrencyPicker" />
+                {:else}
+                    <ListInput
+                        outline
+                        floatingLabel
+                        label="Currency"
+                        value={updatedExpense.currency}
+                        readonly
+                        inputId="editCurrencyPicker" />
+                {/if}
+            </Col>
+        </Row>
 
         <ListInput
             outline
@@ -217,24 +241,6 @@
             validateOnBlur
             on:input={() => f7.input.validate('#editCategoryPicker')}
             errorMessage="Please select a category." />
-
-        {#if item.originalCurrency}
-            <ListInput
-                outline
-                floatingLabel
-                label="Currency"
-                value={updatedExpense.originalCurrency}
-                readonly
-                inputId="editCurrencyPicker" />
-        {:else}
-            <ListInput
-                outline
-                floatingLabel
-                label="Currency"
-                value={updatedExpense.currency}
-                readonly
-                inputId="editCurrencyPicker" />
-        {/if}
     </List>
     <Button on:click={handleAddExpense}>Update</Button>
 </Block>

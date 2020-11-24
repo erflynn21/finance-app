@@ -98,3 +98,7 @@
 .modal-form {
   margin-top: 0;
 }
+
+html {
+  scroll-behavior: smooth;
+}

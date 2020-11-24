@@ -10,6 +10,8 @@
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { Plugins } from '@capacitor/core';
+    import Row from 'framework7-svelte/components/row.svelte';
+    import Col from 'framework7-svelte/components/col.svelte';
     const { Keyboard } = Plugins;
 
     let recurring = false;
@@ -181,26 +183,38 @@
             clearButton
             required
             autofocus
-            on:click={Keyboard.show()}
             on:input={() => f7.input.validate('#expenseTitle')}
             errorMessage="Please provide a valid expense name." />
 
-        <ListInput
-            outline
-            floatingLabel
-            label="Amount:"
-            type="number"
-            placeholder="Amount"
-            autocapitalize="off"
-            inputId="expenseAmount"
-            step="0.01"
-            inputmode="decimal"
-            pattern="[0-9]*"
-            bind:value={expense.amount}
-            clearButton
-            required
-            on:input={() => f7.input.validate('#expenseAmount')}
-            errorMessage="Please provide a valid amount." />
+        <Row>
+            <Col>
+                <ListInput
+                    outline
+                    floatingLabel
+                    label="Amount:"
+                    type="number"
+                    placeholder="Amount"
+                    autocapitalize="off"
+                    inputId="expenseAmount"
+                    step="0.01"
+                    inputmode="decimal"
+                    pattern="[0-9]*"
+                    bind:value={expense.amount}
+                    clearButton
+                    required
+                    on:input={() => f7.input.validate('#expenseAmount')}
+                    errorMessage="Please provide a valid amount." />
+            </Col>
+            <Col>
+                <ListInput
+                    outline
+                    floatingLabel
+                    label="Currency"
+                    value={expense.currency}
+                    readonly
+                    inputId="expenseCurrencyPicker" />
+            </Col>
+        </Row>
 
         <ListInput
             outline
@@ -217,13 +231,6 @@
             on:input={() => f7.input.validate('#expenseCategoryPicker')}
             errorMessage="Please select a category." />
 
-        <ListInput
-            outline
-            floatingLabel
-            label="Currency"
-            value={expense.currency}
-            readonly
-            inputId="expenseCurrencyPicker" />
         <ListItem
             checkbox
             onChange={() => (recurring = !recurring)}
