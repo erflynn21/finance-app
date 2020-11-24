@@ -8,15 +8,12 @@
     import { allCurrencies, baseCurrency } from '../stores/currenciesStore';
     import Button from 'framework7-svelte/components/button.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
-    import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { onDestroy, onMount } from 'svelte';
     import { updateExpense } from '../stores/expensesStore';
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
     const { Keyboard } = Plugins;
-
-    let recurring = false;
 
     let updatedExpense = {
         title: item.title,
@@ -43,51 +40,28 @@
             return;
         }
 
-        f7.dialog.preloader('Adding expense...');
+        f7.dialog.preloader('Updating expense...');
         // formats the amount to a number
         updatedExpense.amount = Number(updatedExpense.amount);
 
         // check whether expense needs to be converted to base currency
-        if (
-            updatedExpense.currency === '' ||
-            updatedExpense.currency === $baseCurrency
-        ) {
-            updatedExpense.currency = $baseCurrency;
-        } else {
+        if (updatedExpense.originalAmount !== item.originalAmount) {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
-            await convertAmount().then(f7.dialog.close());
+            updatedExpense.amount = updatedExpense.originalAmount;
+            updatedExpense.currency = updatedExpense.originalCurrency;
+            await convertAmount();
         }
 
-        if (recurring === false) {
-            // add the expense
-            updateExpense(updatedExpense, itemId).then(() => {
-                dispatch('collapse');
-            });
-        } else {
-            expense.recurringdate = expense.date.slice(-2);
-            // add the recurring expense
-            addMonthlyExpense(expense).then(() => {
-                clearForm();
-            });
-        }
+        // add the expense
+        updateExpense(updatedExpense, itemId).then(() => {
+            dispatch('collapse');
+            f7.dialog.close();
+        });
 
         f7.dialog.close();
     }
 
-    const clearForm = () => {
-        updatedExpense.title = null;
-        updatedExpense.date = new Date().toISOString().substr(0, 10);
-        updatedExpense.category = null;
-        updatedExpense.amount = null;
-        updatedExpense.currency = $baseCurrency;
-        updatedExpense.originalCurrency = null;
-        updatedExpense.originalAmount = null;
-    };
-
     async function convertAmount() {
-        updatedExpense.originalAmount = updatedExpense.amount;
-        updatedExpense.originalCurrency = updatedExpense.currency[0];
-
         let url = `https://api.exchangeratesapi.io/${updatedExpense.date}?base=${$baseCurrency}&symbols=${updatedExpense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
@@ -189,27 +163,45 @@
             bind:value={updatedExpense.title}
             clearButton
             required
-            autofocus
             on:click={Keyboard.show()}
             on:input={() => f7.input.validate('#expenseTitle')}
             errorMessage="Please provide a valid expense name." />
 
-        <ListInput
-            outline
-            floatingLabel
-            label="Amount:"
-            type="number"
-            placeholder="Amount"
-            autocapitalize="off"
-            inputId="expenseAmount"
-            step="0.01"
-            inputmode="decimal"
-            pattern="[0-9]*"
-            bind:value={updatedExpense.amount}
-            clearButton
-            required
-            on:input={() => f7.input.validate('#expenseAmount')}
-            errorMessage="Please provide a valid amount." />
+        {#if item.originalCurrency}
+            <ListInput
+                outline
+                floatingLabel
+                label="Amount:"
+                type="number"
+                placeholder="Amount"
+                autocapitalize="off"
+                inputId="expenseAmount"
+                step="0.01"
+                inputmode="decimal"
+                pattern="[0-9]*"
+                bind:value={updatedExpense.originalAmount}
+                clearButton
+                required
+                on:input={() => f7.input.validate('#expenseAmount')}
+                errorMessage="Please provide a valid amount." />
+        {:else}
+            <ListInput
+                outline
+                floatingLabel
+                label="Amount:"
+                type="number"
+                placeholder="Amount"
+                autocapitalize="off"
+                inputId="expenseAmount"
+                step="0.01"
+                inputmode="decimal"
+                pattern="[0-9]*"
+                bind:value={updatedExpense.amount}
+                clearButton
+                required
+                on:input={() => f7.input.validate('#expenseAmount')}
+                errorMessage="Please provide a valid amount." />
+        {/if}
 
         <ListInput
             outline
@@ -226,17 +218,23 @@
             on:input={() => f7.input.validate('#editCategoryPicker')}
             errorMessage="Please select a category." />
 
-        <ListInput
-            outline
-            floatingLabel
-            label="Currency"
-            value={updatedExpense.currency}
-            readonly
-            inputId="editCurrencyPicker" />
-        <ListItem
-            checkbox
-            onChange={() => (recurring = !recurring)}
-            title="This is a monthly recurring expense" />
+        {#if item.originalCurrency}
+            <ListInput
+                outline
+                floatingLabel
+                label="Currency"
+                value={updatedExpense.originalCurrency}
+                readonly
+                inputId="editCurrencyPicker" />
+        {:else}
+            <ListInput
+                outline
+                floatingLabel
+                label="Currency"
+                value={updatedExpense.currency}
+                readonly
+                inputId="editCurrencyPicker" />
+        {/if}
     </List>
-    <Button on:click={handleAddExpense}>Add</Button>
+    <Button on:click={handleAddExpense}>Update</Button>
 </Block>
