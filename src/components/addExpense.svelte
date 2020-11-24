@@ -11,6 +11,8 @@
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { Plugins, KeyboardInfo } from '@capacitor/core';
+    import Row from 'framework7-svelte/components/row.svelte';
+    import Col from 'framework7-svelte/components/col.svelte';
     const { Keyboard } = Plugins;
 
     let recurring = false;
@@ -152,8 +154,8 @@
     }
 </script>
 
-<Block class="modal-margin-top">
-    <BlockTitle class="text-align-center modal-title">Add Expense</BlockTitle>
+<Block>
+    <!-- <BlockTitle class="text-align-center modal-title">Add Expense</BlockTitle> -->
     <List noHairlines class="add-expense-form">
         <ListInput
             outline

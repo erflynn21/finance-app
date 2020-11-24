@@ -9,6 +9,8 @@
     import AddIncome from './addIncome.svelte';
     import FabBackdrop from 'framework7-svelte/components/fab-backdrop.svelte';
     import PageContent from 'framework7-svelte/components/page-content.svelte';
+    import Toolbar from 'framework7-svelte/components/toolbar.svelte';
+    import Link from 'framework7-svelte/components/link.svelte';
 </script>
 
 <FabBackdrop />
@@ -31,6 +33,12 @@
 </Fab>
 
 <Sheet class="add-expense" style="height: auto; max-height: 80vh" backdrop>
+    <Toolbar>
+        <div class="left">Add New Expense</div>
+        <div class="right">
+            <Link sheetClose>Close</Link>
+        </div>
+    </Toolbar>
     <div class="swipe-handler" />
     <AddExpense />
 </Sheet>

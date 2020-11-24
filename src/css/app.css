@@ -82,10 +82,6 @@
   content: none;
 }
 
-.modal-margin-top {
-  margin-top: 15px;
-}
-
 .block-title {
   margin-bottom: 0;
 }
@@ -97,4 +93,12 @@
 
 .add-expense-form {
   margin-bottom: 10px;
+}
+
+.list {
+  margin-top: 0;
+}
+
+.block {
+  margin-top: 15px;
 }
