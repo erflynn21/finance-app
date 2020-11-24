@@ -70,10 +70,6 @@
   text-transform: none;
 }
 
-/* .list {
-  margin: 0;
-} */
-
 .list ul::before {
   content: none;
 }
@@ -95,10 +91,10 @@
   margin-bottom: 10px;
 }
 
-.list {
-  margin-top: 0;
-}
-
 .block {
   margin-top: 15px;
+}
+
+.modal-form {
+  margin-top: 0;
 }

@@ -10,11 +10,9 @@
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { Plugins } from '@capacitor/core';
-    import LoadingScreen from '../pages/loadingScreen.svelte';
     const { Keyboard } = Plugins;
 
     let recurring = false;
-    let loading = false;
 
     let expense = {};
     // checks to make sure there's a base currency before setting the expense values
@@ -31,7 +29,6 @@
     }
 
     async function handleAddExpense() {
-        loading = true;
         // validates the different inputs
         f7.input.validate('#expenseTitle');
         f7.input.validate('#expenseAmount');
@@ -46,6 +43,7 @@
             return;
         }
 
+        f7.dialog.preloader('Adding expense...');
         // formats the amount to a number
         expense.amount = Number(expense.amount);
 
@@ -53,7 +51,8 @@
         if (expense.currency === '' || expense.currency === $baseCurrency) {
             expense.currency = $baseCurrency;
         } else {
-            await convertAmount();
+            f7.dialog.preloader('Converting to ' + $baseCurrency);
+            await convertAmount().then(f7.dialog.close());
         }
 
         if (recurring === false) {
@@ -69,13 +68,13 @@
             });
         }
 
-        loading = false;
+        f7.dialog.close();
     }
 
     const clearForm = () => {
         expense.title = null;
-        (expense.date = new Date().toISOString().substr(0, 10)),
-            (expense.category = null);
+        expense.date = new Date().toISOString().substr(0, 10);
+        expense.category = null;
         expense.amount = null;
         expense.currency = $baseCurrency;
         expense.originalCurrency = null;
@@ -159,12 +158,8 @@
     }
 </script>
 
-<!-- 
-{#if loading}
-    <LoadingScreen />
-{:else} -->
 <Block>
-    <List noHairlines class="add-expense-form">
+    <List noHairlines class="add-expense-form modal-form">
         <ListInput
             outline
             floatingLabel
@@ -218,6 +213,7 @@
             inputId="categoryPicker"
             clearButton
             required
+            validateOnBlur
             on:input={() => f7.input.validate('#categoryPicker')}
             errorMessage="Please select a category." />
 
@@ -235,4 +231,3 @@
     </List>
     <Button on:click={handleAddExpense}>Add</Button>
 </Block>
-<!-- {/if} -->
