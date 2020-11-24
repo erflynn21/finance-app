@@ -1,9 +1,6 @@
 <script>
     import { Page, Navbar } from 'framework7-svelte';
-    import BlockHeader from 'framework7-svelte/components/block-header.svelte';
-    import BlockTitle from 'framework7-svelte/components/block-title.svelte';
     import List from 'framework7-svelte/components/list.svelte';
-    import ActionButton from '../components/actionButton.svelte';
     import SwiperItem from '../components/swiperItem.svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
     import {
@@ -14,8 +11,6 @@
     import { deleteIncome, incomes, incomesSum } from '../stores/incomesStore';
 </script>
 
-<!-- <ActionButton /> -->
-
 <Page name="transactions">
     <Navbar title="Transactions" />
     <h1>Expenses:</h1>
@@ -23,7 +18,10 @@
 
     <List>
         {#each $expenses as { item, itemId } (itemId)}
-            <SwiperItem {item} on:deleted={() => deleteExpense(itemId)} />
+            <SwiperItem
+                {item}
+                {itemId}
+                on:deleted={() => deleteExpense(itemId)} />
         {/each}
     </List>
     <h1>Income:</h1>
@@ -31,7 +29,10 @@
 
     <List>
         {#each $incomes as { item, itemId } (itemId)}
-            <SwiperItem {item} on:deleted={() => deleteIncome(itemId)} />
+            <SwiperItem
+                {item}
+                {itemId}
+                on:deleted={() => deleteIncome(itemId)} />
         {/each}
     </List>
 </Page>

@@ -10,6 +10,7 @@
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { Plugins } from '@capacitor/core';
+    import { onDestroy, onMount } from 'svelte';
     const { Keyboard } = Plugins;
 
     let recurring = false;
@@ -32,7 +33,7 @@
         // validates the different inputs
         f7.input.validate('#expenseTitle');
         f7.input.validate('#expenseAmount');
-        f7.input.validate('#expenseCategoryPicker');
+        f7.input.validate('#editCategoryPicker');
 
         // breaks out of function if any inputs are left blank
         if (
@@ -96,13 +97,14 @@
         expense.currency = $baseCurrency;
     }
 
-    let expenseCategoryPicker;
-    let expenseCurrencyPicker;
-    let expenseDateCalendar;
+    let editCategoryPicker;
+    let editCurrencyPicker;
+    let editDateCalendar;
 
     const initPickers = () => {
-        expenseCategoryPicker = f7.picker.create({
-            inputEl: '#expenseCategoryPicker',
+        console.log('initializing pickers');
+        editCategoryPicker = f7.picker.create({
+            inputEl: '#editCategoryPicker',
             cols: [
                 {
                     textAlign: 'center',
@@ -120,8 +122,8 @@
             },
         });
 
-        expenseCurrencyPicker = f7.picker.create({
-            inputEl: '#expenseCurrencyPicker',
+        editCurrencyPicker = f7.picker.create({
+            inputEl: '#editCurrencyPicker',
             cols: [
                 {
                     textAlign: 'center',
@@ -138,14 +140,14 @@
             },
         });
 
-        expenseDateCalendar = f7.calendar.create({
-            inputEl: '#expenseDateCalendar',
+        editDateCalendar = f7.calendar.create({
+            inputEl: '#editDateCalendar',
             on: {
                 open: function () {
                     Keyboard.hide();
                 },
                 change: function () {
-                    expense.date = expenseDateCalendar.value[0]
+                    expense.date = editDateCalendar.value[0]
                         .toISOString()
                         .substr(0, 10);
                 },
@@ -153,9 +155,16 @@
         });
     };
 
-    $: if ($categories.length > 0 && $allCurrencies.length > 0) {
+    onMount(() => {
         initPickers();
-    }
+    });
+
+    onDestroy(() => {
+        console.log('destroying pickers');
+        editCategoryPicker.destroy();
+        editCurrencyPicker.destroy();
+        editDateCalendar.destroy();
+    });
 </script>
 
 <Block>
@@ -166,7 +175,7 @@
             label="Date:"
             placeholder="Select Date"
             readonly
-            inputId="expenseDateCalendar"
+            inputId="editDateCalendar"
             value={expense.date} />
 
         <ListInput
@@ -210,11 +219,11 @@
             type="text"
             readonly
             value={expense.category}
-            inputId="expenseCategoryPicker"
+            inputId="editCategoryPicker"
             clearButton
             required
             validateOnBlur
-            on:input={() => f7.input.validate('#expenseCategoryPicker')}
+            on:input={() => f7.input.validate('#editCategoryPicker')}
             errorMessage="Please select a category." />
 
         <ListInput
@@ -223,7 +232,7 @@
             label="Currency"
             value={expense.currency}
             readonly
-            inputId="expenseCurrencyPicker" />
+            inputId="editCurrencyPicker" />
         <ListItem
             checkbox
             onChange={() => (recurring = !recurring)}

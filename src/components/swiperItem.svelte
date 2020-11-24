@@ -1,11 +1,28 @@
 <script>
     export let item;
+    export let itemId;
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import SwipeoutActions from 'framework7-svelte/components/swipeout-actions.svelte';
     import SwipeoutButton from 'framework7-svelte/components/swipeout-button.svelte';
+    import Sheet from 'framework7-svelte/components/sheet.svelte';
+    import Toolbar from 'framework7-svelte/components/toolbar.svelte';
+    import Link from 'framework7-svelte/components/link.svelte';
     import { createEventDispatcher } from 'svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
+    import Edit from './edit.svelte';
+
     const dispatch = createEventDispatcher();
+
+    let editModal;
+
+    let editing = false;
+    const edit = () => {
+        editing = true;
+        setTimeout(function () {
+            const editModalInstance = editModal.instance();
+            editModalInstance.open();
+        }, 50);
+    };
 
     let date;
     let date1 = item.date.split('-');
@@ -29,9 +46,7 @@
     after="{$baseCurrencySymbol}{item.amount}"
     on:swipeoutDelete={() => dispatch('deleted')}>
     <SwipeoutActions right>
-        <SwipeoutButton onClick={() => console.log('edit')}>
-            Edit
-        </SwipeoutButton>
+        <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
         <SwipeoutButton
             delete
             color="red"
@@ -42,3 +57,20 @@
         </SwipeoutButton>
     </SwipeoutActions>
 </ListItem>
+
+{#if editing === true}
+    <Sheet
+        class="edit"
+        style="height: auto; max-height: 80vh"
+        backdrop
+        bind:this={editModal}>
+        <Toolbar>
+            <div class="left">Edit Expense</div>
+            <div class="right">
+                <Link sheetClose on:click={() => (editing = false)}>Close</Link>
+            </div>
+        </Toolbar>
+        <div class="swipe-handler" />
+        <Edit {item} {itemId} />
+    </Sheet>
+{/if}
