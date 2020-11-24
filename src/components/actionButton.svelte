@@ -10,8 +10,6 @@
     import FabBackdrop from 'framework7-svelte/components/fab-backdrop.svelte';
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
-
-    let unique = {};
 </script>
 
 <FabBackdrop />

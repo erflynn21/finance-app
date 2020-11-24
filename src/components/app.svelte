@@ -41,7 +41,7 @@
         calendar: {
             closeOnSelect: true,
             openIn: 'customModal',
-            dateFormat: 'mm/dd/yyyy',
+            dateFormat: 'yyyy-mm-dd',
             backdrop: true,
         },
     };

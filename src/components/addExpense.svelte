@@ -10,9 +10,11 @@
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { Plugins } from '@capacitor/core';
+    import LoadingScreen from '../pages/loadingScreen.svelte';
     const { Keyboard } = Plugins;
 
     let recurring = false;
+    let loading = false;
 
     let expense = {};
     // checks to make sure there's a base currency before setting the expense values
@@ -21,7 +23,7 @@
             title: null,
             amount: null,
             category: null,
-            date: new Date().toLocaleDateString(),
+            date: new Date().toISOString().substr(0, 10),
             currency: $baseCurrency,
             originalAmount: null,
             originalCurrency: null,
@@ -29,6 +31,7 @@
     }
 
     async function handleAddExpense() {
+        loading = true;
         // validates the different inputs
         f7.input.validate('#expenseTitle');
         f7.input.validate('#expenseAmount');
@@ -65,12 +68,14 @@
                 clearForm();
             });
         }
+
+        loading = false;
     }
 
     const clearForm = () => {
         expense.title = null;
-        expense.date = new Date().toLocaleDateString();
-        expense.category = null;
+        (expense.date = new Date().toISOString().substr(0, 10)),
+            (expense.category = null);
         expense.amount = null;
         expense.currency = $baseCurrency;
         expense.originalCurrency = null;
@@ -80,6 +85,7 @@
     async function convertAmount() {
         expense.originalAmount = expense.amount;
         expense.originalCurrency = expense.currency[0];
+
         let url = `https://api.exchangeratesapi.io/${expense.date}?base=${$baseCurrency}&symbols=${expense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
@@ -140,10 +146,11 @@
                     Keyboard.hide();
                 },
                 change: function () {
-                    expense.date = dateCalendar.value[0].toLocaleDateString();
+                    expense.date = dateCalendar.value[0]
+                        .toISOString()
+                        .substr(0, 10);
                 },
             },
-            dateFormat: 'mm/dd/yyyy',
         });
     };
 
@@ -152,6 +159,10 @@
     }
 </script>
 
+<!-- 
+{#if loading}
+    <LoadingScreen />
+{:else} -->
 <Block>
     <List noHairlines class="add-expense-form">
         <ListInput
@@ -177,7 +188,6 @@
             autofocus
             on:click={Keyboard.show()}
             on:input={() => f7.input.validate('#expenseTitle')}
-            validateOnBlur
             errorMessage="Please provide a valid expense name." />
 
         <ListInput
@@ -194,7 +204,6 @@
             bind:value={expense.amount}
             clearButton
             required
-            validateOnBlur
             on:input={() => f7.input.validate('#expenseAmount')}
             errorMessage="Please provide a valid amount." />
 
@@ -209,7 +218,6 @@
             inputId="categoryPicker"
             clearButton
             required
-            validateOnBlur
             on:input={() => f7.input.validate('#categoryPicker')}
             errorMessage="Please select a category." />
 
@@ -227,3 +235,4 @@
     </List>
     <Button on:click={handleAddExpense}>Add</Button>
 </Block>
+<!-- {/if} -->

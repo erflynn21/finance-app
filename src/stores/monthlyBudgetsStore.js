@@ -1,9 +1,10 @@
 import {writable} from 'svelte/store';
 import userbase from 'userbase-js';
 import { selectedMonth, selectedYear } from '../stores/datesStore';
+import { get } from "svelte/store";
 
 let monthlyBudgets = writable([]);
-const databaseName = `${selectedMonth}-${selectedYear}-monthlyBudgets`;
+const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-monthlyBudgets`;
 
 const openMonthlyBudgetsDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
