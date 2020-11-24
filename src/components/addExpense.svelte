@@ -6,18 +6,16 @@
     import { allCurrencies, baseCurrency } from '../stores/currenciesStore';
     import Button from 'framework7-svelte/components/button.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
-    import BlockTitle from 'framework7-svelte/components/block-title.svelte';
     import { addExpense } from '../stores/expensesStore';
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
-    import { Plugins, KeyboardInfo } from '@capacitor/core';
-    import Row from 'framework7-svelte/components/row.svelte';
-    import Col from 'framework7-svelte/components/col.svelte';
+    import { Plugins } from '@capacitor/core';
     const { Keyboard } = Plugins;
 
     let recurring = false;
 
     let expense = {};
+    // checks to make sure there's a base currency before setting the expense values
     $: if ($baseCurrency !== '') {
         expense = {
             title: null,
@@ -71,7 +69,7 @@
 
     const clearForm = () => {
         expense.title = null;
-        expense.date = new Date().toISOString().substr(0, 10);
+        expense.date = new Date().toLocaleDateString();
         expense.category = null;
         expense.amount = null;
         expense.currency = $baseCurrency;
@@ -155,7 +153,6 @@
 </script>
 
 <Block>
-    <!-- <BlockTitle class="text-align-center modal-title">Add Expense</BlockTitle> -->
     <List noHairlines class="add-expense-form">
         <ListInput
             outline

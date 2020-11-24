@@ -8,9 +8,10 @@
     import AddExpense from './addExpense.svelte';
     import AddIncome from './addIncome.svelte';
     import FabBackdrop from 'framework7-svelte/components/fab-backdrop.svelte';
-    import PageContent from 'framework7-svelte/components/page-content.svelte';
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
+
+    let unique = {};
 </script>
 
 <FabBackdrop />
