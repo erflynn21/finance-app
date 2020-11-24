@@ -1,4 +1,6 @@
 <script>
+    export let item;
+    export let itemId;
     import ListInput from 'framework7-svelte/components/list-input.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import { f7 } from 'framework7-svelte';
@@ -6,51 +8,51 @@
     import { allCurrencies, baseCurrency } from '../stores/currenciesStore';
     import Button from 'framework7-svelte/components/button.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
-    import { addExpense } from '../stores/expensesStore';
-    import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
-    import { Plugins } from '@capacitor/core';
     import { onDestroy, onMount } from 'svelte';
+    import { updateExpense } from '../stores/expensesStore';
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
+    import { Plugins } from '@capacitor/core';
     const { Keyboard } = Plugins;
 
     let recurring = false;
 
-    let expense = {};
-    // checks to make sure there's a base currency before setting the expense values
-    $: if ($baseCurrency !== '') {
-        expense = {
-            title: null,
-            amount: null,
-            category: null,
-            date: new Date().toISOString().substr(0, 10),
-            currency: $baseCurrency,
-            originalAmount: null,
-            originalCurrency: null,
-        };
-    }
+    let updatedExpense = {
+        title: item.title,
+        date: item.date,
+        amount: item.amount,
+        category: item.category,
+        originalAmount: item.originalAmount,
+        currency: item.currency,
+        originalCurrency: item.originalCurrency,
+    };
 
     async function handleAddExpense() {
         // validates the different inputs
-        f7.input.validate('#expenseTitle');
-        f7.input.validate('#expenseAmount');
+        f7.input.validate('#editedTitle');
+        f7.input.validate('#editedAmount');
         f7.input.validate('#editCategoryPicker');
 
         // breaks out of function if any inputs are left blank
         if (
-            expense.title === null ||
-            expense.amount === null ||
-            expense.category === null
+            updatedExpense.title === null ||
+            updatedExpense.amount === null ||
+            updatedExpense.category === null
         ) {
             return;
         }
 
         f7.dialog.preloader('Adding expense...');
         // formats the amount to a number
-        expense.amount = Number(expense.amount);
+        updatedExpense.amount = Number(updatedExpense.amount);
 
         // check whether expense needs to be converted to base currency
-        if (expense.currency === '' || expense.currency === $baseCurrency) {
-            expense.currency = $baseCurrency;
+        if (
+            updatedExpense.currency === '' ||
+            updatedExpense.currency === $baseCurrency
+        ) {
+            updatedExpense.currency = $baseCurrency;
         } else {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
             await convertAmount().then(f7.dialog.close());
@@ -58,8 +60,8 @@
 
         if (recurring === false) {
             // add the expense
-            addExpense(expense).then(() => {
-                clearForm();
+            updateExpense(updatedExpense, itemId).then(() => {
+                dispatch('collapse');
             });
         } else {
             expense.recurringdate = expense.date.slice(-2);
@@ -73,28 +75,28 @@
     }
 
     const clearForm = () => {
-        expense.title = null;
-        expense.date = new Date().toISOString().substr(0, 10);
-        expense.category = null;
-        expense.amount = null;
-        expense.currency = $baseCurrency;
-        expense.originalCurrency = null;
-        expense.originalAmount = null;
+        updatedExpense.title = null;
+        updatedExpense.date = new Date().toISOString().substr(0, 10);
+        updatedExpense.category = null;
+        updatedExpense.amount = null;
+        updatedExpense.currency = $baseCurrency;
+        updatedExpense.originalCurrency = null;
+        updatedExpense.originalAmount = null;
     };
 
     async function convertAmount() {
-        expense.originalAmount = expense.amount;
-        expense.originalCurrency = expense.currency[0];
+        updatedExpense.originalAmount = updatedExpense.amount;
+        updatedExpense.originalCurrency = updatedExpense.currency[0];
 
-        let url = `https://api.exchangeratesapi.io/${expense.date}?base=${$baseCurrency}&symbols=${expense.originalCurrency}`;
+        let url = `https://api.exchangeratesapi.io/${updatedExpense.date}?base=${$baseCurrency}&symbols=${updatedExpense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
         let rates = JSON.stringify(data.rates);
         let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-        expense.amount = Number(
-            (expense.originalAmount / exchangeRate).toFixed(2)
+        updatedExpense.amount = Number(
+            (updatedExpense.originalAmount / exchangeRate).toFixed(2)
         );
-        expense.currency = $baseCurrency;
+        updatedExpense.currency = $baseCurrency;
     }
 
     let editCategoryPicker;
@@ -102,7 +104,6 @@
     let editDateCalendar;
 
     const initPickers = () => {
-        console.log('initializing pickers');
         editCategoryPicker = f7.picker.create({
             inputEl: '#editCategoryPicker',
             cols: [
@@ -116,8 +117,8 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    expense.category = value.value;
-                    expense.category = expense.category[0];
+                    updatedExpense.category = value.value;
+                    updatedExpense.category = updatedExpense.category[0];
                 },
             },
         });
@@ -135,7 +136,7 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    expense.currency = value.value;
+                    updatedExpense.currency = value.value;
                 },
             },
         });
@@ -147,7 +148,7 @@
                     Keyboard.hide();
                 },
                 change: function () {
-                    expense.date = editDateCalendar.value[0]
+                    updatedExpense.date = editDateCalendar.value[0]
                         .toISOString()
                         .substr(0, 10);
                 },
@@ -160,7 +161,6 @@
     });
 
     onDestroy(() => {
-        console.log('destroying pickers');
         editCategoryPicker.destroy();
         editCurrencyPicker.destroy();
         editDateCalendar.destroy();
@@ -176,7 +176,7 @@
             placeholder="Select Date"
             readonly
             inputId="editDateCalendar"
-            value={expense.date} />
+            value={updatedExpense.date} />
 
         <ListInput
             outline
@@ -186,7 +186,7 @@
             placeholder="Your Expense"
             autocapitalize="off"
             inputId="expenseTitle"
-            bind:value={expense.title}
+            bind:value={updatedExpense.title}
             clearButton
             required
             autofocus
@@ -205,7 +205,7 @@
             step="0.01"
             inputmode="decimal"
             pattern="[0-9]*"
-            bind:value={expense.amount}
+            bind:value={updatedExpense.amount}
             clearButton
             required
             on:input={() => f7.input.validate('#expenseAmount')}
@@ -218,7 +218,7 @@
             placeholder="Category"
             type="text"
             readonly
-            value={expense.category}
+            value={updatedExpense.category}
             inputId="editCategoryPicker"
             clearButton
             required
@@ -230,7 +230,7 @@
             outline
             floatingLabel
             label="Currency"
-            value={expense.currency}
+            value={updatedExpense.currency}
             readonly
             inputId="editCurrencyPicker" />
         <ListItem

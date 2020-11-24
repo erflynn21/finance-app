@@ -21,6 +21,7 @@
             <SwiperItem
                 {item}
                 {itemId}
+                type="expense"
                 on:deleted={() => deleteExpense(itemId)} />
         {/each}
     </List>

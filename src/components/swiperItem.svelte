@@ -1,20 +1,20 @@
 <script>
     export let item;
     export let itemId;
+    export let type;
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import SwipeoutActions from 'framework7-svelte/components/swipeout-actions.svelte';
     import SwipeoutButton from 'framework7-svelte/components/swipeout-button.svelte';
     import Sheet from 'framework7-svelte/components/sheet.svelte';
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
-    import { createEventDispatcher } from 'svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import Edit from './edit.svelte';
-
+    import { createEventDispatcher } from 'svelte';
+    import EditExpense from './editExpense.svelte';
     const dispatch = createEventDispatcher();
 
+    // opens editing modal
     let editModal;
-
     let editing = false;
     const edit = () => {
         editing = true;
@@ -24,6 +24,14 @@
         }, 50);
     };
 
+    // closes editing modal
+    const closeModal = () => {
+        const editModalInstance = editModal.instance();
+        editModalInstance.close();
+        editing = false;
+    };
+
+    // sets date for date picker
     let date;
     let date1 = item.date.split('-');
     let date2 = date1[1] + '/' + date1[2];
@@ -58,12 +66,15 @@
     </SwipeoutActions>
 </ListItem>
 
-{#if editing === true}
+{#if editing === true && type === 'expense'}
     <Sheet
         class="edit"
         style="height: auto; max-height: 80vh"
         backdrop
-        bind:this={editModal}>
+        bind:this={editModal}
+        {item}
+        {itemId}
+        {type}>
         <Toolbar>
             <div class="left">Edit Expense</div>
             <div class="right">
@@ -71,6 +82,6 @@
             </div>
         </Toolbar>
         <div class="swipe-handler" />
-        <Edit {item} {itemId} />
+        <EditExpense {item} {itemId} on:collapse={closeModal} />
     </Sheet>
 {/if}
