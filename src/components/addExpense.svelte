@@ -189,11 +189,13 @@
             placeholder="Amount"
             autocapitalize="off"
             inputId="expenseAmount"
+            step="0.01"
+            inputmode="decimal"
+            pattern="[0-9]*"
             bind:value={expense.amount}
             clearButton
             required
             validateOnBlur
-            pattern="[0-9]*"
             on:input={() => f7.input.validate('#expenseAmount')}
             errorMessage="Please provide a valid amount." />
 
