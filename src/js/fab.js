@@ -10,4 +10,10 @@ const showFAB = () => {
     fab.style.transition = '400ms';
 }
 
-export {hideFAB, showFAB}
+const moveFabDown = () => {
+    let fab = document.querySelector('.fab');
+    fab.style.transform = 'translate3d(0, 150%, 0)';
+    fab.style.transition = '400ms';
+}
+
+export {hideFAB, showFAB, moveFabDown}

@@ -4,14 +4,14 @@
     import List from 'framework7-svelte/components/list.svelte';
     import { onMount } from 'svelte';
     import SettingsSwiper from '../components/settingsSwiper.svelte';
-    import { hideFAB, showFAB } from '../js/fab';
+    import { moveFabDown, showFAB } from '../js/fab';
     import {
         deleteMonthlyIncome,
         monthlyIncomes,
     } from '../stores/monthlyIncomesStore';
 
     onMount(() => {
-        hideFAB();
+        moveFabDown();
     });
 </script>
 
