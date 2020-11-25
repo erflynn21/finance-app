@@ -10,6 +10,7 @@
         updateMonthlyExpense,
     } from '../stores/monthlyExpensesStore';
 
+    console.log($monthlyExpenses);
     onMount(() => {
         hideFAB();
     });
@@ -25,6 +26,8 @@
         {#each $monthlyExpenses as { item, itemId } (itemId)}
             <SwiperItem
                 {item}
+                {itemId}
+                type="monthlyExpense"
                 on:deleted={() => deleteMonthlyExpense(itemId)} />
         {/each}
     </List>

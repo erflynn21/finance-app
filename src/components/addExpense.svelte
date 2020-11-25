@@ -63,9 +63,15 @@
                 clearForm();
             });
         } else {
-            expense.recurringdate = expense.date.slice(-2);
+            let recurringExpense = {
+                title: expense.title,
+                amount: expense.amount,
+                category: expense.category,
+                currency: expense.currency,
+                recurringDate: expense.date.slice(-2),
+            };
             // add the recurring expense
-            addMonthlyExpense(expense).then(() => {
+            addMonthlyExpense(recurringExpense).then(() => {
                 clearForm();
             });
         }
