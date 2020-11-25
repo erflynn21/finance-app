@@ -2,7 +2,7 @@
     import { Page, Navbar } from 'framework7-svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import { onMount } from 'svelte';
-    import SwiperItem from '../components/swiperItem.svelte';
+    import SettingsSwiper from '../components/settingsSwiper.svelte';
     import { hideFAB, showFAB } from '../js/fab';
     import {
         deleteMonthlyIncome,
@@ -22,7 +22,11 @@
         on:clickBack={() => showFAB()} />
     <List>
         {#each $monthlyIncomes as { item, itemId } (itemId)}
-            <SwiperItem {item} on:deleted={() => deleteMonthlyIncome(itemId)} />
+            <SettingsSwiper
+                {item}
+                {itemId}
+                type="monthlyIncome"
+                on:deleted={() => deleteMonthlyIncome(itemId)} />
         {/each}
     </List>
 </Page>

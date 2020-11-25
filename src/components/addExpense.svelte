@@ -52,6 +52,8 @@
         // check whether expense needs to be converted to base currency
         if (expense.currency === '' || expense.currency === $baseCurrency) {
             expense.currency = $baseCurrency;
+        } else if (recurring === true) {
+            expense.currency = expense.currency;
         } else {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
             await convertAmount().then(f7.dialog.close());

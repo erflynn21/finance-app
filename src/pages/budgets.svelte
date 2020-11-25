@@ -5,11 +5,11 @@
     import Sheet from 'framework7-svelte/components/sheet.svelte';
     import { onMount } from 'svelte';
     import AddBudget from '../components/addBudget.svelte';
-    import BudgetSwiper from '../components/budgetSwiper.svelte';
     import { hideFAB, showFAB } from '../js/fab';
     import { budgets, deleteBudget } from '../stores/budgetsStore';
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
+    import SettingsSwiper from '../components/settingsSwiper.svelte';
 
     onMount(() => {
         hideFAB();
@@ -21,9 +21,10 @@
     <Navbar title="Budgets" backLink="Back" on:clickBack={() => showFAB()} />
     <List>
         {#each $budgets as { item, itemId } (itemId)}
-            <BudgetSwiper
+            <SettingsSwiper
                 {item}
                 {itemId}
+                type="budget"
                 on:deleted={() => deleteBudget(itemId)} />
         {/each}
     </List>

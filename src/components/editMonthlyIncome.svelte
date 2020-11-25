@@ -10,14 +10,14 @@
     import Block from 'framework7-svelte/components/block.svelte';
     import { onDestroy, onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
-    import { updateMonthlyExpense } from '../stores/monthlyExpensesStore';
     const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
+    import { updateMonthlyIncome } from '../stores/monthlyIncomesStore';
     const { Keyboard } = Plugins;
 
-    let updatedMonthlyExpense = {
+    let updatedMonthlyIncome = {
         title: item.title,
         recurringDate: item.recurringDate,
         amount: item.amount,
@@ -25,7 +25,7 @@
         currency: item.currency,
     };
 
-    const handleUpdateMonthlyExpense = async () => {
+    const handleUpdateMonthlyIncome = async () => {
         // validates the different inputs
         f7.input.validate('#editedTitle');
         f7.input.validate('#editedAmount');
@@ -33,32 +33,32 @@
 
         // breaks out of function if any inputs are left blank
         if (
-            updatedMonthlyExpense.title === null ||
-            updatedMonthlyExpense.amount === null ||
-            updatedMonthlyExpense.category === null
+            updatedMonthlyIncome.title === null ||
+            updatedMonthlyIncome.amount === null ||
+            updatedMonthlyIncome.category === null
         ) {
             return;
         }
 
         f7.dialog.preloader('Updating expense...');
         // formats the amount to a number
-        updatedMonthlyExpense.amount = Number(updatedMonthlyExpense.amount);
+        updatedMonthlyIncome.amount = Number(updatedMonthlyIncome.amount);
 
         // update the monthly expense
-        updateMonthlyExpense(updatedMonthlyExpense, itemId).then(() => {
+        updateMonthlyIncome(updatedMonthlyIncome, itemId).then(() => {
             dispatch('collapse');
         });
 
         f7.dialog.close();
     };
 
-    let editMonthlyExpenseCategoryPicker;
-    let editMonthlyExpenseCurrencyPicker;
-    let editMonthlyExpenseDatePicker;
+    let editMonthlyIncomeCategoryPicker;
+    let editMonthlyIncomeCurrencyPicker;
+    let editMonthlyIncomeDatePicker;
 
     const initPickers = () => {
-        editMonthlyExpenseCategoryPicker = f7.picker.create({
-            inputEl: '#editMonthlyExpenseCategoryPicker',
+        editMonthlyIncomeCategoryPicker = f7.picker.create({
+            inputEl: '#editMonthlyIncomeCategoryPicker',
             cols: [
                 {
                     textAlign: 'center',
@@ -70,15 +70,15 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    updatedMonthlyExpense.category = value.value;
-                    updatedMonthlyExpense.category =
-                        updatedMonthlyExpense.category[0];
+                    updatedMonthlyIncome.category = value.value;
+                    updatedMonthlyIncome.category =
+                        updatedMonthlyIncome.category[0];
                 },
             },
         });
 
-        editMonthlyExpenseCurrencyPicker = f7.picker.create({
-            inputEl: '#editMonthlyExpenseCurrencyPicker',
+        editMonthlyIncomeCurrencyPicker = f7.picker.create({
+            inputEl: '#editMonthlyIncomeCurrencyPicker',
             cols: [
                 {
                     textAlign: 'center',
@@ -90,13 +90,13 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    updatedMonthlyExpense.currency = value.value;
+                    updatedMonthlyIncome.currency = value.value;
                 },
             },
         });
 
-        editMonthlyExpenseDatePicker = f7.picker.create({
-            inputEl: '#editMonthlyExpenseDatePicker',
+        editMonthlyIncomeDatePicker = f7.picker.create({
+            inputEl: '#editMonthlyIncomeDatePicker',
             cols: [
                 {
                     textAlign: 'center',
@@ -173,7 +173,7 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    updatedMonthlyExpense.recurringDate = value.value;
+                    updatedMonthlyIncome.recurringDate = value.value;
                 },
             },
         });
@@ -184,9 +184,9 @@
     });
 
     onDestroy(() => {
-        editMonthlyExpenseCategoryPicker.destroy();
-        editMonthlyExpenseCurrencyPicker.destroy();
-        editMonthlyExpenseDatePicker.destroy();
+        editMonthlyIncomeCategoryPicker.destroy();
+        editMonthlyIncomeCurrencyPicker.destroy();
+        editMonthlyIncomeDatePicker.destroy();
     });
 </script>
 
@@ -198,8 +198,8 @@
             label="Monthly On:"
             placeholder="Select Date"
             readonly
-            inputId="editMonthlyExpenseDatePicker"
-            value={updatedMonthlyExpense.recurringDate} />
+            inputId="editMonthlyIncomeDatePicker"
+            value={updatedMonthlyIncome.recurringDate} />
 
         <ListInput
             outline
@@ -209,7 +209,7 @@
             placeholder="Your Expense"
             autocapitalize="off"
             inputId="editedTitle"
-            bind:value={updatedMonthlyExpense.title}
+            bind:value={updatedMonthlyIncome.title}
             clearButton
             required
             on:input={() => f7.input.validate('#editedTitle')}
@@ -228,7 +228,7 @@
                     step="0.01"
                     inputmode="decimal"
                     pattern="[0-9]*"
-                    bind:value={updatedMonthlyExpense.amount}
+                    bind:value={updatedMonthlyIncome.amount}
                     clearButton
                     required
                     on:input={() => f7.input.validate('#editedAmount')}
@@ -239,26 +239,11 @@
                     outline
                     floatingLabel
                     label="Currency"
-                    value={updatedMonthlyExpense.currency}
+                    value={updatedMonthlyIncome.currency}
                     readonly
-                    inputId="editMonthlyExpenseCurrencyPicker" />
+                    inputId="editMonthlyIncomeCurrencyPicker" />
             </Col>
         </Row>
-
-        <ListInput
-            outline
-            floatingLabel
-            label="Category"
-            placeholder="Category"
-            type="text"
-            readonly
-            value={updatedMonthlyExpense.category}
-            inputId="editMonthlyExpenseCategoryPicker"
-            clearButton
-            required
-            validateOnBlur
-            on:input={() => f7.input.validate('#editMonthlyExpenseCategoryPicker')}
-            errorMessage="Please select a category." />
     </List>
-    <Button on:click={handleUpdateMonthlyExpense}>Update</Button>
+    <Button on:click={handleUpdateMonthlyIncome}>Update</Button>
 </Block>

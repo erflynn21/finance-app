@@ -56,9 +56,15 @@
                 clearForm();
             });
         } else {
-            income.recurringdate = income.date.slice(-2);
+            let recurringIncome = {
+                title: income.title,
+                amount: income.amount,
+                category: income.category,
+                currency: income.currency,
+                recurringDate: income.date.slice(-2),
+            };
             // add the recurring expense
-            addMonthlyIncome(income).then(() => {
+            addMonthlyIncome(recurringIncome).then(() => {
                 clearForm();
             });
         }

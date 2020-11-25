@@ -2,15 +2,14 @@
     import { Page, Navbar } from 'framework7-svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import { onMount } from 'svelte';
+    import SettingsSwiper from '../components/settingsSwiper.svelte';
     import SwiperItem from '../components/swiperItem.svelte';
     import { hideFAB, showFAB } from '../js/fab';
     import {
         deleteMonthlyExpense,
         monthlyExpenses,
-        updateMonthlyExpense,
     } from '../stores/monthlyExpensesStore';
 
-    console.log($monthlyExpenses);
     onMount(() => {
         hideFAB();
     });
@@ -24,7 +23,7 @@
         on:clickBack={() => showFAB()} />
     <List>
         {#each $monthlyExpenses as { item, itemId } (itemId)}
-            <SwiperItem
+            <SettingsSwiper
                 {item}
                 {itemId}
                 type="monthlyExpense"
