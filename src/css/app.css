@@ -102,3 +102,7 @@
 html {
   scroll-behavior: smooth;
 }
+
+.transactions-list {
+  margin: 10px 0;
+}

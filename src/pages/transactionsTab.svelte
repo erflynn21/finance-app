@@ -16,7 +16,7 @@
     <h1>Expenses:</h1>
     <h3>Total Expenses: {$baseCurrencySymbol}{$expensesSum}</h3>
 
-    <List>
+    <List class="transactions-list">
         {#each $expenses as { item, itemId } (itemId)}
             <SwiperItem
                 {item}
@@ -28,7 +28,7 @@
     <h1>Income:</h1>
     <h3>Total Income: {$baseCurrencySymbol}{$incomesSum}</h3>
 
-    <List>
+    <List class="transactions-list">
         {#each $incomes as { item, itemId } (itemId)}
             <SwiperItem
                 {item}
@@ -37,6 +37,8 @@
                 on:deleted={() => deleteIncome(itemId)} />
         {/each}
     </List>
+
+    <h3>Remaining: {$baseCurrencySymbol}{$incomesSum - $expensesSum}</h3>
 </Page>
 
 <style>
