@@ -146,7 +146,7 @@
             errorMessage="Please provide a valid income name." />
 
         <Row>
-            <Col>
+            <Col width="66">
                 {#if item.originalCurrency}
                     <ListInput
                         outline
@@ -183,7 +183,7 @@
                         errorMessage="Please provide a valid amount." />
                 {/if}
             </Col>
-            <Col>
+            <Col width="33">
                 {#if item.originalCurrency}
                     <ListInput
                         outline

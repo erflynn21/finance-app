@@ -1,40 +1,72 @@
 <script>
+    import ListInput from 'framework7-svelte/components/list-input.svelte';
+    import List from 'framework7-svelte/components/list.svelte';
+    import { f7 } from 'framework7-svelte';
+    import Button from 'framework7-svelte/components/button.svelte';
+    import Block from 'framework7-svelte/components/block.svelte';
+    import { Plugins } from '@capacitor/core';
+    import Row from 'framework7-svelte/components/row.svelte';
+    import Col from 'framework7-svelte/components/col.svelte';
+    const { Keyboard } = Plugins;
     import { addBudget } from '../stores/budgetsStore';
-    import { baseCurrency, currencyOptions } from '../stores/currenciesStore';
+    import { baseCurrency, allCurrencies } from '../stores/currenciesStore';
+    import { onMount } from 'svelte';
 
-    let budget = {
-        category: '',
-        amount: '',
-        currency: '',
-        date: new Date().toISOString().substr(0, 10),
-    };
+    let budget = {};
+    // checks to make sure there's a base currency before setting the expense values
+    $: if ($baseCurrency !== '') {
+        budget = {
+            category: null,
+            amount: null,
+            currency: $baseCurrency,
+            date: new Intl.DateTimeFormat('en-CA').format(new Date()),
+        };
+    }
 
-    let error = '';
+    const handleAddBudget = async () => {
+        // validates the different inputs
+        f7.input.validate('#budgetCategory');
+        f7.input.validate('#budgetAmount');
 
-    async function handleAddBudget() {
-        if (budget.category === '' || budget.amount === null) {
-            error = `Please fill in all fields before submitting a budget.`;
+        // breaks out of function if any inputs are left blank
+        if (
+            budget.title === null ||
+            budget.amount === null ||
+            budget.category === null
+        ) {
             return;
-        } else {
-            error = '';
         }
+
+        f7.dialog.preloader('Adding budget...');
+        // formats the amount to a number
+        budget.amount = Number(budget.amount);
+
         // check whether budget needs to be converted to base currency
-        if (budget.currency === '' || budget.currency == $baseCurrency) {
+        if (budget.currency === '' || budget.currency === $baseCurrency) {
             budget.currency = $baseCurrency;
             budget.originalCurrency = null;
             budget.originalAmount = null;
         } else {
-            await convertAmount();
+            f7.dialog.preloader('Converting to ' + $baseCurrency);
+            await convertAmount().then(f7.dialog.close());
         }
 
         // add the budget
         addBudget(budget).then(() => {
             // clear form
-            budget.category = '';
-            budget.amount = '';
-            budget.currency = $baseCurrency;
+            clearForm();
         });
-    }
+
+        f7.dialog.close();
+    };
+
+    const clearForm = () => {
+        budget.category = null;
+        budget.amount = null;
+        budget.currency = $baseCurrency;
+        budget.originalCurrency = null;
+        budget.originalAmount = null;
+    };
 
     async function convertAmount() {
         budget.originalAmount = budget.amount;
@@ -49,88 +81,81 @@
         );
         budget.currency = $baseCurrency;
     }
+
+    let budgetCurrencyPicker;
+    const initPickers = () => {
+        budgetCurrencyPicker = f7.picker.create({
+            inputEl: '#budgetCurrencyPicker',
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: $allCurrencies,
+                },
+            ],
+            on: {
+                open: function () {
+                    Keyboard.hide();
+                },
+                change: function (value) {
+                    budget.currency = value.value;
+                },
+            },
+        });
+    };
+
+    onMount(() => {
+        if ($allCurrencies.length > 0) {
+            initPickers();
+        }
+    });
 </script>
 
-<form class="new-budget" on:submit|preventDefault={handleAddBudget}>
-    <div class="title">
-        <label for="title">Category: </label>
-        <input
+<Block>
+    <List noHairlines class="add-form modal-form">
+        <ListInput
+            outline
+            floatingLabel
+            label="Category:"
             type="text"
-            placeholder="New budget category"
-            bind:value={budget.category} />
-    </div>
+            placeholder="New Budget Category"
+            autocapitalize="off"
+            inputId="budgetCategory"
+            bind:value={budget.category}
+            clearButton
+            required
+            autofocus
+            on:input={() => f7.input.validate('#budgetCategory')}
+            errorMessage="Please provide a valid category name." />
 
-    <div class="amount">
-        <label for="amount">Amount: </label>
-        <input type="number" placeholder="Amount" bind:value={budget.amount} />
-    </div>
-
-    <div class="currency">
-        <label for="currency">Currency: </label>
-        <select id="budget-currency" bind:value={budget.currency}>
-            <option value={$baseCurrency}>{$baseCurrency}</option>
-            {#each $currencyOptions as currencyOption}
-                <option value={currencyOption}>{currencyOption}</option>
-            {/each}
-        </select>
-    </div>
-
-    <span class="error">
-        <p>{error}</p>
-    </span>
-
-    <div><button on:click|preventDefault={handleAddBudget}>Add</button></div>
-</form>
-
-<style>
-    .new-budget {
-        width: 100%;
-        background: white;
-    }
-
-    .new-budget div {
-        margin: 15px 0;
-        display: grid;
-        grid-template-columns: 0.5fr 1fr;
-    }
-
-    input {
-        border: none;
-    }
-
-    input:active {
-        border: none;
-    }
-
-    .title input {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        padding-bottom: 5px;
-    }
-
-    .amount input {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        padding-bottom: 5px;
-    }
-
-    .currency select {
-        width: 30%;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .currency {
-        padding-bottom: 15px;
-    }
-
-    button {
-        width: 60%;
-        justify-self: center;
-        height: 35px;
-        grid-column: 1/3;
-        border-radius: 10px;
-        cursor: pointer;
-        border: 0;
-        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-        background: green;
-        color: white;
-    }
-</style>
+        <Row>
+            <Col width="66">
+                <ListInput
+                    outline
+                    floatingLabel
+                    label="Amount:"
+                    type="number"
+                    placeholder="Amount"
+                    autocapitalize="off"
+                    inputId="budgetAmount"
+                    step="0.01"
+                    inputmode="decimal"
+                    pattern="[0-9]*"
+                    bind:value={budget.amount}
+                    clearButton
+                    required
+                    on:input={() => f7.input.validate('#budgetAmount')}
+                    errorMessage="Please provide a valid amount." />
+            </Col>
+            <Col width="33">
+                <ListInput
+                    outline
+                    floatingLabel
+                    label="Currency"
+                    value={budget.currency}
+                    readonly
+                    inputId="budgetCurrencyPicker" />
+            </Col>
+        </Row>
+    </List>
+    <Button on:click={handleAddBudget}>Add</Button>
+</Block>

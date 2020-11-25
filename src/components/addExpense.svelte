@@ -30,7 +30,7 @@
         };
     }
 
-    async function handleAddExpense() {
+    const handleAddExpense = async () => {
         // validates the different inputs
         f7.input.validate('#expenseTitle');
         f7.input.validate('#expenseAmount');
@@ -71,11 +71,11 @@
         }
 
         f7.dialog.close();
-    }
+    };
 
     const clearForm = () => {
         expense.title = null;
-        expense.date = new Date().toISOString().substr(0, 10);
+        expense.date = new Intl.DateTimeFormat('en-CA').format(new Date());
         expense.category = null;
         expense.amount = null;
         expense.currency = $baseCurrency;
@@ -187,7 +187,7 @@
             errorMessage="Please provide a valid expense name." />
 
         <Row>
-            <Col>
+            <Col width="66">
                 <ListInput
                     outline
                     floatingLabel
@@ -205,7 +205,7 @@
                     on:input={() => f7.input.validate('#expenseAmount')}
                     errorMessage="Please provide a valid amount." />
             </Col>
-            <Col>
+            <Col width="33">
                 <ListInput
                     outline
                     floatingLabel
