@@ -10,6 +10,7 @@
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
     import SettingsSwiper from '../components/settingsSwiper.svelte';
+    import Block from 'framework7-svelte/components/block.svelte';
 
     onMount(() => {
         hideFAB();
@@ -17,8 +18,14 @@
 </script>
 
 <Page name="budgets" noToolbar>
-    <!-- Top Navbar -->
     <Navbar title="Budgets" backLink="Back" on:clickBack={() => showFAB()} />
+    <Block class="text-align-center">
+        Below are the budgets that will be automatically regenerated every month
+        to create your monthly budget. You can adjust the amounts and categories
+        of each budget and it will be reflected moving forward. Note: Updating a
+        budget category will not update the current month's budget category or
+        previous month's, only those generated in the future.
+    </Block>
     <List>
         {#each $budgets as { item, itemId } (itemId)}
             <SettingsSwiper
