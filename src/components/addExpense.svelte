@@ -83,7 +83,7 @@
         expense.originalAmount = null;
     };
 
-    async function convertAmount() {
+    const convertAmount = async () => {
         expense.originalAmount = expense.amount;
         expense.originalCurrency = expense.currency[0];
 
@@ -96,7 +96,7 @@
             (expense.originalAmount / exchangeRate).toFixed(2)
         );
         expense.currency = $baseCurrency;
-    }
+    };
 
     let expenseCategoryPicker;
     let expenseCurrencyPicker;

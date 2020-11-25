@@ -76,7 +76,7 @@
         income.originalAmount = null;
     };
 
-    async function convertAmount() {
+    const convertAmount = async () => {
         income.originalAmount = income.amount;
         income.originalCurrency = income.currency[0];
 
@@ -89,7 +89,7 @@
             (income.originalAmount / exchangeRate).toFixed(2)
         );
         income.currency = $baseCurrency;
-    }
+    };
 
     let incomeCurrencyPicker;
     let incomeDateCalendar;

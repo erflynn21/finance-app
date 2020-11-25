@@ -4,7 +4,6 @@
     import ListInput from 'framework7-svelte/components/list-input.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import { f7 } from 'framework7-svelte';
-    import { categories } from '../stores/budgetsStore';
     import { allCurrencies, baseCurrency } from '../stores/currenciesStore';
     import Button from 'framework7-svelte/components/button.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
@@ -26,7 +25,7 @@
         originalCurrency: item.originalCurrency,
     };
 
-    async function handleAddExpense() {
+    const handleUpdateIncome = async () => {
         // validates the different inputs
         f7.input.validate('#editedTitle');
         f7.input.validate('#editedAmount');
@@ -59,9 +58,9 @@
         });
 
         f7.dialog.close();
-    }
+    };
 
-    async function convertAmount() {
+    const convertAmount = async () => {
         let url = `https://api.exchangeratesapi.io/${updatedIncome.date}?base=${$baseCurrency}&symbols=${updatedIncome.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
@@ -71,7 +70,7 @@
             (updatedIncome.originalAmount / exchangeRate).toFixed(2)
         );
         updatedIncome.currency = $baseCurrency;
-    }
+    };
 
     let editIncomeCurrencyPicker;
     let editIncomeDateCalendar;
@@ -138,11 +137,11 @@
             type="text"
             placeholder="Your Income"
             autocapitalize="off"
-            inputId="incomeTitle"
+            inputId="editedTitle"
             bind:value={updatedIncome.title}
             clearButton
             required
-            on:input={() => f7.input.validate('#incomeTitle')}
+            on:input={() => f7.input.validate('#editedTitle')}
             errorMessage="Please provide a valid income name." />
 
         <Row>
@@ -155,14 +154,14 @@
                         type="number"
                         placeholder="Amount"
                         autocapitalize="off"
-                        inputId="incomeAmount"
+                        inputId="editedAmount"
                         step="0.01"
                         inputmode="decimal"
                         pattern="[0-9]*"
                         bind:value={updatedIncome.originalAmount}
                         clearButton
                         required
-                        on:input={() => f7.input.validate('#incomeAmount')}
+                        on:input={() => f7.input.validate('#editedAmount')}
                         errorMessage="Please provide a valid amount." />
                 {:else}
                     <ListInput
@@ -172,14 +171,14 @@
                         type="number"
                         placeholder="Amount"
                         autocapitalize="off"
-                        inputId="incomeAmount"
+                        inputId="editedAmount"
                         step="0.01"
                         inputmode="decimal"
                         pattern="[0-9]*"
                         bind:value={updatedIncome.amount}
                         clearButton
                         required
-                        on:input={() => f7.input.validate('#incomeAmount')}
+                        on:input={() => f7.input.validate('#editedAmount')}
                         errorMessage="Please provide a valid amount." />
                 {/if}
             </Col>
@@ -204,5 +203,5 @@
             </Col>
         </Row>
     </List>
-    <Button on:click={handleAddExpense}>Update</Button>
+    <Button on:click={handleUpdateIncome}>Update</Button>
 </Block>

@@ -27,7 +27,7 @@
         originalCurrency: item.originalCurrency,
     };
 
-    async function handleAddExpense() {
+    const handleUpdateExpense = async () => {
         // validates the different inputs
         f7.input.validate('#editedTitle');
         f7.input.validate('#editedAmount');
@@ -65,9 +65,9 @@
         });
 
         f7.dialog.close();
-    }
+    };
 
-    async function convertAmount() {
+    const convertAmount = async () => {
         let url = `https://api.exchangeratesapi.io/${updatedExpense.date}?base=${$baseCurrency}&symbols=${updatedExpense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
@@ -77,7 +77,7 @@
             (updatedExpense.originalAmount / exchangeRate).toFixed(2)
         );
         updatedExpense.currency = $baseCurrency;
-    }
+    };
 
     let editExpenseCategoryPicker;
     let editExpenseCurrencyPicker;
@@ -165,11 +165,11 @@
             type="text"
             placeholder="Your Expense"
             autocapitalize="off"
-            inputId="expenseTitle"
+            inputId="editedTitle"
             bind:value={updatedExpense.title}
             clearButton
             required
-            on:input={() => f7.input.validate('#expenseTitle')}
+            on:input={() => f7.input.validate('#editedTitle')}
             errorMessage="Please provide a valid expense name." />
 
         <Row>
@@ -182,14 +182,14 @@
                         type="number"
                         placeholder="Amount"
                         autocapitalize="off"
-                        inputId="expenseAmount"
+                        inputId="editedAmount"
                         step="0.01"
                         inputmode="decimal"
                         pattern="[0-9]*"
                         bind:value={updatedExpense.originalAmount}
                         clearButton
                         required
-                        on:input={() => f7.input.validate('#expenseAmount')}
+                        on:input={() => f7.input.validate('#editedAmount')}
                         errorMessage="Please provide a valid amount." />
                 {:else}
                     <ListInput
@@ -199,14 +199,14 @@
                         type="number"
                         placeholder="Amount"
                         autocapitalize="off"
-                        inputId="expenseAmount"
+                        inputId="editedAmount"
                         step="0.01"
                         inputmode="decimal"
                         pattern="[0-9]*"
                         bind:value={updatedExpense.amount}
                         clearButton
                         required
-                        on:input={() => f7.input.validate('#expenseAmount')}
+                        on:input={() => f7.input.validate('#editedAmount')}
                         errorMessage="Please provide a valid amount." />
                 {/if}
             </Col>
@@ -246,5 +246,5 @@
             on:input={() => f7.input.validate('#editCategoryPicker')}
             errorMessage="Please select a category." />
     </List>
-    <Button on:click={handleAddExpense}>Update</Button>
+    <Button on:click={handleUpdateExpense}>Update</Button>
 </Block>
