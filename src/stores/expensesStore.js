@@ -9,7 +9,18 @@ const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-expenses`;
 
 const openExpensesDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
-        expenses.set(items)
+        // sets the expenses based on date and timestamp
+        let a = items;
+        a.sort(function (a,b) {
+            return (
+                new Date(b.item.date) - new Date(a.item.date) ||
+                new Date(b.createdBy.timestamp) -
+                    new Date(a.createdBy.timestamp)
+            );
+        })
+        expenses.set(a);
+
+        // sets the expenses sum
         let totalExpenses = [];
         get(expenses).forEach((expense) => {
             totalExpenses = [...totalExpenses, expense.item.amount];

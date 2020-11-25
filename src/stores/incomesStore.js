@@ -9,7 +9,18 @@ const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-incomes`;
 
 const openIncomesDatabase = () => {
         userbase.openDatabase({ databaseName, changeHandler: function (items) {
-            incomes.set(items)
+            // sorts the incomes based on date and timestamp
+            let a = items;
+            a.sort(function (a,b) {
+                return (
+                    new Date(b.item.date) - new Date(a.item.date) ||
+                    new Date(b.createdBy.timestamp) -
+                        new Date(a.createdBy.timestamp)
+                );
+            })
+            incomes.set(a);
+
+            // sets the income sum
             let totalIncomes = [];
             get(incomes).forEach((income) => {
                 totalIncomes = [...totalIncomes, income.item.amount];
