@@ -24,6 +24,7 @@
     }
 
     const handleAddBudget = async () => {
+        console.log(budget);
         // validates the different inputs
         f7.input.validate('#budgetCategory');
         f7.input.validate('#budgetAmount');
@@ -41,46 +42,16 @@
         // formats the amount to a number
         budget.amount = Number(budget.amount);
 
-        // check whether budget needs to be converted to base currency
-        if (budget.currency === '' || budget.currency === $baseCurrency) {
-            budget.currency = $baseCurrency;
-            budget.originalCurrency = null;
-            budget.originalAmount = null;
-        } else {
-            f7.dialog.preloader('Converting to ' + $baseCurrency);
-            await convertAmount().then(f7.dialog.close());
-        }
-
         // add the budget
         addBudget(budget).then(() => {
             // clear form
-            clearForm();
+            budget.category = null;
+            budget.amount = null;
+            budget.currency = $baseCurrency;
         });
 
         f7.dialog.close();
     };
-
-    const clearForm = () => {
-        budget.category = null;
-        budget.amount = null;
-        budget.currency = $baseCurrency;
-        budget.originalCurrency = null;
-        budget.originalAmount = null;
-    };
-
-    async function convertAmount() {
-        budget.originalAmount = budget.amount;
-        budget.originalCurrency = budget.currency;
-        let url = `https://api.exchangeratesapi.io/${budget.date}?base=${$baseCurrency}&symbols=${budget.originalCurrency}`;
-        let response = await fetch(url);
-        let data = await response.json();
-        let rates = JSON.stringify(data.rates);
-        let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-        budget.amount = Number(
-            (budget.originalAmount / exchangeRate).toFixed(2)
-        );
-        budget.currency = $baseCurrency;
-    }
 
     let budgetCurrencyPicker;
     const initPickers = () => {
@@ -98,6 +69,7 @@
                 },
                 change: function (value) {
                     budget.currency = value.value;
+                    budget.currency = budget.currency[0];
                 },
             },
         });
