@@ -41,7 +41,11 @@
         updatedIncome.amount = Number(updatedIncome.amount);
 
         // check whether expense needs to be converted to base currency
-        if (updatedIncome.originalAmount !== item.originalAmount) {
+        if (
+            updatedIncome.originalAmount !== item.originalAmount ||
+            (updateIncome.date !== item.date &&
+                updateIncome.currency !== $baseCurrency)
+        ) {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
             updatedIncome.amount = updatedIncome.originalAmount;
             updatedIncome.currency = updatedIncome.originalCurrency;
@@ -98,9 +102,9 @@
                     Keyboard.hide();
                 },
                 change: function () {
-                    updatedIncome.date = editIncomeDateCalendar.value[0]
-                        .toISOString()
-                        .substr(0, 10);
+                    updatedIncome.date = new Intl.DateTimeFormat(
+                        'en-CA'
+                    ).format(editIncomeDateCalendar.value[0]);
                 },
             },
         });
@@ -117,7 +121,7 @@
 </script>
 
 <Block>
-    <List noHairlines class="add-expense-form modal-form">
+    <List noHairlines class="modal-form">
         <ListInput
             outline
             floatingLabel

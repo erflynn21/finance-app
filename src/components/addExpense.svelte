@@ -23,7 +23,7 @@
             title: null,
             amount: null,
             category: null,
-            date: new Date().toISOString().substr(0, 10),
+            date: new Intl.DateTimeFormat('en-CA').format(new Date()),
             currency: $baseCurrency,
             originalAmount: null,
             originalCurrency: null,
@@ -147,9 +147,9 @@
                     Keyboard.hide();
                 },
                 change: function () {
-                    expense.date = expenseDateCalendar.value[0]
-                        .toISOString()
-                        .substr(0, 10);
+                    expense.date = new Intl.DateTimeFormat('en-CA').format(
+                        expenseDateCalendar.value[0]
+                    );
                 },
             },
         });

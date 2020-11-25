@@ -21,7 +21,7 @@
         income = {
             title: null,
             amount: null,
-            date: new Date().toISOString().substr(0, 10),
+            date: new Intl.DateTimeFormat('en-CA').format(new Date()),
             currency: $baseCurrency,
             originalAmount: null,
             originalCurrency: null,
@@ -120,9 +120,9 @@
                     Keyboard.hide();
                 },
                 change: function () {
-                    income.date = incomeDateCalendar.value[0]
-                        .toISOString()
-                        .substr(0, 10);
+                    income.date = new Intl.DateTimeFormat('en-CA').format(
+                        incomeDateCalendar.value[0]
+                    );
                 },
             },
         });

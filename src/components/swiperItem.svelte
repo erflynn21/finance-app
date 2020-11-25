@@ -9,7 +9,7 @@
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import { createEventDispatcher } from 'svelte';
+    import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
     import EditExpense from './editExpense.svelte';
     import EditIncome from './editIncome.svelte';
     const dispatch = createEventDispatcher();
@@ -32,20 +32,30 @@
         editing = false;
     };
 
+    let date, date1, date2, date3;
     // sets date for date picker
-    let date;
-    let date1 = item.date.split('-');
-    let date2 = date1[1] + '/' + date1[2];
-    if (date2.startsWith('0')) {
-        let date3 = date2.split('0');
-        if (date3[2] === undefined) {
-            date = date3[1];
+    const setDate = () => {
+        date;
+        date1 = item.date.split('-');
+        date2 = date1[1] + '/' + date1[2];
+        if (date2.startsWith('0')) {
+            date3 = date2.split('0');
+            if (date3[2] === undefined) {
+                date = date3[1];
+            } else {
+                date = date3[1] + date3[2];
+            }
         } else {
-            date = date3[1] + date3[2];
+            date = date2;
         }
-    } else {
-        date = date2;
-    }
+    };
+
+    onMount(() => {
+        setDate();
+    });
+    afterUpdate(() => {
+        setDate();
+    });
 </script>
 
 <ListItem
