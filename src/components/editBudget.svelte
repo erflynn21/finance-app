@@ -1,60 +1,54 @@
 <script>
+    export let item;
+    export let itemId;
     import ListInput from 'framework7-svelte/components/list-input.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import { f7 } from 'framework7-svelte';
+    import { updateBudget } from '../stores/budgetsStore';
+    import { allCurrencies } from '../stores/currenciesStore';
     import Button from 'framework7-svelte/components/button.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
+    import { onDestroy, onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
     const { Keyboard } = Plugins;
-    import { addBudget } from '../stores/budgetsStore';
-    import { baseCurrency, allCurrencies } from '../stores/currenciesStore';
-    import { onMount } from 'svelte';
 
-    let budget = {};
-    // checks to make sure there's a base currency before setting the expense values
-    $: if ($baseCurrency !== '') {
-        budget = {
-            category: null,
-            amount: null,
-            currency: $baseCurrency,
-        };
-    }
+    let updatedBudget = {
+        amount: item.amount,
+        category: item.category,
+        currency: item.currency,
+    };
 
-    const handleAddBudget = async () => {
+    const handleUpdateBudget = async () => {
         // validates the different inputs
-        f7.input.validate('#budgetCategory');
-        f7.input.validate('#budgetAmount');
+        f7.input.validate('#editedCategory');
+        f7.input.validate('#editedAmount');
 
         // breaks out of function if any inputs are left blank
-        if (
-            budget.title === null ||
-            budget.amount === null ||
-            budget.category === null
-        ) {
+        if (updatedBudget.category === null || updatedBudget.amount === null) {
             return;
         }
 
-        f7.dialog.preloader('Adding budget...');
+        f7.dialog.preloader('Updating expense...');
         // formats the amount to a number
-        budget.amount = Number(budget.amount);
+        updatedBudget.amount = Number(updatedBudget.amount);
 
-        // add the budget
-        addBudget(budget).then(() => {
-            // clear form
-            budget.category = null;
-            budget.amount = null;
-            budget.currency = $baseCurrency;
+        // updates the budget
+        updateBudget(updatedBudget, itemId).then(() => {
+            dispatch('collapse');
         });
 
         f7.dialog.close();
     };
 
-    let budgetCurrencyPicker;
+    let editBudgetCurrencyPicker;
+
     const initPickers = () => {
-        budgetCurrencyPicker = f7.picker.create({
-            inputEl: '#budgetCurrencyPicker',
+        editBudgetCurrencyPicker = f7.picker.create({
+            inputEl: '#editBudgetCurrencyPicker',
             cols: [
                 {
                     textAlign: 'center',
@@ -66,36 +60,36 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    budget.currency = value.value;
-                    budget.currency = budget.currency[0];
+                    updatedBudget.currency = value.value;
                 },
             },
         });
     };
 
     onMount(() => {
-        if ($allCurrencies.length > 0) {
-            initPickers();
-        }
+        initPickers();
+    });
+
+    onDestroy(() => {
+        editBudgetCurrencyPicker.destroy();
     });
 </script>
 
 <Block>
-    <List noHairlines class="add-form modal-form">
+    <List noHairlines class="modal-form">
         <ListInput
             outline
             floatingLabel
-            label="Category:"
+            label="Budget:"
             type="text"
-            placeholder="New Budget Category"
+            placeholder="Budget Category"
             autocapitalize="off"
-            inputId="budgetCategory"
-            bind:value={budget.category}
+            inputId="editedCategory"
+            bind:value={updatedBudget.category}
             clearButton
             required
-            autofocus
-            on:input={() => f7.input.validate('#budgetCategory')}
-            errorMessage="Please provide a valid category name." />
+            on:input={() => f7.input.validate('#editedCategory')}
+            errorMessage="Please provide a valid budget category." />
 
         <Row>
             <Col width="66">
@@ -106,14 +100,14 @@
                     type="number"
                     placeholder="Amount"
                     autocapitalize="off"
-                    inputId="budgetAmount"
+                    inputId="editedAmount"
                     step="0.01"
                     inputmode="decimal"
                     pattern="[0-9]*"
-                    bind:value={budget.amount}
+                    bind:value={updatedBudget.amount}
                     clearButton
                     required
-                    on:input={() => f7.input.validate('#budgetAmount')}
+                    on:input={() => f7.input.validate('#editedAmount')}
                     errorMessage="Please provide a valid amount." />
             </Col>
             <Col width="33">
@@ -121,11 +115,11 @@
                     outline
                     floatingLabel
                     label="Currency"
-                    value={budget.currency}
+                    value={updatedBudget.currency}
                     readonly
-                    inputId="budgetCurrencyPicker" />
+                    inputId="editBudgetCurrencyPicker" />
             </Col>
         </Row>
     </List>
-    <Button on:click={handleAddBudget}>Add</Button>
+    <Button on:click={handleUpdateBudget}>Update</Button>
 </Block>

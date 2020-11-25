@@ -21,7 +21,10 @@
     <Navbar title="Budgets" backLink="Back" on:clickBack={() => showFAB()} />
     <List>
         {#each $budgets as { item, itemId } (itemId)}
-            <BudgetSwiper {item} on:deleted={() => deleteBudget(itemId)} />
+            <BudgetSwiper
+                {item}
+                {itemId}
+                on:deleted={() => deleteBudget(itemId)} />
         {/each}
     </List>
 
