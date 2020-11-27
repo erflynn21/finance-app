@@ -1,7 +1,7 @@
 import {writable} from 'svelte/store';
 import userbase from 'userbase-js';
 import { get } from "svelte/store";
-import { currencyDict } from './currencyDictStore';
+import { currencyDict } from './dictionariesStore';
 
 let currencies = writable(null);
 let baseCurrency = writable('');

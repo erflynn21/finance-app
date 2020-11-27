@@ -34,4 +34,19 @@ const currencyDict = {
     ZAR: 'R',
 };
 
-export {currencyDict};
+const monthsDict = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+]
+
+export {currencyDict, monthsDict};

@@ -88,10 +88,10 @@
             <View url="/loading-screen/" class="safe-areas" />
         {:else if $userStore}
             {#if $currencies === null}
-                <View url="/loading-screen/" class="safe-areas" />
-                <!-- <Page noNavbar class="safe-areas loader">
+                <!-- <View url="/loading-screen/" class="safe-areas" /> -->
+                <Page noNavbar class="safe-areas loader">
                     <Preloader color="green" size={100} />
-                </Page> -->
+                </Page>
             {:else if currenciesSet === false}
                 <View url="/set-currencies/" class="safe-areas" />
             {/if}

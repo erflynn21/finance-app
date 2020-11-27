@@ -6,7 +6,7 @@
         baseCurrency,
         baseCurrencySymbol,
     } from '../stores/currenciesStore';
-    import { currencyDict } from '../stores/currencyDictStore';
+    import { currencyDict } from '../stores/dictionariesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import SwipeoutActions from 'framework7-svelte/components/swipeout-actions.svelte';
     import SwipeoutButton from 'framework7-svelte/components/swipeout-button.svelte';

@@ -5,7 +5,6 @@
     import ActionButton from '../components/actionButton.svelte';
 </script>
 
-<!-- <ActionButton /> -->
 <Page name="home">
     <Navbar title="Overview" />
 </Page>

@@ -1,9 +1,12 @@
 import {writable} from 'svelte/store';
+import { get } from "svelte/store";
+import {monthsDict} from './dictionariesStore';
 
 const startDate = writable('');
 const endDate = writable('');
 const selectedMonth = writable('');
 const selectedYear = writable('');
+const selectedMonthName = writable('');
 
 // getting current date
 const date = new Date();
@@ -29,5 +32,6 @@ startDate.set(`${start}`);
 endDate.set(`${end}`);
 selectedMonth.set(currentMonth);
 selectedYear.set(currentYear);
+selectedMonthName.set(monthsDict[get(selectedMonth) - 1]);
 
-export {startDate, endDate, selectedMonth, selectedYear}
+export {startDate, endDate, selectedMonth, selectedYear, selectedMonthName}

@@ -1,9 +1,7 @@
 <script>
     import { Page, Navbar } from 'framework7-svelte';
-    import ActionButton from '../components/actionButton.svelte';
+    import { selectedMonthName, selectedYear } from '../stores/datesStore';
 </script>
-
-<!-- <ActionButton /> -->
 
 <Page name="budget">
     <Navbar title="Budget" />
