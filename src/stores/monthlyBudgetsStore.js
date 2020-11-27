@@ -4,13 +4,15 @@ import { selectedMonth, selectedYear } from '../stores/datesStore';
 import { get } from "svelte/store";
 
 let monthlyBudgets = writable([]);
+let monthlyDBOpen = writable(false);
 const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-monthlyBudgets`;
 
 const openMonthlyBudgetsDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
         monthlyBudgets.set(items);
     }})
-    .catch((e) => console.log(e));
+    .catch((e) => console.log(e))
+    .finally(() => monthlyDBOpen.set(true));
 }
 
 const addMonthlyBudget = (monthlyBudget) => {
@@ -25,4 +27,4 @@ const deleteMonthlyBudget = (monthlyBudgetId) => {
     return userbase.deleteItem({ databaseName, itemId: monthlyBudgetId });
 };
 
-export {monthlyBudgets, openMonthlyBudgetsDatabase, addMonthlyBudget, updateMonthlyBudget, deleteMonthlyBudget};
+export {monthlyBudgets, monthlyDBOpen, openMonthlyBudgetsDatabase, addMonthlyBudget, updateMonthlyBudget, deleteMonthlyBudget};

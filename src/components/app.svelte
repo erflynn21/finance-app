@@ -20,7 +20,10 @@
     import { openBudgetsDatabase } from '../stores/budgetsStore';
     import { openIncomesDatabase } from '../stores/incomesStore';
     import { openMonthlyIncomesDatabase } from '../stores/monthlyIncomesStore';
-    import { openMonthlyBudgetsDatabase } from '../stores/monthlyBudgetsStore';
+    import {
+        monthlyDBOpen,
+        openMonthlyBudgetsDatabase,
+    } from '../stores/monthlyBudgetsStore';
     import { openMonthlyExpensesDatabase } from '../stores/monthlyExpensesStore';
     import ActionButton from './actionButton.svelte';
     import { Plugins, KeyboardInfo } from '@capacitor/core';
@@ -60,23 +63,23 @@
     $: if ($currencies) checkBaseCurrency();
 
     const initDatabases = () => {
-        openBudgetsDatabase();
-        openCurrenciesDatabase();
-        openExpensesDatabase();
-        openIncomesDatabase();
         openMonthlyBudgetsDatabase();
         openMonthlyExpensesDatabase();
         openMonthlyIncomesDatabase();
+
+        openCurrenciesDatabase();
+        openExpensesDatabase();
+        openIncomesDatabase();
     };
 
     $: if ($userStore) initDatabases();
+    $: if ($monthlyDBOpen === true) openBudgetsDatabase();
 
     onMount(() => {
         f7ready(() => {});
     });
 </script>
 
-<!-- <SetCurrencies on:CurrencySet={checkBaseCurrency} /> -->
 <App params={f7params}>
     <!-- Views/Tabs container -->
     <Views tabs class="safe-areas">

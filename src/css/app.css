@@ -109,17 +109,28 @@ html {
 }
 
 .budget-summary-list {
-  margin: 0 0 10px 0;
+  margin: 0 0 25px 0;
 }
 
 .budget-summary-list .item-inner:after {
   content: none;
 }
 
-h4 {
+.monthly-budget-list {
+  margin: 15px 0 15px 0;
+}
+
+.monthly-budget-list .item-inner:after {
+  content: none;
+}
+
+h1, h2, h3, h4, h5, h6  {
   margin: 0;
 }
 
-.budget-summary-list .item-cell:first-child {
-  width: 125%;
+.budget-summary-list .item-cell:last-child {
+  /* width: 100%; */
+  margin-left: 0;
+  justify-content: end;
 }
+

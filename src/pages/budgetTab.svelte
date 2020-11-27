@@ -8,6 +8,11 @@
     import { selectedMonthName, selectedYear } from '../stores/datesStore';
     import { expensesSum } from '../stores/expensesStore';
     import { tweened } from 'svelte/motion';
+    import {
+        deleteMonthlyBudget,
+        monthlyBudgets,
+    } from '../stores/monthlyBudgetsStore';
+    import MonthlyBudgetCategory from '../components/monthlyBudgetCategory.svelte';
 
     // percentage and tweened values
     $: percentage = Math.floor((100 / $budgetsSum) * $expensesSum) || 0;
@@ -56,6 +61,12 @@
             </div>
         </div>
     </List>
+
+    <!-- <List class="monthly-budget-list"> -->
+    {#each $monthlyBudgets as { item, itemId } (itemId)}
+        <MonthlyBudgetCategory {item} {itemId} />
+    {/each}
+    <!-- </List> -->
 </Page>
 
 <style>
@@ -71,7 +82,6 @@
     :global(.budget-summary-grid .item-cell:last-child) {
         justify-self: end;
     }
-
     .grid {
         display: grid;
         grid-template-columns: 1fr 0.1fr;
