@@ -78,6 +78,7 @@
   content: none;
 }
 
+
 .block-title {
   margin-bottom: 0;
 }
@@ -105,4 +106,20 @@ html {
 
 .transactions-list {
   margin: 10px 0;
+}
+
+.budget-summary-list {
+  margin: 0 0 10px 0;
+}
+
+.budget-summary-list .item-inner:after {
+  content: none;
+}
+
+h4 {
+  margin: 0;
+}
+
+.budget-summary-list .item-cell:first-child {
+  width: 125%;
 }
