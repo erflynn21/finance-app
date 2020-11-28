@@ -5,6 +5,7 @@ import { get } from "svelte/store";
 
 let incomes = writable([]);
 let incomesSum = writable(0);
+let incomesDBOpen = writable(false);
 const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-incomes`;
 
 const openIncomesDatabase = () => {
@@ -31,7 +32,8 @@ const openIncomesDatabase = () => {
                 return trimmed;
             }, 0));
         }})
-        .catch((e) => console.log(e));
+        .catch((e) => console.log(e))
+        .finally(() => incomesDBOpen.set(true));
 }
 
 const addIncome = (income) => {
@@ -46,4 +48,4 @@ const deleteIncome = (incomeId) => {
     return userbase.deleteItem({ databaseName, itemId: incomeId });
 }
 
-export {incomes, incomesSum, openIncomesDatabase, addIncome, updateIncome, deleteIncome};
+export {incomes, incomesSum, incomesDBOpen, openIncomesDatabase, addIncome, updateIncome, deleteIncome};

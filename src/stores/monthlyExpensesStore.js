@@ -16,7 +16,6 @@ const openMonthlyExpensesDatabase = () => {
     .catch((e) => console.log(e));
 }
 
-// monthlyExpense.item.recurringDate >= new Date().getDate()
 const checkRecurringExpenses = async (monthlyExpenses) => {
     monthlyExpenses.forEach(async monthlyExpense => {
         let result = get(expenses).filter((expense) => expense.item.title === monthlyExpense.item.title);

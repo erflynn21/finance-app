@@ -21,7 +21,7 @@
         openExpensesDatabase,
     } from '../stores/expensesStore';
     import { openBudgetsDatabase } from '../stores/budgetsStore';
-    import { openIncomesDatabase } from '../stores/incomesStore';
+    import { incomesDBOpen, openIncomesDatabase } from '../stores/incomesStore';
     import { openMonthlyIncomesDatabase } from '../stores/monthlyIncomesStore';
     import {
         monthlyDBOpen,
@@ -68,7 +68,6 @@
     const initDatabases = () => {
         openCurrenciesDatabase();
         openMonthlyBudgetsDatabase();
-        openMonthlyIncomesDatabase();
         openExpensesDatabase();
         openIncomesDatabase();
     };
@@ -76,6 +75,7 @@
     $: if ($userStore) initDatabases();
     $: if ($monthlyDBOpen === true) openBudgetsDatabase();
     $: if ($expensesDBOpen === true) openMonthlyExpensesDatabase();
+    $: if ($incomesDBOpen === true) openMonthlyIncomesDatabase();
 
     onMount(() => {
         f7ready(() => {});

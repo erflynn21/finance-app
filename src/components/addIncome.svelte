@@ -45,6 +45,8 @@
         // check whether income needs to be converted to base currency
         if (income.currency === '' || income.currency === $baseCurrency) {
             income.currency = $baseCurrency;
+        } else if (recurring === true) {
+            income.currency = income.currency;
         } else {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
             await convertAmount().then(f7.dialog.close());
@@ -59,7 +61,6 @@
             let recurringIncome = {
                 title: income.title,
                 amount: income.amount,
-                category: income.category,
                 currency: income.currency,
                 recurringDate: income.date.slice(-2),
             };
