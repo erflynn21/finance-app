@@ -38,7 +38,10 @@
         {/each}
     </List>
 
-    <h3>Remaining: {$baseCurrencySymbol}{$incomesSum - $expensesSum}</h3>
+    <h3>
+        Remaining:
+        {$baseCurrencySymbol}{($incomesSum - $expensesSum).toFixed(2)}
+    </h3>
 </Page>
 
 <style>

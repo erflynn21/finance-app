@@ -8,11 +8,14 @@
     import { selectedMonthName, selectedYear } from '../stores/datesStore';
     import { expensesSum } from '../stores/expensesStore';
     import { tweened } from 'svelte/motion';
-    import { monthlyBudgets } from '../stores/monthlyBudgetsStore';
+    import {
+        monthlyBudgets,
+        monthlyBudgetsSum,
+    } from '../stores/monthlyBudgetsStore';
     import MonthlyBudgetCategory from '../components/monthlyBudgetCategory.svelte';
 
     // percentage and tweened values
-    $: percentage = Math.floor((100 / $budgetsSum) * $expensesSum) || 0;
+    $: percentage = Math.floor((100 / $monthlyBudgetsSum) * $expensesSum) || 0;
     const tweenedPercentage = tweened(0);
     $: tweenedPercentage.set(percentage);
 </script>
@@ -29,7 +32,7 @@
                     <ListItemCell>
                         {$baseCurrencySymbol}{$expensesSum}
                         of
-                        {$baseCurrencySymbol}{$budgetsSum}
+                        {$baseCurrencySymbol}{$monthlyBudgetsSum}
                     </ListItemCell>
                 </ListItemRow>
                 <ListItemRow>
@@ -59,9 +62,13 @@
         </div>
     </List>
 
+    <h3>Categories</h3>
+
     {#each $monthlyBudgets as { item, itemId } (itemId)}
         <MonthlyBudgetCategory {item} {itemId} />
     {/each}
+
+    <div class="spacer" />
 </Page>
 
 <style>
@@ -110,5 +117,17 @@
         box-sizing: border-box;
         background-color: green;
         border-radius: 5px;
+    }
+
+    .spacer {
+        height: 65px;
+    }
+
+    h3 {
+        font-size: 14px;
+        color: black;
+        font-weight: 400;
+        text-align: center;
+        margin: 10px 0 10px 0;
     }
 </style>

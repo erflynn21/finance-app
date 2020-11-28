@@ -12,7 +12,7 @@ const databaseName = `budgets`;
 const openBudgetsDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
         budgets.set(items);
-        // console.log(items);
+
         // sets the budgets sum
         let totalBudgets = [];
         get(budgets).forEach((budget) => {
@@ -45,11 +45,8 @@ const setCategories = () => {
 }
 
 const setMonthlyBudgets = async (budgets) => {
-    console.log('set monthly budgets')
-    // console.log(budgets);
     budgets.forEach(async budget => {
         let monthlyBudget = get(monthlyBudgets).filter((monthlybudget) => monthlybudget.item.category === budget.item.category);
-            // console.log(monthlyBudget);
         if (monthlyBudget.length == 0) {
             let newMonthlyBudget = {
                 amount: budget.item.amount,
@@ -60,7 +57,6 @@ const setMonthlyBudgets = async (budgets) => {
             if (newMonthlyBudget.currency !== get(baseCurrency)) {
                 await convertAmount(newMonthlyBudget);
             }
-            console.log(newMonthlyBudget)
             addMonthlyBudget(newMonthlyBudget);
         } else {
             return;
