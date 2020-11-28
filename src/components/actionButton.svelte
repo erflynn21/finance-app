@@ -10,6 +10,26 @@
     import FabBackdrop from 'framework7-svelte/components/fab-backdrop.svelte';
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
+
+    // opens add modal
+    let addModal;
+    let adding = false;
+    let type;
+    const add = (addType) => {
+        adding = true;
+        type = addType;
+        setTimeout(function () {
+            const addModalInstance = addModal.instance();
+            addModalInstance.open();
+        }, 50);
+    };
+
+    // closes add modal
+    const closeModal = () => {
+        const addModalInstance = addModal.instance();
+        addModalInstance.close();
+        adding = false;
+    };
 </script>
 
 <FabBackdrop />
@@ -18,44 +38,53 @@
     <Icon ios="f7:plus" md="material:add" />
     <Icon ios="f7:xmark" md="material:close" />
     <FabButtons position="top">
-        <FabButton label="Add Expense" fabClose>
-            <Button sheetOpen=".add-expense">
-                <Icon material="create" />
-            </Button>
+        <FabButton label="Add Expense" fabClose on:click={() => add('expense')}>
+            <!-- <Button sheetOpen=".add-expense"> -->
+            <Icon material="create" />
+            <!-- </Button> -->
         </FabButton>
-        <FabButton label="Add Income" fabClose>
-            <Button sheetOpen=".add-income">
-                <Icon material="today" />
-            </Button>
+        <FabButton label="Add Income" fabClose on:click={() => add('income')}>
+            <!-- <Button sheetOpen=".add-income"> -->
+            <Icon material="today" />
+            <!-- </Button> -->
         </FabButton>
     </FabButtons>
 </Fab>
 
-<Sheet class="add-expense" style="height: auto; max-height: 80vh" backdrop>
-    <Toolbar>
-        <div class="left">Add New Expense</div>
-        <div class="right">
-            <Link sheetClose>Close</Link>
-        </div>
-    </Toolbar>
-    <div class="swipe-handler" />
-    <AddExpense />
-</Sheet>
+{#if adding === true && type === 'expense'}
+    <Sheet
+        class="add"
+        style="height: auto; max-height: 80vh"
+        backdrop
+        bind:this={addModal}>
+        <Toolbar>
+            <div class="left">Add New Expense</div>
+            <div class="right">
+                <Link sheetClose on:click={() => (adding = false)}>Close</Link>
+            </div>
+        </Toolbar>
+        <div class="swipe-handler" />
+        <AddExpense />
+    </Sheet>
+{/if}
 
-<Sheet
-    class="add-income"
-    style="height: auto; max-height: 70vh"
-    swipeToClose
-    backdrop>
-    <Toolbar>
-        <div class="left">Add New Income</div>
-        <div class="right">
-            <Link sheetClose>Close</Link>
-        </div>
-    </Toolbar>
-    <div class="swipe-handler" />
-    <AddIncome />
-</Sheet>
+{#if adding === true && type === 'income'}
+    <Sheet
+        class="add"
+        style="height: auto; max-height: 70vh"
+        swipeToClose
+        backdrop
+        bind:this={addModal}>
+        <Toolbar>
+            <div class="left">Add New Income</div>
+            <div class="right">
+                <Link sheetClose on:click={() => (adding = false)}>Close</Link>
+            </div>
+        </Toolbar>
+        <div class="swipe-handler" />
+        <AddIncome />
+    </Sheet>
+{/if}
 
 <style>
     :global(.fab) {

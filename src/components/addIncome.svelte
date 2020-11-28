@@ -12,6 +12,7 @@
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
+    import { onDestroy, onMount } from 'svelte';
     const { Keyboard } = Plugins;
 
     let recurring = false;
@@ -134,9 +135,18 @@
         });
     };
 
-    $: if ($categories.length > 0 && $allCurrencies.length > 0) {
+    onMount(() => {
         initPickers();
-    }
+    });
+
+    onDestroy(() => {
+        incomeCurrencyPicker.destroy();
+        incomeDateCalendar.destroy();
+    });
+
+    // $: if ($categories.length > 0 && $allCurrencies.length > 0) {
+    //     initPickers();
+    // }
 </script>
 
 <Block>
