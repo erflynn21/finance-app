@@ -35,7 +35,7 @@
             return;
         }
 
-        f7.dialog.preloader('Updating expense...');
+        f7.dialog.preloader('Updating income...');
         // formats the amount to a number
         updatedIncome.amount = Number(updatedIncome.amount);
 
@@ -50,7 +50,7 @@
         }
 
         // add the expense
-        updateIncome(updatedIncome, itemId).then(() => {
+        await updateIncome(updatedIncome, itemId).then(() => {
             dispatch('collapse');
             f7.dialog.close();
         });

@@ -62,7 +62,7 @@
 
         if (recurring === false) {
             // add the expense
-            addExpense(expense).then(() => {
+            await addExpense(expense).then(() => {
                 clearForm();
             });
         } else {
@@ -74,7 +74,7 @@
                 recurringDate: expense.date.slice(-2),
             };
             // add the recurring expense
-            addMonthlyExpense(recurringExpense).then(() => {
+            await addMonthlyExpense(recurringExpense).then(() => {
                 clearForm();
             });
         }

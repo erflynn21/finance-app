@@ -13,6 +13,7 @@
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
     import EditMonthlyBudget from './editMonthlyBudget.svelte';
+    import { deleteMonthlyBudget } from '../stores/monthlyBudgetsStore';
 
     // sets expenses sum for each category
     $: categorySum = 0;
@@ -108,6 +109,7 @@
             </SwipeoutButton> -->
         </SwipeoutActions>
     </li>
+    <!-- <button on:click={() => deleteMonthlyBudget(itemId)}>X</button> -->
 </List>
 
 {#if editing === true}

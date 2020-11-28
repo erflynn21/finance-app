@@ -32,12 +32,12 @@
             return;
         }
 
-        f7.dialog.preloader('Updating expense...');
+        f7.dialog.preloader('Updating budget...');
         // formats the amount to a number
         updatedBudget.amount = Number(updatedBudget.amount);
 
         // updates the budget
-        updateBudget(updatedBudget, itemId).then(() => {
+        await updateBudget(updatedBudget, itemId).then(() => {
             dispatch('collapse');
         });
 

@@ -41,7 +41,7 @@
         budget.amount = Number(budget.amount);
 
         // add the budget
-        addBudget(budget).then(() => {
+        await addBudget(budget).then(() => {
             // clear form
             budget.category = null;
             budget.amount = null;

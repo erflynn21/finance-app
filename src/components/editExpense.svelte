@@ -57,7 +57,7 @@
         }
 
         // add the expense
-        updateExpense(updatedExpense, itemId).then(() => {
+        await updateExpense(updatedExpense, itemId).then(() => {
             dispatch('collapse');
             f7.dialog.close();
         });

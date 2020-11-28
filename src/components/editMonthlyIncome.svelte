@@ -29,7 +29,7 @@
         // validates the different inputs
         f7.input.validate('#editedTitle');
         f7.input.validate('#editedAmount');
-        f7.input.validate('#editMonthlyExpenseCategoryPicker');
+        f7.input.validate('#editMonthlyIncomeCategoryPicker');
 
         // breaks out of function if any inputs are left blank
         if (
@@ -40,12 +40,12 @@
             return;
         }
 
-        f7.dialog.preloader('Updating expense...');
+        f7.dialog.preloader('Updating income...');
         // formats the amount to a number
         updatedMonthlyIncome.amount = Number(updatedMonthlyIncome.amount);
 
         // update the monthly expense
-        updateMonthlyIncome(updatedMonthlyIncome, itemId).then(() => {
+        await updateMonthlyIncome(updatedMonthlyIncome, itemId).then(() => {
             dispatch('collapse');
         });
 

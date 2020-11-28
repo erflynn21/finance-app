@@ -45,7 +45,7 @@
         updatedMonthlyExpense.amount = Number(updatedMonthlyExpense.amount);
 
         // update the monthly expense
-        updateMonthlyExpense(updatedMonthlyExpense, itemId).then(() => {
+        await updateMonthlyExpense(updatedMonthlyExpense, itemId).then(() => {
             dispatch('collapse');
         });
 

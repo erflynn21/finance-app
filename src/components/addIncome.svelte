@@ -5,7 +5,6 @@
     import Block from 'framework7-svelte/components/block.svelte';
     import ListInput from 'framework7-svelte/components/list-input.svelte';
     import List from 'framework7-svelte/components/list.svelte';
-    import { categories } from '../stores/budgetsStore';
     import { addMonthlyIncome } from '../stores/monthlyIncomesStore';
     import { addIncome } from '../stores/incomesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
@@ -39,11 +38,11 @@
             return;
         }
 
-        f7.dialog.preloader('Adding expense...');
+        f7.dialog.preloader('Adding income...');
         // formats the amount to a number
         income.amount = Number(income.amount);
 
-        // check whether expense needs to be converted to base currency
+        // check whether income needs to be converted to base currency
         if (income.currency === '' || income.currency === $baseCurrency) {
             income.currency = $baseCurrency;
         } else {
@@ -52,8 +51,8 @@
         }
 
         if (recurring === false) {
-            // add the expense
-            addIncome(income).then(() => {
+            // add the income
+            await addIncome(income).then(() => {
                 clearForm();
             });
         } else {
@@ -64,8 +63,8 @@
                 currency: income.currency,
                 recurringDate: income.date.slice(-2),
             };
-            // add the recurring expense
-            addMonthlyIncome(recurringIncome).then(() => {
+            // add the recurring income
+            await addMonthlyIncome(recurringIncome).then(() => {
                 clearForm();
             });
         }
