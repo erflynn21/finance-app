@@ -12,7 +12,6 @@
 
     // sets expenses sum for each category
     $: categorySum = 0;
-
     const calcCategoryExpenses = () => {
         let categoryExpenses = [];
         $expenses.forEach((expense) => {
@@ -21,7 +20,9 @@
                 // console.log(categoryExpenses);
             }
             categorySum = categoryExpenses.reduce(function (a, b) {
-                return a + b;
+                const sum = a + b;
+                const trimmed = Number(sum.toFixed(2));
+                return trimmed;
             }, 0);
         });
     };
@@ -29,7 +30,7 @@
     $: if ($expenses) calcCategoryExpenses();
 
     // percentage and tweened values
-    $: percentage = Math.floor((100 / $budgetsSum) * $expensesSum) || 0;
+    $: percentage = Math.floor((100 / item.amount) * categorySum) || 0;
     const tweenedPercentage = tweened(0);
     $: tweenedPercentage.set(percentage);
 </script>
