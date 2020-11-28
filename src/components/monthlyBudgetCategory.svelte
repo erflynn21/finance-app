@@ -109,7 +109,7 @@
             </SwipeoutButton> -->
         </SwipeoutActions>
     </li>
-    <!-- <button on:click={() => deleteMonthlyBudget(itemId)}>X</button> -->
+    <button on:click={() => deleteMonthlyBudget(itemId)}>X</button>
 </List>
 
 {#if editing === true}

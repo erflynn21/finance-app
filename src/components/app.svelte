@@ -16,7 +16,10 @@
         currencies,
         openCurrenciesDatabase,
     } from '../stores/currenciesStore';
-    import { openExpensesDatabase } from '../stores/expensesStore';
+    import {
+        expensesDBOpen,
+        openExpensesDatabase,
+    } from '../stores/expensesStore';
     import { openBudgetsDatabase } from '../stores/budgetsStore';
     import { openIncomesDatabase } from '../stores/incomesStore';
     import { openMonthlyIncomesDatabase } from '../stores/monthlyIncomesStore';
@@ -63,17 +66,16 @@
     $: if ($currencies) checkBaseCurrency();
 
     const initDatabases = () => {
-        openMonthlyBudgetsDatabase();
-        openMonthlyExpensesDatabase();
-        openMonthlyIncomesDatabase();
-
         openCurrenciesDatabase();
+        openMonthlyBudgetsDatabase();
+        openMonthlyIncomesDatabase();
         openExpensesDatabase();
         openIncomesDatabase();
     };
 
     $: if ($userStore) initDatabases();
     $: if ($monthlyDBOpen === true) openBudgetsDatabase();
+    $: if ($expensesDBOpen === true) openMonthlyExpensesDatabase();
 
     onMount(() => {
         f7ready(() => {});
