@@ -4,11 +4,10 @@
     import ListItemCell from 'framework7-svelte/components/list-item-cell.svelte';
     import ListItemRow from 'framework7-svelte/components/list-item-row.svelte';
     import List from 'framework7-svelte/components/list.svelte';
-    import { budgetsSum } from '../stores/budgetsStore';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import { expenses, expensesSum } from '../stores/expensesStore';
+    import { expenses } from '../stores/expensesStore';
     import { tweened } from 'svelte/motion';
-    import { afterUpdate } from 'svelte';
+    import { deleteMonthlyBudget } from '../stores/monthlyBudgetsStore';
 
     // sets expenses sum for each category
     $: categorySum = 0;
@@ -60,19 +59,19 @@
                             <div
                                 class="percent"
                                 style="width: {$tweenedPercentage}%; background-color: yellow" />
-                            <span style="color: gray">{percentage}%</span>
+                            <span style="color: #383838">{percentage}%</span>
                         {:else}
                             <div
                                 class="percent"
                                 style="width: {$tweenedPercentage}%; background-color: red" />
                             <span>{percentage}%</span>
                         {/if}
-                        <span>{percentage}%</span>
                     </div>
                 </div>
             </ListItemRow>
         </div>
     </div>
+    <!-- <button on:click={() => deleteMonthlyBudget(itemId)}>X</button> -->
 </List>
 
 <style>
@@ -85,7 +84,7 @@
     }
 
     .percentage {
-        grid-column: 1/2;
+        grid-column: 1/3;
         width: 100%;
         position: relative;
         background-color: lightgray;

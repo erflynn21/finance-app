@@ -8,10 +8,7 @@
     import { selectedMonthName, selectedYear } from '../stores/datesStore';
     import { expensesSum } from '../stores/expensesStore';
     import { tweened } from 'svelte/motion';
-    import {
-        deleteMonthlyBudget,
-        monthlyBudgets,
-    } from '../stores/monthlyBudgetsStore';
+    import { monthlyBudgets } from '../stores/monthlyBudgetsStore';
     import MonthlyBudgetCategory from '../components/monthlyBudgetCategory.svelte';
 
     // percentage and tweened values
@@ -47,14 +44,14 @@
                                 <div
                                     class="percent"
                                     style="width: {$tweenedPercentage}%; background-color: yellow" />
-                                <span style="color: gray">{percentage}%</span>
+                                <span
+                                    style="color: #383838">{percentage}%</span>
                             {:else}
                                 <div
                                     class="percent"
                                     style="width: {$tweenedPercentage}%; background-color: red" />
                                 <span>{percentage}%</span>
                             {/if}
-                            <span>{percentage}%</span>
                         </div>
                     </div>
                 </ListItemRow>
@@ -62,11 +59,9 @@
         </div>
     </List>
 
-    <!-- <List class="monthly-budget-list"> -->
     {#each $monthlyBudgets as { item, itemId } (itemId)}
         <MonthlyBudgetCategory {item} {itemId} />
     {/each}
-    <!-- </List> -->
 </Page>
 
 <style>
@@ -77,10 +72,11 @@
 
     :global(.budget-summary-grid .item-cell:first-child) {
         justify-self: start;
+        width: 75%;
     }
 
     :global(.budget-summary-grid .item-cell:last-child) {
-        justify-self: end;
+        text-align: right;
     }
     .grid {
         display: grid;

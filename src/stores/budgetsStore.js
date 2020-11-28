@@ -1,8 +1,8 @@
 import {get, writable} from 'svelte/store';
 import userbase from 'userbase-js';
 import {baseCurrency} from './currenciesStore'
-import { endDate } from './datesStore';
-import { addMonthlyBudget, monthlyBudgets, monthlyDBOpen } from './monthlyBudgetsStore';
+import { startDate } from './datesStore';
+import { addMonthlyBudget, monthlyBudgets } from './monthlyBudgetsStore';
 
 let budgets = writable([]);
 let budgetsSum = writable(0);
@@ -12,7 +12,7 @@ const databaseName = `budgets`;
 const openBudgetsDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
         budgets.set(items);
-
+        // console.log(items);
         // sets the budgets sum
         let totalBudgets = [];
         get(budgets).forEach((budget) => {
@@ -28,7 +28,7 @@ const openBudgetsDatabase = () => {
         setCategories();
 
         // sets monthly budgets
-        setMonthlyBudgets(get(budgets));
+        setMonthlyBudgets(items);
     }})
     .catch((e) => console.log(e));
     ;
@@ -45,8 +45,11 @@ const setCategories = () => {
 }
 
 const setMonthlyBudgets = async (budgets) => {
+    console.log('set monthly budgets')
+    // console.log(budgets);
     budgets.forEach(async budget => {
         let monthlyBudget = get(monthlyBudgets).filter((monthlybudget) => monthlybudget.item.category === budget.item.category);
+            // console.log(monthlyBudget);
         if (monthlyBudget.length == 0) {
             let newMonthlyBudget = {
                 amount: budget.item.amount,
@@ -57,7 +60,7 @@ const setMonthlyBudgets = async (budgets) => {
             if (newMonthlyBudget.currency !== get(baseCurrency)) {
                 await convertAmount(newMonthlyBudget);
             }
-
+            console.log(newMonthlyBudget)
             addMonthlyBudget(newMonthlyBudget);
         } else {
             return;
@@ -68,7 +71,7 @@ const setMonthlyBudgets = async (budgets) => {
 const convertAmount = async (newMonthlyBudget) => {
     newMonthlyBudget.originalAmount = newMonthlyBudget.amount;
     newMonthlyBudget.originalCurrency = newMonthlyBudget.currency;
-    let date = get(endDate);
+    let date = get(startDate);
     let url = `https://api.exchangeratesapi.io/${date}?base=${get(baseCurrency)}&symbols=${newMonthlyBudget.originalCurrency}`;
     let response = await fetch(url);
     let data = await response.json();
