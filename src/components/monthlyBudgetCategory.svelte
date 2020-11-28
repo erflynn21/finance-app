@@ -1,13 +1,18 @@
 <script>
     export let item;
-    // export let itemId;
+    export let itemId;
     import ListItemCell from 'framework7-svelte/components/list-item-cell.svelte';
     import ListItemRow from 'framework7-svelte/components/list-item-row.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
     import { expenses } from '../stores/expensesStore';
     import { tweened } from 'svelte/motion';
-    import { deleteMonthlyBudget } from '../stores/monthlyBudgetsStore';
+    import SwipeoutActions from 'framework7-svelte/components/swipeout-actions.svelte';
+    import SwipeoutButton from 'framework7-svelte/components/swipeout-button.svelte';
+    import Sheet from 'framework7-svelte/components/sheet.svelte';
+    import Toolbar from 'framework7-svelte/components/toolbar.svelte';
+    import Link from 'framework7-svelte/components/link.svelte';
+    import EditMonthlyBudget from './editMonthlyBudget.svelte';
 
     // sets expenses sum for each category
     $: categorySum = 0;
@@ -25,8 +30,25 @@
             }, 0);
         });
     };
-
     $: if ($expenses) calcCategoryExpenses();
+
+    // opens editing modal
+    let editModal;
+    let editing = false;
+    const edit = () => {
+        editing = true;
+        setTimeout(function () {
+            const editModalInstance = editModal.instance();
+            editModalInstance.open();
+        }, 50);
+    };
+
+    // closes editing modal
+    const closeModal = () => {
+        const editModalInstance = editModal.instance();
+        editModalInstance.close();
+        editing = false;
+    };
 
     // percentage and tweened values
     $: percentage = Math.floor((100 / item.amount) * categorySum) || 0;
@@ -34,45 +56,78 @@
     $: tweenedPercentage.set(percentage);
 </script>
 
+<!-- swipeout on:swipeoutDelete={() => deleteMonthlyBudget(itemId)} -->
 <List class="monthly-budget-list">
-    <div class="item-content">
-        <div class="item-inner item-cell">
-            <ListItemRow class="budget-summary-grid">
-                <ListItemCell>
-                    <h4>{item.category}</h4>
-                </ListItemCell>
-                <ListItemCell>
-                    {$baseCurrencySymbol}{categorySum}
-                    of
-                    {$baseCurrencySymbol}{item.amount}
-                </ListItemCell>
-            </ListItemRow>
-            <ListItemRow>
-                <div class="grid">
-                    <div class="percentage">
-                        {#if percentage <= 70}
-                            <div
-                                class="percent"
-                                style="width: {$tweenedPercentage}%; background-color: green" />
-                            <span>{percentage}%</span>
-                        {:else if percentage > 70 && percentage <= 90}
-                            <div
-                                class="percent"
-                                style="width: {$tweenedPercentage}%; background-color: yellow" />
-                            <span style="color: #383838">{percentage}%</span>
-                        {:else}
-                            <div
-                                class="percent"
-                                style="width: {$tweenedPercentage}%; background-color: red" />
-                            <span>{percentage}%</span>
-                        {/if}
+    <li class="swipeout delete-callback">
+        <div class="swipeout-content item-content">
+            <div class="item-inner item-cell">
+                <ListItemRow class="budget-summary-grid">
+                    <ListItemCell>
+                        <h4>{item.category}</h4>
+                    </ListItemCell>
+                    <ListItemCell>
+                        {$baseCurrencySymbol}{categorySum}
+                        of
+                        {$baseCurrencySymbol}{item.amount}
+                    </ListItemCell>
+                </ListItemRow>
+                <ListItemRow>
+                    <div class="grid">
+                        <div class="percentage">
+                            {#if percentage <= 70}
+                                <div
+                                    class="percent"
+                                    style="width: {$tweenedPercentage}%; background-color: green" />
+                                <span>{percentage}%</span>
+                            {:else if percentage > 70 && percentage <= 90}
+                                <div
+                                    class="percent"
+                                    style="width: {$tweenedPercentage}%; background-color: yellow" />
+                                <span
+                                    style="color: #383838">{percentage}%</span>
+                            {:else}
+                                <div
+                                    class="percent"
+                                    style="width: {$tweenedPercentage}%; background-color: red" />
+                                <span>{percentage}%</span>
+                            {/if}
+                        </div>
                     </div>
-                </div>
-            </ListItemRow>
+                </ListItemRow>
+            </div>
         </div>
-    </div>
-    <!-- <button on:click={() => deleteMonthlyBudget(itemId)}>X</button> -->
+        <SwipeoutActions right>
+            <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
+            <!-- <SwipeoutButton
+                delete
+                color="red"
+                overswipe
+                confirmText="Are you sure you want to delete this budget category?"
+                confirmTitle=" ">
+                Delete
+            </SwipeoutButton> -->
+        </SwipeoutActions>
+    </li>
 </List>
+
+{#if editing === true}
+    <Sheet
+        class="edit"
+        style="height: auto; max-height: 70vh"
+        backdrop
+        bind:this={editModal}
+        {item}
+        {itemId}>
+        <Toolbar>
+            <div class="left">Edit Expense</div>
+            <div class="right">
+                <Link sheetClose on:click={() => (editing = false)}>Close</Link>
+            </div>
+        </Toolbar>
+        <div class="swipe-handler" />
+        <EditMonthlyBudget {item} {itemId} on:collapse={closeModal} />
+    </Sheet>
+{/if}
 
 <style>
     .grid {

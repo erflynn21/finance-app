@@ -17,8 +17,6 @@
     import Col from 'framework7-svelte/components/col.svelte';
     const { Keyboard } = Plugins;
 
-    let originalCurrency = item.originalCurrency;
-
     let updatedExpense = {
         title: item.title,
         date: item.date,
@@ -57,9 +55,6 @@
             f7.dialog.preloader('Converting to ' + $baseCurrency);
             await convertAmount();
         }
-
-        console.log(updatedExpense);
-        // console.log(item);
 
         // add the expense
         updateExpense(updatedExpense, itemId).then(() => {
