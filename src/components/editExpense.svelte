@@ -17,6 +17,8 @@
     import Col from 'framework7-svelte/components/col.svelte';
     const { Keyboard } = Plugins;
 
+    let originalCurrency = item.originalCurrency;
+
     let updatedExpense = {
         title: item.title,
         date: item.date,
@@ -48,15 +50,16 @@
 
         // check whether expense needs to be converted to base currency
         if (
-            updatedExpense.originalAmount !== item.originalAmount ||
-            (updateExpense.date !== item.date &&
-                updateExpense.currency !== $baseCurrency)
+            (updatedExpense.originalCurrency !== null &&
+                updatedExpense.date !== item.date) ||
+            updatedExpense.originalAmount !== item.originalAmount
         ) {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
-            updatedExpense.amount = updatedExpense.originalAmount;
-            updatedExpense.currency = updatedExpense.originalCurrency;
             await convertAmount();
         }
+
+        console.log(updatedExpense);
+        // console.log(item);
 
         // add the expense
         updateExpense(updatedExpense, itemId).then(() => {
@@ -68,6 +71,10 @@
     };
 
     const convertAmount = async () => {
+        if (updatedExpense.originalAmount === null) {
+            updatedExpense.originalAmount = updatedExpense.amount;
+            updatedExpense.originalCurrency = updatedExpense.currency;
+        }
         let url = `https://api.exchangeratesapi.io/${updatedExpense.date}?base=${$baseCurrency}&symbols=${updatedExpense.originalCurrency}`;
         let response = await fetch(url);
         let data = await response.json();
@@ -85,7 +92,7 @@
 
     const initPickers = () => {
         editExpenseCategoryPicker = f7.picker.create({
-            inputEl: '#editCategoryPicker',
+            inputEl: '#editExpenseCategoryPicker',
             cols: [
                 {
                     textAlign: 'center',
@@ -116,7 +123,7 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    updatedExpense.currency = value.value;
+                    updatedExpense.currency = value.value[0];
                 },
             },
         });
@@ -213,20 +220,22 @@
             <Col width="33">
                 {#if item.originalCurrency}
                     <ListInput
+                        disabled
                         outline
                         floatingLabel
                         label="Currency"
                         value={updatedExpense.originalCurrency}
                         readonly
-                        inputId="editCurrencyPicker" />
+                        inputId="editExpenseCurrencyPicker" />
                 {:else}
                     <ListInput
+                        disabled
                         outline
                         floatingLabel
                         label="Currency"
                         value={updatedExpense.currency}
                         readonly
-                        inputId="editCurrencyPicker" />
+                        inputId="editExpenseCurrencyPicker" />
                 {/if}
             </Col>
         </Row>

@@ -6,8 +6,27 @@
     import List from 'framework7-svelte/components/list.svelte';
     import { budgetsSum } from '../stores/budgetsStore';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import { expensesSum } from '../stores/expensesStore';
+    import { expenses, expensesSum } from '../stores/expensesStore';
     import { tweened } from 'svelte/motion';
+    import { afterUpdate } from 'svelte';
+
+    // sets expenses sum for each category
+    $: categorySum = 0;
+
+    const calcCategoryExpenses = () => {
+        let categoryExpenses = [];
+        $expenses.forEach((expense) => {
+            if (expense.item.category === item.category) {
+                categoryExpenses = [...categoryExpenses, expense.item.amount];
+                // console.log(categoryExpenses);
+            }
+            categorySum = categoryExpenses.reduce(function (a, b) {
+                return a + b;
+            }, 0);
+        });
+    };
+
+    $: if ($expenses) calcCategoryExpenses();
 
     // percentage and tweened values
     $: percentage = Math.floor((100 / $budgetsSum) * $expensesSum) || 0;
@@ -23,7 +42,7 @@
                     <h4>{item.category}</h4>
                 </ListItemCell>
                 <ListItemCell>
-                    {$baseCurrencySymbol}{$expensesSum}
+                    {$baseCurrencySymbol}{categorySum}
                     of
                     {$baseCurrencySymbol}{item.amount}
                 </ListItemCell>
@@ -65,7 +84,7 @@
     }
 
     .percentage {
-        grid-column: 1/3;
+        grid-column: 1/2;
         width: 100%;
         position: relative;
         background-color: lightgray;

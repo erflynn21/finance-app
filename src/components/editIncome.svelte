@@ -41,13 +41,11 @@
 
         // check whether expense needs to be converted to base currency
         if (
-            updatedIncome.originalAmount !== item.originalAmount ||
-            (updateIncome.date !== item.date &&
-                updateIncome.currency !== $baseCurrency)
+            (updatedIncome.originalCurrency !== null &&
+                updatedIncome.date !== item.date) ||
+            updatedIncome.originalAmount !== item.originalAmount
         ) {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
-            updatedIncome.amount = updatedIncome.originalAmount;
-            updatedIncome.currency = updatedIncome.originalCurrency;
             await convertAmount();
         }
 
@@ -185,6 +183,7 @@
             <Col width="33">
                 {#if item.originalCurrency}
                     <ListInput
+                        disabled
                         outline
                         floatingLabel
                         label="Currency"
@@ -193,6 +192,7 @@
                         inputId="editIncomeCurrencyPicker" />
                 {:else}
                     <ListInput
+                        disabled
                         outline
                         floatingLabel
                         label="Currency"
