@@ -91,6 +91,9 @@
             </Page>
         {:else if $initialized === false && localStorage.userbaseCurrentSession}
             <View url="/loading-screen/" class="safe-areas" />
+            <!-- <Page noNavbar class="safe-areas loader">
+                <Preloader color="green" size={100} />
+            </Page> -->
         {:else if $userStore}
             {#if $currencies === null}
                 <!-- <View url="/loading-screen/" class="safe-areas" /> -->

@@ -5,7 +5,7 @@
     import ListItemRow from 'framework7-svelte/components/list-item-row.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import { expenses } from '../stores/expensesStore';
+    import { deleteExpense, expenses } from '../stores/expensesStore';
     import { tweened } from 'svelte/motion';
     import SwipeoutActions from 'framework7-svelte/components/swipeout-actions.svelte';
     import SwipeoutButton from 'framework7-svelte/components/swipeout-button.svelte';
@@ -14,17 +14,31 @@
     import Link from 'framework7-svelte/components/link.svelte';
     import EditMonthlyBudget from './editMonthlyBudget.svelte';
     import { deleteMonthlyBudget } from '../stores/monthlyBudgetsStore';
+    import SwiperItem from './swiperItem.svelte';
+    import Icon from 'framework7-svelte/components/icon.svelte';
+    import Button from 'framework7-svelte/components/button.svelte';
 
-    // sets expenses sum for each category
+    let dropdown = false;
+
+    // const openMenu = () => {
+    //     dropdown = !dropdown;
+    //     console.log(dropdown);
+    // };
+
+    // sets expenses sum and category expenses for each category
     $: categorySum = 0;
+    $: categoryExpenses = [];
     const calcCategoryExpenses = () => {
-        let categoryExpenses = [];
+        let categoryExpensesAmounts = [];
         $expenses.forEach((expense) => {
             if (expense.item.category === item.category) {
-                categoryExpenses = [...categoryExpenses, expense.item.amount];
-                // console.log(categoryExpenses);
+                categoryExpensesAmounts = [
+                    ...categoryExpensesAmounts,
+                    expense.item.amount,
+                ];
+                categoryExpenses = [...categoryExpenses, expense];
             }
-            categorySum = categoryExpenses.reduce(function (a, b) {
+            categorySum = categoryExpensesAmounts.reduce(function (a, b) {
                 const sum = a + b;
                 const trimmed = Number(sum.toFixed(2));
                 return trimmed;
@@ -93,6 +107,24 @@
                                 <span>{percentage}%</span>
                             {/if}
                         </div>
+                        <!-- <div on:click={openMenu}>
+                            
+                        </div> -->
+                        <div
+                            class="dropdown"
+                            on:click={() => (dropdown = !dropdown)}>
+                            {#if dropdown === false}
+                                <Icon
+                                    f7="chevron_down"
+                                    size="20"
+                                    style="align-self: center" />
+                            {:else}
+                                <Icon
+                                    f7="chevron_up"
+                                    size="20"
+                                    style="align-self: center" />
+                            {/if}
+                        </div>
                     </div>
                 </ListItemRow>
             </div>
@@ -109,6 +141,16 @@
             </SwipeoutButton> -->
         </SwipeoutActions>
     </li>
+
+    {#if dropdown === true}
+        {#each categoryExpenses as { item, itemId } (itemId)}
+            <SwiperItem
+                {item}
+                {itemId}
+                type="expense"
+                on:deleted={() => deleteExpense(itemId)} />
+        {/each}
+    {/if}
     <!-- <button on:click={() => deleteMonthlyBudget(itemId)}>X</button> -->
 </List>
 
@@ -141,7 +183,7 @@
     }
 
     .percentage {
-        grid-column: 1/3;
+        grid-column: 1/2;
         width: 100%;
         position: relative;
         background-color: lightgray;
@@ -164,5 +206,10 @@
         box-sizing: border-box;
         background-color: green;
         border-radius: 5px;
+    }
+
+    .dropdown {
+        grid-column: 2/3;
+        justify-self: end;
     }
 </style>

@@ -120,7 +120,7 @@ html {
   margin: 0 0 15px 0;
 }
 
-.monthly-budget-list .item-inner:after {
+.delete-callback .item-inner:after {
   content: none;
 }
 
