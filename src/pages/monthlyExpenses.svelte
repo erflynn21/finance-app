@@ -15,7 +15,7 @@
     });
 </script>
 
-<Page name="monthly-expenses" noToolbar>
+<Page name="monthly-expenses" noToolbar onPageBeforeOut={() => showFAB()}>
     <Navbar
         title="Monthly Recurring Expenses"
         backLink="Back"

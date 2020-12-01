@@ -17,7 +17,7 @@
     });
 </script>
 
-<Page name="budgets" noToolbar>
+<Page name="budgets" noToolbar onPageBeforeOut={() => showFAB()}>
     <Navbar title="Budgets" backLink="Back" on:clickBack={() => showFAB()} />
     <Block class="text-align-center">
         Below are the budgets that will be automatically regenerated every month

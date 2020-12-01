@@ -39,7 +39,7 @@
                         <h3>BUDGET</h3>
                     </ListItemCell>
                     <ListItemCell>
-                        {$selectedMonthName}
+                        {$selectedMonthName},
                         {$selectedYear}
                     </ListItemCell>
                 </ListItemRow>

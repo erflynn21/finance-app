@@ -15,7 +15,7 @@
     });
 </script>
 
-<Page name="monthly-incomes" noToolbar>
+<Page name="monthly-incomes" noToolbar onPageBeforeOut={() => showFAB()}>
     <Navbar
         title="Monthly Recurring Incomes"
         backLink="Back"

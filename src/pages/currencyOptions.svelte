@@ -33,7 +33,7 @@
     });
 </script>
 
-<Page name="currency options" noToolbar>
+<Page name="currency options" noToolbar onPageBeforeOut={() => showFAB()}>
     <Navbar
         title="Currency Options"
         backLink="Back"
