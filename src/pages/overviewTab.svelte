@@ -1,10 +1,178 @@
 <script>
-    import { Page, Navbar } from 'framework7-svelte';
+    import { Page } from 'framework7-svelte';
     import List from 'framework7-svelte/components/list.svelte';
-    import ListItem from 'framework7-svelte/components/list-item.svelte';
-    import ActionButton from '../components/actionButton.svelte';
+    import ListItemCell from 'framework7-svelte/components/list-item-cell.svelte';
+    import ListItemRow from 'framework7-svelte/components/list-item-row.svelte';
+    import NavLeft from 'framework7-svelte/components/nav-left.svelte';
+    import Navbar from 'framework7-svelte/components/navbar.svelte';
+    import { baseCurrencySymbol } from '../stores/currenciesStore';
+    import { selectedMonthName, selectedYear } from '../stores/datesStore';
+    import { expensesSum } from '../stores/expensesStore';
+    import { tweened } from 'svelte/motion';
+    import { monthlyBudgetsSum } from '../stores/monthlyBudgetsStore';
+    import { incomesSum } from '../stores/incomesStore';
+
+    $: cashflow = Number($incomesSum - $expensesSum).toFixed(2);
+
+    // percentage and tweened values
+    $: percentage = Math.floor((100 / $monthlyBudgetsSum) * $expensesSum) || 0;
+    const tweenedPercentage = tweened(0);
+    $: tweenedPercentage.set(percentage);
 </script>
 
 <Page name="home">
-    <Navbar title="Overview" />
+    <!-- <div class="spacer" />
+    <div class="background" />
+    <div class="heading">
+        <h1>Overview</h1>
+    </div> -->
+    <Navbar title="Overview" large>
+        <NavLeft />
+    </Navbar>
+
+    <List class="overview-list" inset>
+        <div class="item-content">
+            <div class="item-inner item-cell">
+                <ListItemRow class="overview-grid">
+                    <ListItemCell>
+                        <h3>BUDGET</h3>
+                    </ListItemCell>
+                    <ListItemCell>
+                        {$selectedMonthName}
+                        {$selectedYear}
+                    </ListItemCell>
+                </ListItemRow>
+                <ListItemRow>
+                    <div class="grid">
+                        <div class="percentage">
+                            {#if percentage <= 70}
+                                <div
+                                    class="percent"
+                                    style="width: {$tweenedPercentage}%; background-color: green" />
+                                <span>{percentage}%</span>
+                            {:else if percentage > 70 && percentage <= 90}
+                                <div
+                                    class="percent"
+                                    style="width: {$tweenedPercentage}%; background-color: yellow" />
+                                <span
+                                    style="color: #383838">{percentage}%</span>
+                            {:else}
+                                <div
+                                    class="percent"
+                                    style="width: {$tweenedPercentage}%; background-color: red" />
+                                <span>{percentage}%</span>
+                            {/if}
+                        </div>
+                    </div>
+                </ListItemRow>
+            </div>
+        </div>
+    </List>
+
+    <List class="overview-list" inset>
+        <div class="item-content">
+            <div class="item-inner item-cell">
+                <ListItemRow>
+                    <h3>CASH FLOW</h3>
+                </ListItemRow>
+                <div class="grid cash-flow-summary">
+                    <div class="exp-inc">
+                        <h5>
+                            Earned:
+                            {$baseCurrencySymbol}{Math.floor($incomesSum)}
+                        </h5>
+                        <h5>
+                            Spent: -{$baseCurrencySymbol}{Math.floor($expensesSum)}
+                        </h5>
+                    </div>
+                    <div class="cash-flow-sum">
+                        {#if cashflow >= 0}
+                            <h4 style="color: green">
+                                {$baseCurrencySymbol}{cashflow}
+                            </h4>
+                        {:else}
+                            <h4 style="color: red">
+                                {$baseCurrencySymbol}{cashflow}
+                            </h4>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </List>
 </Page>
+
+<style>
+    :global(.overview-grid .item-cell:last-child) {
+        text-align: right;
+    }
+
+    h3 {
+        font-size: 20px;
+        font-weight: 400;
+    }
+
+    .cash-flow-summary {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: auto;
+    }
+
+    .exp-inc {
+        padding-left: 5px;
+    }
+
+    .exp-inc h5 {
+        font-size: 16px;
+        font-weight: 300;
+        margin-bottom: 5px;
+        color: gray;
+    }
+
+    .cash-flow-sum {
+        justify-self: end;
+        align-self: center;
+    }
+
+    .cash-flow-sum h4 {
+        font-size: 18px;
+        font-weight: 500;
+    }
+    /* .background {
+        width: 100vw;
+        box-shadow: 0 2px 2px -2px gray;
+        background-color: green;
+        margin-bottom: 2px;
+        position: fixed;
+        top: 0;
+        z-index: 0;
+        height: 120px;
+    }
+
+    .heading {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        height: 55px;
+        width: 100vw;
+        background: green;
+    }
+
+    .heading h1 {
+        font-size: 30px;
+        font-weight: 400;
+        width: 100vw;
+        color: white;
+        padding-left: 20px;
+        padding-top: 15px;
+    }
+
+    .spacer {
+        height: 80px;
+        width: 100vw;
+        background: transparent;
+    } */
+</style>
