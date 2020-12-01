@@ -12,6 +12,8 @@
         monthlyBudgetsSum,
     } from '../stores/monthlyBudgetsStore';
     import MonthlyBudgetCategory from '../components/monthlyBudgetCategory.svelte';
+    import { fade } from 'svelte/transition';
+    import { flip } from 'svelte/animate';
 
     // percentage and tweened values
     $: percentage = Math.floor((100 / $monthlyBudgetsSum) * $expensesSum) || 0;
@@ -64,7 +66,9 @@
     <h3>Categories</h3>
 
     {#each $monthlyBudgets as { item, itemId } (itemId)}
-        <MonthlyBudgetCategory {item} {itemId} />
+        <div out:fade|local animate:flip={{ duration: 400 }}>
+            <MonthlyBudgetCategory {item} {itemId} />
+        </div>
     {/each}
 
     <div class="spacer" />

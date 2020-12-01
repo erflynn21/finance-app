@@ -16,6 +16,7 @@
     import { deleteMonthlyBudget } from '../stores/monthlyBudgetsStore';
     import SwiperItem from './swiperItem.svelte';
     import Icon from 'framework7-svelte/components/icon.svelte';
+    import { f7 } from 'framework7-svelte';
 
     let dropdown = false;
 
@@ -41,6 +42,16 @@
         });
     };
     $: if ($expenses) calcCategoryExpenses();
+
+    const deleteBudget = (itemId) => {
+        f7.dialog.confirm(
+            'Are you sure you want to delete this budget?',
+            ' ',
+            () => {
+                deleteMonthlyBudget(itemId);
+            }
+        );
+    };
 
     // opens editing modal
     let editModal;
@@ -123,14 +134,14 @@
         </div>
         <SwipeoutActions right>
             <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
-            <!-- <SwipeoutButton
-                delete
+            <SwipeoutButton
                 color="red"
                 overswipe
                 confirmText="Are you sure you want to delete this budget category?"
-                confirmTitle=" ">
+                confirmTitle=" "
+                on:click={deleteBudget(itemId)}>
                 Delete
-            </SwipeoutButton> -->
+            </SwipeoutButton>
         </SwipeoutActions>
     </li>
 
@@ -140,7 +151,7 @@
                 {item}
                 {itemId}
                 type="expense"
-                on:deleted={() => deleteExpense(itemId).then(console.log('deleted'))} />
+                on:deleted={() => deleteExpense(itemId)} />
         {/each}
     {/if}
     <!-- <button on:click={() => deleteMonthlyBudget(itemId)}>X</button> -->

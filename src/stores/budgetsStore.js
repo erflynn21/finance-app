@@ -47,6 +47,7 @@ const setCategories = () => {
 const setMonthlyBudgets = async (budgets) => {
     budgets.forEach(async budget => {
         let monthlyBudget = get(monthlyBudgets).filter((monthlybudget) => monthlybudget.item.category === budget.item.category);
+        // console.log(monthlyBudget);
         if (monthlyBudget.length == 0) {
             let newMonthlyBudget = {
                 amount: budget.item.amount,
