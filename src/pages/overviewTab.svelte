@@ -12,6 +12,7 @@
     import { monthlyBudgetsSum } from '../stores/monthlyBudgetsStore';
     import { incomesSum } from '../stores/incomesStore';
     import DoughnutChart from '../components/doughnutChart.svelte';
+    import Block from 'framework7-svelte/components/block.svelte';
 
     $: cashflow = Number($incomesSum - $expensesSum).toFixed(2);
 
@@ -22,14 +23,13 @@
 </script>
 
 <Page name="home">
-    <!-- <div class="spacer" />
+    <div class="overview-spacer" />
     <div class="background" />
+    <!-- <Block> -->
     <div class="heading">
         <h1>Overview</h1>
-    </div> -->
-    <Navbar title="Overview" large>
-        <NavLeft />
-    </Navbar>
+    </div>
+    <!-- </Block> -->
 
     <List class="overview-list" inset>
         <div class="item-content">
@@ -119,6 +119,42 @@
 </Page>
 
 <style>
+    .background {
+        width: 100vw;
+        box-shadow: 0 2px 2px -2px gray;
+        background-color: green;
+        margin-bottom: 2px;
+        position: fixed;
+        top: 0;
+        z-index: 0;
+        height: calc(env(safe-area-inset-top) + 140px);
+    }
+
+    .overview-spacer {
+        height: calc(env(safe-area-inset-top) + 80px);
+        width: 100vw;
+        background: transparent;
+    }
+    .heading {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        height: calc(env(safe-area-inset-top) + 55px);
+        width: 100vw;
+        background: green;
+    }
+
+    .heading h1 {
+        font-size: 30px;
+        font-weight: 400;
+        width: 100vw;
+        color: white;
+        padding-left: 20px;
+        padding-top: calc(env(safe-area-inset-top) + 15px);
+    }
     :global(.overview-grid .item-cell:last-child) {
         text-align: right;
     }
@@ -189,42 +225,4 @@
         font-size: 18px;
         font-weight: 500;
     }
-
-    /* .background {
-        width: 100vw;
-        box-shadow: 0 2px 2px -2px gray;
-        background-color: green;
-        margin-bottom: 2px;
-        position: fixed;
-        top: 0;
-        z-index: 0;
-        height: 120px;
-    }
-
-    .heading {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 2;
-        height: 55px;
-        width: 100vw;
-        background: green;
-    }
-
-    .heading h1 {
-        font-size: 30px;
-        font-weight: 400;
-        width: 100vw;
-        color: white;
-        padding-left: 20px;
-        padding-top: 15px;
-    }
-
-    .spacer {
-        height: 80px;
-        width: 100vw;
-        background: transparent;
-    } */
 </style>
