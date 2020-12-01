@@ -3,7 +3,6 @@
     import ListItemCell from 'framework7-svelte/components/list-item-cell.svelte';
     import ListItemRow from 'framework7-svelte/components/list-item-row.svelte';
     import List from 'framework7-svelte/components/list.svelte';
-    import { budgetsSum } from '../stores/budgetsStore';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
     import { selectedMonthName, selectedYear } from '../stores/datesStore';
     import { expensesSum } from '../stores/expensesStore';
@@ -117,6 +116,7 @@
         box-sizing: border-box;
         background-color: green;
         border-radius: 5px;
+        max-width: 100%;
     }
 
     .spacer {

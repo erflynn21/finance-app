@@ -20,11 +20,6 @@
 
     let dropdown = false;
 
-    // const openMenu = () => {
-    //     dropdown = !dropdown;
-    //     console.log(dropdown);
-    // };
-
     // sets expenses sum and category expenses for each category
     $: categorySum = 0;
     $: categoryExpenses = [];
@@ -148,7 +143,7 @@
                 {item}
                 {itemId}
                 type="expense"
-                on:deleted={() => deleteExpense(itemId)} />
+                on:deleted={() => deleteExpense(itemId).then(console.log('deleted'))} />
         {/each}
     {/if}
     <!-- <button on:click={() => deleteMonthlyBudget(itemId)}>X</button> -->
@@ -191,6 +186,7 @@
         border-radius: 5px;
         display: flex;
         align-items: center;
+        max-width: 100%;
     }
 
     span {
@@ -206,6 +202,7 @@
         box-sizing: border-box;
         background-color: green;
         border-radius: 5px;
+        max-width: 100%;
     }
 
     .dropdown {

@@ -23,18 +23,14 @@ const openExpensesDatabase = () => {
 
         // sets the expenses sum
         let totalExpenses = [];
-        if (get(expenses).length > 0) {
-            get(expenses).forEach((expense) => {
-                totalExpenses = [...totalExpenses, expense.item.amount];
-            });
-            expensesSum.set(totalExpenses.reduce(function (a, b) {
-                const sum = a + b;
-                const trimmed = Number(sum.toFixed(2));
-                return trimmed;
-            }, 0));
-        } else {
-            expensesSum.set(0);
-        }
+        get(expenses).forEach((expense) => {
+            totalExpenses = [...totalExpenses, expense.item.amount];
+        });
+        expensesSum.set(totalExpenses.reduce(function (a, b) {
+            const sum = a + b;
+            const trimmed = Number(sum.toFixed(2));
+            return trimmed;
+        }, 0));
         
     }})
     .catch((e) => console.log(e))
@@ -49,7 +45,7 @@ const updateExpense = (expense, expenseId) => {
     return userbase.updateItem({ databaseName, item: expense, itemId: expenseId });
 };
 
-const deleteExpense = async (expenseId) => {
+const deleteExpense = (expenseId) => {
     try {
         return userbase.deleteItem({ databaseName, itemId: expenseId });
     } catch (e) {
