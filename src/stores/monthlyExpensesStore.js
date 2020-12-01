@@ -57,7 +57,6 @@ const convertAmount = async (newExpenseFromMonthly) => {
 }
 
 const addMonthlyExpense = (monthlyExpense) => {
-    console.log(monthlyExpense);
     return userbase.insertItem({ databaseName, item: monthlyExpense });
 };
 
