@@ -11,6 +11,7 @@
     import { tweened } from 'svelte/motion';
     import { monthlyBudgetsSum } from '../stores/monthlyBudgetsStore';
     import { incomesSum } from '../stores/incomesStore';
+    import DoughnutChart from '../components/doughnutChart.svelte';
 
     $: cashflow = Number($incomesSum - $expensesSum).toFixed(2);
 
@@ -100,11 +101,59 @@
             </div>
         </div>
     </List>
+
+    <List class="overview-list" inset>
+        <div class="item-content">
+            <div class="item-inner item-cell">
+                <ListItemRow>
+                    <h3>SPENDING</h3>
+                </ListItemRow>
+                <div class="doughnut">
+                    <DoughnutChart />
+                </div>
+            </div>
+        </div>
+    </List>
 </Page>
 
 <style>
     :global(.overview-grid .item-cell:last-child) {
         text-align: right;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 0.1fr;
+        width: 100%;
+        height: 25px;
+        margin-top: 10px;
+    }
+
+    .percentage {
+        grid-column: 1/3;
+        width: 100%;
+        position: relative;
+        background-color: lightgray;
+        box-sizing: border-box;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+    }
+
+    span {
+        position: absolute;
+        color: white;
+        padding-left: 5px;
+        font-size: 14px;
+    }
+
+    .percent {
+        height: 100%;
+        position: absolute;
+        box-sizing: border-box;
+        background-color: green;
+        border-radius: 5px;
+        max-width: 100%;
     }
 
     h3 {
@@ -138,6 +187,7 @@
         font-size: 18px;
         font-weight: 500;
     }
+
     /* .background {
         width: 100vw;
         box-shadow: 0 2px 2px -2px gray;

@@ -111,6 +111,7 @@
     let expenseDateCalendar;
 
     const initPickers = () => {
+        console.log($categories);
         expenseCategoryPicker = f7.picker.create({
             inputEl: '#expenseCategoryPicker',
             cols: [
