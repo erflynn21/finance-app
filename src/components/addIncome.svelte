@@ -76,7 +76,6 @@
     const clearForm = () => {
         income.title = null;
         income.date = new Intl.DateTimeFormat('en-CA').format(new Date());
-        income.category = null;
         income.amount = null;
         income.currency = $baseCurrency;
         income.originalCurrency = null;

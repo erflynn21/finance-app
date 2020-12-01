@@ -16,7 +16,6 @@
     import { deleteMonthlyBudget } from '../stores/monthlyBudgetsStore';
     import SwiperItem from './swiperItem.svelte';
     import Icon from 'framework7-svelte/components/icon.svelte';
-    import Button from 'framework7-svelte/components/button.svelte';
 
     let dropdown = false;
 
@@ -103,9 +102,6 @@
                                 <span>{percentage}%</span>
                             {/if}
                         </div>
-                        <!-- <div on:click={openMenu}>
-                            
-                        </div> -->
                         <div
                             class="dropdown"
                             on:click={() => (dropdown = !dropdown)}>

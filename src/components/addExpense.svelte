@@ -85,7 +85,6 @@
     const clearForm = () => {
         expense.title = null;
         expense.date = new Intl.DateTimeFormat('en-CA').format(new Date());
-        expense.category = null;
         expense.amount = null;
         expense.currency = $baseCurrency;
         expense.originalCurrency = null;
