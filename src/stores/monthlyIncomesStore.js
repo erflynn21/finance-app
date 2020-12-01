@@ -2,7 +2,7 @@ import {get, writable} from 'svelte/store';
 import userbase from 'userbase-js';
 import {incomes, addIncome} from './incomesStore';
 import {baseCurrency} from './currenciesStore'
-import { selectedMonth, selectedYear } from './datesStore';
+import { currentDate, selectedMonth, selectedYear } from './datesStore';
 
 let monthlyIncomes = writable([]);
 const databaseName = `monthlyIncomes`;
@@ -19,7 +19,7 @@ const openMonthlyIncomesDatabase = () => {
 const checkRecurringIncomes = async (monthlyIncomes) => {
     monthlyIncomes.forEach(async monthlyIncome => {
         let result = get(incomes).filter((income) => income.item.title === monthlyIncome.item.title);
-        if (result.length == 0) {
+        if (result.length == 0 && monthlyIncome.item.recurringDate <= get(currentDate)) {
             let newIncomeFromMonthly = {
                 title: monthlyIncome.item.title,
                 amount: monthlyIncome.item.amount,

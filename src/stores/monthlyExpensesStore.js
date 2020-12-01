@@ -2,7 +2,7 @@ import {get, writable} from 'svelte/store';
 import {expenses, addExpense} from './expensesStore';
 import {baseCurrency} from './currenciesStore'
 import userbase from 'userbase-js';
-import { selectedMonth, selectedYear } from './datesStore';
+import { currentDate, selectedMonth, selectedYear } from './datesStore';
 
 let monthlyExpenses = writable([]);
 const databaseName = `monthlyExpenses`;
@@ -16,10 +16,12 @@ const openMonthlyExpensesDatabase = () => {
     .catch((e) => console.log(e));
 }
 
+
+
 const checkRecurringExpenses = async (monthlyExpenses) => {
     monthlyExpenses.forEach(async monthlyExpense => {
-        let result = get(expenses).filter((expense) => expense.item.title === monthlyExpense.item.title);
-        if (result.length == 0) {
+        let result = get(expenses).filter((expense) => (expense.item.title === monthlyExpense.item.title));
+        if (result.length == 0 && monthlyExpense.item.recurringDate <= get(currentDate)) {
             let newExpenseFromMonthly = {
                 title: monthlyExpense.item.title,
                 amount: monthlyExpense.item.amount,
@@ -55,6 +57,7 @@ const convertAmount = async (newExpenseFromMonthly) => {
 }
 
 const addMonthlyExpense = (monthlyExpense) => {
+    console.log(monthlyExpense);
     return userbase.insertItem({ databaseName, item: monthlyExpense });
 };
 

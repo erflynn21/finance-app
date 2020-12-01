@@ -4,6 +4,7 @@ import {monthsDict} from './dictionariesStore';
 
 const startDate = writable('');
 const endDate = writable('');
+const currentDate = writable('')
 const selectedMonth = writable('');
 const selectedYear = writable('');
 const selectedMonthName = writable('');
@@ -30,8 +31,9 @@ const end = currentYear + '-' + currentMonth + '-' + today;
 
 startDate.set(`${start}`);
 endDate.set(`${end}`);
+currentDate.set(today);
 selectedMonth.set(currentMonth);
 selectedYear.set(currentYear);
 selectedMonthName.set(monthsDict[get(selectedMonth) - 1]);
 
-export {startDate, endDate, selectedMonth, selectedYear, selectedMonthName}
+export {startDate, endDate, currentDate, selectedMonth, selectedYear, selectedMonthName}
