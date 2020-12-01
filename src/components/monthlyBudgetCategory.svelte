@@ -22,8 +22,9 @@
 
     // sets expenses sum and category expenses for each category
     $: categorySum = 0;
-    $: categoryExpenses = [];
+    let categoryExpenses;
     const calcCategoryExpenses = () => {
+        categoryExpenses = [];
         let categoryExpensesAmounts = [];
         $expenses.forEach((expense) => {
             if (expense.item.category === item.category) {
