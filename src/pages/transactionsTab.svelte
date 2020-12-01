@@ -42,6 +42,8 @@
         Remaining:
         {$baseCurrencySymbol}{($incomesSum - $expensesSum).toFixed(2)}
     </h3>
+
+    <div class="spacer" />
 </Page>
 
 <style>

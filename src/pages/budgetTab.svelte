@@ -123,10 +123,6 @@
         max-width: 100%;
     }
 
-    .spacer {
-        height: 65px;
-    }
-
     h3 {
         font-size: 14px;
         color: black;

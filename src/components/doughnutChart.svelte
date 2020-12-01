@@ -91,6 +91,7 @@
         doughnutChart.update();
     };
 
+    let doughnutChart;
     const initiateChart = () => {
         var ctx = document.getElementById('doughnutChart');
         doughnutChart = new Chart(ctx, {
