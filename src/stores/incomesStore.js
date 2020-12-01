@@ -9,7 +9,7 @@ let incomesDBOpen = writable(false);
 const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-incomes`;
 
 const openIncomesDatabase = () => {
-        userbase.openDatabase({ databaseName, changeHandler: function (items) {
+        return userbase.openDatabase({ databaseName, changeHandler: function (items) {
             // sorts the incomes based on date and timestamp
             let a = items;
             a.sort(function (a,b) {

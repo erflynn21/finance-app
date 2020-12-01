@@ -9,7 +9,7 @@ let expensesDBOpen = writable(false);
 const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-expenses`;
 
 const openExpensesDatabase = () => {
-    userbase.openDatabase({ databaseName, changeHandler: function (items) {
+    return userbase.openDatabase({ databaseName, changeHandler: function (items) {
         // sets the expenses based on date and timestamp
         let a = items;
         a.sort(function (a,b) {

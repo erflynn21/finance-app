@@ -12,24 +12,10 @@
     } from 'framework7-svelte';
     import routes from '../js/routes';
     import { userStore, initialized } from '../stores/userStore.js';
-    import {
-        currencies,
-        openCurrenciesDatabase,
-    } from '../stores/currenciesStore';
-    import {
-        expensesDBOpen,
-        openExpensesDatabase,
-    } from '../stores/expensesStore';
-    import { openBudgetsDatabase } from '../stores/budgetsStore';
-    import { incomesDBOpen, openIncomesDatabase } from '../stores/incomesStore';
-    import { openMonthlyIncomesDatabase } from '../stores/monthlyIncomesStore';
-    import {
-        monthlyDBOpen,
-        openMonthlyBudgetsDatabase,
-    } from '../stores/monthlyBudgetsStore';
-    import { openMonthlyExpensesDatabase } from '../stores/monthlyExpensesStore';
+    import { currencies } from '../stores/currenciesStore';
+
     import ActionButton from './actionButton.svelte';
-    import { Plugins, KeyboardInfo } from '@capacitor/core';
+    import { Plugins } from '@capacitor/core';
     const { Keyboard } = Plugins;
 
     // Framework7 Parameters
@@ -64,18 +50,6 @@
         }
     };
     $: if ($currencies) checkBaseCurrency();
-
-    const initDatabases = () => {
-        openCurrenciesDatabase();
-        openMonthlyBudgetsDatabase();
-        openExpensesDatabase();
-        openIncomesDatabase();
-    };
-
-    $: if ($userStore) initDatabases();
-    $: if ($monthlyDBOpen === true) openBudgetsDatabase();
-    $: if ($expensesDBOpen === true) openMonthlyExpensesDatabase();
-    $: if ($incomesDBOpen === true) openMonthlyIncomesDatabase();
 
     onMount(() => {
         f7ready(() => {});

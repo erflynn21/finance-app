@@ -9,7 +9,7 @@ let monthlyDBOpen = writable(false);
 const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-monthlyBudgets`;
 
 const openMonthlyBudgetsDatabase = () => {
-    userbase.openDatabase({ databaseName, changeHandler: function (items) {
+    return userbase.openDatabase({ databaseName, changeHandler: function (items) {
         monthlyBudgets.set(items);
         // sets the monthly budgets total
         let totalMonthlyBudgets = [];
