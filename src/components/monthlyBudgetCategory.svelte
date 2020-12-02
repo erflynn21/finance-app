@@ -5,7 +5,7 @@
     import ListItemRow from 'framework7-svelte/components/list-item-row.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import { deleteExpense, expenses } from '../stores/expensesStore';
+    import { expenses } from '../stores/expensesStore';
     import { tweened } from 'svelte/motion';
     import SwipeoutActions from 'framework7-svelte/components/swipeout-actions.svelte';
     import SwipeoutButton from 'framework7-svelte/components/swipeout-button.svelte';
@@ -17,6 +17,8 @@
     import SwiperItem from './swiperItem.svelte';
     import Icon from 'framework7-svelte/components/icon.svelte';
     import { f7 } from 'framework7-svelte';
+    import { fade } from 'svelte/transition';
+    import { flip } from 'svelte/animate';
 
     let dropdown = false;
 
@@ -77,9 +79,8 @@
     $: tweenedPercentage.set(percentage);
 </script>
 
-<!-- swipeout on:swipeoutDelete={() => deleteMonthlyBudget(itemId)} -->
 <List class="monthly-budget-list">
-    <li class="swipeout delete-callback">
+    <li class="swipeout">
         <div class="swipeout-content item-content">
             <div class="item-inner item-cell">
                 <ListItemRow class="budget-summary-grid">
@@ -137,8 +138,6 @@
             <SwipeoutButton
                 color="red"
                 overswipe
-                confirmText="Are you sure you want to delete this budget category?"
-                confirmTitle=" "
                 on:click={deleteBudget(itemId)}>
                 Delete
             </SwipeoutButton>
@@ -147,11 +146,9 @@
 
     {#if dropdown === true}
         {#each categoryExpenses as { item, itemId } (itemId)}
-            <SwiperItem
-                {item}
-                {itemId}
-                type="expense"
-                on:deleted={() => deleteExpense(itemId)} />
+            <div animate:flip={{ delay: 400, duration: 400 }}>
+                <SwiperItem {item} {itemId} type="expense" />
+            </div>
         {/each}
     {/if}
 </List>

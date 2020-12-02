@@ -20,6 +20,9 @@
     const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
     import { removeAllListeners } from 'process';
+    import { f7 } from 'framework7-svelte';
+    import { deleteExpense } from '../stores/expensesStore';
+    import { deleteIncome } from '../stores/incomesStore';
     const { Keyboard } = Plugins;
 
     $: if (editing === true) {
@@ -80,6 +83,21 @@
         }
     };
 
+    const deleteItem = () => {
+        f7.dialog.confirm(
+            'Are you sure you want to delete this item?',
+            ' ',
+            () => {
+                f7.dialog.preloader(`Deleting ${type}...`);
+                if (type === 'expense') {
+                    deleteExpense(itemId).then(() => f7.dialog.close());
+                } else if (type === 'income') {
+                    deleteIncome(itemId).then(() => f7.dialog.close());
+                }
+            }
+        );
+    };
+
     onMount(() => {
         if (item.date) {
             setDate();
@@ -96,16 +114,10 @@
     swipeout
     header={date}
     title={item.title}
-    after="{$baseCurrencySymbol}{item.amount}"
-    on:swipeoutDelete={() => dispatch('deleted')}>
+    after="{$baseCurrencySymbol}{item.amount}">
     <SwipeoutActions right>
         <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
-        <SwipeoutButton
-            delete
-            color="red"
-            overswipe
-            confirmText="Are you sure you want to delete this item?"
-            confirmTitle=" ">
+        <SwipeoutButton color="red" overswipe on:click={deleteItem}>
             Delete
         </SwipeoutButton>
     </SwipeoutActions>

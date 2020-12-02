@@ -20,6 +20,10 @@
     const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
     import { removeAllListeners } from 'process';
+    import { deleteBudget } from '../stores/budgetsStore';
+    import { deleteMonthlyExpense } from '../stores/monthlyExpensesStore';
+    import { deleteMonthlyIncome } from '../stores/monthlyIncomesStore';
+    import { f7 } from 'framework7-svelte';
     const { Keyboard } = Plugins;
 
     $: if (editing === true) {
@@ -56,6 +60,23 @@
         }, 50);
     };
 
+    const deleteItem = () => {
+        f7.dialog.confirm(
+            'Are you sure you want to delete this item?',
+            ' ',
+            () => {
+                f7.dialog.preloader(`Deleting ${type}...`);
+                if (type === 'budget') {
+                    deleteBudget(itemId).then(() => f7.dialog.close());
+                } else if (type === 'monthly expense') {
+                    deleteMonthlyExpense(itemId).then(() => f7.dialog.close());
+                } else if (type === 'monthly income') {
+                    deleteMonthlyIncome(itemId).then(() => f7.dialog.close());
+                }
+            }
+        );
+    };
+
     // closes editing modal
     const closeModal = () => {
         const editModalInstance = editModal.instance();
@@ -68,34 +89,19 @@
     <ListItem
         swipeout
         title={item.category}
-        after="{currencySymbol}{item.amount}"
-        on:swipeoutDelete={() => dispatch('deleted')}>
+        after="{currencySymbol}{item.amount}">
         <SwipeoutActions right>
             <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
-            <SwipeoutButton
-                delete
-                color="red"
-                overswipe
-                confirmText="Are you sure you want to delete this budget?"
-                confirmTitle=" ">
+            <SwipeoutButton color="red" overswipe on:click={deleteItem}>
                 Delete
             </SwipeoutButton>
         </SwipeoutActions>
     </ListItem>
 {:else}
-    <ListItem
-        swipeout
-        title={item.title}
-        after="{currencySymbol}{item.amount}"
-        on:swipeoutDelete={() => dispatch('deleted')}>
+    <ListItem swipeout title={item.title} after="{currencySymbol}{item.amount}">
         <SwipeoutActions right>
             <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
-            <SwipeoutButton
-                delete
-                color="red"
-                overswipe
-                confirmText="Are you sure you want to delete this budget?"
-                confirmTitle=" ">
+            <SwipeoutButton color="red" overswipe on:click={deleteItem}>
                 Delete
             </SwipeoutButton>
         </SwipeoutActions>
@@ -122,7 +128,7 @@
     </Sheet>
 {/if}
 
-{#if editing === true && type === 'monthlyExpense'}
+{#if editing === true && type === 'monthly expense'}
     <Sheet
         class="edit"
         style="height: auto; max-height: 70vh"
@@ -143,7 +149,7 @@
     </Sheet>
 {/if}
 
-{#if editing === true && type === 'monthlyIncome'}
+{#if editing === true && type === 'monthly income'}
     <Sheet
         class="edit"
         style="height: auto; max-height: 70vh"

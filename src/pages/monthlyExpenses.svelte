@@ -5,10 +5,8 @@
     import { onMount } from 'svelte';
     import SettingsSwiper from '../components/settingsSwiper.svelte';
     import { moveFabDown, showFAB } from '../js/fab';
-    import {
-        deleteMonthlyExpense,
-        monthlyExpenses,
-    } from '../stores/monthlyExpensesStore';
+    import { monthlyExpenses } from '../stores/monthlyExpensesStore';
+    import { flip } from 'svelte/animate';
 
     onMount(() => {
         moveFabDown();
@@ -26,11 +24,9 @@
     </Block>
     <List>
         {#each $monthlyExpenses as { item, itemId } (itemId)}
-            <SettingsSwiper
-                {item}
-                {itemId}
-                type="monthlyExpense"
-                on:deleted={() => deleteMonthlyExpense(itemId)} />
+            <div animate:flip={{ duration: 400 }}>
+                <SettingsSwiper {item} {itemId} type="monthly expense" />
+            </div>
         {/each}
     </List>
 </Page>

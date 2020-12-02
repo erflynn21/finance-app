@@ -3,12 +3,9 @@
     import List from 'framework7-svelte/components/list.svelte';
     import SwiperItem from '../components/swiperItem.svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import {
-        deleteExpense,
-        expenses,
-        expensesSum,
-    } from '../stores/expensesStore';
-    import { deleteIncome, incomes, incomesSum } from '../stores/incomesStore';
+    import { expenses, expensesSum } from '../stores/expensesStore';
+    import { incomes, incomesSum } from '../stores/incomesStore';
+    import { flip } from 'svelte/animate';
 </script>
 
 <Page name="transactions">
@@ -18,11 +15,9 @@
 
     <List class="transactions-list">
         {#each $expenses as { item, itemId } (itemId)}
-            <SwiperItem
-                {item}
-                {itemId}
-                type="expense"
-                on:deleted={() => deleteExpense(itemId)} />
+            <div animate:flip={{ duration: 400 }}>
+                <SwiperItem {item} {itemId} type="expense" />
+            </div>
         {/each}
     </List>
     <h1>Income:</h1>
@@ -30,11 +25,9 @@
 
     <List class="transactions-list">
         {#each $incomes as { item, itemId } (itemId)}
-            <SwiperItem
-                {item}
-                {itemId}
-                type="income"
-                on:deleted={() => deleteIncome(itemId)} />
+            <div animate:flip={{ duration: 400 }}>
+                <SwiperItem {item} {itemId} type="income" />
+            </div>
         {/each}
     </List>
 

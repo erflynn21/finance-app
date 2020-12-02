@@ -6,11 +6,12 @@
     import { onMount } from 'svelte';
     import AddBudget from '../components/addBudget.svelte';
     import { hideFAB, showFAB } from '../js/fab';
-    import { budgets, deleteBudget } from '../stores/budgetsStore';
+    import { budgets } from '../stores/budgetsStore';
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
     import SettingsSwiper from '../components/settingsSwiper.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
+    import { flip } from 'svelte/animate';
 
     onMount(() => {
         hideFAB();
@@ -28,11 +29,9 @@
     </Block>
     <List>
         {#each $budgets as { item, itemId } (itemId)}
-            <SettingsSwiper
-                {item}
-                {itemId}
-                type="budget"
-                on:deleted={() => deleteBudget(itemId)} />
+            <div animate:flip={{ duration: 400 }}>
+                <SettingsSwiper {item} {itemId} type="budget" />
+            </div>
         {/each}
     </List>
 
