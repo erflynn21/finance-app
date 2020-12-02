@@ -10,16 +10,24 @@
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
     import { Plugins } from '@capacitor/core';
+    import { onDestroy } from 'svelte';
+    import { removeAllListeners } from 'process';
     const { Keyboard } = Plugins;
 
-    Keyboard.addListener('keyboardWillShow', (info) => {
-        document.getElementById('add').style.marginBottom = `${
-            info.keyboardHeight - 20
-        }px`;
-    });
+    $: if (adding === true) {
+        Keyboard.addListener('keyboardWillShow', (info) => {
+            document.getElementById('add').style.marginBottom = `${
+                info.keyboardHeight - 20
+            }px`;
+        });
 
-    Keyboard.addListener('keyboardWillHide', () => {
-        document.getElementById('add').style.marginBottom = '0px';
+        Keyboard.addListener('keyboardWillHide', () => {
+            document.getElementById('add').style.marginBottom = '0px';
+        });
+    }
+
+    onDestroy(() => {
+        removeAllListeners();
     });
 
     // opens add modal
@@ -84,6 +92,7 @@
     <Sheet
         class="add"
         style="height: auto; max-height: 70vh"
+        id="add"
         swipeToClose
         backdrop
         bind:this={addModal}>

@@ -9,10 +9,34 @@
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
+    import {
+        afterUpdate,
+        createEventDispatcher,
+        onDestroy,
+        onMount,
+    } from 'svelte';
     import EditExpense from './editExpense.svelte';
     import EditIncome from './editIncome.svelte';
     const dispatch = createEventDispatcher();
+    import { Plugins } from '@capacitor/core';
+    import { removeAllListeners } from 'process';
+    const { Keyboard } = Plugins;
+
+    $: if (editing === true) {
+        Keyboard.addListener('keyboardWillShow', (info) => {
+            document.getElementById('edit').style.marginBottom = `${
+                info.keyboardHeight - 20
+            }px`;
+        });
+
+        Keyboard.addListener('keyboardWillHide', () => {
+            document.getElementById('edit').style.marginBottom = '0px';
+        });
+    }
+
+    onDestroy(() => {
+        removeAllListeners();
+    });
 
     // opens editing modal
     let editModal;
@@ -85,6 +109,7 @@
     <Sheet
         class="edit"
         style="height: auto; max-height: 80vh"
+        id="edit"
         backdrop
         bind:this={editModal}
         {item}
@@ -105,6 +130,7 @@
     <Sheet
         class="edit"
         style="height: auto; max-height: 70vh"
+        id="edit"
         backdrop
         bind:this={editModal}
         {item}
@@ -120,3 +146,9 @@
         <EditIncome {item} {itemId} on:collapse={closeModal} />
     </Sheet>
 {/if}
+
+<style>
+    :global(.edit) {
+        transition: margin-bottom 100ms ease;
+    }
+</style>

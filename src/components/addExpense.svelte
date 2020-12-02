@@ -195,6 +195,7 @@
             inputId="expenseTitle"
             bind:value={expense.title}
             clearButton
+            autofocus
             required
             on:input={() => f7.input.validate('#expenseTitle')}
             errorMessage="Please provide a valid expense name." />

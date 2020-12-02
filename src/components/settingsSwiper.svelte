@@ -13,11 +13,30 @@
     import Sheet from 'framework7-svelte/components/sheet.svelte';
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onDestroy } from 'svelte';
     import EditBudget from './editBudget.svelte';
     import EditMonthlyExpense from './editMonthlyExpense.svelte';
     import EditMonthlyIncome from './editMonthlyIncome.svelte';
     const dispatch = createEventDispatcher();
+    import { Plugins } from '@capacitor/core';
+    import { removeAllListeners } from 'process';
+    const { Keyboard } = Plugins;
+
+    $: if (editing === true) {
+        Keyboard.addListener('keyboardWillShow', (info) => {
+            document.getElementById('edit').style.marginBottom = `${
+                info.keyboardHeight - 20
+            }px`;
+        });
+
+        Keyboard.addListener('keyboardWillHide', () => {
+            document.getElementById('edit').style.marginBottom = '0px';
+        });
+    }
+
+    onDestroy(() => {
+        removeAllListeners();
+    });
 
     let currencySymbol;
     if (item.currency === $baseCurrency) {
@@ -87,6 +106,7 @@
     <Sheet
         class="edit"
         style="height: auto; max-height: 80vh"
+        id="edit"
         backdrop
         bind:this={editModal}
         {item}
@@ -106,6 +126,7 @@
     <Sheet
         class="edit"
         style="height: auto; max-height: 70vh"
+        id="edit"
         backdrop
         bind:this={editModal}
         {item}
@@ -126,6 +147,7 @@
     <Sheet
         class="edit"
         style="height: auto; max-height: 70vh"
+        id="edit"
         backdrop
         bind:this={editModal}
         {item}
