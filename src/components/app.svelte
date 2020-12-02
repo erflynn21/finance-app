@@ -59,18 +59,14 @@
 <App params={f7params}>
     <!-- Views/Tabs container -->
     <Views tabs class="safe-areas">
-        {#if $initialized === false && !localStorage.userbaseCurrentSession}
-            <Page noNavbar class="safe-areas loader">
-                <Preloader color="green" size={100} />
-            </Page>
-        {:else if $initialized === false && localStorage.userbaseCurrentSession}
+        {#if $initialized === false}
             <View url="/loading-screen/" class="safe-areas" />
             <!-- <Page noNavbar class="safe-areas loader">
                 <Preloader color="green" size={100} />
             </Page> -->
         {:else if $userStore}
             {#if $currencies === null}
-                <!-- <View url="/loading-screen/" class="safe-areas" /> -->
+                <View url="/loading-screen/" class="safe-areas" />
                 <Page noNavbar class="safe-areas loader">
                     <Preloader color="green" size={100} />
                 </Page>

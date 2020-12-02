@@ -80,7 +80,7 @@
 </script>
 
 <List class="monthly-budget-list">
-    <li class="swipeout">
+    <li class="swipeout delete-callback">
         <div class="swipeout-content item-content">
             <div class="item-inner item-cell">
                 <ListItemRow class="budget-summary-grid">

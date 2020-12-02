@@ -1,31 +1,19 @@
 <script>
     import { Page, Navbar } from 'framework7-svelte';
-    import { userStore } from '../stores/userStore';
-    import { f7, f7router } from 'framework7-svelte';
+    import { signOut } from '../stores/userStore';
+    import { f7 } from 'framework7-svelte';
     import Button from 'framework7-svelte/components/button.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
-    import userbase from 'userbase-js';
-    import ActionButton from '../components/actionButton.svelte';
 
     // sign out
-    const signOut = async () => {
+    const signOutUser = async () => {
         f7.dialog.preloader('Signing you out...');
-        await userbase
-            .signOut()
-            .then(() => userStore.set(null))
-            .catch((e) => console.log(e))
-            .finally(() => {
-                localStorage.clear();
-                f7.dialog.close();
-                location.reload();
-            });
+        await signOut().then(() => f7.dialog.close());
     };
 </script>
 
 <Page name="settings">
-    <!-- <ActionButton /> -->
-    <!-- Top Navbar -->
     <Navbar title="Settings" />
     <List>
         <ListItem title="Currency Options" link="/currency-options/" />
@@ -35,7 +23,7 @@
             link="/monthly-expenses/" />
         <ListItem title="Monthly Recurring Income" link="/monthly-incomes/" />
     </List>
-    <Button on:click={signOut}>Sign Out</Button>
+    <Button on:click={signOutUser}>Sign Out</Button>
 </Page>
 
 <style>

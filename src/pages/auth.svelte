@@ -1,5 +1,4 @@
 <script>
-    import userbase from 'userbase-js';
     import { Page } from 'framework7-svelte';
     import BlockFooter from 'framework7-svelte/components/block-footer.svelte';
     import Button from 'framework7-svelte/components/button.svelte';
@@ -7,13 +6,13 @@
     import ListInput from 'framework7-svelte/components/list-input.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import LoginScreenTitle from 'framework7-svelte/components/login-screen-title.svelte';
-    import { userStore } from '../stores/userStore';
+    import { signIn, signUp } from '../stores/userStore';
     import { f7 } from 'framework7-svelte';
 
-    let username, email, password, password2, error;
+    let username, email, password, password2;
 
     // sign up
-    const signUp = async () => {
+    const signUpUser = async () => {
         f7.input.validate('#username');
         f7.input.validate('#email');
         f7.input.validate('#password');
@@ -32,16 +31,14 @@
             return;
         } else {
             f7.dialog.preloader('Creating an account for you...');
-            await userbase
-                .signUp({ username, email, password, rememberMe: 'local' })
-                .then((user) => userStore.set(user))
-                .catch((e) => (error = e));
+            await signUp(username, email, password).then(() =>
+                f7.dialog.close()
+            );
         }
-        f7.dialog.close();
     };
 
     // sign in
-    const signIn = async () => {
+    const signInUser = async () => {
         f7.input.validate('#username');
         f7.input.validate('#password');
 
@@ -49,12 +46,8 @@
             return;
         } else {
             f7.dialog.preloader('Signing you in...');
-            await userbase
-                .signIn({ username, password, rememberMe: 'local' })
-                .then((user) => userStore.set(user))
-                .catch((e) => (error = e));
+            await signIn(username, password).then(() => f7.dialog.close());
         }
-        f7.dialog.close();
     };
 
     let login = true;
@@ -122,7 +115,7 @@
     </List>
     {#if login === true}
         <List>
-            <ListButton on:click={signIn}>Sign In</ListButton>
+            <ListButton on:click={signInUser}>Sign In</ListButton>
         </List>
         <BlockFooter>
             Don't have an account?
@@ -130,7 +123,7 @@
         </BlockFooter>
     {:else}
         <List>
-            <ListButton on:click={signUp}>Register</ListButton>
+            <ListButton on:click={signUpUser}>Register</ListButton>
         </List>
         <BlockFooter>
             Already have an account?
