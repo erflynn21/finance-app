@@ -12,6 +12,27 @@
     import SettingsSwiper from '../components/settingsSwiper.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
     import { flip } from 'svelte/animate';
+    import { Plugins } from '@capacitor/core';
+    import { onDestroy } from 'svelte';
+    import { removeAllListeners } from 'process';
+    const { Keyboard } = Plugins;
+
+    let adding = true;
+    $: if (adding === true) {
+        Keyboard.addListener('keyboardWillShow', (info) => {
+            document.getElementById('add').style.marginBottom = `${
+                info.keyboardHeight - 20
+            }px`;
+        });
+
+        Keyboard.addListener('keyboardWillHide', () => {
+            document.getElementById('add').style.marginBottom = '0px';
+        });
+    }
+
+    onDestroy(() => {
+        removeAllListeners();
+    });
 
     onMount(() => {
         hideFAB();
@@ -36,11 +57,16 @@
     </List>
 
     <Button sheetOpen=".add-budget">Add Budget</Button>
-    <Sheet class="add-budget" style="height: auto; " swipeToClose backdrop>
+    <Sheet
+        class="add-budget"
+        style="height: auto;"
+        swipeToClose
+        id="add"
+        backdrop>
         <Toolbar>
             <div class="left">Add New Budget</div>
             <div class="right">
-                <Link sheetClose>Close</Link>
+                <Link sheetClose on:click={() => (adding = false)}>Close</Link>
             </div>
         </Toolbar>
         <div class="swipe-handler" />

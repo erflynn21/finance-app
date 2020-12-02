@@ -10,7 +10,7 @@
     const { Keyboard } = Plugins;
     import { addBudget } from '../stores/budgetsStore';
     import { baseCurrency, allCurrencies } from '../stores/currenciesStore';
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
 
     let budget = {};
     // checks to make sure there's a base currency before setting the expense values
@@ -77,6 +77,10 @@
         if ($allCurrencies.length > 0) {
             initPickers();
         }
+    });
+
+    onDestroy(() => {
+        budgetCurrencyPicker.destroy();
     });
 </script>
 
