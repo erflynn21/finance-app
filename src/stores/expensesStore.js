@@ -5,7 +5,6 @@ import { get } from "svelte/store";
 
 let expenses = writable([]);
 let expensesSum = writable(0);
-let expensesDBOpen = writable(false);
 const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-expenses`;
 
 const openExpensesDatabase = () => {
@@ -33,8 +32,7 @@ const openExpensesDatabase = () => {
         }, 0));
         
     }})
-    .catch((e) => console.log(e))
-    .finally(() => expensesDBOpen.set(true));
+    .catch((e) => console.log(e));
 }
 
 const addExpense = (expense) => {
@@ -53,4 +51,4 @@ const deleteExpense = (expenseId) => {
     }
 }
 
-export {expenses, expensesSum, expensesDBOpen, openExpensesDatabase, addExpense, updateExpense, deleteExpense};
+export {expenses, expensesSum, openExpensesDatabase, addExpense, updateExpense, deleteExpense};
