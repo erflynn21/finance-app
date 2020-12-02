@@ -154,7 +154,6 @@
                 on:deleted={() => deleteExpense(itemId)} />
         {/each}
     {/if}
-    <!-- <button on:click={() => deleteMonthlyBudget(itemId)}>X</button> -->
 </List>
 
 {#if editing === true}

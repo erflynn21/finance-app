@@ -38,21 +38,28 @@
         removeAllListeners();
     });
 
+    let editModalInstance;
     // opens editing modal
     let editModal;
     let editing = false;
     const edit = () => {
         editing = true;
         setTimeout(function () {
-            const editModalInstance = editModal.instance();
+            editModalInstance = editModal.instance();
             editModalInstance.open();
         }, 50);
     };
 
     // closes editing modal
     const closeModal = () => {
-        const editModalInstance = editModal.instance();
-        editModalInstance.close();
+        console.log('closing');
+        if (editModal !== null) {
+            editModalInstance = editModal.instance();
+            editModalInstance.close();
+        } else {
+            document.querySelector('.sheet-backdrop').style.display = 'none';
+            document.querySelector('.backdrop-in').style.display = 'none';
+        }
         editing = false;
     };
 

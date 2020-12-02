@@ -243,11 +243,11 @@
             type="text"
             readonly
             value={updatedExpense.category}
-            inputId="editCategoryPicker"
+            inputId="editExpenseCategoryPicker"
             clearButton
             required
             validateOnBlur
-            on:input={() => f7.input.validate('#editCategoryPicker')}
+            on:input={() => f7.input.validate('#editExpenseCategoryPicker')}
             errorMessage="Please select a category." />
     </List>
     <Button on:click={handleUpdateExpense}>Update</Button>
