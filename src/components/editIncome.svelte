@@ -43,10 +43,16 @@
         if (
             (updatedIncome.originalCurrency !== null &&
                 updatedIncome.date !== item.date) ||
-            updatedIncome.originalAmount !== item.originalAmount
+            updatedIncome.originalAmount !== item.originalAmount ||
+            (updatedIncome.originalCurrency !== item.originalCurrency &&
+                updatedIncome.originalCurrency !== $baseCurrency)
         ) {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
             await convertAmount();
+        } else if (updatedIncome.originalCurrency === $baseCurrency) {
+            updatedIncome.originalCurrency = null;
+            updatedIncome.amount = updatedIncome.originalAmount;
+            updatedIncome.originalAmount = null;
         }
 
         // add the expense
@@ -87,7 +93,11 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    updatedIncome.currency = value.value;
+                    if (updatedIncome.originalCurrency !== null) {
+                        updatedIncome.originalCurrency = value.value[0];
+                    } else {
+                        updatedIncome.currency = value.value[0];
+                    }
                 },
             },
         });
@@ -183,7 +193,6 @@
             <Col width="33">
                 {#if item.originalCurrency}
                     <ListInput
-                        disabled
                         outline
                         floatingLabel
                         label="Currency"
@@ -192,7 +201,6 @@
                         inputId="editIncomeCurrencyPicker" />
                 {:else}
                     <ListInput
-                        disabled
                         outline
                         floatingLabel
                         label="Currency"

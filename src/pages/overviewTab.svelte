@@ -3,8 +3,6 @@
     import List from 'framework7-svelte/components/list.svelte';
     import ListItemCell from 'framework7-svelte/components/list-item-cell.svelte';
     import ListItemRow from 'framework7-svelte/components/list-item-row.svelte';
-    import NavLeft from 'framework7-svelte/components/nav-left.svelte';
-    import Navbar from 'framework7-svelte/components/navbar.svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
     import { selectedMonthName, selectedYear } from '../stores/datesStore';
     import { expensesSum } from '../stores/expensesStore';
@@ -12,7 +10,6 @@
     import { monthlyBudgetsSum } from '../stores/monthlyBudgetsStore';
     import { incomesSum } from '../stores/incomesStore';
     import DoughnutChart from '../components/doughnutChart.svelte';
-    import Block from 'framework7-svelte/components/block.svelte';
 
     $: cashflow = Number($incomesSum - $expensesSum).toFixed(2);
 
@@ -25,11 +22,9 @@
 <Page name="home">
     <div class="overview-spacer" />
     <div class="background" />
-    <!-- <Block> -->
     <div class="heading">
         <h1>Overview</h1>
     </div>
-    <!-- </Block> -->
 
     <List class="overview-list" inset>
         <div class="item-content">

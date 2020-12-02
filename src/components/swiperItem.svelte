@@ -52,7 +52,6 @@
 
     // closes editing modal
     const closeModal = () => {
-        console.log('closing');
         if (editModal !== null) {
             editModalInstance = editModal.instance();
             editModalInstance.close();

@@ -50,10 +50,16 @@
         if (
             (updatedExpense.originalCurrency !== null &&
                 updatedExpense.date !== item.date) ||
-            updatedExpense.originalAmount !== item.originalAmount
+            updatedExpense.originalAmount !== item.originalAmount ||
+            (updatedExpense.originalCurrency !== item.originalCurrency &&
+                updatedExpense.originalCurrency !== $baseCurrency)
         ) {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
             await convertAmount();
+        } else if (updatedExpense.originalCurrency === $baseCurrency) {
+            updatedExpense.originalCurrency = null;
+            updatedExpense.amount = updatedExpense.originalAmount;
+            updatedExpense.originalAmount = null;
         }
 
         // add the expense
@@ -118,7 +124,11 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    updatedExpense.currency = value.value[0];
+                    if (updatedExpense.originalCurrency !== null) {
+                        updatedExpense.originalCurrency = value.value[0];
+                    } else {
+                        updatedExpense.currency = value.value[0];
+                    }
                 },
             },
         });
@@ -215,7 +225,6 @@
             <Col width="33">
                 {#if item.originalCurrency}
                     <ListInput
-                        disabled
                         outline
                         floatingLabel
                         label="Currency"
@@ -224,7 +233,6 @@
                         inputId="editExpenseCurrencyPicker" />
                 {:else}
                     <ListInput
-                        disabled
                         outline
                         floatingLabel
                         label="Currency"
