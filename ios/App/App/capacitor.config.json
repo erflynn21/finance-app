@@ -11,7 +11,7 @@
       "spinnerColor": "#ffffff"
     },
     "Keyboard": {
-      "resize": "native"
+      "resize": "none"
     }
   },
   "cordova": {},

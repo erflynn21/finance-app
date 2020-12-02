@@ -4,12 +4,23 @@
     import FabButtons from 'framework7-svelte/components/fab-buttons.svelte';
     import FabButton from 'framework7-svelte/components/fab-button.svelte';
     import Sheet from 'framework7-svelte/components/sheet.svelte';
-    import Button from 'framework7-svelte/components/button.svelte';
     import AddExpense from './addExpense.svelte';
     import AddIncome from './addIncome.svelte';
     import FabBackdrop from 'framework7-svelte/components/fab-backdrop.svelte';
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
+    import { Plugins } from '@capacitor/core';
+    const { Keyboard } = Plugins;
+
+    Keyboard.addListener('keyboardWillShow', (info) => {
+        document.getElementById('add').style.marginBottom = `${
+            info.keyboardHeight - 20
+        }px`;
+    });
+
+    Keyboard.addListener('keyboardWillHide', () => {
+        document.getElementById('add').style.marginBottom = '0px';
+    });
 
     // opens add modal
     let addModal;
@@ -55,6 +66,7 @@
     <Sheet
         class="add"
         style="height: auto; max-height: 80vh"
+        id="add"
         backdrop
         bind:this={addModal}>
         <Toolbar>
@@ -89,5 +101,9 @@
 <style>
     :global(.fab) {
         transition-delay: 0ms;
+    }
+
+    :global(.add) {
+        transition: margin-bottom 100ms ease;
     }
 </style>

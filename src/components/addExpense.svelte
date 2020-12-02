@@ -111,7 +111,6 @@
     let expenseDateCalendar;
 
     const initPickers = () => {
-        console.log($categories);
         expenseCategoryPicker = f7.picker.create({
             inputEl: '#expenseCategoryPicker',
             cols: [
@@ -173,10 +172,6 @@
         expenseCurrencyPicker.destroy();
         expenseDateCalendar.destroy();
     });
-
-    // $: if ($categories.length > 0 && $allCurrencies.length > 0) {
-    //     initPickers();
-    // }
 </script>
 
 <Block>
@@ -201,7 +196,6 @@
             bind:value={expense.title}
             clearButton
             required
-            autofocus
             on:input={() => f7.input.validate('#expenseTitle')}
             errorMessage="Please provide a valid expense name." />
 

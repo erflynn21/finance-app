@@ -35,9 +35,9 @@ userbase
                 openMonthlyIncomesDatabase()
             });
         }
-        userbase.getDatabases().then((databases) => {
-            console.log(databases)
-          }).catch((e) => console.error(e))
+        // userbase.getDatabases().then((databases) => {
+        //     console.log(databases)
+        //   }).catch((e) => console.error(e))
     })
     .catch((e) => console.log(e))
     .finally(() => {
