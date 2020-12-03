@@ -16,6 +16,12 @@
 
     import ActionButton from './actionButton.svelte';
     import { Plugins } from '@capacitor/core';
+    import {
+        selectedMonth,
+        selectedMonthName,
+        selectedYear,
+        startDate,
+    } from '../stores/datesStore';
     const { Keyboard } = Plugins;
 
     // Framework7 Parameters
@@ -35,6 +41,11 @@
             openIn: 'customModal',
             dateFormat: 'yyyy-mm-dd',
             backdrop: true,
+            minDate: `${$selectedYear}-${$selectedMonth}-00`,
+            maxDate: `${$selectedYear}-${$selectedMonth}-31`,
+            header: true,
+            headerPlaceholder: `${$selectedMonthName}, ${$selectedYear}`,
+            toolbar: false,
         },
     };
 
