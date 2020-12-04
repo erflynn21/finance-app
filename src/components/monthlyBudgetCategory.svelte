@@ -17,7 +17,6 @@
     import SwiperItem from './swiperItem.svelte';
     import Icon from 'framework7-svelte/components/icon.svelte';
     import { f7 } from 'framework7-svelte';
-    import { fade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
 
     let dropdown = false;

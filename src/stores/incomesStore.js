@@ -5,10 +5,11 @@ import { get } from "svelte/store";
 
 let incomes = writable([]);
 let incomesSum = writable(0);
-const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-incomes`;
+let incomesDatabaseName = writable(null);
+incomesDatabaseName.set(`${get(selectedYear)}-${get(selectedMonth)}-incomes`);
 
 const openIncomesDatabase = () => {
-        return userbase.openDatabase({ databaseName, changeHandler: function (items) {
+        return userbase.openDatabase({ databaseName: get(incomesDatabaseName), changeHandler: function (items) {
             // sorts the incomes based on date and timestamp
             let a = items;
             a.sort(function (a,b) {
@@ -35,15 +36,15 @@ const openIncomesDatabase = () => {
 }
 
 const addIncome = (income) => {
-    return userbase.insertItem({ databaseName, item: income });
+    return userbase.insertItem({ databaseName: get(incomesDatabaseName), item: income });
 };
 
 const updateIncome = (income, incomeId) => {
-    return userbase.updateItem({ databaseName, item: income, itemId: incomeId });
+    return userbase.updateItem({ databaseName: get(incomesDatabaseName), item: income, itemId: incomeId });
 };
 
 const deleteIncome = (incomeId) => {
-    return userbase.deleteItem({ databaseName, itemId: incomeId });
+    return userbase.deleteItem({ databaseName: get(incomesDatabaseName), itemId: incomeId });
 }
 
-export {incomes, incomesSum, openIncomesDatabase, addIncome, updateIncome, deleteIncome};
+export {incomes, incomesSum, incomesDatabaseName, openIncomesDatabase, addIncome, updateIncome, deleteIncome};

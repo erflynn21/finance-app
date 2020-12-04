@@ -47,7 +47,6 @@ const setCategories = () => {
 const setMonthlyBudgets = async (budgets) => {
     budgets.forEach(async budget => {
         let monthlyBudget = get(monthlyBudgets).filter((monthlybudget) => monthlybudget.item.category === budget.item.category);
-        // console.log(monthlyBudget);
         if (monthlyBudget.length == 0) {
             let newMonthlyBudget = {
                 amount: budget.item.amount,
@@ -58,7 +57,7 @@ const setMonthlyBudgets = async (budgets) => {
             if (newMonthlyBudget.currency !== get(baseCurrency)) {
                 await convertAmount(newMonthlyBudget);
             }
-            addMonthlyBudget(newMonthlyBudget);
+            await addMonthlyBudget(newMonthlyBudget);
         } else {
             return;
         }
@@ -92,4 +91,4 @@ const deleteBudget = (budgetId) => {
     return userbase.deleteItem({ databaseName, itemId: budgetId });
 }
 
-export {budgets, budgetsSum, categories, openBudgetsDatabase, addBudget, updateBudget, deleteBudget};
+export {budgets, budgetsSum, categories, setMonthlyBudgets, openBudgetsDatabase, addBudget, updateBudget, deleteBudget};

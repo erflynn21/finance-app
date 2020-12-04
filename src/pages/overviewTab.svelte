@@ -10,8 +10,23 @@
     import { monthlyBudgetsSum } from '../stores/monthlyBudgetsStore';
     import { incomesSum } from '../stores/incomesStore';
     import DoughnutChart from '../components/doughnutChart.svelte';
+    import Icon from 'framework7-svelte/components/icon.svelte';
+    import Sheet from 'framework7-svelte/components/sheet.svelte';
+    import Toolbar from 'framework7-svelte/components/toolbar.svelte';
+    import Link from 'framework7-svelte/components/link.svelte';
+    import ChangeMonth from '../components/changeMonth.svelte';
 
     $: cashflow = Number($incomesSum - $expensesSum).toFixed(2);
+
+    let monthModal;
+    let modalOpen = false;
+    const openModal = () => {
+        modalOpen = true;
+        setTimeout(function () {
+            const monthModalInstance = monthModal.instance();
+            monthModalInstance.open();
+        }, 50);
+    };
 
     // percentage and tweened values
     $: percentage = Math.floor((100 / $monthlyBudgetsSum) * $expensesSum) || 0;
@@ -34,8 +49,24 @@
                         <h3>BUDGET</h3>
                     </ListItemCell>
                     <ListItemCell>
-                        {$selectedMonthName},
-                        {$selectedYear}
+                        <div class="date-picker">
+                            {$selectedMonthName},
+                            {$selectedYear}
+                            <div class="dropdown" on:click={openModal}>
+                                {#if modalOpen === false}
+                                    <Icon
+                                        f7="chevron_down"
+                                        size="18"
+                                        style="align-self: center"
+                                        sheetOpen=".changeMonth" />
+                                {:else}
+                                    <Icon
+                                        f7="chevron_up"
+                                        size="18"
+                                        style="align-self: center" />
+                                {/if}
+                            </div>
+                        </div>
                     </ListItemCell>
                 </ListItemRow>
                 <ListItemRow>
@@ -111,6 +142,25 @@
     </List>
 
     <div class="spacer" />
+
+    {#if modalOpen === true}
+        <Sheet
+            class="changeMonth"
+            style="height: auto; max-height: 70vh"
+            id="changeMonth"
+            swipeToClose
+            backdrop
+            bind:this={monthModal}>
+            <Toolbar>
+                <div class="left">Change Budget Month</div>
+                <div class="right">
+                    <Link sheetClose>Close</Link>
+                </div>
+            </Toolbar>
+            <div class="swipe-handler" />
+            <ChangeMonth />
+        </Sheet>
+    {/if}
 </Page>
 
 <style>
@@ -219,5 +269,14 @@
     .cash-flow-sum h4 {
         font-size: 18px;
         font-weight: 500;
+    }
+
+    .date-picker {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .dropdown {
+        margin-left: 5px;
     }
 </style>

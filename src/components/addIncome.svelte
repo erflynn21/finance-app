@@ -142,10 +142,6 @@
         incomeCurrencyPicker.destroy();
         incomeDateCalendar.destroy();
     });
-
-    // $: if ($categories.length > 0 && $allCurrencies.length > 0) {
-    //     initPickers();
-    // }
 </script>
 
 <Block>

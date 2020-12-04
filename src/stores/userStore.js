@@ -18,6 +18,7 @@ const { SplashScreen } = Plugins;
 
 const userStore = writable(null);
 const initialized = writable(false);
+const allDatabases = writable(null);
 
 userbase
     .init({ appId: '5b975c6f-3f35-48f4-b92f-904372fbcb3b' })
@@ -28,9 +29,6 @@ userbase
         userStore.set(user);
         initialized.set(true);
         SplashScreen.hide();
-        // userbase.getDatabases().then((databases) => {
-        //     console.log(databases)
-        //   }).catch((e) => console.error(e))
     })
     .catch((e) => console.log(e));
 
@@ -74,6 +72,10 @@ const openDatabases = () => {
     openIncomesDatabase().then(() => {
         openMonthlyIncomesDatabase()
     });
+
+    userbase.getDatabases().then((databases) => {
+        allDatabases.set(databases);
+    }).catch((e) => console.error(e))
 }
 
-export { userStore, initialized, signUp, signIn, signOut };
+export { userStore, initialized, allDatabases, signUp, signIn, signOut };

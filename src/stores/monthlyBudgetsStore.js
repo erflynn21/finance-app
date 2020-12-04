@@ -5,10 +5,11 @@ import { get } from "svelte/store";
 
 let monthlyBudgets = writable([]);
 let monthlyBudgetsSum = writable(0);
-const databaseName = `${get(selectedYear)}-${get(selectedMonth)}-monthlyBudgets`;
+let monthlyBudgetsDatabaseName = writable(null);
+monthlyBudgetsDatabaseName.set(`${get(selectedYear)}-${get(selectedMonth)}-monthlyBudgets`);
 
 const openMonthlyBudgetsDatabase = () => {
-    return userbase.openDatabase({ databaseName, changeHandler: function (items) {
+    return userbase.openDatabase({ databaseName: get(monthlyBudgetsDatabaseName), changeHandler: function (items) {
         monthlyBudgets.set(items);
         // sets the monthly budgets total
         let totalMonthlyBudgets = [];
@@ -25,15 +26,15 @@ const openMonthlyBudgetsDatabase = () => {
 }
 
 const addMonthlyBudget = (monthlyBudget) => {
-    return userbase.insertItem({ databaseName, item: monthlyBudget });
+    return userbase.insertItem({ databaseName: get(monthlyBudgetsDatabaseName), item: monthlyBudget });
 };
 
 const updateMonthlyBudget = (monthlyBudget, monthlyBudgetId) => {
-    return userbase.updateItem({ databaseName, item: monthlyBudget, itemId: monthlyBudgetId });
+    return userbase.updateItem({ databaseName: get(monthlyBudgetsDatabaseName), item: monthlyBudget, itemId: monthlyBudgetId });
 };
 
 const deleteMonthlyBudget = (monthlyBudgetId) => {
-    return userbase.deleteItem({ databaseName, itemId: monthlyBudgetId });
+    return userbase.deleteItem({ databaseName: get(monthlyBudgetsDatabaseName), itemId: monthlyBudgetId });
 };
 
-export {monthlyBudgets, monthlyBudgetsSum, openMonthlyBudgetsDatabase, addMonthlyBudget, updateMonthlyBudget, deleteMonthlyBudget};
+export {monthlyBudgets, monthlyBudgetsSum, monthlyBudgetsDatabaseName, openMonthlyBudgetsDatabase, addMonthlyBudget, updateMonthlyBudget, deleteMonthlyBudget};
