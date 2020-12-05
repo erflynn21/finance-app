@@ -9,15 +9,9 @@
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import {
-        afterUpdate,
-        createEventDispatcher,
-        onDestroy,
-        onMount,
-    } from 'svelte';
+    import { afterUpdate, onDestroy, onMount } from 'svelte';
     import EditExpense from './editExpense.svelte';
     import EditIncome from './editIncome.svelte';
-    const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
     import { removeAllListeners } from 'process';
     import { f7 } from 'framework7-svelte';
@@ -27,19 +21,23 @@
 
     $: if (editing === true) {
         Keyboard.addListener('keyboardWillShow', (info) => {
-            document.getElementById('edit').style.marginBottom = `${
-                info.keyboardHeight - 20
-            }px`;
+            if (document.getElementById('edit')) {
+                document.getElementById('edit').style.marginBottom = `${
+                    info.keyboardHeight - 20
+                }px`;
+            }
         });
 
         Keyboard.addListener('keyboardWillHide', () => {
-            document.getElementById('edit').style.marginBottom = '0px';
+            if (document.getElementById('edit')) {
+                document.getElementById('edit').style.marginBottom = '0px';
+            }
         });
     }
 
-    onDestroy(() => {
+    $: if (editing === false) {
         removeAllListeners();
-    });
+    }
 
     let editModalInstance;
     // opens editing modal
