@@ -12,16 +12,31 @@
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
     import { onDestroy, onMount } from 'svelte';
+    import {
+        selectedMonth,
+        selectedMonthName,
+        selectedYear,
+    } from '../stores/datesStore';
     const { Keyboard } = Plugins;
 
     let recurring = false;
+
+    let calendarDate;
+    $: if ($selectedMonth) setMonth();
+    const setMonth = () => {
+        if (new Date().getMonth() + 1 === $selectedMonth) {
+            calendarDate = new Intl.DateTimeFormat('en-CA').format(new Date());
+        } else {
+            calendarDate = `${$selectedYear}-${$selectedMonth}-01`;
+        }
+    };
 
     let income = {};
     $: if ($baseCurrency !== '') {
         income = {
             title: null,
             amount: null,
-            date: new Intl.DateTimeFormat('en-CA').format(new Date()),
+            date: calendarDate,
             currency: $baseCurrency,
             originalAmount: null,
             originalCurrency: null,
@@ -119,11 +134,26 @@
             },
         });
 
+        let minDate = `${$selectedYear}-${$selectedMonth}-01`;
+        let maxDate = `${$selectedYear}-${$selectedMonth}-31`;
         incomeDateCalendar = f7.calendar.create({
             inputEl: '#incomeDateCalendar',
+            disabled(date) {
+                if (new Intl.DateTimeFormat('en-CA').format(date) < minDate)
+                    return true;
+                if (new Intl.DateTimeFormat('en-CA').format(date) > maxDate)
+                    return true;
+                return false;
+            },
+            headerPlaceholder: `${$selectedMonthName}, ${$selectedYear}`,
             on: {
                 open: function () {
                     Keyboard.hide();
+                    incomeDateCalendar.setYearMonth(
+                        $selectedYear,
+                        $selectedMonth - 1,
+                        0
+                    );
                 },
                 change: function () {
                     income.date = new Intl.DateTimeFormat('en-CA').format(

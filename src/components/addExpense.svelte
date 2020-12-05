@@ -165,11 +165,8 @@
 
         let minDate = `${$selectedYear}-${$selectedMonth}-01`;
         let maxDate = `${$selectedYear}-${$selectedMonth}-31`;
-
         expenseDateCalendar = f7.calendar.create({
             inputEl: '#expenseDateCalendar',
-            // minDate: new Date(`${$selectedYear}-${$selectedMonth}-01`),
-            // maxDate: new Date(`${$selectedYear}-${$selectedMonth}-31`),
             disabled(date) {
                 if (new Intl.DateTimeFormat('en-CA').format(date) < minDate)
                     return true;

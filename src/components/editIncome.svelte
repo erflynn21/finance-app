@@ -14,6 +14,11 @@
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
     import { updateIncome } from '../stores/incomesStore';
+    import {
+        selectedMonth,
+        selectedMonthName,
+        selectedYear,
+    } from '../stores/datesStore';
     const { Keyboard } = Plugins;
 
     let updatedIncome = {
@@ -102,11 +107,26 @@
             },
         });
 
+        let minDate = `${$selectedYear}-${$selectedMonth}-01`;
+        let maxDate = `${$selectedYear}-${$selectedMonth}-31`;
         editIncomeDateCalendar = f7.calendar.create({
             inputEl: '#editIncomeDateCalendar',
+            disabled(date) {
+                if (new Intl.DateTimeFormat('en-CA').format(date) < minDate)
+                    return true;
+                if (new Intl.DateTimeFormat('en-CA').format(date) > maxDate)
+                    return true;
+                return false;
+            },
+            headerPlaceholder: `${$selectedMonthName}, ${$selectedYear}`,
             on: {
                 open: function () {
                     Keyboard.hide();
+                    editIncomeDateCalendar.setYearMonth(
+                        $selectedYear,
+                        $selectedMonth - 1,
+                        0
+                    );
                 },
                 change: function () {
                     updatedIncome.date = new Intl.DateTimeFormat(

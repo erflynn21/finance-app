@@ -15,6 +15,11 @@
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
+    import {
+        selectedMonth,
+        selectedMonthName,
+        selectedYear,
+    } from '../stores/datesStore';
     const { Keyboard } = Plugins;
 
     let updatedExpense = {
@@ -133,11 +138,26 @@
             },
         });
 
+        let minDate = `${$selectedYear}-${$selectedMonth}-01`;
+        let maxDate = `${$selectedYear}-${$selectedMonth}-31`;
         editExpenseDateCalendar = f7.calendar.create({
             inputEl: '#editExpenseDateCalendar',
+            disabled(date) {
+                if (new Intl.DateTimeFormat('en-CA').format(date) < minDate)
+                    return true;
+                if (new Intl.DateTimeFormat('en-CA').format(date) > maxDate)
+                    return true;
+                return false;
+            },
+            headerPlaceholder: `${$selectedMonthName}, ${$selectedYear}`,
             on: {
                 open: function () {
                     Keyboard.hide();
+                    editExpenseDateCalendar.setYearMonth(
+                        $selectedYear,
+                        $selectedMonth - 1,
+                        0
+                    );
                 },
                 change: function () {
                     updatedExpense.date = new Intl.DateTimeFormat(
