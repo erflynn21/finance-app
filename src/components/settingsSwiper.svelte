@@ -13,13 +13,10 @@
     import Sheet from 'framework7-svelte/components/sheet.svelte';
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
-    import { createEventDispatcher, onDestroy } from 'svelte';
     import EditBudget from './editBudget.svelte';
     import EditMonthlyExpense from './editMonthlyExpense.svelte';
     import EditMonthlyIncome from './editMonthlyIncome.svelte';
-    const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
-    import { removeAllListeners } from 'process';
     import { deleteBudget } from '../stores/budgetsStore';
     import { deleteMonthlyExpense } from '../stores/monthlyExpensesStore';
     import { deleteMonthlyIncome } from '../stores/monthlyIncomesStore';
@@ -28,19 +25,19 @@
 
     $: if (editing === true) {
         Keyboard.addListener('keyboardWillShow', (info) => {
-            document.getElementById('edit').style.marginBottom = `${
-                info.keyboardHeight - 20
-            }px`;
+            if (document.getElementById('edit')) {
+                document.getElementById('edit').style.marginBottom = `${
+                    info.keyboardHeight - 20
+                }px`;
+            }
         });
 
         Keyboard.addListener('keyboardWillHide', () => {
-            document.getElementById('edit').style.marginBottom = '0px';
+            if (document.getElementById('edit')) {
+                document.getElementById('edit').style.marginBottom = '0px';
+            }
         });
     }
-
-    onDestroy(() => {
-        removeAllListeners();
-    });
 
     let currencySymbol;
     if (item.currency === $baseCurrency) {

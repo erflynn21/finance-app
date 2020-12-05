@@ -9,7 +9,7 @@
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
     import { baseCurrencySymbol } from '../stores/currenciesStore';
-    import { afterUpdate, onDestroy, onMount } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import EditExpense from './editExpense.svelte';
     import EditIncome from './editIncome.svelte';
     import { Plugins } from '@capacitor/core';
