@@ -6,25 +6,40 @@
     import { allCurrencies, baseCurrency } from '../stores/currenciesStore';
     import Button from 'framework7-svelte/components/button.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
-    import { addExpense } from '../stores/expensesStore';
+    import { addExpense, expenses } from '../stores/expensesStore';
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
     import { onDestroy, onMount } from 'svelte';
+    import {
+        selectedMonth,
+        selectedMonthName,
+        selectedYear,
+    } from '../stores/datesStore';
     const { Keyboard } = Plugins;
 
     let recurring = false;
 
+    let calendarDate;
+    $: if ($selectedMonth) setMonth();
+    const setMonth = () => {
+        if (new Date().getMonth() + 1 === $selectedMonth) {
+            calendarDate = new Intl.DateTimeFormat('en-CA').format(new Date());
+        } else {
+            calendarDate = `${$selectedYear}-${$selectedMonth}-01`;
+        }
+    };
+
     let expense = {};
     // checks to make sure there's a base currency before setting the expense values
-    $: if ($baseCurrency !== '') {
+    $: if ($baseCurrency !== '' && calendarDate !== undefined) {
         expense = {
             title: null,
             amount: null,
             category: null,
-            date: new Intl.DateTimeFormat('en-CA').format(new Date()),
+            date: calendarDate,
             currency: $baseCurrency,
             originalAmount: null,
             originalCurrency: null,
@@ -148,11 +163,29 @@
             },
         });
 
+        let minDate = `${$selectedYear}-${$selectedMonth}-01`;
+        let maxDate = `${$selectedYear}-${$selectedMonth}-31`;
+
         expenseDateCalendar = f7.calendar.create({
             inputEl: '#expenseDateCalendar',
+            // minDate: new Date(`${$selectedYear}-${$selectedMonth}-01`),
+            // maxDate: new Date(`${$selectedYear}-${$selectedMonth}-31`),
+            disabled(date) {
+                if (new Intl.DateTimeFormat('en-CA').format(date) < minDate)
+                    return true;
+                if (new Intl.DateTimeFormat('en-CA').format(date) > maxDate)
+                    return true;
+                return false;
+            },
+            headerPlaceholder: `${$selectedMonthName}, ${$selectedYear}`,
             on: {
                 open: function () {
                     Keyboard.hide();
+                    expenseDateCalendar.setYearMonth(
+                        $selectedYear,
+                        $selectedMonth - 1,
+                        0
+                    );
                 },
                 change: function () {
                     expense.date = new Intl.DateTimeFormat('en-CA').format(

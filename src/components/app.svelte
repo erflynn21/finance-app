@@ -1,27 +1,21 @@
 <script>
-    import { onMount } from 'svelte';
+    import { Plugins } from '@capacitor/core';
     import {
-        f7ready,
         App,
-        Views,
-        View,
-        Toolbar,
+        f7ready,
         Link,
         Page,
         Preloader,
+        Toolbar,
+        View,
+        Views,
     } from 'framework7-svelte';
+    import { onMount } from 'svelte';
     import routes from '../js/routes';
-    import { userStore, initialized } from '../stores/userStore.js';
     import { currencies } from '../stores/currenciesStore';
-
+    import { initialized, userStore } from '../stores/userStore.js';
     import ActionButton from './actionButton.svelte';
-    import { Plugins } from '@capacitor/core';
-    import {
-        selectedMonth,
-        selectedMonthName,
-        selectedYear,
-        startDate,
-    } from '../stores/datesStore';
+
     const { Keyboard } = Plugins;
 
     // Framework7 Parameters
@@ -33,7 +27,7 @@
         routes: routes,
         // Register service worker
         // serviceWorker: {
-        //     path: '/service-worker.js',
+        //     path: '/serÇ◊±¿M JMvice-worker.js',
         // },
 
         calendar: {
@@ -41,11 +35,9 @@
             openIn: 'customModal',
             dateFormat: 'yyyy-mm-dd',
             backdrop: true,
-            minDate: `${$selectedYear}-${$selectedMonth}-00`,
-            maxDate: `${$selectedYear}-${$selectedMonth}-31`,
             header: true,
-            headerPlaceholder: `${$selectedMonthName}, ${$selectedYear}`,
             toolbar: false,
+            touchMove: false,
         },
     };
 

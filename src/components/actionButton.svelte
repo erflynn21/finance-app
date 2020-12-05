@@ -80,7 +80,7 @@
         <Toolbar>
             <div class="left">Add New Expense</div>
             <div class="right">
-                <Link sheetClose on:click={() => (adding = false)}>Close</Link>
+                <Link sheetClose on:click={closeModal}>Close</Link>
             </div>
         </Toolbar>
         <div class="swipe-handler" />
@@ -99,7 +99,7 @@
         <Toolbar>
             <div class="left">Add New Income</div>
             <div class="right">
-                <Link sheetClose on:click={() => (adding = false)}>Close</Link>
+                <Link sheetClose on:click={closeModal}>Close</Link>
             </div>
         </Toolbar>
         <div class="swipe-handler" />

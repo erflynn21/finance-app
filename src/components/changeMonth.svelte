@@ -3,7 +3,7 @@
     import ListInput from 'framework7-svelte/components/list-input.svelte';
     import { f7 } from 'framework7-svelte';
     import List from 'framework7-svelte/components/list.svelte';
-    import { onDestroy, onMount } from 'svelte';
+    import { onDestroy, onMount, createEventDispatcher } from 'svelte';
     import Block from 'framework7-svelte/components/block.svelte';
     import {
         selectedMonthName,
@@ -25,6 +25,7 @@
         openMonthlyBudgetsDatabase,
     } from '../stores/monthlyBudgetsStore';
     import { budgets, setMonthlyBudgets } from '../stores/budgetsStore';
+    const dispatch = createEventDispatcher();
 
     const changeMonth = () => {
         // check to see if a month exists in the database already
@@ -77,6 +78,7 @@
         await openIncomesDatabase();
         await setMonthlyBudgets($budgets);
         f7.dialog.close();
+        dispatch('collapse');
     };
 
     let budgetMonth = `${$selectedMonthName}, ${$selectedYear}`;

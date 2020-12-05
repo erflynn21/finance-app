@@ -42,6 +42,7 @@
             }, 0);
         });
     };
+
     $: if ($expenses) calcCategoryExpenses();
 
     const deleteBudget = (itemId) => {

@@ -28,6 +28,12 @@
         }, 50);
     };
 
+    const closeModal = () => {
+        const monthModalInstance = monthModal.instance();
+        monthModalInstance.close();
+        modalOpen = false;
+    };
+
     // percentage and tweened values
     $: percentage = Math.floor((100 / $monthlyBudgetsSum) * $expensesSum) || 0;
     const tweenedPercentage = tweened(0);
@@ -158,7 +164,7 @@
                 </div>
             </Toolbar>
             <div class="swipe-handler" />
-            <ChangeMonth />
+            <ChangeMonth on:collapse={closeModal} />
         </Sheet>
     {/if}
 </Page>
