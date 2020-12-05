@@ -18,6 +18,7 @@
     import Icon from 'framework7-svelte/components/icon.svelte';
     import { f7 } from 'framework7-svelte';
     import { flip } from 'svelte/animate';
+    import { afterUpdate } from 'svelte';
 
     let dropdown = false;
 
@@ -25,6 +26,7 @@
     $: categorySum = 0;
     let categoryExpenses;
     const calcCategoryExpenses = () => {
+        categorySum = 0;
         categoryExpenses = [];
         let categoryExpensesAmounts = [];
         $expenses.forEach((expense) => {
