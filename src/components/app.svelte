@@ -20,7 +20,7 @@
 
     // Framework7 Parameters
     let f7params = {
-        name: 'looking', // App name
+        name: 'Expat Expenses', // App name
         theme: 'auto', // Automatic theme detection
 
         // App routes
