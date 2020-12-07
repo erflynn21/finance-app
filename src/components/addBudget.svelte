@@ -53,6 +53,7 @@
 
     let budgetCurrencyPicker;
     const initPickers = () => {
+        console.log('inited');
         budgetCurrencyPicker = f7.picker.create({
             inputEl: '#budgetCurrencyPicker',
             cols: [
@@ -77,10 +78,6 @@
         if ($allCurrencies.length > 0) {
             initPickers();
         }
-    });
-
-    onDestroy(() => {
-        budgetCurrencyPicker.destroy();
     });
 </script>
 

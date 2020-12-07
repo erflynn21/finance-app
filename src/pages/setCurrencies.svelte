@@ -6,8 +6,6 @@
     import List from 'framework7-svelte/components/list.svelte';
     import CurrenciesList from '../shared/currenciesList.svelte';
     import { addCurrencies } from '../stores/currenciesStore';
-    import { createEventDispatcher } from 'svelte';
-    const dispatch = createEventDispatcher();
 
     let baseCurrency;
     let currencyOptions;
@@ -27,7 +25,7 @@
     };
 </script>
 
-<Page name="set-currencies" class="safe-area" noNavbar>
+<Page name="set-currencies" noNavbar>
     <Block class="text-align-center">
         Before getting started with budgeting you must select the currency that
         your budget will be in. This is the currency that will show up

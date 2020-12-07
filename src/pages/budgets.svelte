@@ -17,16 +17,37 @@
     import { removeAllListeners } from 'process';
     const { Keyboard } = Plugins;
 
-    let adding = true;
+    // opens add modal
+    let addModal;
+    let adding = false;
+    const add = () => {
+        adding = true;
+        setTimeout(function () {
+            const addModalInstance = addModal.instance();
+            addModalInstance.open();
+        }, 100);
+    };
+
+    // closes add modal
+    const closeModal = () => {
+        const addModalInstance = addModal.instance();
+        addModalInstance.close();
+        adding = false;
+    };
+
     $: if (adding === true) {
         Keyboard.addListener('keyboardWillShow', (info) => {
-            document.getElementById('add').style.marginBottom = `${
-                info.keyboardHeight - 20
-            }px`;
+            if (document.getElementById('add')) {
+                document.getElementById('add').style.marginBottom = `${
+                    info.keyboardHeight - 20
+                }px`;
+            }
         });
 
         Keyboard.addListener('keyboardWillHide', () => {
-            document.getElementById('add').style.marginBottom = '0px';
+            if (document.getElementById('add')) {
+                document.getElementById('add').style.marginBottom = '0px';
+            }
         });
     }
 
@@ -56,20 +77,22 @@
         {/each}
     </List>
 
-    <Button sheetOpen=".add-budget">Add Budget</Button>
-    <Sheet
-        class="add-budget"
-        style="height: auto;"
-        swipeToClose
-        id="add"
-        backdrop>
-        <Toolbar>
-            <div class="left">Add New Budget</div>
-            <div class="right">
-                <Link sheetClose on:click={() => (adding = false)}>Close</Link>
-            </div>
-        </Toolbar>
-        <div class="swipe-handler" />
-        <AddBudget />
-    </Sheet>
+    <Button on:click={add}>Add Budget</Button>
+    {#if adding === true}
+        <Sheet
+            class="add-budget"
+            style="height: auto;"
+            swipeToClose
+            id="add"
+            backdrop>
+            <Toolbar>
+                <div class="left">Add New Budget</div>
+                <div class="right">
+                    <Link sheetClose on:click={closeModal}>Close</Link>
+                </div>
+            </Toolbar>
+            <div class="swipe-handler" />
+            <AddBudget />
+        </Sheet>
+    {/if}
 </Page>

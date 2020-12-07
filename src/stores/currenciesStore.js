@@ -13,17 +13,18 @@ const databaseName = `currencies`;
 const openCurrenciesDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
         currencies.set(items);
+        setCurrencies();
     }})
     .catch((e) => console.log(e))
     .finally(() => {
-        setCurrencies();
+       
     });
 }
 
 const setCurrencies = () => {
     if (get(currencies).length > 0) {
-        baseCurrency.set(get(currencies)[0].item.baseCurrency);
-        currencyOptions.set(get(currencies)[0].item.currencyOptions);
+        baseCurrency.set(get(currencies)[0].item.newBaseCurrency);
+        currencyOptions.set(get(currencies)[0].item.newCurrencyOptions);
         baseCurrencySymbol.set(currencyDict[get(baseCurrency)]);
 
         let everyCurrency = [];
@@ -32,6 +33,7 @@ const setCurrencies = () => {
             everyCurrency = [...everyCurrency, currencyOption];
         });
         allCurrencies.set(everyCurrency);
+        // console.log(get(allCurrencies));
     } else {
         return;
     }

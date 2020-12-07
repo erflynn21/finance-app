@@ -13,7 +13,7 @@
     import { onMount } from 'svelte';
     import routes from '../js/routes';
     import { currencies } from '../stores/currenciesStore';
-    import { initialized, userStore } from '../stores/userStore.js';
+    import { initialized, userSetUp, userStore } from '../stores/userStore.js';
     import ActionButton from './actionButton.svelte';
 
     const { Keyboard } = Plugins;
@@ -43,17 +43,6 @@
 
     Keyboard.setAccessoryBarVisible({ isVisible: true });
 
-    // checking if user has set base currency and currency options
-    let currenciesSet;
-    const checkBaseCurrency = () => {
-        if ($currencies.length === 0) {
-            currenciesSet = false;
-        } else {
-            currenciesSet = true;
-        }
-    };
-    $: if ($currencies) checkBaseCurrency();
-
     onMount(() => {
         f7ready(() => {});
     });
@@ -63,25 +52,34 @@
     <!-- Views/Tabs container -->
     <Views tabs class="safe-areas">
         {#if $initialized === false}
-            <View url="/loading-screen/" class="safe-areas" />
+            <View
+                id="view-loading-screen"
+                url="/loading-screen/"
+                class="safe-areas" />
             <!-- <Page noNavbar class="safe-areas loader">
                 <Preloader color="green" size={100} />
             </Page> -->
         {:else if $userStore}
-            {#if $currencies === null}
-                <View url="/loading-screen/" class="safe-areas" />
-                <Page noNavbar class="safe-areas loader">
+            {#if $userSetUp === false}
+                <View
+                    id="view-intro-slider"
+                    url="/intro-slider/"
+                    class="safe-areas" />
+            {:else if $currencies === null}
+                <View
+                    id="view-loading-screen"
+                    url="/loading-screen/"
+                    class="safe-areas" />
+                <!-- <Page noNavbar class="safe-areas loader">
                     <Preloader color="green" size={100} />
-                </Page>
-            {:else if currenciesSet === false}
-                <View url="/set-currencies/" class="safe-areas" />
+                </Page> -->
             {/if}
         {:else}
-            <View url="/auth/" class="safe-areas" />
+            <View id="view-auth" url="/auth/" class="safe-areas" />
         {/if}
 
         <!-- Tabbar for switching views-tabs -->
-        {#if $initialized === true && $userStore !== null && currenciesSet === true}
+        {#if $initialized === true && $userStore !== null && $userSetUp === true}
             <Toolbar tabbar bottom bgColor="white">
                 <Link
                     tabLink="#view-overview"

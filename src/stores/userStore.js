@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import userbase from 'userbase-js';
 import {
     openCurrenciesDatabase,
@@ -19,16 +19,25 @@ const { SplashScreen } = Plugins;
 const userStore = writable(null);
 const initialized = writable(false);
 const allDatabases = writable(null);
+const userSetUp = writable(false);
 
 userbase
     .init({ appId: '5b975c6f-3f35-48f4-b92f-904372fbcb3b' })
     .then(({ user }) => {
         if (user) {
-            openDatabases();   
+            openDatabases(); 
+            
         }
+        
         userStore.set(user);
         initialized.set(true);
         SplashScreen.hide();
+
+        if (user.profile === undefined) {
+            return;
+        } else if (user.profile.setUpDone === 'true') {
+            userSetUp.set(true);
+        }
     })
     .catch((e) => console.log(e));
 
@@ -61,6 +70,20 @@ const signOut = async () => {
     }
 }
 
+const setUpDone = async () => {
+    try {
+        await userbase.updateUser({
+            profile: {
+                setUpDone: 'true',
+            }
+        }).then(() => {
+            location.reload();
+        });
+    } catch (e) {
+        return console.log(e)
+    }
+}
+
 const openDatabases = () => {
     openCurrenciesDatabase();
     openMonthlyBudgetsDatabase().then(() => {
@@ -78,4 +101,4 @@ const openDatabases = () => {
     }).catch((e) => console.error(e))
 }
 
-export { userStore, initialized, allDatabases, signUp, signIn, signOut };
+export { userStore, initialized, allDatabases, userSetUp, setUpDone, signUp, signIn, signOut };
