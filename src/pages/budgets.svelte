@@ -84,7 +84,8 @@
             style="height: auto;"
             swipeToClose
             id="add"
-            backdrop>
+            backdrop
+            bind:this={addModal}>
             <Toolbar>
                 <div class="left">Add New Budget</div>
                 <div class="right">

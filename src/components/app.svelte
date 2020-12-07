@@ -10,9 +10,10 @@
         View,
         Views,
     } from 'framework7-svelte';
+    import { parse } from 'path';
     import { onMount } from 'svelte';
     import routes from '../js/routes';
-    import { currencies } from '../stores/currenciesStore';
+    import { monthlyIncomes } from '../stores/monthlyIncomesStore';
     import { initialized, userSetUp, userStore } from '../stores/userStore.js';
     import ActionButton from './actionButton.svelte';
 
@@ -27,7 +28,7 @@
         routes: routes,
         // Register service worker
         // serviceWorker: {
-        //     path: '/serÇ◊±¿M JMvice-worker.js',
+        //     path: '/service-worker.js',
         // },
 
         calendar: {
@@ -42,7 +43,6 @@
     };
 
     Keyboard.setAccessoryBarVisible({ isVisible: true });
-
     onMount(() => {
         f7ready(() => {});
     });
@@ -52,27 +52,27 @@
     <!-- Views/Tabs container -->
     <Views tabs class="safe-areas">
         {#if $initialized === false}
-            <View
-                id="view-loading-screen"
-                url="/loading-screen/"
-                class="safe-areas" />
-            <!-- <Page noNavbar class="safe-areas loader">
-                <Preloader color="green" size={100} />
-            </Page> -->
+            {#if localStorage.userbaseCurrentSession}
+                {#if JSON.parse(localStorage.userbaseCurrentSession).signedIn === true}
+                    <View
+                        id="view-loading-screen"
+                        url="/loading-screen/"
+                        class="safe-areas" />
+                {/if}
+            {:else}
+                <div />
+            {/if}
         {:else if $userStore}
             {#if $userSetUp === false}
                 <View
                     id="view-intro-slider"
                     url="/intro-slider/"
                     class="safe-areas" />
-            {:else if $currencies === null}
+            {:else if $monthlyIncomes === null}
                 <View
                     id="view-loading-screen"
                     url="/loading-screen/"
                     class="safe-areas" />
-                <!-- <Page noNavbar class="safe-areas loader">
-                    <Preloader color="green" size={100} />
-                </Page> -->
             {/if}
         {:else}
             <View id="view-auth" url="/auth/" class="safe-areas" />

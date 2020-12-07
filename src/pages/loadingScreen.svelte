@@ -1,9 +1,7 @@
 <script>
-    import { Page, Preloader } from 'framework7-svelte';
-    import Card from 'framework7-svelte/components/card.svelte';
+    import { Page } from 'framework7-svelte';
     import ListItemCell from 'framework7-svelte/components/list-item-cell.svelte';
     import ListItemRow from 'framework7-svelte/components/list-item-row.svelte';
-    import ListItem from 'framework7-svelte/components/list-item.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import SkeletonBlock from 'framework7-svelte/components/skeleton-block.svelte';
 </script>

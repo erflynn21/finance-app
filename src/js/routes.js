@@ -14,7 +14,10 @@ import IntroSliderPage from '../pages/introSlider.svelte';
 import NotFoundPage from '../pages/404.svelte';
 
 let routes = [
-
+  {
+    path: '/loading-screen/',
+    component: LoadingScreenPage,
+  },
   {
     path: '/',
     component: OverviewPage,
@@ -54,10 +57,6 @@ let routes = [
   {
     path: '/auth/',
     component: AuthPage,
-  },
-  {
-    path: '/loading-screen/',
-    component: LoadingScreenPage,
   },
   {
     path: '/intro-slider',

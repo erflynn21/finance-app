@@ -26,20 +26,19 @@ userbase
     .then(({ user }) => {
         if (user) {
             openDatabases(); 
-            
+            userStore.set(user);
         }
-        
-        userStore.set(user);
-        initialized.set(true);
-        SplashScreen.hide();
-
+         
         if (user.profile === undefined) {
             return;
         } else if (user.profile.setUpDone === 'true') {
             userSetUp.set(true);
         }
     })
-    .catch((e) => console.log(e));
+    .catch((e) => console.log(e)).finally(() => {
+        initialized.set(true);
+        SplashScreen.hide();
+    });
 
 const signUp = async (username, email, password) => {
     try {
