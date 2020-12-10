@@ -51,10 +51,10 @@
         {#if $initialized === false}
             {#if localStorage.userbaseCurrentSession}
                 {#if JSON.parse(localStorage.userbaseCurrentSession).signedIn === true}
-                    <!-- <View
+                    <View
                         id="view-loading-screen"
                         url="/loading-screen/"
-                        class="safe-areas" /> -->
+                        class="safe-areas" />
                 {/if}
             {:else}
                 <div />
