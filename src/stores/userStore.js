@@ -1,4 +1,4 @@
-import { get, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 import userbase from 'userbase-js';
 import {
     openCurrenciesDatabase,
@@ -22,7 +22,7 @@ const allDatabases = writable(null);
 const userSetUp = writable(false);
 
 userbase
-    .init({ appId: '9c589a73-c7d7-435e-9657-336c0347609f' })
+    .init({ appId: process.env.USERBASE_API_KEY })
     .then(({ user }) => {
         if (user) {
             openDatabases(); 
