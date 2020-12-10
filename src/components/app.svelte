@@ -24,9 +24,9 @@
         // App routes
         routes: routes,
         // Register service worker
-        // serviceWorker: {
-        //     path: '/service-worker.js',
-        // },
+        serviceWorker: {
+            path: '/service-worker.js',
+        },
 
         calendar: {
             closeOnSelect: true,
@@ -72,7 +72,11 @@
                     class="safe-areas" />
             {/if}
         {:else}
-            <View id="view-auth" url="/auth/" class="safe-areas" />
+            <View
+                id="view-auth"
+                url="/auth/"
+                class="safe-areas"
+                style="z-index: 5001;" />
         {/if}
 
         <!-- Tabbar for switching views-tabs -->
