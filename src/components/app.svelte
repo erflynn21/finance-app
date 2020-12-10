@@ -4,13 +4,10 @@
         App,
         f7ready,
         Link,
-        Page,
-        Preloader,
         Toolbar,
         View,
         Views,
     } from 'framework7-svelte';
-    import { parse } from 'path';
     import { onMount } from 'svelte';
     import routes from '../js/routes';
     import { monthlyIncomes } from '../stores/monthlyIncomesStore';

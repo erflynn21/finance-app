@@ -95,6 +95,9 @@
         income.currency = $baseCurrency;
         income.originalCurrency = null;
         income.originalAmount = null;
+        incomeCurrencyPicker.destroy();
+        incomeDateCalendar.destroy();
+        initPickers();
     };
 
     const convertAmount = async () => {
@@ -188,9 +191,9 @@
         <ListInput
             outline
             floatingLabel
-            label="Expense:"
+            label="Income:"
             type="text"
-            placeholder="Your Expense"
+            placeholder="Your Income"
             autocapitalize="off"
             inputId="incomeTitle"
             bind:value={income.title}

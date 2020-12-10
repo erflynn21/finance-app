@@ -22,7 +22,7 @@ const allDatabases = writable(null);
 const userSetUp = writable(false);
 
 userbase
-    .init({ appId: '5b975c6f-3f35-48f4-b92f-904372fbcb3b' })
+    .init({ appId: '9c589a73-c7d7-435e-9657-336c0347609f' })
     .then(({ user }) => {
         if (user) {
             openDatabases(); 

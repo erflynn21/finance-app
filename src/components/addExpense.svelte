@@ -104,6 +104,10 @@
         expense.currency = $baseCurrency;
         expense.originalCurrency = null;
         expense.originalAmount = null;
+        expenseCategoryPicker.destroy();
+        expenseCurrencyPicker.destroy();
+        expenseDateCalendar.destroy();
+        initPickers();
     };
 
     const convertAmount = async () => {

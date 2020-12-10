@@ -78,7 +78,6 @@
   content: none;
 }
 
-
 .block-title {
   margin-bottom: 0;
 }
@@ -141,7 +140,6 @@ h1, h2, h3, h4, h5, h6  {
 }
 
 .budget-summary-list .item-cell:last-child {
-  /* width: 100%; */
   margin-left: 0;
   justify-content: end;
 }

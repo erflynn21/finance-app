@@ -210,6 +210,10 @@
         text-align: right;
     }
 
+    :global(.overview-grid .item-cell) {
+        width: auto;
+    }
+
     .grid {
         display: grid;
         grid-template-columns: 1fr 0.1fr;
