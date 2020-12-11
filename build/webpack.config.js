@@ -22,7 +22,6 @@ module.exports = {
   mode: env,
   entry: {
     app: './src/js/app.js',
-    systemvars: true,
   },
   output: {
     path: resolvePath('www'),
