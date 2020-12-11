@@ -171,6 +171,7 @@ module.exports = {
   plugins: [
     new Dotenv({
       path: '.env',
+      systemvars: true,
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env),
@@ -222,8 +223,8 @@ module.exports = {
       ],
     }),
 
-    // new WorkboxPlugin.InjectManifest({
-    //   swSrc: resolvePath('src/service-worker.js'),
-    // }),
+    new WorkboxPlugin.InjectManifest({
+      swSrc: resolvePath('src/service-worker.js'),
+    }),
   ],
 };

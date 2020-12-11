@@ -24,9 +24,9 @@
         // App routes
         routes: routes,
         // Register service worker
-        // serviceWorker: {
-        //     path: '/service-worker.js',
-        // },
+        serviceWorker: {
+            path: '/service-worker.js',
+        },
 
         calendar: {
             closeOnSelect: true,
