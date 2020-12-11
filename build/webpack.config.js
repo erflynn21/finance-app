@@ -175,7 +175,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env),
       'process.env.TARGET': JSON.stringify(target),
-      'process.env.USERBASE_API_KEY': JSON.stringify(apiKey),
+      'USERBASE_API_KEY': JSON.stringify(apiKey),
     }),
 
     ...(env === 'production' ? [
@@ -222,8 +222,8 @@ module.exports = {
       ],
     }),
 
-    new WorkboxPlugin.InjectManifest({
-      swSrc: resolvePath('src/service-worker.js'),
-    }),
+    // new WorkboxPlugin.InjectManifest({
+    //   swSrc: resolvePath('src/service-worker.js'),
+    // }),
   ],
 };
