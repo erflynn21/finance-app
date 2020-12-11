@@ -172,7 +172,6 @@ module.exports = {
   plugins: [
     new Dotenv({
       path: '.env',
-      systemvars: true,
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env),
