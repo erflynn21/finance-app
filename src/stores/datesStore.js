@@ -16,7 +16,7 @@ let currentMonth = '';
 if (date.getMonth() + 1 >= 10) {
     currentMonth = date.getMonth() + 1;
 } else {
-    currentMonth = '0' + date.getMonth() + 1;
+    currentMonth = '0' + (date.getMonth() + 1);
 }
 
 let today = '';

@@ -111,6 +111,9 @@
                     budgetMonth =
                         monthsDict[values.value[0]] + ', ' + values.value[1];
                     newSelectedMonth = Number(values.value[0]) + 1;
+                    if (newSelectedMonth <= 10) {
+                        newSelectedMonth = '0' + newSelectedMonth;
+                    }
                     newSelectedYear = values.value[1];
                 },
             },
