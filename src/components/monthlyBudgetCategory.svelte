@@ -18,7 +18,24 @@
     import Icon from 'framework7-svelte/components/icon.svelte';
     import { f7 } from 'framework7-svelte';
     import { flip } from 'svelte/animate';
-    import { afterUpdate } from 'svelte';
+    import { Plugins } from '@capacitor/core';
+    const { Keyboard } = Plugins;
+
+    $: if (editing === true) {
+        Keyboard.addListener('keyboardWillShow', (info) => {
+            if (document.getElementById('edit')) {
+                document.getElementById('edit').style.marginBottom = `${
+                    info.keyboardHeight - 20
+                }px`;
+            }
+        });
+
+        Keyboard.addListener('keyboardWillHide', () => {
+            if (document.getElementById('edit')) {
+                document.getElementById('edit').style.marginBottom = '0px';
+            }
+        });
+    }
 
     let dropdown = false;
 
@@ -159,6 +176,7 @@
     <Sheet
         class="edit"
         style="height: auto; max-height: 70vh"
+        id="edit"
         backdrop
         bind:this={editModal}
         {item}
