@@ -59,23 +59,24 @@
             }, ${newSelectedYear}...`
         );
         // set new selected month, month name, year, and datbase names
+        if (selectedYear !== new Date().getFullYear()) {
+            selectedYear.set(newSelectedYear);
+            expensesDatabaseName.set(newSelectedYear + '-expenses');
+            incomesDatabaseName.set(newSelectedYear + '-incomes');
+        }
         selectedMonth.set(newSelectedMonth);
-        selectedYear.set(newSelectedYear);
         selectedMonthName.set(monthsDict[newSelectedMonth - 1]);
-        expensesDatabaseName.set(
-            newSelectedYear + '-' + newSelectedMonth + '-expenses'
-        );
-        incomesDatabaseName.set(
-            newSelectedYear + '-' + newSelectedMonth + '-incomes'
-        );
+
         monthlyBudgetsDatabaseName.set(
             newSelectedYear + '-' + newSelectedMonth + '-monthlyBudgets'
         );
 
         // open the expenses, incomes and monthly budgets databases for the selected month
         await openMonthlyBudgetsDatabase();
-        await openExpensesDatabase();
-        await openIncomesDatabase();
+        if (selectedYear !== new Date().getFullYear()) {
+            await openExpensesDatabase();
+            await openIncomesDatabase();
+        }
         await setMonthlyBudgets($budgets);
         f7.dialog.close();
         dispatch('collapse');

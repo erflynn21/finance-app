@@ -97,7 +97,7 @@ const openDatabases = () => {
 
     userbase.getDatabases().then((databases) => {
         allDatabases.set(databases);
-        // console.log(get(allDatabases));
+        console.log(get(allDatabases));
     }).catch((e) => console.error(e))
 }
 
