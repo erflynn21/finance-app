@@ -11,7 +11,16 @@ incomesDatabaseName.set(`${get(selectedYear)}-incomes`);
 const openIncomesDatabase = () => {
         return userbase.openDatabase({ databaseName: get(incomesDatabaseName), changeHandler: function (items) {
             // sorts the incomes based on date and timestamp
-            let a = items;
+            let incomesForMonth = [];
+            items.forEach(item => {
+                const date = item.item.date;
+                const year = Number(date.slice(0,4));
+                const month = Number(date.slice(5, 7));
+                if (year === get(selectedYear) && month === get(selectedMonth)) {
+                    incomesForMonth =[...incomesForMonth, item];
+                }
+            })
+            let a = incomesForMonth;
             a.sort(function (a,b) {
                 return (
                     new Date(b.item.date) - new Date(a.item.date) ||

@@ -11,14 +11,23 @@ expensesDatabaseName.set(`${get(selectedYear)}-expenses`);
 const openExpensesDatabase = async () => {
     try {
         return userbase.openDatabase({
-            databaseName: get(expensesDatabaseName), changeHandler: function (items_2) {
+            databaseName: get(expensesDatabaseName), changeHandler: function (items) {
                 // sets the expenses based on date and timestamp
-                let a = items_2;
-                a.sort(function (a_1, b) {
+                let expensesForMonth = [];
+                items.forEach(item => {
+                    const date = item.item.date;
+                    const year = Number(date.slice(0,4));
+                    const month = Number(date.slice(5, 7));
+                    if (year === get(selectedYear) && month === get(selectedMonth)) {
+                        expensesForMonth =[...expensesForMonth, item];
+                    }
+                })
+                let a = expensesForMonth;
+                a.sort(function (a, b) {
                     return (
-                        new Date(b.item.date) - new Date(a_1.item.date) ||
+                        new Date(b.item.date) - new Date(a.item.date) ||
                         new Date(b.createdBy.timestamp) -
-                        new Date(a_1.createdBy.timestamp)
+                        new Date(a.createdBy.timestamp)
                     );
                 });
                 expenses.set(a);
