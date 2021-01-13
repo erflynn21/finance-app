@@ -21,22 +21,22 @@
 
     let recurring = false;
 
-    let calendarDate;
-    $: if ($selectedMonth) setMonth();
-    const setMonth = () => {
-        if (new Date().getMonth() + 1 === $selectedMonth) {
-            calendarDate = new Intl.DateTimeFormat('en-CA').format(new Date());
-        } else {
-            calendarDate = `${$selectedYear}-${$selectedMonth}-01`;
-        }
-    };
+    // let calendarDate;
+    // $: if ($selectedMonth) setMonth();
+    // const setMonth = () => {
+    //     if (new Date().getMonth() + 1 === $selectedMonth) {
+    //         calendarDate = new Intl.DateTimeFormat('en-CA').format(new Date());
+    //     } else {
+    //         calendarDate = `${$selectedYear}-${$selectedMonth}-01`;
+    //     }
+    // };
 
     let income = {};
     $: if ($baseCurrency !== '') {
         income = {
             title: null,
             amount: null,
-            date: calendarDate,
+            date: new Intl.DateTimeFormat('en-CA').format(new Date()),
             currency: $baseCurrency,
             originalAmount: null,
             originalCurrency: null,
@@ -137,8 +137,8 @@
             },
         });
 
-        let minDate = `${$selectedYear}-${$selectedMonth}-01`;
-        let maxDate = `${$selectedYear}-${$selectedMonth}-31`;
+        let minDate = `${$selectedYear}-01-01`;
+        let maxDate = `${$selectedYear}-12-31`;
         incomeDateCalendar = f7.calendar.create({
             inputEl: '#incomeDateCalendar',
             disabled(date) {

@@ -22,24 +22,24 @@
 
     let recurring = false;
 
-    let calendarDate;
-    $: if ($selectedMonth) setMonth();
-    const setMonth = () => {
-        if (new Date().getMonth() + 1 === $selectedMonth) {
-            calendarDate = new Intl.DateTimeFormat('en-CA').format(new Date());
-        } else {
-            calendarDate = `${$selectedYear}-${$selectedMonth}-01`;
-        }
-    };
+    // let calendarDate;
+    // $: if ($selectedMonth) setMonth();
+    // const setMonth = () => {
+    //     if (new Date().getMonth() === $selectedMonth) {
+    //         calendarDate = new Intl.DateTimeFormat('en-CA').format(new Date());
+    //     } else {
+    //         calendarDate = `${$selectedYear}-${$selectedMonth}-01`;
+    //     }
+    // };
 
     let expense = {};
     // checks to make sure there's a base currency before setting the expense values
-    $: if ($baseCurrency !== '' && calendarDate !== undefined) {
+    $: if ($baseCurrency !== '') {
         expense = {
             title: null,
             amount: null,
             category: null,
-            date: calendarDate,
+            date: new Intl.DateTimeFormat('en-CA').format(new Date()),
             currency: $baseCurrency,
             originalAmount: null,
             originalCurrency: null,
@@ -167,8 +167,8 @@
             },
         });
 
-        let minDate = `${$selectedYear}-${$selectedMonth}-01`;
-        let maxDate = `${$selectedYear}-${$selectedMonth}-31`;
+        let minDate = `${$selectedYear}-01-01`;
+        let maxDate = `${$selectedYear}-12-31`;
         expenseDateCalendar = f7.calendar.create({
             inputEl: '#expenseDateCalendar',
             disabled(date) {

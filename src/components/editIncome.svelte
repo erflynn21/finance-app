@@ -107,8 +107,8 @@
             },
         });
 
-        let minDate = `${$selectedYear}-${$selectedMonth}-01`;
-        let maxDate = `${$selectedYear}-${$selectedMonth}-31`;
+        let minDate = `${$selectedYear}-01-01`;
+        let maxDate = `${$selectedYear}-12-31`;
         editIncomeDateCalendar = f7.calendar.create({
             inputEl: '#editIncomeDateCalendar',
             disabled(date) {

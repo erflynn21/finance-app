@@ -6,7 +6,7 @@ import { get } from "svelte/store";
 let expenses = writable([]);
 let expensesSum = writable(0);
 let expensesDatabaseName = writable(null);
-expensesDatabaseName.set(`${get(selectedYear)}-${get(selectedMonth)}-expenses`);
+expensesDatabaseName.set(`${get(selectedYear)}-expenses`);
 
 const openExpensesDatabase = async () => {
     try {

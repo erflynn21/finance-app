@@ -6,7 +6,7 @@ import { get } from "svelte/store";
 let incomes = writable([]);
 let incomesSum = writable(0);
 let incomesDatabaseName = writable(null);
-incomesDatabaseName.set(`${get(selectedYear)}-${get(selectedMonth)}-incomes`);
+incomesDatabaseName.set(`${get(selectedYear)}-incomes`);
 
 const openIncomesDatabase = () => {
         return userbase.openDatabase({ databaseName: get(incomesDatabaseName), changeHandler: function (items) {
@@ -16,7 +16,7 @@ const openIncomesDatabase = () => {
                 return (
                     new Date(b.item.date) - new Date(a.item.date) ||
                     new Date(b.createdBy.timestamp) -
-                        new Date(a.createdBy.timestamp)
+                    new Date(a.createdBy.timestamp)
                 );
             })
             incomes.set(a);
