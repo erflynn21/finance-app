@@ -64,12 +64,14 @@
                                         f7="chevron_down"
                                         size="18"
                                         style="align-self: center"
-                                        sheetOpen=".changeMonth" />
+                                        sheetOpen=".changeMonth"
+                                    />
                                 {:else}
                                     <Icon
                                         f7="chevron_up"
                                         size="18"
-                                        style="align-self: center" />
+                                        style="align-self: center"
+                                    />
                                 {/if}
                             </div>
                         </div>
@@ -81,18 +83,21 @@
                             {#if percentage <= 70}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: green" />
+                                    style="width: {$tweenedPercentage}%; background-color: green"
+                                />
                                 <span>{percentage}%</span>
                             {:else if percentage > 70 && percentage <= 90}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: yellow" />
-                                <span
-                                    style="color: #383838">{percentage}%</span>
+                                    style="width: {$tweenedPercentage}%; background-color: yellow"
+                                />
+                                <span style="color: #383838">{percentage}%</span
+                                >
                             {:else}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: red" />
+                                    style="width: {$tweenedPercentage}%; background-color: red"
+                                />
                                 <span>{percentage}%</span>
                             {/if}
                         </div>
@@ -115,7 +120,9 @@
                             {$baseCurrencySymbol}{Math.floor($incomesSum)}
                         </h5>
                         <h5>
-                            Spent: -{$baseCurrencySymbol}{Math.floor($expensesSum)}
+                            Spent: -{$baseCurrencySymbol}{Math.floor(
+                                $expensesSum
+                            )}
                         </h5>
                     </div>
                     <div class="cash-flow-sum">
@@ -155,12 +162,14 @@
             style="height: auto; max-height: 70vh"
             id="changeMonth"
             swipeToClose
-            backdrop
-            bind:this={monthModal}>
+            bind:this={monthModal}
+        >
             <Toolbar>
                 <div class="left">Change Budget Month</div>
                 <div class="right">
-                    <Link sheetClose>Close</Link>
+                    <Link sheetClose on:click={() => (modalOpen = false)}
+                        >Close</Link
+                    >
                 </div>
             </Toolbar>
             <div class="swipe-handler" />
