@@ -17,9 +17,14 @@
         selectedMonthName,
         selectedYear,
     } from '../stores/datesStore';
+    import { currentRoute } from '../stores/currentRouteStore';
     const { Keyboard } = Plugins;
 
     let recurring = false;
+
+    if ($currentRoute === 'recurring') {
+        recurring = true;
+    }
 
     let calendarDate;
     $: if ($selectedMonth) setMonth();
@@ -241,11 +246,20 @@
             </Col>
         </Row>
 
-        <ListItem
-            checkbox
-            onChange={() => (recurring = !recurring)}
-            title="This is a monthly recurring income"
-        />
+        {#if recurring === false}
+            <ListItem
+                checkbox
+                onChange={() => (recurring = !recurring)}
+                title="This is a monthly recurring income"
+            />
+        {:else}
+            <ListItem
+                checkbox
+                checked
+                onChange={() => (recurring = !recurring)}
+                title="This is a monthly recurring income"
+            />
+        {/if}
     </List>
     <Button on:click={handleAddIncome}>Add</Button>
 </Block>
