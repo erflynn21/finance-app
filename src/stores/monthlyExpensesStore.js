@@ -19,18 +19,32 @@ const openMonthlyExpensesDatabase = () => {
 
 
 const checkRecurringExpenses = async (monthlyExpenses) => {
+    let newExpenseFromMonthly;
     monthlyExpenses.forEach(async monthlyExpense => {
         let result = get(expenses).filter((expense) => (expense.item.title === monthlyExpense.item.title));
-        if (result.length == 0 && monthlyExpense.item.recurringDate <= get(currentDate)) {
-            let newExpenseFromMonthly = {
-                title: monthlyExpense.item.title,
-                amount: monthlyExpense.item.amount,
-                category: monthlyExpense.item.category,
-                date: get(selectedYear) + '-' + get(selectedMonth) + '-' + monthlyExpense.item.recurringDate,
-                currency: monthlyExpense.item.currency,
-                originalAmount: null,
-                originalCurrency: null,
+        if (result.length == 0 && Number(monthlyExpense.item.recurringDate) <= get(currentDate)) {
+            if (get(selectedMonth) < 10) {
+                newExpenseFromMonthly = {
+                    title: monthlyExpense.item.title,
+                    amount: monthlyExpense.item.amount,
+                    category: monthlyExpense.item.category,
+                    date: get(selectedYear) + '-0' + get(selectedMonth) + '-' + monthlyExpense.item.recurringDate,
+                    currency: monthlyExpense.item.currency,
+                    originalAmount: null,
+                    originalCurrency: null,
+                }
+            } else {
+                newExpenseFromMonthly = {
+                    title: monthlyExpense.item.title,
+                    amount: monthlyExpense.item.amount,
+                    category: monthlyExpense.item.category,
+                    date: get(selectedYear) + '-' + get(selectedMonth) + '-' + monthlyExpense.item.recurringDate,
+                    currency: monthlyExpense.item.currency,
+                    originalAmount: null,
+                    originalCurrency: null,
+                }
             }
+            
 
             if (newExpenseFromMonthly.currency !== get(baseCurrency)) {
                 await convertAmount(newExpenseFromMonthly);
