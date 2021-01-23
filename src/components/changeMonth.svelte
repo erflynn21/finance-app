@@ -11,7 +11,7 @@
         selectedMonth,
     } from '../stores/datesStore';
     import { monthsDict } from '../stores/dictionariesStore';
-    import { allDatabases } from '../stores/userStore';
+    import { allDatabases, getAllDatabases } from '../stores/userStore';
     import {
         allExpenses,
         expensesDatabaseName,
@@ -84,6 +84,7 @@
         await setMonthlyBudgets($budgets);
         setExpenses($allExpenses);
         setIncomes($allIncomes);
+        getAllDatabases();
         f7.dialog.close();
         dispatch('collapse');
     };

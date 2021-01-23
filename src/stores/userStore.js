@@ -94,11 +94,14 @@ const openDatabases = () => {
     openIncomesDatabase().then(() => {
         openMonthlyIncomesDatabase()
     });
+    getAllDatabases();
+}
 
+const getAllDatabases = () => {
     userbase.getDatabases().then((databases) => {
         allDatabases.set(databases);
-        console.log(get(allDatabases));
+        // console.log(get(allDatabases));
     }).catch((e) => console.error(e))
 }
 
-export { userStore, initialized, allDatabases, userSetUp, setUpDone, signUp, signIn, signOut };
+export { userStore, initialized, allDatabases, userSetUp, setUpDone, signUp, signIn, signOut, getAllDatabases };
