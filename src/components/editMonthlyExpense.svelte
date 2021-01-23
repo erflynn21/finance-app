@@ -173,7 +173,6 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    console.log(value.value[0]);
                     updatedMonthlyExpense.recurringDate = value.value[0];
                 },
             },
