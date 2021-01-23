@@ -21,22 +21,26 @@
 
     let recurring = false;
 
-    // let calendarDate;
-    // $: if ($selectedMonth) setMonth();
-    // const setMonth = () => {
-    //     if (new Date().getMonth() + 1 === $selectedMonth) {
-    //         calendarDate = new Intl.DateTimeFormat('en-CA').format(new Date());
-    //     } else {
-    //         calendarDate = `${$selectedYear}-${$selectedMonth}-01`;
-    //     }
-    // };
+    let calendarDate;
+    $: if ($selectedMonth) setMonth();
+    const setMonth = () => {
+        if (new Date().getMonth() + 1 === $selectedMonth) {
+            calendarDate = new Intl.DateTimeFormat('en-CA').format(new Date());
+        } else {
+            if ($selectedMonth < 10) {
+                calendarDate = `${$selectedYear}-0${$selectedMonth}-01`;
+            } else {
+                calendarDate = `${$selectedYear}-${$selectedMonth}-01`;
+            }
+        }
+    };
 
     let income = {};
     $: if ($baseCurrency !== '') {
         income = {
             title: null,
             amount: null,
-            date: new Intl.DateTimeFormat('en-CA').format(new Date()),
+            date: calendarDate,
             currency: $baseCurrency,
             originalAmount: null,
             originalCurrency: null,
@@ -90,7 +94,7 @@
 
     const clearForm = () => {
         income.title = null;
-        income.date = new Intl.DateTimeFormat('en-CA').format(new Date());
+        income.date = calendarDate;
         income.amount = null;
         income.currency = $baseCurrency;
         income.originalCurrency = null;
@@ -186,7 +190,8 @@
             placeholder="Select Date"
             readonly
             inputId="incomeDateCalendar"
-            value={income.date} />
+            value={income.date}
+        />
 
         <ListInput
             outline
@@ -201,7 +206,8 @@
             required
             autofocus
             on:input={() => f7.input.validate('#incomeTitle')}
-            errorMessage="Please provide a valid income name." />
+            errorMessage="Please provide a valid income name."
+        />
 
         <Row>
             <Col width="66">
@@ -220,7 +226,8 @@
                     clearButton
                     required
                     on:input={() => f7.input.validate('#incomeAmount')}
-                    errorMessage="Please provide a valid amount." />
+                    errorMessage="Please provide a valid amount."
+                />
             </Col>
             <Col width="33">
                 <ListInput
@@ -229,14 +236,16 @@
                     label="Currency"
                     value={income.currency}
                     readonly
-                    inputId="incomeCurrencyPicker" />
+                    inputId="incomeCurrencyPicker"
+                />
             </Col>
         </Row>
 
         <ListItem
             checkbox
             onChange={() => (recurring = !recurring)}
-            title="This is a monthly recurring income" />
+            title="This is a monthly recurring income"
+        />
     </List>
     <Button on:click={handleAddIncome}>Add</Button>
 </Block>
