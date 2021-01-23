@@ -33,7 +33,7 @@ startDate.set(`${start}`);
 endDate.set(`${end}`);
 currentDate.set(today);
 selectedMonth.set(Number(currentMonth));
-selectedYear.set(currentYear);
+selectedYear.set(Number(currentYear));
 selectedMonthName.set(monthsDict[get(selectedMonth) - 1]);
 
 export {startDate, endDate, currentDate, selectedMonth, selectedYear, selectedMonthName}
