@@ -18,9 +18,14 @@
         selectedMonthName,
         selectedYear,
     } from '../stores/datesStore';
+    import { currentRoute } from '../stores/currentRouteStore';
     const { Keyboard } = Plugins;
 
     let recurring = false;
+
+    if ($currentRoute === 'recurring') {
+        recurring = true;
+    }
 
     let calendarDate;
     $: if ($selectedMonth) setMonth();
@@ -28,13 +33,17 @@
         if (new Date().getMonth() + 1 === $selectedMonth) {
             calendarDate = new Intl.DateTimeFormat('en-CA').format(new Date());
         } else {
-            calendarDate = `${$selectedYear}-${$selectedMonth}-01`;
+            if ($selectedMonth < 10) {
+                calendarDate = `${$selectedYear}-0${$selectedMonth}-01`;
+            } else {
+                calendarDate = `${$selectedYear}-${$selectedMonth}-01`;
+            }
         }
     };
 
     let expense = {};
     // checks to make sure there's a base currency before setting the expense values
-    $: if ($baseCurrency !== '' && calendarDate !== undefined) {
+    $: if ($baseCurrency !== '') {
         expense = {
             title: null,
             amount: null,
@@ -99,7 +108,7 @@
 
     const clearForm = () => {
         expense.title = null;
-        expense.date = new Intl.DateTimeFormat('en-CA').format(new Date());
+        expense.date = calendarDate;
         expense.amount = null;
         expense.currency = $baseCurrency;
         expense.originalCurrency = null;
@@ -167,8 +176,8 @@
             },
         });
 
-        let minDate = `${$selectedYear}-${$selectedMonth}-01`;
-        let maxDate = `${$selectedYear}-${$selectedMonth}-31`;
+        let minDate = `${$selectedYear}-01-01`;
+        let maxDate = `${$selectedYear}-12-31`;
         expenseDateCalendar = f7.calendar.create({
             inputEl: '#expenseDateCalendar',
             disabled(date) {
@@ -217,7 +226,8 @@
             placeholder="Select Date"
             readonly
             inputId="expenseDateCalendar"
-            value={expense.date} />
+            value={expense.date}
+        />
 
         <ListInput
             outline
@@ -232,7 +242,8 @@
             autofocus
             required
             on:input={() => f7.input.validate('#expenseTitle')}
-            errorMessage="Please provide a valid expense name." />
+            errorMessage="Please provide a valid expense name."
+        />
 
         <Row>
             <Col width="66">
@@ -251,7 +262,8 @@
                     clearButton
                     required
                     on:input={() => f7.input.validate('#expenseAmount')}
-                    errorMessage="Please provide a valid amount." />
+                    errorMessage="Please provide a valid amount."
+                />
             </Col>
             <Col width="33">
                 <ListInput
@@ -260,7 +272,8 @@
                     label="Currency"
                     value={expense.currency}
                     readonly
-                    inputId="expenseCurrencyPicker" />
+                    inputId="expenseCurrencyPicker"
+                />
             </Col>
         </Row>
 
@@ -277,12 +290,23 @@
             required
             validateOnBlur
             on:input={() => f7.input.validate('#expenseCategoryPicker')}
-            errorMessage="Please select a category." />
+            errorMessage="Please select a category."
+        />
 
-        <ListItem
-            checkbox
-            onChange={() => (recurring = !recurring)}
-            title="This is a monthly recurring expense" />
+        {#if recurring === false}
+            <ListItem
+                checkbox
+                onChange={() => (recurring = !recurring)}
+                title="This is a monthly recurring expense"
+            />
+        {:else}
+            <ListItem
+                checkbox
+                checked
+                onChange={() => (recurring = !recurring)}
+                title="This is a monthly recurring expense"
+            />
+        {/if}
     </List>
     <Button on:click={handleAddExpense}>Add</Button>
 </Block>

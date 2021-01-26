@@ -6,14 +6,14 @@
         currencyOptions,
         updateCurrencies,
     } from '../stores/currenciesStore';
-    import { get } from 'svelte/store';
     import Block from 'framework7-svelte/components/block.svelte';
     import Button from 'framework7-svelte/components/button.svelte';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import CurrenciesList from '../shared/currenciesList.svelte';
-    import { onDestroy, onMount } from 'svelte';
+    import { onMount } from 'svelte';
     import { hideFAB, showFAB } from '../js/fab';
+    import { f7 } from 'framework7-svelte';
 
     let updatedCurrencyOptions;
     let currencyOptionsSelect;
@@ -21,11 +21,15 @@
     const setCurrencies = () => {
         const optionsSelect = currencyOptionsSelect.smartSelectInstance();
         updatedCurrencyOptions = optionsSelect.getValue();
+        if (updatedCurrencyOptions.length === 0) {
+            f7.dialog.alert('You must select at least one currency option');
+            return;
+        }
         const updatedCurrencies = {
-            baseCurrency: get(baseCurrency),
-            currencyOptions: updatedCurrencyOptions,
+            newBaseCurrency: $baseCurrency,
+            newCurrencyOptions: updatedCurrencyOptions,
         };
-        updateCurrencies(updatedCurrencies, get(currencies)[0].itemId);
+        updateCurrencies(updatedCurrencies, $currencies[0].itemId);
     };
 
     onMount(() => {
@@ -37,7 +41,8 @@
     <Navbar
         title="Currency Options"
         backLink="Back"
-        on:clickBack={() => showFAB()} />
+        on:clickBack={() => showFAB()}
+    />
 
     <Block class="text-align-center">
         <h1>Budget Currency: {$baseCurrency}</h1>
@@ -55,7 +60,8 @@
             title="Currency Options"
             smartSelect
             smartSelectParams={{ openIn: 'popover' }}
-            bind:this={currencyOptionsSelect}>
+            bind:this={currencyOptionsSelect}
+        >
             <select name="baseCurrency" multiple>
                 <CurrenciesList />
             </select>

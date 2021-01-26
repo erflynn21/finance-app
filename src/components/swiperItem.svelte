@@ -66,16 +66,16 @@
     let date, date1, date2, date3;
     // sets date for date picker
     const setDate = () => {
-        date;
         date1 = item.date.split('-');
         date2 = date1[1] + '/' + date1[2];
         if (date2.startsWith('0')) {
-            date3 = date2.split('0');
-            if (date3[2] === undefined) {
-                date = date3[1];
-            } else {
-                date = date3[1] + date3[2];
-            }
+            date3 = date2.split('/');
+            date = date3[0].split('0')[1] + '/' + date3[1];
+            // if (date3[2] === undefined) {
+            //     date = date3[1];
+            // } else {
+            //     date = date3[1] + date3[2];
+            // }
         } else {
             date = date2;
         }
@@ -112,7 +112,8 @@
     swipeout
     header={date}
     title={item.title}
-    after="{$baseCurrencySymbol}{item.amount}">
+    after="{$baseCurrencySymbol}{item.amount}"
+>
     <SwipeoutActions right>
         <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
         <SwipeoutButton color="red" overswipe on:click={deleteItem}>
@@ -130,7 +131,8 @@
         bind:this={editModal}
         {item}
         {itemId}
-        {type}>
+        {type}
+    >
         <Toolbar>
             <div class="left">Edit Expense</div>
             <div class="right">
@@ -151,7 +153,8 @@
         bind:this={editModal}
         {item}
         {itemId}
-        {type}>
+        {type}
+    >
         <Toolbar>
             <div class="left">Edit Expense</div>
             <div class="right">

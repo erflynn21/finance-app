@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
 import userbase from 'userbase-js';
 import {
     openCurrenciesDatabase,
@@ -12,7 +12,7 @@ import { openMonthlyIncomesDatabase } from '../stores/monthlyIncomesStore';
 import {
     openMonthlyBudgetsDatabase,
 } from '../stores/monthlyBudgetsStore';
-import { openMonthlyExpensesDatabase } from '../stores/monthlyExpensesStore';
+import { openMonthlyExpensesDatabase } from './monthlyExpensesStore';
 import { Plugins } from '@capacitor/core';
 const { SplashScreen } = Plugins;
 
@@ -94,10 +94,14 @@ const openDatabases = () => {
     openIncomesDatabase().then(() => {
         openMonthlyIncomesDatabase()
     });
+    getAllDatabases();
+}
 
+const getAllDatabases = () => {
     userbase.getDatabases().then((databases) => {
         allDatabases.set(databases);
+        // console.log(get(allDatabases));
     }).catch((e) => console.error(e))
 }
 
-export { userStore, initialized, allDatabases, userSetUp, setUpDone, signUp, signIn, signOut };
+export { userStore, initialized, allDatabases, userSetUp, setUpDone, signUp, signIn, signOut, getAllDatabases };

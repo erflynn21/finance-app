@@ -173,7 +173,7 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    updatedMonthlyIncome.recurringDate = value.value;
+                    updatedMonthlyIncome.recurringDate = value.value[0];
                 },
             },
         });
@@ -199,7 +199,8 @@
             placeholder="Select Date"
             readonly
             inputId="editMonthlyIncomeDatePicker"
-            value={updatedMonthlyIncome.recurringDate} />
+            value={updatedMonthlyIncome.recurringDate}
+        />
 
         <ListInput
             outline
@@ -213,7 +214,8 @@
             clearButton
             required
             on:input={() => f7.input.validate('#editedTitle')}
-            errorMessage="Please provide a valid expense name." />
+            errorMessage="Please provide a valid expense name."
+        />
 
         <Row>
             <Col width="66">
@@ -232,7 +234,8 @@
                     clearButton
                     required
                     on:input={() => f7.input.validate('#editedAmount')}
-                    errorMessage="Please provide a valid amount." />
+                    errorMessage="Please provide a valid amount."
+                />
             </Col>
             <Col width="33">
                 <ListInput
@@ -241,7 +244,8 @@
                     label="Currency"
                     value={updatedMonthlyIncome.currency}
                     readonly
-                    inputId="editMonthlyIncomeCurrencyPicker" />
+                    inputId="editMonthlyIncomeCurrencyPicker"
+                />
             </Col>
         </Row>
     </List>

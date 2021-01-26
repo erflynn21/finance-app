@@ -173,7 +173,7 @@
                     Keyboard.hide();
                 },
                 change: function (value) {
-                    updatedMonthlyExpense.recurringDate = value.value;
+                    updatedMonthlyExpense.recurringDate = value.value[0];
                 },
             },
         });
@@ -199,7 +199,8 @@
             placeholder="Select Date"
             readonly
             inputId="editMonthlyExpenseDatePicker"
-            value={updatedMonthlyExpense.recurringDate} />
+            value={updatedMonthlyExpense.recurringDate}
+        />
 
         <ListInput
             outline
@@ -213,7 +214,8 @@
             clearButton
             required
             on:input={() => f7.input.validate('#editedTitle')}
-            errorMessage="Please provide a valid expense name." />
+            errorMessage="Please provide a valid expense name."
+        />
 
         <Row>
             <Col width="66">
@@ -232,7 +234,8 @@
                     clearButton
                     required
                     on:input={() => f7.input.validate('#editedAmount')}
-                    errorMessage="Please provide a valid amount." />
+                    errorMessage="Please provide a valid amount."
+                />
             </Col>
             <Col width="33">
                 <ListInput
@@ -241,7 +244,8 @@
                     label="Currency"
                     value={updatedMonthlyExpense.currency}
                     readonly
-                    inputId="editMonthlyExpenseCurrencyPicker" />
+                    inputId="editMonthlyExpenseCurrencyPicker"
+                />
             </Col>
         </Row>
 
@@ -257,8 +261,10 @@
             clearButton
             required
             validateOnBlur
-            on:input={() => f7.input.validate('#editMonthlyExpenseCategoryPicker')}
-            errorMessage="Please select a category." />
+            on:input={() =>
+                f7.input.validate('#editMonthlyExpenseCategoryPicker')}
+            errorMessage="Please select a category."
+        />
     </List>
     <Button on:click={handleUpdateMonthlyExpense}>Update</Button>
 </Block>

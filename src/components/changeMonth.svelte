@@ -11,14 +11,18 @@
         selectedMonth,
     } from '../stores/datesStore';
     import { monthsDict } from '../stores/dictionariesStore';
-    import { allDatabases } from '../stores/userStore';
+    import { allDatabases, getAllDatabases } from '../stores/userStore';
     import {
+        allExpenses,
         expensesDatabaseName,
         openExpensesDatabase,
+        setExpenses,
     } from '../stores/expensesStore';
     import {
+        allIncomes,
         incomesDatabaseName,
         openIncomesDatabase,
+        setIncomes,
     } from '../stores/incomesStore';
     import {
         monthlyBudgetsDatabaseName,
@@ -59,24 +63,28 @@
             }, ${newSelectedYear}...`
         );
         // set new selected month, month name, year, and datbase names
+        if (selectedYear !== new Date().getFullYear()) {
+            selectedYear.set(Number(newSelectedYear));
+            expensesDatabaseName.set(newSelectedYear + '-expenses');
+            incomesDatabaseName.set(newSelectedYear + '-incomes');
+        }
         selectedMonth.set(newSelectedMonth);
-        selectedYear.set(newSelectedYear);
         selectedMonthName.set(monthsDict[newSelectedMonth - 1]);
-        expensesDatabaseName.set(
-            newSelectedYear + '-' + newSelectedMonth + '-expenses'
-        );
-        incomesDatabaseName.set(
-            newSelectedYear + '-' + newSelectedMonth + '-incomes'
-        );
+
         monthlyBudgetsDatabaseName.set(
             newSelectedYear + '-' + newSelectedMonth + '-monthlyBudgets'
         );
 
-        // open the expenses, incomes and monthly budgets databases for the selected month
+        // open the monthly budgets databases for the selected month
         await openMonthlyBudgetsDatabase();
-        await openExpensesDatabase();
-        await openIncomesDatabase();
+        if (selectedYear !== new Date().getFullYear()) {
+            await openExpensesDatabase();
+            await openIncomesDatabase();
+        }
         await setMonthlyBudgets($budgets);
+        setExpenses($allExpenses);
+        setIncomes($allIncomes);
+        getAllDatabases();
         f7.dialog.close();
         dispatch('collapse');
     };
@@ -99,7 +107,7 @@
                 {
                     values: (function createValues() {
                         const arr = [];
-                        for (let i = 2020; i <= 2030; i += 1) {
+                        for (let i = 2021; i <= 2030; i += 1) {
                             arr.push(i);
                         }
                         return arr;
@@ -111,9 +119,9 @@
                     budgetMonth =
                         monthsDict[values.value[0]] + ', ' + values.value[1];
                     newSelectedMonth = Number(values.value[0]) + 1;
-                    if (newSelectedMonth <= 10) {
-                        newSelectedMonth = '0' + newSelectedMonth;
-                    }
+                    // if (newSelectedMonth <= 10) {
+                    //     newSelectedMonth = newSelectedMonth;
+                    // }
                     newSelectedYear = values.value[1];
                 },
             },
@@ -137,7 +145,8 @@
             label="Select Month"
             readonly
             bind:value={budgetMonth}
-            inputId="pickerBudgetMonth" />
+            inputId="pickerBudgetMonth"
+        />
     </List>
     <Button on:click={changeMonth}>Change Month</Button>
 </Block>

@@ -56,14 +56,10 @@
     <Icon ios="f7:xmark" md="material:close" />
     <FabButtons position="top">
         <FabButton label="Add Expense" fabClose on:click={() => add('expense')}>
-            <!-- <Button sheetOpen=".add-expense"> -->
-            <Icon material="create" />
-            <!-- </Button> -->
+            <Icon f7="minus" />
         </FabButton>
         <FabButton label="Add Income" fabClose on:click={() => add('income')}>
-            <!-- <Button sheetOpen=".add-income"> -->
-            <Icon material="today" />
-            <!-- </Button> -->
+            <Icon f7="plus" />
         </FabButton>
     </FabButtons>
 </Fab>
@@ -74,7 +70,8 @@
         style="height: auto; max-height: 80vh"
         id="add"
         backdrop
-        bind:this={addModal}>
+        bind:this={addModal}
+    >
         <Toolbar>
             <div class="left">Add New Expense</div>
             <div class="right">
@@ -93,7 +90,8 @@
         id="add"
         swipeToClose
         backdrop
-        bind:this={addModal}>
+        bind:this={addModal}
+    >
         <Toolbar>
             <div class="left">Add New Income</div>
             <div class="right">

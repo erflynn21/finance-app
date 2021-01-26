@@ -33,7 +33,6 @@ const setCurrencies = () => {
             everyCurrency = [...everyCurrency, currencyOption];
         });
         allCurrencies.set(everyCurrency);
-        // console.log(get(allCurrencies));
     } else {
         return;
     }
@@ -50,7 +49,7 @@ const updateCurrencies = (updatedCurrencies, updatedCurrenciesId) => {
     return userbase.updateItem({ databaseName, item: updatedCurrencies, itemId: updatedCurrenciesId })
         .then(() => {
             setCurrencies();
-        });
+    });
 };
 
 

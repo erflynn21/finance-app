@@ -7,17 +7,25 @@
     import { moveFabDown, showFAB } from '../js/fab';
     import { monthlyExpenses } from '../stores/monthlyExpensesStore';
     import { flip } from 'svelte/animate';
+    import { currentRoute } from '../stores/currentRouteStore';
 
     onMount(() => {
         moveFabDown();
+        currentRoute.set('recurring');
     });
+
+    const onOut = () => {
+        showFAB();
+        currentRoute.set('not recurring');
+    };
 </script>
 
-<Page name="monthly-expenses" noToolbar onPageBeforeOut={() => showFAB()}>
+<Page name="monthly-expenses" noToolbar onPageBeforeOut={onOut}>
     <Navbar
         title="Monthly Recurring Expenses"
         backLink="Back"
-        on:clickBack={() => showFAB()} />
+        on:clickBack={() => showFAB()}
+    />
     <Block class="text-align-center">
         Expenses below will be automatically added to your budget every month on
         the specified day.

@@ -31,7 +31,7 @@
             return;
         }
 
-        f7.dialog.preloader('Updating expense...');
+        f7.dialog.preloader('Updating budget...');
         // formats the amount to a number
         updatedMonthlyBudget.amount = Number(updatedMonthlyBudget.amount);
 
@@ -57,7 +57,8 @@
             value={updatedMonthlyBudget.category}
             clearButton
             required
-            errorMessage="Please select a category." />
+            errorMessage="Please select a category."
+        />
 
         <Row>
             <Col width="66">
@@ -77,7 +78,8 @@
                     autofocus
                     required
                     on:input={() => f7.input.validate('#editedAmount')}
-                    errorMessage="Please provide a valid amount." />
+                    errorMessage="Please provide a valid amount."
+                />
             </Col>
             <Col width="33">
                 <ListInput
@@ -87,7 +89,8 @@
                     label="Currency"
                     value={updatedMonthlyBudget.currency}
                     readonly
-                    inputId="editExpenseCurrencyPicker" />
+                    inputId="editExpenseCurrencyPicker"
+                />
             </Col>
         </Row>
     </List>

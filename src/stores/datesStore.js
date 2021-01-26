@@ -32,8 +32,8 @@ const end = currentYear + '-' + currentMonth + '-' + today;
 startDate.set(`${start}`);
 endDate.set(`${end}`);
 currentDate.set(today);
-selectedMonth.set(currentMonth);
-selectedYear.set(currentYear);
+selectedMonth.set(Number(currentMonth));
+selectedYear.set(Number(currentYear));
 selectedMonthName.set(monthsDict[get(selectedMonth) - 1]);
 
 export {startDate, endDate, currentDate, selectedMonth, selectedYear, selectedMonthName}

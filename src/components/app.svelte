@@ -34,8 +34,9 @@
             dateFormat: 'yyyy-mm-dd',
             backdrop: true,
             header: true,
-            toolbar: false,
-            touchMove: false,
+            yearSelector: false,
+            // toolbar: false,
+            // touchMove: false,
         },
     };
 

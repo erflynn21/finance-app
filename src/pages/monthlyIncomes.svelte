@@ -6,19 +6,26 @@
     import SettingsSwiper from '../components/settingsSwiper.svelte';
     import { moveFabDown, showFAB } from '../js/fab';
     import { monthlyIncomes } from '../stores/monthlyIncomesStore';
-    import { fade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
+    import { currentRoute } from '../stores/currentRouteStore';
 
     onMount(() => {
         moveFabDown();
+        currentRoute.set('recurring');
     });
+
+    const onOut = () => {
+        showFAB();
+        currentRoute.set('not recurring');
+    };
 </script>
 
-<Page name="monthly-incomes" noToolbar onPageBeforeOut={() => showFAB()}>
+<Page name="monthly-incomes" noToolbar onPageBeforeOut={onOut}>
     <Navbar
         title="Monthly Recurring Incomes"
         backLink="Back"
-        on:clickBack={() => showFAB()} />
+        on:clickBack={() => showFAB()}
+    />
     <Block class="text-align-center">
         Incomes below will be automatically added to your budget every month on
         the specified day.

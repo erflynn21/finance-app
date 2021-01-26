@@ -16,19 +16,34 @@ const openMonthlyIncomesDatabase = () => {
     .catch((e) => console.log(e));
 }
 
+
 const checkRecurringIncomes = async (monthlyIncomes) => {
+    let newIncomeFromMonthly;
     monthlyIncomes.forEach(async monthlyIncome => {
         let result = get(incomes).filter((income) => income.item.title === monthlyIncome.item.title);
-        if (result.length == 0 && monthlyIncome.item.recurringDate <= get(currentDate)) {
-            let newIncomeFromMonthly = {
-                title: monthlyIncome.item.title,
-                amount: monthlyIncome.item.amount,
-                category: monthlyIncome.item.category,
-                date: get(selectedYear) + '-' + get(selectedMonth) + '-' + monthlyIncome.item.recurringDate,
-                currency: monthlyIncome.item.currency,
-                originalAmount: null,
-                originalCurrency: null,
+        if (result.length == 0 && Number(monthlyIncome.item.recurringDate) <= get(currentDate)) {
+            if (get(selectedMonth) < 10) {
+                newIncomeFromMonthly = {
+                    title: monthlyIncome.item.title,
+                    amount: monthlyIncome.item.amount,
+                    category: monthlyIncome.item.category,
+                    date: get(selectedYear) + '-0' + get(selectedMonth) + '-' + monthlyIncome.item.recurringDate,
+                    currency: monthlyIncome.item.currency,
+                    originalAmount: null,
+                    originalCurrency: null,
+                }
+            } else {
+                newIncomeFromMonthly = {
+                    title: monthlyIncome.item.title,
+                    amount: monthlyIncome.item.amount,
+                    category: monthlyIncome.item.category,
+                    date: get(selectedYear) + '-' + get(selectedMonth) + '-' + monthlyIncome.item.recurringDate,
+                    currency: monthlyIncome.item.currency,
+                    originalAmount: null,
+                    originalCurrency: null,
+                }
             }
+            
 
             if (newIncomeFromMonthly.currency !== get(baseCurrency)) {
                 await convertAmount(newIncomeFromMonthly);
