@@ -70,7 +70,11 @@
         date2 = date1[1] + '/' + date1[2];
         if (date2.startsWith('0')) {
             date3 = date2.split('/');
-            date = date3[0].split('0')[1] + '/' + date3[1];
+            if (date3[1].startsWith('0')) {
+                date = date3[0].split('0')[1] + '/' + date3[1].split('0')[1];
+            } else {
+                date = date3[0].split('0')[1] + '/' + date3[1];
+            }
             // if (date3[2] === undefined) {
             //     date = date3[1];
             // } else {
