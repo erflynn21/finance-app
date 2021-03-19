@@ -99,14 +99,14 @@
 
     const clearForm = () => {
         income.title = null;
-        income.date = calendarDate;
+        // income.date = calendarDate;
         income.amount = null;
         income.currency = $baseCurrency;
         income.originalCurrency = null;
         income.originalAmount = null;
-        incomeCurrencyPicker.destroy();
-        incomeDateCalendar.destroy();
-        initPickers();
+        // incomeCurrencyPicker.destroy();
+        // incomeDateCalendar.destroy();
+        // initPickers();
     };
 
     const convertAmount = async () => {
