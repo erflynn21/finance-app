@@ -115,6 +115,12 @@
                 },
             ],
             on: {
+                open: function (value) {
+                    pickerBudgetMonth.setValue([
+                        String($selectedMonth - 1),
+                        String($selectedYear),
+                    ]);
+                },
                 change: function (values) {
                     budgetMonth =
                         monthsDict[values.value[0]] + ', ' + values.value[1];
