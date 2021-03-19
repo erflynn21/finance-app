@@ -1,6 +1,6 @@
 {
   "appId": "com.evanflynn.expatexpenses",
-  "appName": "expat-expenses",
+  "appName": "Expat Expenses",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
