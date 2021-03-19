@@ -118,34 +118,40 @@
                             {#if percentage <= 70}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: green" />
+                                    style="width: {$tweenedPercentage}%; background-color: green"
+                                />
                                 <span>{percentage}%</span>
                             {:else if percentage > 70 && percentage <= 90}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: yellow" />
-                                <span
-                                    style="color: #383838">{percentage}%</span>
+                                    style="width: {$tweenedPercentage}%; background-color: yellow"
+                                />
+                                <span style="color: #383838">{percentage}%</span
+                                >
                             {:else}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: red" />
+                                    style="width: {$tweenedPercentage}%; background-color: red"
+                                />
                                 <span>{percentage}%</span>
                             {/if}
                         </div>
                         <div
                             class="dropdown"
-                            on:click={() => (dropdown = !dropdown)}>
+                            on:click={() => (dropdown = !dropdown)}
+                        >
                             {#if dropdown === false}
                                 <Icon
                                     f7="chevron_down"
                                     size="20"
-                                    style="align-self: center" />
+                                    style="align-self: center"
+                                />
                             {:else}
                                 <Icon
                                     f7="chevron_up"
                                     size="20"
-                                    style="align-self: center" />
+                                    style="align-self: center"
+                                />
                             {/if}
                         </div>
                     </div>
@@ -154,10 +160,7 @@
         </div>
         <SwipeoutActions right>
             <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
-            <SwipeoutButton
-                color="red"
-                overswipe
-                on:click={deleteBudget(itemId)}>
+            <SwipeoutButton color="red" on:click={deleteBudget(itemId)}>
                 Delete
             </SwipeoutButton>
         </SwipeoutActions>
@@ -180,7 +183,8 @@
         backdrop
         bind:this={editModal}
         {item}
-        {itemId}>
+        {itemId}
+    >
         <Toolbar>
             <div class="left">Edit Expense</div>
             <div class="right">

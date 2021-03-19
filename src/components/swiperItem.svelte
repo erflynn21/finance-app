@@ -120,7 +120,7 @@
 >
     <SwipeoutActions right>
         <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
-        <SwipeoutButton color="red" overswipe on:click={deleteItem}>
+        <SwipeoutButton color="red" on:click={deleteItem}>
             Delete
         </SwipeoutButton>
     </SwipeoutActions>

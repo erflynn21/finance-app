@@ -86,10 +86,11 @@
     <ListItem
         swipeout
         title={item.category}
-        after="{currencySymbol}{item.amount}">
+        after="{currencySymbol}{item.amount}"
+    >
         <SwipeoutActions right>
             <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
-            <SwipeoutButton color="red" overswipe on:click={deleteItem}>
+            <SwipeoutButton color="red" on:click={deleteItem}>
                 Delete
             </SwipeoutButton>
         </SwipeoutActions>
@@ -98,7 +99,7 @@
     <ListItem swipeout title={item.title} after="{currencySymbol}{item.amount}">
         <SwipeoutActions right>
             <SwipeoutButton on:click={edit}>Edit</SwipeoutButton>
-            <SwipeoutButton color="red" overswipe on:click={deleteItem}>
+            <SwipeoutButton color="red" on:click={deleteItem}>
                 Delete
             </SwipeoutButton>
         </SwipeoutActions>
@@ -113,7 +114,8 @@
         backdrop
         bind:this={editModal}
         {item}
-        {itemId}>
+        {itemId}
+    >
         <Toolbar>
             <div class="left">Edit Expense</div>
             <div class="right">
@@ -134,7 +136,8 @@
         bind:this={editModal}
         {item}
         {itemId}
-        {type}>
+        {type}
+    >
         <Toolbar>
             <div class="left">Edit Expense</div>
             <div class="right">
@@ -155,7 +158,8 @@
         bind:this={editModal}
         {item}
         {itemId}
-        {type}>
+        {type}
+    >
         <Toolbar>
             <div class="left">Edit Expense</div>
             <div class="right">
