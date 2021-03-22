@@ -53,9 +53,9 @@
     let login = true;
 </script>
 
-<Page noNavbar loginScreen>
+<Page noNavbar loginScreen class="login-bg">
     <LoginScreenTitle>Expat Expenses</LoginScreenTitle>
-    <List form>
+    <List form class="auth">
         <ListInput
             outline
             floatingLabel
@@ -68,7 +68,8 @@
             placeholder="Your Username"
             bind:value={username}
             autocapitalize="off"
-            errorMessage="Please provide a valid username." />
+            errorMessage="Please provide a valid username."
+        />
         {#if login === false}
             <ListInput
                 outline
@@ -82,7 +83,8 @@
                 placeholder="Your Email"
                 bind:value={email}
                 autocapitalize="off"
-                errorMessage="Please provide a valid email." />
+                errorMessage="Please provide a valid email."
+            />
         {/if}
         <ListInput
             outline
@@ -96,7 +98,8 @@
             placeholder="Your Password"
             bind:value={password}
             autocapitalize="off"
-            errorMessage="Please provide a valid password." />
+            errorMessage="Please provide a valid password."
+        />
         {#if login === false}
             <ListInput
                 outline
@@ -110,24 +113,63 @@
                 placeholder="Repeat Your Password"
                 bind:value={password2}
                 autocapitalize="off"
-                errorMessage="Please enter the same password." />
+                errorMessage="Please enter the same password."
+            />
         {/if}
     </List>
     {#if login === true}
         <List>
-            <ListButton on:click={signInUser}>Sign In</ListButton>
+            <ListButton on:click={signInUser} class="white-button"
+                >Sign In</ListButton
+            >
         </List>
         <BlockFooter>
             Don't have an account?
-            <Button on:click={() => (login = false)}>Register</Button>
+            <Button on:click={() => (login = false)} class="white-button"
+                >Register</Button
+            >
         </BlockFooter>
     {:else}
         <List>
-            <ListButton on:click={signUpUser}>Register</ListButton>
+            <ListButton on:click={signUpUser} class="white-button"
+                >Register</ListButton
+            >
         </List>
         <BlockFooter>
             Already have an account?
-            <Button on:click={() => (login = true)}>Sign In</Button>
+            <Button on:click={() => (login = true)} class="white-button"
+                >Sign In</Button
+            >
         </BlockFooter>
     {/if}
 </Page>
+
+<style>
+    :global(.login-bg) {
+        background: url('../static/img/city.jpg') no-repeat center center fixed !important;
+        background-size: cover !important;
+        color: white !important;
+    }
+
+    :global(.login-bg .block-footer) {
+        color: white !important;
+        /* font-size: 16px; */
+    }
+
+    :global(.login-screen-content) {
+        background: transparent !important;
+    }
+
+    :global(.white-button) {
+        color: white !important;
+    }
+
+    :global(.white-button .list-button) {
+        color: white !important;
+    }
+
+    :global(.auth .item-floating-label) {
+        color: white !important;
+        background: transparent !important;
+    }
+</style>
