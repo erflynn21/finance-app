@@ -153,7 +153,6 @@
 
     :global(.login-bg .block-footer) {
         color: white !important;
-        /* font-size: 16px; */
     }
 
     :global(.login-screen-content) {
@@ -171,5 +170,9 @@
     :global(.auth .item-floating-label) {
         color: white !important;
         background: transparent !important;
+    }
+
+    :global(.auth input) {
+        color: white !important;
     }
 </style>
