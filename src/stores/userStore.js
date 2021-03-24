@@ -46,7 +46,7 @@ const signUp = async (username, email, password) => {
         location.reload();
         return openDatabases();
     } catch (e) {
-        return console.log(e);
+        return e;
     } 
 }
 
@@ -56,7 +56,7 @@ const signIn = async (username, password) => {
         location.reload();
         return openDatabases();
     } catch (e) {
-        return console.log(e);
+        return e;
     }
 }
 
@@ -65,7 +65,7 @@ const signOut = async () => {
         await userbase.signOut();
         return userStore.set(null);
     } catch (e) {
-        return console.log(e)
+        return e;
     }
 }
 
@@ -79,7 +79,7 @@ const setUpDone = async () => {
             location.reload();
         });
     } catch (e) {
-        return console.log(e)
+        return e;
     }
 }
 

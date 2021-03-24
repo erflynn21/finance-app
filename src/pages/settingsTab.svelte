@@ -9,7 +9,20 @@
     // sign out
     const signOutUser = async () => {
         f7.dialog.preloader('Signing you out...');
-        await signOut().then(() => f7.dialog.close());
+        await signOut().then((e) => {
+            if (e) {
+                f7.dialog.close();
+                let errorToast = f7.toast.create({
+                    text: e.message,
+                    position: 'center',
+                    closeTimeout: 2000,
+                    cssClass: 'text-align-center',
+                });
+                errorToast.open();
+            } else {
+                f7.dialog.close();
+            }
+        });
     };
 </script>
 
@@ -20,7 +33,8 @@
         <ListItem title="Budgets" link="/budgets/" />
         <ListItem
             title="Monthly Recurring Expenses"
-            link="/monthly-expenses/" />
+            link="/monthly-expenses/"
+        />
         <ListItem title="Monthly Recurring Income" link="/monthly-incomes/" />
     </List>
     <Button on:click={signOutUser}>Sign Out</Button>

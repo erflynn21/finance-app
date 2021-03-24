@@ -31,9 +31,20 @@
             return;
         } else {
             f7.dialog.preloader('Creating an account for you...');
-            await signUp(username, email, password).then(() =>
-                f7.dialog.close()
-            );
+            await signUp(username, email, password).then((e) => {
+                if (e) {
+                    f7.dialog.close();
+                    let errorToast = f7.toast.create({
+                        text: e.message,
+                        position: 'center',
+                        closeTimeout: 2000,
+                        cssClass: 'text-align-center',
+                    });
+                    errorToast.open();
+                } else {
+                    f7.dialog.close();
+                }
+            });
         }
     };
 
@@ -46,7 +57,20 @@
             return;
         } else {
             f7.dialog.preloader('Signing you in...');
-            await signIn(username, password).then(() => f7.dialog.close());
+            await signIn(username, password).then((e) => {
+                if (e) {
+                    f7.dialog.close();
+                    let errorToast = f7.toast.create({
+                        text: e.message,
+                        position: 'center',
+                        closeTimeout: 2000,
+                        cssClass: 'text-align-center',
+                    });
+                    errorToast.open();
+                } else {
+                    f7.dialog.close();
+                }
+            });
         }
     };
 
