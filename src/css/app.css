@@ -1,9 +1,9 @@
 /* Custom color theme properties */
 :root {
-  --f7-theme-color: #008000;
+  --f7-theme-color: #047857;
   --f7-theme-color-rgb: 0, 128, 0;
-  --f7-theme-color-shade: #005700;
-  --f7-theme-color-tint: #00a900;
+  --f7-theme-color-shade: #059669;
+  --f7-theme-color-tint: #065F46;
 }
 
 /* Invert navigation bars to fill style */
@@ -162,3 +162,23 @@ h1, h2, h3, h4, h5, h6  {
 .spacer {
   height: 65px;
 }
+
+.toolbar {
+  background: rgb(6, 95, 70);
+  background: linear-gradient(
+    90deg,
+    rgba(6, 95, 70, 1) 0%,
+    rgba(5, 150, 105, 1) 100%
+  );
+}
+
+/* .input-outline.input-focused:after, .item-input-outline.item-input-focused .item-input-wrap:after {
+  border: 2px solid;
+  border-image: linear-gradient(
+    90deg,
+    rgba(6, 95, 70, 1) 0%,
+    rgba(5, 150, 105, 1) 100%
+  );
+  border-image-slice: 1;
+  border-radius: var(--f7-input-outline-border-radius);
+} */

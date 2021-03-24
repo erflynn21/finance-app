@@ -60,7 +60,8 @@
                 </ListItemRow>
                 <div class="doughnut">
                     <SkeletonBlock
-                        style="width: 300px; height: 300px; border-radius: 50%; text-align-center" />
+                        style="width: 300px; height: 300px; border-radius: 50%; text-align-center"
+                    />
                 </div>
             </div>
         </div>
@@ -71,7 +72,12 @@
     .background {
         width: 100vw;
         box-shadow: 0 2px 2px -2px gray;
-        background-color: green;
+        background: rgb(6, 95, 70);
+        background: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 1) 0%,
+            rgba(5, 150, 105, 1) 100%
+        );
         margin-bottom: 2px;
         position: fixed;
         top: 0;
@@ -93,7 +99,12 @@
         z-index: 2;
         height: calc(env(safe-area-inset-top) + 55px);
         width: 100vw;
-        background: green;
+        background: rgb(6, 95, 70);
+        background: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 1) 0%,
+            rgba(5, 150, 105, 1) 100%
+        );
     }
 
     .heading h1 {

@@ -55,7 +55,8 @@
                     <View
                         id="view-loading-screen"
                         url="/loading-screen/"
-                        class="safe-areas" />
+                        class="safe-areas"
+                    />
                 {/if}
             {:else}
                 <div />
@@ -65,45 +66,52 @@
                 <View
                     id="view-intro-slider"
                     url="/intro-slider/"
-                    class="safe-areas" />
+                    class="safe-areas"
+                />
             {:else if $monthlyIncomes === null}
                 <View
                     id="view-loading-screen"
                     url="/loading-screen/"
-                    class="safe-areas" />
+                    class="safe-areas"
+                />
             {/if}
         {:else}
             <View
                 id="view-auth"
                 url="/auth/"
                 class="safe-areas"
-                style="z-index: 5001;" />
+                style="z-index: 5001;"
+            />
         {/if}
 
         <!-- Tabbar for switching views-tabs -->
         {#if $initialized === true && $userStore !== null && $userSetUp === true}
-            <Toolbar tabbar bottom bgColor="white">
+            <Toolbar tabbar bottom style="background: white !important;">
                 <Link
                     tabLink="#view-overview"
                     tabLinkActive
                     iconF7="chart_pie"
                     iconColor="gray"
-                    iconSize="30px" />
+                    iconSize="30px"
+                />
                 <Link
                     tabLink="#view-budget"
                     iconF7="doc_text"
                     iconColor="gray"
-                    iconSize="30px" />
+                    iconSize="30px"
+                />
                 <Link
                     tabLink="#view-transactions"
                     iconF7="money_dollar_circle"
                     iconColor="gray"
-                    iconSize="30px" />
+                    iconSize="30px"
+                />
                 <Link
                     tabLink="#view-settings"
                     iconF7="gear"
                     iconColor="gray"
-                    iconSize="30px" />
+                    iconSize="30px"
+                />
             </Toolbar>
 
             <ActionButton />
@@ -120,7 +128,8 @@
             id="view-transactions"
             name="transactions"
             tab
-            url="/transactions/" />
+            url="/transactions/"
+        />
 
         <!-- Settings View -->
         <View id="view-settings" name="settings" tab url="/settings/" />
@@ -136,12 +145,16 @@
         align-items: center;
     }
 
-    /* :global(.toolbar-inner) {
-        padding-top: 15px;
-    } */
-
     :global(.tab-link-active .icon) {
-        color: #008000;
+        background: rgb(6, 95, 70);
+        background: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 1) 0%,
+            rgba(5, 150, 105, 1) 100%
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     :global(.fab-right-bottom) {
@@ -157,5 +170,14 @@
         box-shadow: none;
         transition-delay: 0;
         transition-duration: 200ms;
+    }
+
+    :global(.navbar-bg) {
+        background: rgb(6, 95, 70);
+        background: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 1) 0%,
+            rgba(5, 150, 105, 1) 100%
+        );
     }
 </style>

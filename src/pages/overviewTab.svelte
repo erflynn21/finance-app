@@ -83,20 +83,19 @@
                             {#if percentage <= 70}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: green"
+                                    style="width: {$tweenedPercentage}%; background: linear-gradient(90deg, rgba(6,95,70,1) 0%, rgba(5,150,105,1) 100%);"
                                 />
                                 <span>{percentage}%</span>
                             {:else if percentage > 70 && percentage <= 90}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: yellow"
+                                    style="width: {$tweenedPercentage}%; background: linear-gradient(90deg, rgba(202,138,4,1) 0%, rgba(250,204,21,1) 100%);"
                                 />
-                                <span style="color: #383838">{percentage}%</span
-                                >
+                                <span>{percentage}%</span>
                             {:else}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: red"
+                                    style="width: {$tweenedPercentage}%; background: linear-gradient(90deg, rgba(153,27,27,1) 0%, rgba(220,38,38,1) 100%);"
                                 />
                                 <span>{percentage}%</span>
                             {/if}
@@ -127,11 +126,11 @@
                     </div>
                     <div class="cash-flow-sum">
                         {#if cashflow >= 0}
-                            <h4 style="color: green">
+                            <h4 class="green">
                                 {$baseCurrencySymbol}{cashflow}
                             </h4>
                         {:else}
-                            <h4 style="color: red">
+                            <h4 class="red">
                                 {$baseCurrencySymbol}{cashflow}
                             </h4>
                         {/if}
@@ -182,7 +181,12 @@
     .background {
         width: 100vw;
         box-shadow: 0 2px 2px -2px gray;
-        background-color: green;
+        background: rgb(6, 95, 70);
+        background: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 1) 0%,
+            rgba(5, 150, 105, 1) 100%
+        );
         margin-bottom: 2px;
         position: fixed;
         top: 0;
@@ -204,7 +208,12 @@
         z-index: 2;
         height: calc(env(safe-area-inset-top) + 55px);
         width: 100vw;
-        background: green;
+        background: rgb(6, 95, 70);
+        background: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 1) 0%,
+            rgba(5, 150, 105, 1) 100%
+        );
     }
 
     .heading h1 {
@@ -297,5 +306,29 @@
 
     .dropdown {
         margin-left: 5px;
+    }
+
+    .green {
+        background: rgb(6, 95, 70);
+        background: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 1) 0%,
+            rgba(5, 150, 105, 1) 100%
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .red {
+        background: rgb(153, 27, 27);
+        background: linear-gradient(
+            90deg,
+            rgba(153, 27, 27, 1) 0%,
+            rgba(220, 38, 38, 1) 100%
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 </style>

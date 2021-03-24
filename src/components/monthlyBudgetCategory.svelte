@@ -118,20 +118,19 @@
                             {#if percentage <= 70}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: green"
+                                    style="width: {$tweenedPercentage}%; background: linear-gradient(90deg, rgba(6,95,70,1) 0%, rgba(5,150,105,1) 100%);"
                                 />
                                 <span>{percentage}%</span>
                             {:else if percentage > 70 && percentage <= 90}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: yellow"
+                                    style="width: {$tweenedPercentage}%; background: linear-gradient(90deg, rgba(202,138,4,1) 0%, rgba(250,204,21,1) 100%);"
                                 />
-                                <span style="color: #383838">{percentage}%</span
-                                >
+                                <span>{percentage}%</span>
                             {:else}
                                 <div
                                     class="percent"
-                                    style="width: {$tweenedPercentage}%; background-color: red"
+                                    style="width: {$tweenedPercentage}%; background: linear-gradient(90deg, rgba(153,27,27,1) 0%, rgba(220,38,38,1) 100%);"
                                 />
                                 <span>{percentage}%</span>
                             {/if}

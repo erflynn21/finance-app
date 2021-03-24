@@ -108,6 +108,15 @@
         transition-delay: 0ms;
     }
 
+    :global(.fab a) {
+        background: rgb(6, 95, 70);
+        background: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 1) 0%,
+            rgba(5, 150, 105, 1) 100%
+        );
+    }
+
     :global(.add) {
         transition: margin-bottom 100ms ease;
     }
