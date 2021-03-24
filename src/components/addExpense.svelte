@@ -86,8 +86,19 @@
 
         if (recurring === false) {
             // add the expense
-            await addExpense(expense).then(() => {
-                clearForm();
+            await addExpense(expense).then((e) => {
+                if (e) {
+                    f7.dialog.close();
+                    let errorToast = f7.toast.create({
+                        text: e.message,
+                        position: 'center',
+                        closeTimeout: 2000,
+                        cssClass: 'text-align-center',
+                    });
+                    errorToast.open();
+                } else {
+                    clearForm();
+                }
             });
         } else {
             let recurringExpense = {
@@ -98,8 +109,19 @@
                 recurringDate: expense.date.slice(-2),
             };
             // add the recurring expense
-            await addMonthlyExpense(recurringExpense).then(() => {
-                clearForm();
+            await addMonthlyExpense(recurringExpense).then((e) => {
+                if (e) {
+                    f7.dialog.close();
+                    let errorToast = f7.toast.create({
+                        text: e.message,
+                        position: 'center',
+                        closeTimeout: 2000,
+                        cssClass: 'text-align-center',
+                    });
+                    errorToast.open();
+                } else {
+                    clearForm();
+                }
             });
         }
 

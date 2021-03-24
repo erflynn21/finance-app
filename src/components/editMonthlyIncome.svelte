@@ -45,8 +45,19 @@
         updatedMonthlyIncome.amount = Number(updatedMonthlyIncome.amount);
 
         // update the monthly expense
-        await updateMonthlyIncome(updatedMonthlyIncome, itemId).then(() => {
-            dispatch('collapse');
+        await updateMonthlyIncome(updatedMonthlyIncome, itemId).then((e) => {
+            if (e) {
+                f7.dialog.close();
+                let errorToast = f7.toast.create({
+                    text: e.message,
+                    position: 'center',
+                    closeTimeout: 2000,
+                    cssClass: 'text-align-center',
+                });
+                errorToast.open();
+            } else {
+                dispatch('collapse');
+            }
         });
 
         f7.dialog.close();

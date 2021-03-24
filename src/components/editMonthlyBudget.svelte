@@ -36,8 +36,20 @@
         updatedMonthlyBudget.amount = Number(updatedMonthlyBudget.amount);
 
         // add the expense
-        await updateMonthlyBudget(updatedMonthlyBudget, itemId).then(() => {
-            dispatch('collapse');
+        await updateMonthlyBudget(updatedMonthlyBudget, itemId).then((e) => {
+            if (e) {
+                f7.dialog.close();
+                let errorToast = f7.toast.create({
+                    text: e.message,
+                    position: 'center',
+                    closeTimeout: 2000,
+                    cssClass: 'text-align-center',
+                });
+                errorToast.open();
+            } else {
+                dispatch('collapse');
+                f7.dialog.close();
+            }
         });
 
         f7.dialog.close();

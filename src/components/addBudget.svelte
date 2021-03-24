@@ -41,11 +41,22 @@
         budget.amount = Number(budget.amount);
 
         // add the budget
-        await addBudget(budget).then(() => {
-            // clear form
-            budget.category = null;
-            budget.amount = null;
-            budget.currency = $baseCurrency;
+        await addBudget(budget).then((e) => {
+            if (e) {
+                f7.dialog.close();
+                let errorToast = f7.toast.create({
+                    text: e.message,
+                    position: 'center',
+                    closeTimeout: 2000,
+                    cssClass: 'text-align-center',
+                });
+                errorToast.open();
+            } else {
+                // clear form
+                budget.category = null;
+                budget.amount = null;
+                budget.currency = $baseCurrency;
+            }
         });
 
         f7.dialog.close();
@@ -96,7 +107,8 @@
             required
             autofocus
             on:input={() => f7.input.validate('#budgetCategory')}
-            errorMessage="Please provide a valid category name." />
+            errorMessage="Please provide a valid category name."
+        />
 
         <Row>
             <Col width="66">
@@ -115,7 +127,8 @@
                     clearButton
                     required
                     on:input={() => f7.input.validate('#budgetAmount')}
-                    errorMessage="Please provide a valid amount." />
+                    errorMessage="Please provide a valid amount."
+                />
             </Col>
             <Col width="33">
                 <ListInput
@@ -124,7 +137,8 @@
                     label="Currency"
                     value={budget.currency}
                     readonly
-                    inputId="budgetCurrencyPicker" />
+                    inputId="budgetCurrencyPicker"
+                />
             </Col>
         </Row>
     </List>

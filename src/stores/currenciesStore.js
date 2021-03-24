@@ -16,9 +16,6 @@ const openCurrenciesDatabase = () => {
         setCurrencies();
     }})
     .catch((e) => console.log(e))
-    .finally(() => {
-       
-    });
 }
 
 const setCurrencies = () => {
@@ -38,18 +35,14 @@ const setCurrencies = () => {
     }
 }
 
-const addCurrencies = (currencies) => {
-    return userbase.insertItem({ databaseName, item: currencies })
-        .then(() => {
-            setCurrencies();
-        });
+const addCurrencies = async (currencies) => {
+    await userbase.insertItem({ databaseName, item: currencies });
+    setCurrencies();
 };
 
-const updateCurrencies = (updatedCurrencies, updatedCurrenciesId) => {
-    return userbase.updateItem({ databaseName, item: updatedCurrencies, itemId: updatedCurrenciesId })
-        .then(() => {
-            setCurrencies();
-    });
+const updateCurrencies = async (updatedCurrencies, updatedCurrenciesId) => {
+    await userbase.updateItem({ databaseName, item: updatedCurrencies, itemId: updatedCurrenciesId });
+    setCurrencies();
 };
 
 

@@ -56,15 +56,27 @@ const setIncomes = (items) => {
 }
 
 const addIncome = (income) => {
-    return userbase.insertItem({ databaseName: get(incomesDatabaseName), item: income });
+    try {
+        return userbase.insertItem({ databaseName: get(incomesDatabaseName), item: income });
+    } catch (e) {
+        return e;
+    }
 };
 
 const updateIncome = (income, incomeId) => {
-    return userbase.updateItem({ databaseName: get(incomesDatabaseName), item: income, itemId: incomeId });
+    try {
+       return userbase.updateItem({ databaseName: get(incomesDatabaseName), item: income, itemId: incomeId }); 
+    } catch (e) {
+        return e;
+    }
 };
 
 const deleteIncome = (incomeId) => {
-    return userbase.deleteItem({ databaseName: get(incomesDatabaseName), itemId: incomeId });
+    try {
+        return userbase.deleteItem({ databaseName: get(incomesDatabaseName), itemId: incomeId });
+    } catch (e) {
+        return e;
+    }
 }
 
 export {incomes, incomesSum, incomesDatabaseName, allIncomes, openIncomesDatabase, addIncome, updateIncome, deleteIncome, setIncomes};

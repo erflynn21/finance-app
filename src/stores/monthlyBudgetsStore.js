@@ -26,15 +26,27 @@ const openMonthlyBudgetsDatabase = () => {
 }
 
 const addMonthlyBudget = (monthlyBudget) => {
-    return userbase.insertItem({ databaseName: get(monthlyBudgetsDatabaseName), item: monthlyBudget });
+    try {
+        return userbase.insertItem({ databaseName: get(monthlyBudgetsDatabaseName), item: monthlyBudget });
+    } catch (e) {
+        return e;
+    }
 };
 
 const updateMonthlyBudget = (monthlyBudget, monthlyBudgetId) => {
-    return userbase.updateItem({ databaseName: get(monthlyBudgetsDatabaseName), item: monthlyBudget, itemId: monthlyBudgetId });
+    try {
+        return userbase.updateItem({ databaseName: get(monthlyBudgetsDatabaseName), item: monthlyBudget, itemId: monthlyBudgetId });
+    } catch (e) {
+        return e;
+    }
 };
 
 const deleteMonthlyBudget = (monthlyBudgetId) => {
-    return userbase.deleteItem({ databaseName: get(monthlyBudgetsDatabaseName), itemId: monthlyBudgetId });
+    try {
+        return userbase.deleteItem({ databaseName: get(monthlyBudgetsDatabaseName), itemId: monthlyBudgetId });
+    } catch (e) {
+        return e;
+    }
 };
 
 export {monthlyBudgets, monthlyBudgetsSum, monthlyBudgetsDatabaseName, openMonthlyBudgetsDatabase, addMonthlyBudget, updateMonthlyBudget, deleteMonthlyBudget};

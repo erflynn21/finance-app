@@ -61,9 +61,20 @@
         }
 
         // add the expense
-        await updateIncome(updatedIncome, itemId).then(() => {
-            dispatch('collapse');
-            f7.dialog.close();
+        await updateIncome(updatedIncome, itemId).then((e) => {
+            if (e) {
+                f7.dialog.close();
+                let errorToast = f7.toast.create({
+                    text: e.message,
+                    position: 'center',
+                    closeTimeout: 2000,
+                    cssClass: 'text-align-center',
+                });
+                errorToast.open();
+            } else {
+                dispatch('collapse');
+                f7.dialog.close();
+            }
         });
 
         f7.dialog.close();
@@ -156,7 +167,8 @@
             placeholder="Select Date"
             readonly
             inputId="editIncomeDateCalendar"
-            value={updatedIncome.date} />
+            value={updatedIncome.date}
+        />
 
         <ListInput
             outline
@@ -170,7 +182,8 @@
             clearButton
             required
             on:input={() => f7.input.validate('#editedTitle')}
-            errorMessage="Please provide a valid income name." />
+            errorMessage="Please provide a valid income name."
+        />
 
         <Row>
             <Col width="66">
@@ -190,7 +203,8 @@
                         clearButton
                         required
                         on:input={() => f7.input.validate('#editedAmount')}
-                        errorMessage="Please provide a valid amount." />
+                        errorMessage="Please provide a valid amount."
+                    />
                 {:else}
                     <ListInput
                         outline
@@ -207,7 +221,8 @@
                         clearButton
                         required
                         on:input={() => f7.input.validate('#editedAmount')}
-                        errorMessage="Please provide a valid amount." />
+                        errorMessage="Please provide a valid amount."
+                    />
                 {/if}
             </Col>
             <Col width="33">
@@ -218,7 +233,8 @@
                         label="Currency"
                         value={updatedIncome.originalCurrency}
                         readonly
-                        inputId="editIncomeCurrencyPicker" />
+                        inputId="editIncomeCurrencyPicker"
+                    />
                 {:else}
                     <ListInput
                         outline
@@ -226,7 +242,8 @@
                         label="Currency"
                         value={updatedIncome.currency}
                         readonly
-                        inputId="editIncomeCurrencyPicker" />
+                        inputId="editIncomeCurrencyPicker"
+                    />
                 {/if}
             </Col>
         </Row>

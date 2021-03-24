@@ -35,7 +35,8 @@ userbase
             userSetUp.set(true);
         }
     })
-    .catch((e) => console.log(e)).finally(() => {
+    .catch((e) => console.log(e))
+    .finally(() => {
         initialized.set(true);
         SplashScreen.hide();
     });

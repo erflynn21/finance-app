@@ -56,18 +56,28 @@ const setExpenses = (items) => {
 }
 
 const addExpense = (expense) => {
-    return userbase.insertItem({ databaseName: get(expensesDatabaseName), item: expense });
+    try {
+        userbase.insertItem({ databaseName: get(expensesDatabaseName), item: expense });
+    } catch (e) {
+        return e;
+    }
+    
 };
 
 const updateExpense = (expense, expenseId) => {
-    return userbase.updateItem({ databaseName: get(expensesDatabaseName), item: expense, itemId: expenseId });
+    try {
+        return userbase.updateItem({ databaseName: get(expensesDatabaseName), item: expense, itemId: expenseId });
+    } catch (e) {
+        return e;
+    }
+     
 };
 
 const deleteExpense = (expenseId) => {
     try {
         return userbase.deleteItem({ databaseName: get(expensesDatabaseName), itemId: expenseId });
     } catch (e) {
-        return console.log(e);
+        return e;
     }
 }
 

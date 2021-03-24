@@ -37,8 +37,19 @@
         updatedBudget.amount = Number(updatedBudget.amount);
 
         // updates the budget
-        await updateBudget(updatedBudget, itemId).then(() => {
-            dispatch('collapse');
+        await updateBudget(updatedBudget, itemId).then((e) => {
+            if (e) {
+                f7.dialog.close();
+                let errorToast = f7.toast.create({
+                    text: e.message,
+                    position: 'center',
+                    closeTimeout: 2000,
+                    cssClass: 'text-align-center',
+                });
+                errorToast.open();
+            } else {
+                dispatch('collapse');
+            }
         });
 
         f7.dialog.close();
@@ -89,7 +100,8 @@
             clearButton
             required
             on:input={() => f7.input.validate('#editedCategory')}
-            errorMessage="Please provide a valid budget category." />
+            errorMessage="Please provide a valid budget category."
+        />
 
         <Row>
             <Col width="66">
@@ -108,7 +120,8 @@
                     clearButton
                     required
                     on:input={() => f7.input.validate('#editedAmount')}
-                    errorMessage="Please provide a valid amount." />
+                    errorMessage="Please provide a valid amount."
+                />
             </Col>
             <Col width="33">
                 <ListInput
@@ -117,7 +130,8 @@
                     label="Currency"
                     value={updatedBudget.currency}
                     readonly
-                    inputId="editBudgetCurrencyPicker" />
+                    inputId="editBudgetCurrencyPicker"
+                />
             </Col>
         </Row>
     </List>

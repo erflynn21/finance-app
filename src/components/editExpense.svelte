@@ -68,9 +68,20 @@
         }
 
         // add the expense
-        await updateExpense(updatedExpense, itemId).then(() => {
-            dispatch('collapse');
-            f7.dialog.close();
+        await updateExpense(updatedExpense, itemId).then((e) => {
+            if (e) {
+                f7.dialog.close();
+                let errorToast = f7.toast.create({
+                    text: e.message,
+                    position: 'center',
+                    closeTimeout: 2000,
+                    cssClass: 'text-align-center',
+                });
+                errorToast.open();
+            } else {
+                dispatch('collapse');
+                f7.dialog.close();
+            }
         });
 
         f7.dialog.close();
@@ -188,7 +199,8 @@
             placeholder="Select Date"
             readonly
             inputId="editExpenseDateCalendar"
-            value={updatedExpense.date} />
+            value={updatedExpense.date}
+        />
 
         <ListInput
             outline
@@ -202,7 +214,8 @@
             clearButton
             required
             on:input={() => f7.input.validate('#editedTitle')}
-            errorMessage="Please provide a valid expense name." />
+            errorMessage="Please provide a valid expense name."
+        />
 
         <Row>
             <Col width="66">
@@ -222,7 +235,8 @@
                         clearButton
                         required
                         on:input={() => f7.input.validate('#editedAmount')}
-                        errorMessage="Please provide a valid amount." />
+                        errorMessage="Please provide a valid amount."
+                    />
                 {:else}
                     <ListInput
                         outline
@@ -239,7 +253,8 @@
                         clearButton
                         required
                         on:input={() => f7.input.validate('#editedAmount')}
-                        errorMessage="Please provide a valid amount." />
+                        errorMessage="Please provide a valid amount."
+                    />
                 {/if}
             </Col>
             <Col width="33">
@@ -250,7 +265,8 @@
                         label="Currency"
                         value={updatedExpense.originalCurrency}
                         readonly
-                        inputId="editExpenseCurrencyPicker" />
+                        inputId="editExpenseCurrencyPicker"
+                    />
                 {:else}
                     <ListInput
                         outline
@@ -258,7 +274,8 @@
                         label="Currency"
                         value={updatedExpense.currency}
                         readonly
-                        inputId="editExpenseCurrencyPicker" />
+                        inputId="editExpenseCurrencyPicker"
+                    />
                 {/if}
             </Col>
         </Row>
@@ -276,7 +293,8 @@
             required
             validateOnBlur
             on:input={() => f7.input.validate('#editExpenseCategoryPicker')}
-            errorMessage="Please select a category." />
+            errorMessage="Please select a category."
+        />
     </List>
     <Button on:click={handleUpdateExpense}>Update</Button>
 </Block>

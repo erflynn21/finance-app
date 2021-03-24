@@ -78,8 +78,19 @@
 
         if (recurring === false) {
             // add the income
-            await addIncome(income).then(() => {
-                clearForm();
+            await addIncome(income).then((e) => {
+                if (e) {
+                    f7.dialog.close();
+                    let errorToast = f7.toast.create({
+                        text: e.message,
+                        position: 'center',
+                        closeTimeout: 2000,
+                        cssClass: 'text-align-center',
+                    });
+                    errorToast.open();
+                } else {
+                    clearForm();
+                }
             });
         } else {
             let recurringIncome = {
@@ -89,8 +100,19 @@
                 recurringDate: income.date.slice(-2),
             };
             // add the recurring income
-            await addMonthlyIncome(recurringIncome).then(() => {
-                clearForm();
+            await addMonthlyIncome(recurringIncome).then((e) => {
+                if (e) {
+                    f7.dialog.close();
+                    let errorToast = f7.toast.create({
+                        text: e.message,
+                        position: 'center',
+                        closeTimeout: 2000,
+                        cssClass: 'text-align-center',
+                    });
+                    errorToast.open();
+                } else {
+                    clearForm();
+                }
             });
         }
 

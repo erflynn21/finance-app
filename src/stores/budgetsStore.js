@@ -80,15 +80,27 @@ const convertAmount = async (newMonthlyBudget) => {
 };
 
 const addBudget = (budget) => {
-    return userbase.insertItem({ databaseName, item: budget });
+    try {
+        return userbase.insertItem({ databaseName, item: budget });
+    } catch (e) {
+        return e;
+    }
 };
 
 const updateBudget = (budget, budgetId) => {
-    return userbase.updateItem({ databaseName, item: budget, itemId: budgetId });
+    try {
+        return userbase.updateItem({ databaseName, item: budget, itemId: budgetId });
+    } catch (e) {
+        return e;
+    }
 };
 
 const deleteBudget = (budgetId) => {
-    return userbase.deleteItem({ databaseName, itemId: budgetId });
+    try {
+        return userbase.deleteItem({ databaseName, itemId: budgetId });
+    } catch (e) {
+        return e;
+    }
 }
 
 export {budgets, budgetsSum, categories, setMonthlyBudgets, openBudgetsDatabase, addBudget, updateBudget, deleteBudget};

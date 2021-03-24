@@ -70,15 +70,27 @@ const convertAmount = async (newIncomeFromMonthly) => {
 }
 
 const addMonthlyIncome = (monthlyIncome) => {
-    return userbase.insertItem({ databaseName, item: monthlyIncome });
+    try {
+        return userbase.insertItem({ databaseName, item: monthlyIncome });
+    } catch (e) {
+        return e;
+    }
 };
 
 const updateMonthlyIncome = (monthlyIncome, monthlyIncomeId) => {
-    return userbase.updateItem({ databaseName, item: monthlyIncome, itemId: monthlyIncomeId });
+    try {
+        return userbase.updateItem({ databaseName, item: monthlyIncome, itemId: monthlyIncomeId });
+    } catch (e) {
+        return e;
+    }
 };
 
 const deleteMonthlyIncome = (monthlyIncomeId) => {
-    return userbase.deleteItem({ databaseName, itemId: monthlyIncomeId });
+    try {
+        return userbase.deleteItem({ databaseName, itemId: monthlyIncomeId });
+    } catch (e) {
+        return e;
+    }
 }
 
 export {monthlyIncomes, openMonthlyIncomesDatabase, addMonthlyIncome, updateMonthlyIncome, deleteMonthlyIncome};
