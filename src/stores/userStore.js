@@ -70,6 +70,15 @@ const signOut = async () => {
     }
 }
 
+const deleteUser = async () => {
+    try {
+        await userbase.deleteUser();
+        return userStore.set(null);
+    } catch (e) {
+        return e;
+    }
+}
+
 const setUpDone = async () => {
     try {
         await userbase.updateUser({
@@ -111,4 +120,4 @@ const getAllDatabases = () => {
     }).catch((e) => console.error(e))
 }
 
-export { userStore, initialized, allDatabases, userSetUp, setUpDone, signUp, signIn, signOut, getAllDatabases };
+export { userStore, initialized, allDatabases, userSetUp, setUpDone, signUp, signIn, signOut, deleteUser, getAllDatabases };
