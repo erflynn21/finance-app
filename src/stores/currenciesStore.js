@@ -35,14 +35,25 @@ const setCurrencies = () => {
     }
 }
 
-const addCurrencies = async (currencies) => {
-    await userbase.insertItem({ databaseName, item: currencies });
-    setCurrencies();
+const addCurrencies = (currencies) => {
+    try {
+        return userbase.insertItem({ databaseName, item: currencies }).then(() => {
+            setCurrencies();
+        });    
+    } catch (e) {
+        return e
+    }
+    
 };
 
 const updateCurrencies = async (updatedCurrencies, updatedCurrenciesId) => {
-    await userbase.updateItem({ databaseName, item: updatedCurrencies, itemId: updatedCurrenciesId });
-    setCurrencies();
+    try {
+        return userbase.updateItem({ databaseName, item: updatedCurrencies, itemId: updatedCurrenciesId }).then(() => {
+            setCurrencies();
+        });
+    } catch (e) {
+        return e;
+    }
 };
 
 

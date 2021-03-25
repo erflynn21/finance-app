@@ -28,7 +28,7 @@ userbase
             openDatabases(); 
             userStore.set(user);
         }
-         
+        
         if (user.profile === undefined) {
             return;
         } else if (user.profile.setUpDone === 'true') {
@@ -97,6 +97,7 @@ const openDatabases = () => {
     });
     getAllDatabases();
 }
+
 
 const getAllDatabases = () => {
     userbase.getDatabases().then((databases) => {

@@ -61,6 +61,7 @@
     let currencyOptionsSelect;
 
     const setCurrencies = () => {
+        f7.dialog.preloader('Setting up currencies...');
         const baseCurrencySelect = baseSelect.smartSelectInstance();
         const optionsSelect = currencyOptionsSelect.smartSelectInstance();
         newBaseCurrency = baseCurrencySelect.getValue();
@@ -69,9 +70,21 @@
             newBaseCurrency,
             newCurrencyOptions,
         };
-        addCurrencies(currencies).then(() => {
-            nextSlide();
+        addCurrencies(currencies).then((e) => {
+            if (e) {
+                f7.dialog.close();
+                let errorToast = f7.toast.create({
+                    text: e.message,
+                    position: 'center',
+                    closeTimeout: 2000,
+                    cssClass: 'text-align-center',
+                });
+                errorToast.open();
+            } else {
+                nextSlide();
+            }
         });
+        f7.dialog.close();
     };
 
     let swiper;
@@ -130,7 +143,11 @@
                     title="Budget Currency"
                     smartSelect
                     bind:this={baseSelect}
-                    smartSelectParams={{ openIn: 'popover', closeOnSelect: 'true' }}>
+                    smartSelectParams={{
+                        openIn: 'popover',
+                        closeOnSelect: 'true',
+                    }}
+                >
                     <select name="baseCurrency">
                         <CurrenciesList />
                     </select>
@@ -139,7 +156,8 @@
                     title="Currency Options"
                     smartSelect
                     smartSelectParams={{ openIn: 'popover' }}
-                    bind:this={currencyOptionsSelect}>
+                    bind:this={currencyOptionsSelect}
+                >
                     <select name="baseCurrency" multiple>
                         <CurrenciesList />
                     </select>
@@ -197,7 +215,8 @@
             swipeToClose
             id="add"
             backdrop
-            bind:this={addModal}>
+            bind:this={addModal}
+        >
             <Toolbar>
                 <div class="left">Add New Budget</div>
                 <div class="right">

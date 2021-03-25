@@ -21,7 +21,20 @@
             baseCurrency,
             currencyOptions,
         };
-        addCurrencies(currencies);
+        addCurrencies(currencies).then((e) => {
+            if (e) {
+                f7.dialog.close();
+                let errorToast = f7.toast.create({
+                    text: e.message,
+                    position: 'center',
+                    closeTimeout: 2000,
+                    cssClass: 'text-align-center',
+                });
+                errorToast.open();
+            } else {
+                nextSlide();
+            }
+        });
     };
 </script>
 
@@ -43,7 +56,8 @@
             title="Budget Currency"
             smartSelect
             bind:this={baseSelect}
-            smartSelectParams={{ openIn: 'popover', closeOnSelect: 'true' }}>
+            smartSelectParams={{ openIn: 'popover', closeOnSelect: 'true' }}
+        >
             <select name="baseCurrency">
                 <CurrenciesList />
             </select>
@@ -52,7 +66,8 @@
             title="Currency Options"
             smartSelect
             smartSelectParams={{ openIn: 'popover' }}
-            bind:this={currencyOptionsSelect}>
+            bind:this={currencyOptionsSelect}
+        >
             <select name="baseCurrency" multiple>
                 <CurrenciesList />
             </select>

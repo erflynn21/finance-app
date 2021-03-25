@@ -57,7 +57,7 @@ const setExpenses = (items) => {
 
 const addExpense = (expense) => {
     try {
-        userbase.insertItem({ databaseName: get(expensesDatabaseName), item: expense });
+        return userbase.insertItem({ databaseName: get(expensesDatabaseName), item: expense });
     } catch (e) {
         return e;
     }
