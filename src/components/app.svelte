@@ -118,7 +118,7 @@
         {/if}
 
         <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
-        <View id="view-overview" main tab tabActive url="/" />
+        <View id="view-overview" main tabActive tab url="/" />
 
         <!-- Budget View -->
         <View id="view-budget" name="budget" tab url="/budget/" />

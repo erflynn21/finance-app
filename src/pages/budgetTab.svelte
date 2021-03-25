@@ -14,11 +14,14 @@
     import MonthlyBudgetCategory from '../components/monthlyBudgetCategory.svelte';
     import { fade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
+    import { incomesSum } from '../stores/incomesStore';
 
     // percentage and tweened values
     $: percentage = Math.floor((100 / $monthlyBudgetsSum) * $expensesSum) || 0;
     const tweenedPercentage = tweened(0);
     $: tweenedPercentage.set(percentage);
+
+    $: remainingBudget = $incomesSum - $monthlyBudgetsSum;
 </script>
 
 <Page name="budget">
@@ -59,6 +62,18 @@
                                 <span>{percentage}%</span>
                             {/if}
                         </div>
+                    </div>
+                </ListItemRow>
+                <ListItemRow>
+                    <div class="remaining">
+                        {#if remainingBudget > 0}
+                            You have {$baseCurrencySymbol}{remainingBudget}
+                            left to budget this month.
+                        {:else if remainingBudget === 0}
+                            You've budgeted all of your income!
+                        {:else}
+                            You've budgeted more than your income this month!
+                        {/if}
                     </div>
                 </ListItemRow>
             </div>
@@ -131,5 +146,10 @@
         font-weight: 400;
         text-align: center;
         margin: 10px 0 10px 0;
+    }
+
+    .remaining {
+        margin: 10px auto 0 auto;
+        font-size: 14px;
     }
 </style>
