@@ -8,6 +8,7 @@
     import LoginScreenTitle from 'framework7-svelte/components/login-screen-title.svelte';
     import { signIn, signUp } from '../stores/userStore';
     import { f7 } from 'framework7-svelte';
+    import userbase from 'userbase-js';
 
     let username, email, password, password2;
 
@@ -73,6 +74,31 @@
             });
         }
     };
+
+    // const resetPassword = async () => {
+    //     f7.dialog.confirm(
+    //         'A new password will be sent to your email, would you like to continue?',
+    //         async function () {
+    //             f7.dialog.preloader('Sending email...');
+    //             await userbase
+    //                 .forgotPassword({ username })
+    //                 .then(() => {
+    //                     f7.dialog.close();
+    //                     f7.dialog.alert('Email sent successfully!');
+    //                 })
+    //                 .catch((e) => {
+    //                     f7.dialog.close();
+    //                     let errorToast = f7.toast.create({
+    //                         text: e.message,
+    //                         position: 'center',
+    //                         closeTimeout: 2000,
+    //                         cssClass: 'text-align-center',
+    //                     });
+    //                     errorToast.open();
+    //                 });
+    //         }
+    //     );
+    // };
 
     let login = true;
 </script>
@@ -146,6 +172,9 @@
             <ListButton on:click={signInUser} class="white-button"
                 >Sign In</ListButton
             >
+            <!-- <ListButton on:click={resetPassword} class="white-button"
+                >Forgot Password</ListButton
+            > -->
         </List>
         <BlockFooter>
             Don't have an account?

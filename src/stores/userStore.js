@@ -85,17 +85,22 @@ const setUpDone = async () => {
 }
 
 const openDatabases = () => {
-    openCurrenciesDatabase();
-    openMonthlyBudgetsDatabase().then(() => {
-        openBudgetsDatabase()
-    });
-    openExpensesDatabase().then(() => {
-        openMonthlyExpensesDatabase()
-    });
-    openIncomesDatabase().then(() => {
-        openMonthlyIncomesDatabase()
-    });
-    getAllDatabases();
+    try {
+        openCurrenciesDatabase();
+        openMonthlyBudgetsDatabase().then(() => {
+            openBudgetsDatabase()
+        });
+        openExpensesDatabase().then(() => {
+            openMonthlyExpensesDatabase()
+        });
+        openIncomesDatabase().then(() => {
+            openMonthlyIncomesDatabase()
+        });
+        getAllDatabases();
+    } catch (e) {
+        return e
+    }
+    
 }
 
 
