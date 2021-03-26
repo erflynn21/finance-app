@@ -11,6 +11,7 @@ import SetCurrenciesPage from '../pages/setCurrencies.svelte';
 import AuthPage from '../pages/auth.svelte';
 import LoadingScreenPage from '../pages/loadingScreen.svelte';
 import IntroSliderPage from '../pages/introSlider.svelte';
+import AccountPage from '../pages/account.svelte';
 import NotFoundPage from '../pages/404.svelte';
 
 let routes = [
@@ -61,6 +62,10 @@ let routes = [
   {
     path: '/intro-slider',
     component: IntroSliderPage,
+  },
+  {
+    path: '/account/',
+    component: AccountPage,
   },
   {
     path: '(.*)',

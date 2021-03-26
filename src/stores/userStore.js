@@ -70,6 +70,26 @@ const signOut = async () => {
     }
 }
 
+const updateUser = async (user) => {
+    try {
+        if (user.currentPassword && user.newPassword1 && user.newPassword2) {
+            await userbase.updateUser({
+                username: user.username,
+                email: user.email,
+                currentPassword: user.currentPassword,
+                newPassword: user.newPassword1,
+            });
+        } else {
+            await userbase.updateUser({
+                username: user.username,
+                email: user.email
+            });  
+        }
+    } catch (e) {
+        return e;
+    }
+}
+
 const deleteUser = async () => {
     try {
         await userbase.deleteUser();
@@ -120,4 +140,4 @@ const getAllDatabases = () => {
     }).catch((e) => console.error(e))
 }
 
-export { userStore, initialized, allDatabases, userSetUp, setUpDone, signUp, signIn, signOut, deleteUser, getAllDatabases };
+export { userStore, initialized, allDatabases, userSetUp, setUpDone, signUp, signIn, signOut, deleteUser, updateUser, getAllDatabases };
