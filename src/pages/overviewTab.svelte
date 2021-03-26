@@ -35,7 +35,7 @@
     };
 
     // percentage and tweened values
-    $: percentage = Math.floor((100 / $monthlyBudgetsSum) * $expensesSum) || 0;
+    $: percentage = Math.ceil((100 / $monthlyBudgetsSum) * $expensesSum) || 0;
     const tweenedPercentage = tweened(0);
     $: tweenedPercentage.set(percentage);
 </script>

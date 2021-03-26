@@ -80,6 +80,7 @@
                         categoryExpenseTotal + expense.item.amount;
                 }
             });
+            categoryExpenseTotal = Number(categoryExpenseTotal).toFixed(2);
             categoryExpenses = [...categoryExpenses, categoryExpenseTotal];
             categoryExpenseTotal = 0;
         });
