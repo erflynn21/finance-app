@@ -18,6 +18,7 @@
         selectedYear,
     } from '../stores/datesStore';
     import { currentRoute } from '../stores/currentRouteStore';
+    import { convert } from '../js/convert';
     const { Keyboard } = Plugins;
 
     let recurring = false;
@@ -73,7 +74,7 @@
             income.currency = income.currency;
         } else {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
-            await convertAmount().then(f7.dialog.close());
+            await convert(income).then(f7.dialog.close());
         }
 
         if (recurring === false) {
@@ -121,29 +122,10 @@
 
     const clearForm = () => {
         income.title = null;
-        // income.date = calendarDate;
         income.amount = null;
         income.currency = $baseCurrency;
         income.originalCurrency = null;
         income.originalAmount = null;
-        // incomeCurrencyPicker.destroy();
-        // incomeDateCalendar.destroy();
-        // initPickers();
-    };
-
-    const convertAmount = async () => {
-        income.originalAmount = income.amount;
-        income.originalCurrency = income.currency[0];
-
-        let url = `https://api.exchangeratesapi.io/${income.date}?base=${$baseCurrency}&symbols=${income.originalCurrency}`;
-        let response = await fetch(url);
-        let data = await response.json();
-        let rates = JSON.stringify(data.rates);
-        let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-        income.amount = Number(
-            (income.originalAmount / exchangeRate).toFixed(2)
-        );
-        income.currency = $baseCurrency;
     };
 
     let incomeCurrencyPicker;

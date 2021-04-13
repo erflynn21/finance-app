@@ -19,6 +19,7 @@
         selectedMonthName,
         selectedYear,
     } from '../stores/datesStore';
+    import { convert } from '../js/convert';
     const { Keyboard } = Plugins;
 
     let updatedIncome = {
@@ -43,6 +44,9 @@
         f7.dialog.preloader('Updating income...');
         // formats the amount to a number
         updatedIncome.amount = Number(updatedIncome.amount);
+        if (updatedIncome.originalAmount) {
+            updatedIncome.originalAmount = Number(updatedIncome.originalAmount);
+        }
 
         // check whether expense needs to be converted to base currency
         if (
@@ -53,7 +57,7 @@
                 updatedIncome.originalCurrency !== $baseCurrency)
         ) {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
-            await convertAmount();
+            await convert(updatedIncome);
         } else if (updatedIncome.originalCurrency === $baseCurrency) {
             updatedIncome.originalCurrency = null;
             updatedIncome.amount = updatedIncome.originalAmount;
@@ -78,18 +82,6 @@
         });
 
         f7.dialog.close();
-    };
-
-    const convertAmount = async () => {
-        let url = `https://api.exchangeratesapi.io/${updatedIncome.date}?base=${$baseCurrency}&symbols=${updatedIncome.originalCurrency}`;
-        let response = await fetch(url);
-        let data = await response.json();
-        let rates = JSON.stringify(data.rates);
-        let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-        updatedIncome.amount = Number(
-            (updatedIncome.originalAmount / exchangeRate).toFixed(2)
-        );
-        updatedIncome.currency = $baseCurrency;
     };
 
     let editIncomeCurrencyPicker;

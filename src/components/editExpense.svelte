@@ -20,6 +20,7 @@
         selectedMonthName,
         selectedYear,
     } from '../stores/datesStore';
+    import { convert } from '../js/convert';
     const { Keyboard } = Plugins;
 
     let updatedExpense = {
@@ -50,6 +51,11 @@
         f7.dialog.preloader('Updating expense...');
         // formats the amount to a number
         updatedExpense.amount = Number(updatedExpense.amount);
+        if (updatedExpense.originalAmount) {
+            updatedExpense.originalAmount = Number(
+                updatedExpense.originalAmount
+            );
+        }
 
         // check whether expense needs to be converted to base currency
         if (
@@ -60,7 +66,7 @@
                 updatedExpense.originalCurrency !== $baseCurrency)
         ) {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
-            await convertAmount();
+            await convert(updatedExpense);
         } else if (updatedExpense.originalCurrency === $baseCurrency) {
             updatedExpense.originalCurrency = null;
             updatedExpense.amount = updatedExpense.originalAmount;
@@ -85,22 +91,6 @@
         });
 
         f7.dialog.close();
-    };
-
-    const convertAmount = async () => {
-        if (updatedExpense.originalAmount === null) {
-            updatedExpense.originalAmount = updatedExpense.amount;
-            updatedExpense.originalCurrency = updatedExpense.currency;
-        }
-        let url = `https://api.exchangeratesapi.io/${updatedExpense.date}?base=${$baseCurrency}&symbols=${updatedExpense.originalCurrency}`;
-        let response = await fetch(url);
-        let data = await response.json();
-        let rates = JSON.stringify(data.rates);
-        let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-        updatedExpense.amount = Number(
-            (updatedExpense.originalAmount / exchangeRate).toFixed(2)
-        );
-        updatedExpense.currency = $baseCurrency;
     };
 
     let editExpenseCategoryPicker;

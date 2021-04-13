@@ -19,6 +19,7 @@
         selectedYear,
     } from '../stores/datesStore';
     import { currentRoute } from '../stores/currentRouteStore';
+    import { convert } from '../js/convert';
     const { Keyboard } = Plugins;
 
     let recurring = false;
@@ -81,7 +82,7 @@
             expense.currency = expense.currency;
         } else {
             f7.dialog.preloader('Converting to ' + $baseCurrency);
-            await convertAmount().then(f7.dialog.close());
+            await convert(expense).then(f7.dialog.close());
         }
 
         if (recurring === false) {
@@ -134,21 +135,6 @@
         expense.currency = $baseCurrency;
         expense.originalCurrency = null;
         expense.originalAmount = null;
-    };
-
-    const convertAmount = async () => {
-        expense.originalAmount = expense.amount;
-        expense.originalCurrency = expense.currency[0];
-
-        let url = `https://api.exchangeratesapi.io/${expense.date}?base=${$baseCurrency}&symbols=${expense.originalCurrency}`;
-        let response = await fetch(url);
-        let data = await response.json();
-        let rates = JSON.stringify(data.rates);
-        let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-        expense.amount = Number(
-            (expense.originalAmount / exchangeRate).toFixed(2)
-        );
-        expense.currency = $baseCurrency;
     };
 
     let expenseCategoryPicker;

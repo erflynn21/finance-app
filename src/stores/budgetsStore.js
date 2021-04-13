@@ -55,7 +55,7 @@ const setMonthlyBudgets = async (budgets) => {
             }
 
             if (newMonthlyBudget.currency !== get(baseCurrency)) {
-                await convertAmount(newMonthlyBudget);
+                await convert(newMonthlyBudget);
             }
             await addMonthlyBudget(newMonthlyBudget);
         } else {
@@ -63,21 +63,6 @@ const setMonthlyBudgets = async (budgets) => {
         }
     });
 }
-
-const convertAmount = async (newMonthlyBudget) => {
-    newMonthlyBudget.originalAmount = newMonthlyBudget.amount;
-    newMonthlyBudget.originalCurrency = newMonthlyBudget.currency;
-    let date = get(startDate);
-    let url = `https://api.exchangeratesapi.io/${date}?base=${get(baseCurrency)}&symbols=${newMonthlyBudget.originalCurrency}`;
-    let response = await fetch(url);
-    let data = await response.json();
-    let rates = JSON.stringify(data.rates);
-    let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-    newMonthlyBudget.amount = Number(
-        (newMonthlyBudget.originalAmount / exchangeRate).toFixed(2)
-    );
-    newMonthlyBudget.currency = get(baseCurrency);
-};
 
 const addBudget = (budget) => {
     try {

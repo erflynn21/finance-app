@@ -3,6 +3,7 @@ import userbase from 'userbase-js';
 import {incomes, addIncome} from './incomesStore';
 import {baseCurrency} from './currenciesStore'
 import { currentDate, selectedMonth, selectedYear } from './datesStore';
+import { convert } from '../js/convert';
 
 let monthlyIncomes = writable([]);
 const databaseName = `monthlyIncomes`;
@@ -46,7 +47,7 @@ const checkRecurringIncomes = async (monthlyIncomes) => {
             
 
             if (newIncomeFromMonthly.currency !== get(baseCurrency)) {
-                await convertAmount(newIncomeFromMonthly);
+                await convert(newIncomeFromMonthly);
             }
             addIncome(newIncomeFromMonthly);
         } else {
@@ -54,20 +55,6 @@ const checkRecurringIncomes = async (monthlyIncomes) => {
         }
     });
 };
-
-const convertAmount = async (newIncomeFromMonthly) => {
-    newIncomeFromMonthly.originalAmount = newIncomeFromMonthly.amount;
-    newIncomeFromMonthly.originalCurrency = newIncomeFromMonthly.currency;
-    let url = `https://api.exchangeratesapi.io/${newIncomeFromMonthly.date}?base=${get(baseCurrency)}&symbols=${newIncomeFromMonthly.originalCurrency}`;
-    let response = await fetch(url);
-    let data = await response.json();
-    let rates = JSON.stringify(data.rates);
-    let exchangeRate = Number(rates.replace(/[^\d.-]/g, ''));
-    newIncomeFromMonthly.amount = Number(
-        (newIncomeFromMonthly.originalAmount / exchangeRate).toFixed(2)
-    );
-    newIncomeFromMonthly.currency = get(baseCurrency);
-}
 
 const addMonthlyIncome = (monthlyIncome) => {
     try {
