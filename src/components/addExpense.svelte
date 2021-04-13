@@ -130,15 +130,10 @@
 
     const clearForm = () => {
         expense.title = null;
-        // expense.date = calendarDate;
         expense.amount = null;
         expense.currency = $baseCurrency;
         expense.originalCurrency = null;
         expense.originalAmount = null;
-        // expenseCategoryPicker.destroy();
-        // expenseCurrencyPicker.destroy();
-        // expenseDateCalendar.destroy();
-        // initPickers();
     };
 
     const convertAmount = async () => {

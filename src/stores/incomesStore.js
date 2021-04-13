@@ -18,8 +18,7 @@ const openIncomesDatabase = () => {
     })
     } catch(e) {
         return console.log(e);
-    }
-        
+    }     
 }
 
 const setIncomes = (items) => {
