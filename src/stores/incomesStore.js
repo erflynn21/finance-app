@@ -41,7 +41,6 @@ const setIncomes = (items) => {
         );
     })
     incomes.set(a);
-    console.log(a);
 
     // sets the income sum
     let totalIncomes = [];
