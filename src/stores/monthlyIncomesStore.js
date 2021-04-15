@@ -10,11 +10,11 @@ const databaseName = `monthlyIncomes`;
 
 const openMonthlyIncomesDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
-        monthlyIncomes.set(items).then(() => {
-            checkRecurringIncomes(items);
-        });  
+        monthlyIncomes.set(items);
+
     }})
-    .catch((e) => console.log(e));
+    .catch((e) => console.log(e))
+    .finally(() => checkRecurringIncomes(items));
 }
 
 
@@ -49,6 +49,7 @@ const checkRecurringIncomes = async (monthlyIncomes) => {
             if (newIncomeFromMonthly.currency !== get(baseCurrency)) {
                 await convert(newIncomeFromMonthly);
             }
+
             addIncome(newIncomeFromMonthly);
         } else {
             return;
