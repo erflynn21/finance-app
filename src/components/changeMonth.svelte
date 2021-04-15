@@ -11,7 +11,6 @@
         selectedMonth,
     } from '../stores/datesStore';
     import { monthsDict } from '../stores/dictionariesStore';
-    import { allDatabases, getAllDatabases } from '../stores/userStore';
     import {
         allExpenses,
         expensesDatabaseName,
@@ -29,6 +28,8 @@
         openMonthlyBudgetsDatabase,
     } from '../stores/monthlyBudgetsStore';
     import { budgets, setMonthlyBudgets } from '../stores/budgetsStore';
+    import { getAllDatabases } from '../js/databases';
+    import { allDatabases } from '../stores/userStore';
     const dispatch = createEventDispatcher();
 
     const changeMonth = () => {

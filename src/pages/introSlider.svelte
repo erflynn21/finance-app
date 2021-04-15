@@ -11,7 +11,6 @@
     import { addCurrencies } from '../stores/currenciesStore';
     import SettingsSwiper from '../components/settingsSwiper.svelte';
     import { budgets } from '../stores/budgetsStore';
-    import { setUpDone } from '../stores/userStore';
     import { flip } from 'svelte/animate';
     import Navbar from 'framework7-svelte/components/navbar.svelte';
     import { Plugins } from '@capacitor/core';
@@ -19,6 +18,7 @@
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
     import AddBudget from '../components/addBudget.svelte';
+    import { setUpDone } from '../js/auth';
     const { Keyboard } = Plugins;
 
     // opens add modal

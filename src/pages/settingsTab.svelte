@@ -1,11 +1,10 @@
 <script>
     import { Page, Navbar } from 'framework7-svelte';
-    import { deleteUser, signOut } from '../stores/userStore';
     import { f7 } from 'framework7-svelte';
     import Button from 'framework7-svelte/components/button.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
-    import Block from 'framework7-svelte/components/block.svelte';
+    import { signOut } from '../js/auth';
 
     // sign out
     const signOutUser = async () => {

@@ -6,10 +6,11 @@
     import Block from 'framework7-svelte/components/block.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import ListInput from 'framework7-svelte/components/list-input.svelte';
-    import { deleteUser, updateUser, userStore } from '../stores/userStore';
     import { f7 } from 'framework7-svelte';
     import BlockHeader from 'framework7-svelte/components/block-header.svelte';
     import ListButton from 'framework7-svelte/components/list-button.svelte';
+    import { deleteUser, updateUser } from '../js/auth';
+    import { userStore } from '../stores/userStore';
 
     let user = {
         username: $userStore.username,

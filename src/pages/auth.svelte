@@ -6,9 +6,9 @@
     import ListInput from 'framework7-svelte/components/list-input.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import LoginScreenTitle from 'framework7-svelte/components/login-screen-title.svelte';
-    import { signIn, signUp } from '../stores/userStore';
     import { f7 } from 'framework7-svelte';
     import userbase from 'userbase-js';
+    import { signIn, signUp } from '../js/auth';
 
     let username, email, password, password2;
 
