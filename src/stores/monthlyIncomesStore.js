@@ -11,10 +11,9 @@ const databaseName = `monthlyIncomes`;
 const openMonthlyIncomesDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
         monthlyIncomes.set(items);
-
     }})
     .catch((e) => console.log(e))
-    .finally(() => checkRecurringIncomes(items));
+    .finally(() => checkRecurringIncomes(get(monthlyIncomes)));
 }
 
 

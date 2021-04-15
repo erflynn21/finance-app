@@ -13,7 +13,7 @@ const openMonthlyExpensesDatabase = () => {
         monthlyExpenses.set(items);
     }})
     .catch((e) => console.log(e))
-    .finally(() => checkRecurringExpenses(items));
+    .finally(() => checkRecurringExpenses(get(monthlyExpenses)));
 }
 
 
