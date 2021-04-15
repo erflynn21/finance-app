@@ -8,9 +8,9 @@
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
     const { Keyboard } = Plugins;
-    import { addBudget } from '../stores/budgetsStore';
     import { baseCurrency, allCurrencies } from '../stores/currenciesStore';
-    import { onDestroy, onMount } from 'svelte';
+    import { onMount } from 'svelte';
+    import { addBudget } from '../js/budgets';
 
     let budget = {};
     // checks to make sure there's a base currency before setting the expense values

@@ -27,9 +27,10 @@
         monthlyBudgetsDatabaseName,
         openMonthlyBudgetsDatabase,
     } from '../stores/monthlyBudgetsStore';
-    import { budgets, setMonthlyBudgets } from '../stores/budgetsStore';
     import { getAllDatabases } from '../js/databases';
     import { allDatabases } from '../stores/userStore';
+    import { budgets } from '../stores/budgetsStore';
+    import { setMonthlyBudgets } from '../js/budgets';
     const dispatch = createEventDispatcher();
 
     const changeMonth = () => {

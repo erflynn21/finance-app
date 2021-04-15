@@ -4,7 +4,6 @@
     import ListInput from 'framework7-svelte/components/list-input.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import { f7 } from 'framework7-svelte';
-    import { updateBudget } from '../stores/budgetsStore';
     import { allCurrencies } from '../stores/currenciesStore';
     import Button from 'framework7-svelte/components/button.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
@@ -14,6 +13,7 @@
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
+import { updateBudget } from '../js/budgets';
     const { Keyboard } = Plugins;
 
     let updatedBudget = {

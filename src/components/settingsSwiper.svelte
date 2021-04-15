@@ -17,10 +17,10 @@
     import EditMonthlyExpense from './editMonthlyExpense.svelte';
     import EditMonthlyIncome from './editMonthlyIncome.svelte';
     import { Plugins } from '@capacitor/core';
-    import { deleteBudget } from '../stores/budgetsStore';
     import { deleteMonthlyExpense } from '../stores/monthlyExpensesStore';
     import { deleteMonthlyIncome } from '../stores/monthlyIncomesStore';
     import { f7 } from 'framework7-svelte';
+    import { deleteBudget } from '../js/budgets';
     const { Keyboard } = Plugins;
 
     $: if (editing === true) {
