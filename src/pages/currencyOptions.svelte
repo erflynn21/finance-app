@@ -3,8 +3,7 @@
     import {
         currencies,
         baseCurrency,
-        currencyOptions,
-        updateCurrencies,
+        currencyOptions
     } from '../stores/currenciesStore';
     import Block from 'framework7-svelte/components/block.svelte';
     import Button from 'framework7-svelte/components/button.svelte';
@@ -14,6 +13,7 @@
     import { onMount } from 'svelte';
     import { hideFAB, showFAB } from '../js/fab';
     import { f7 } from 'framework7-svelte';
+import { updateCurrencies } from '../js/currencies';
 
     let updatedCurrencyOptions;
     let currencyOptionsSelect;

@@ -4,8 +4,8 @@
     import Button from 'framework7-svelte/components/button.svelte';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import List from 'framework7-svelte/components/list.svelte';
+    import { addCurrencies } from '../js/currencies';
     import CurrenciesList from '../shared/currenciesList.svelte';
-    import { addCurrencies } from '../stores/currenciesStore';
 
     let baseCurrency;
     let currencyOptions;

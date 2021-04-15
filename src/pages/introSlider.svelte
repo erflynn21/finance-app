@@ -8,7 +8,6 @@
     import SwiperSlide from 'framework7-svelte/components/swiper-slide.svelte';
     import Swiper from 'framework7-svelte/components/swiper.svelte';
     import CurrenciesList from '../shared/currenciesList.svelte';
-    import { addCurrencies } from '../stores/currenciesStore';
     import SettingsSwiper from '../components/settingsSwiper.svelte';
     import { budgets } from '../stores/budgetsStore';
     import { flip } from 'svelte/animate';
@@ -19,6 +18,7 @@
     import Link from 'framework7-svelte/components/link.svelte';
     import AddBudget from '../components/addBudget.svelte';
     import { setUpDone } from '../js/auth';
+    import { addCurrencies } from '../js/currencies';
     const { Keyboard } = Plugins;
 
     // opens add modal
