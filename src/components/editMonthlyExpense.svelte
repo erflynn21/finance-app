@@ -10,7 +10,7 @@
     import Block from 'framework7-svelte/components/block.svelte';
     import { onDestroy, onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte';
-    import { updateMonthlyExpense } from '../stores/monthlyExpensesStore';
+    import { updateMonthlyExpense } from '../js/monthlyExpenses';
     const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';

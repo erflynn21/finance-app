@@ -1,10 +1,10 @@
-import { openMonthlyExpensesDatabase } from "../stores/monthlyExpensesStore";
 import { openMonthlyIncomesDatabase } from "../stores/monthlyIncomesStore";
 import { openBudgetsDatabase } from "./budgets";
 import { openCurrenciesDatabase } from "./currencies";
 import { openExpensesDatabase } from "./expenses";
 import { openIncomesDatabase } from "./incomes";
 import { openMonthlyBudgetsDatabase } from "./monthlyBudgets";
+import { openMonthlyExpensesDatabase } from "./monthlyExpenses";
 
 const openDatabases = () => {
     try {

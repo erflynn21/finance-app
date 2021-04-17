@@ -17,7 +17,7 @@
     import EditMonthlyExpense from './editMonthlyExpense.svelte';
     import EditMonthlyIncome from './editMonthlyIncome.svelte';
     import { Plugins } from '@capacitor/core';
-    import { deleteMonthlyExpense } from '../stores/monthlyExpensesStore';
+    import { deleteMonthlyExpense } from '../js/monthlyExpenses';
     import { deleteMonthlyIncome } from '../stores/monthlyIncomesStore';
     import { f7 } from 'framework7-svelte';
     import { deleteBudget } from '../js/budgets';

@@ -1,0 +1,84 @@
+import {get} from 'svelte/store';
+import {expenses} from '../stores/expensesStore';
+import { addExpense } from './expenses';
+import {baseCurrency} from '../stores/currenciesStore'
+import userbase from 'userbase-js';
+import { currentDate, selectedMonth, selectedYear } from '../stores/datesStore';
+import { convert } from './convert';
+import {monthlyExpenses} from '../stores/monthlyExpensesStore';
+const databaseName = `monthlyExpenses`;
+
+const openMonthlyExpensesDatabase = () => {
+    userbase.openDatabase({ databaseName, changeHandler: function (items) {
+        monthlyExpenses.set(items);
+        checkRecurringExpenses(items)
+    }})
+    .catch((e) => console.log(e));
+}
+
+
+
+const checkRecurringExpenses = async (monthlyExpenses) => {
+    let newExpenseFromMonthly;
+    monthlyExpenses.forEach(async monthlyExpense => {
+        let result = get(expenses).filter((expense) => (expense.item.title === monthlyExpense.item.title));
+        if (result.length == 0 && Number(monthlyExpense.item.recurringDate) <= get(currentDate)) {
+            if (get(selectedMonth) < 10) {
+                newExpenseFromMonthly = {
+                    title: monthlyExpense.item.title,
+                    amount: monthlyExpense.item.amount,
+                    category: monthlyExpense.item.category,
+                    date: get(selectedYear) + '-0' + get(selectedMonth) + '-' + monthlyExpense.item.recurringDate,
+                    currency: monthlyExpense.item.currency,
+                    originalAmount: null,
+                    originalCurrency: null,
+                }
+            } else {
+                newExpenseFromMonthly = {
+                    title: monthlyExpense.item.title,
+                    amount: monthlyExpense.item.amount,
+                    category: monthlyExpense.item.category,
+                    date: get(selectedYear) + '-' + get(selectedMonth) + '-' + monthlyExpense.item.recurringDate,
+                    currency: monthlyExpense.item.currency,
+                    originalAmount: null,
+                    originalCurrency: null,
+                }
+            }
+            
+            
+
+            if (newExpenseFromMonthly.currency !== get(baseCurrency)) {
+                await convert(newExpenseFromMonthly);
+            }
+            addExpense(newExpenseFromMonthly);
+        } else {
+            return;
+        }
+    });
+};
+
+const addMonthlyExpense = (monthlyExpense) => {
+    try {
+        return userbase.insertItem({ databaseName, item: monthlyExpense });
+    } catch (e) {
+        return e;
+    }
+};
+
+const updateMonthlyExpense = (monthlyExpense, monthlyExpenseId) => {
+    try {
+        return userbase.updateItem({ databaseName, item: monthlyExpense, itemId: monthlyExpenseId });
+    } catch (e) {
+        return e;
+    }
+};
+
+const deleteMonthlyExpense = (monthlyExpenseId) => {
+    try {
+        return userbase.deleteItem({ databaseName, itemId: monthlyExpenseId });
+    } catch (e) {
+        return e;
+    }
+}
+
+export {openMonthlyExpensesDatabase, addMonthlyExpense, updateMonthlyExpense, deleteMonthlyExpense};
