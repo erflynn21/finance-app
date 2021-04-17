@@ -5,7 +5,7 @@
     import Block from 'framework7-svelte/components/block.svelte';
     import ListInput from 'framework7-svelte/components/list-input.svelte';
     import List from 'framework7-svelte/components/list.svelte';
-    import { addMonthlyIncome } from '../stores/monthlyIncomesStore';
+    import { addMonthlyIncome } from '../js/monthlyIncomes';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';

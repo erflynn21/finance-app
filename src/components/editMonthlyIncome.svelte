@@ -14,7 +14,7 @@
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
-    import { updateMonthlyIncome } from '../stores/monthlyIncomesStore';
+    import { updateMonthlyIncome } from '../js/monthlyIncomes';
     const { Keyboard } = Plugins;
 
     let updatedMonthlyIncome = {
