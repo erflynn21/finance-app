@@ -6,7 +6,6 @@
     import ListInput from 'framework7-svelte/components/list-input.svelte';
     import List from 'framework7-svelte/components/list.svelte';
     import { addMonthlyIncome } from '../stores/monthlyIncomesStore';
-    import { addIncome } from '../stores/incomesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';
@@ -19,6 +18,7 @@
     } from '../stores/datesStore';
     import { currentRoute } from '../stores/currentRouteStore';
     import { convert } from '../js/convert';
+    import { addIncome } from '../js/incomes';
     const { Keyboard } = Plugins;
 
     let recurring = false;

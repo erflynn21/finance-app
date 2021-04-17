@@ -1,6 +1,7 @@
 import {get, writable} from 'svelte/store';
 import userbase from 'userbase-js';
-import {incomes, addIncome} from './incomesStore';
+import {incomes} from './incomesStore';
+import { addIncome } from '../js/incomes';
 import {baseCurrency} from './currenciesStore'
 import { currentDate, selectedMonth, selectedYear } from './datesStore';
 import { convert } from '../js/convert';
@@ -11,9 +12,9 @@ const databaseName = `monthlyIncomes`;
 const openMonthlyIncomesDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
         monthlyIncomes.set(items);
+        checkRecurringIncomes(items);
     }})
-    .catch((e) => console.log(e))
-    .finally(() => checkRecurringIncomes(get(monthlyIncomes)));
+    .catch((e) => console.log(e));
 }
 
 

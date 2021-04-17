@@ -13,12 +13,7 @@
     import { monthsDict } from '../stores/dictionariesStore';
     import { allExpenses, expensesDatabaseName } from '../stores/expensesStore';
     import { openExpensesDatabase, setExpenses } from '../js/expenses';
-    import {
-        allIncomes,
-        incomesDatabaseName,
-        openIncomesDatabase,
-        setIncomes,
-    } from '../stores/incomesStore';
+    import { allIncomes, incomesDatabaseName } from '../stores/incomesStore';
     import {
         monthlyBudgetsDatabaseName,
         openMonthlyBudgetsDatabase,
@@ -27,6 +22,7 @@
     import { allDatabases } from '../stores/userStore';
     import { budgets } from '../stores/budgetsStore';
     import { setMonthlyBudgets } from '../js/budgets';
+    import { openIncomesDatabase, setIncomes } from '../js/incomes';
     const dispatch = createEventDispatcher();
 
     const changeMonth = () => {

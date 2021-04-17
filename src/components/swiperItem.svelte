@@ -16,7 +16,7 @@
     import { removeAllListeners } from 'process';
     import { f7 } from 'framework7-svelte';
     import { deleteExpense } from '../js/expenses';
-    import { deleteIncome } from '../stores/incomesStore';
+    import { deleteIncome } from '../js/incomes';
     const { Keyboard } = Plugins;
 
     $: if (editing === true) {

@@ -13,13 +13,13 @@
     import { Plugins } from '@capacitor/core';
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
-    import { updateIncome } from '../stores/incomesStore';
     import {
         selectedMonth,
         selectedMonthName,
         selectedYear,
     } from '../stores/datesStore';
     import { convert } from '../js/convert';
+    import { updateIncome } from '../js/incomes';
     const { Keyboard } = Plugins;
 
     let updatedIncome = {
