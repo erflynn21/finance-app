@@ -3,6 +3,7 @@ import userbase from 'userbase-js';
 import { budgets, budgetsSum, categories } from '../stores/budgetsStore';
 import {baseCurrency} from '../stores/currenciesStore'
 import { monthlyBudgets } from '../stores/monthlyBudgetsStore';
+import { convert } from './convert';
 import { addMonthlyBudget } from './monthlyBudgets';
 const databaseName = `budgets`;
 

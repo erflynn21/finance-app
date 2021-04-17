@@ -5,6 +5,8 @@ import { openIncomesDatabase } from "./incomes";
 import { openMonthlyBudgetsDatabase } from "./monthlyBudgets";
 import { openMonthlyExpensesDatabase } from "./monthlyExpenses";
 import { openMonthlyIncomesDatabase } from "./monthlyIncomes";
+import {allDatabases} from '../stores/userStore';
+import userbase from 'userbase-js';
 
 const openDatabases = () => {
     try {
@@ -27,7 +29,6 @@ const openDatabases = () => {
 const getAllDatabases = () => {
     userbase.getDatabases().then((databases) => {
         allDatabases.set(databases);
-        // console.log(get(allDatabases));
     }).catch((e) => console.error(e))
 }
 
