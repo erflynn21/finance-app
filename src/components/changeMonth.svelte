@@ -11,12 +11,8 @@
         selectedMonth,
     } from '../stores/datesStore';
     import { monthsDict } from '../stores/dictionariesStore';
-    import {
-        allExpenses,
-        expensesDatabaseName,
-        openExpensesDatabase,
-        setExpenses,
-    } from '../stores/expensesStore';
+    import { allExpenses, expensesDatabaseName } from '../stores/expensesStore';
+    import { openExpensesDatabase, setExpenses } from '../js/expenses';
     import {
         allIncomes,
         incomesDatabaseName,

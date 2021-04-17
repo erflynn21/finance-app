@@ -1,5 +1,6 @@
 import {get, writable} from 'svelte/store';
-import {expenses, addExpense} from './expensesStore';
+import {expenses} from './expensesStore';
+import { addExpense } from '../js/expenses';
 import {baseCurrency} from './currenciesStore'
 import userbase from 'userbase-js';
 import { currentDate, selectedMonth, selectedYear } from './datesStore';
@@ -11,9 +12,9 @@ const databaseName = `monthlyExpenses`;
 const openMonthlyExpensesDatabase = () => {
     userbase.openDatabase({ databaseName, changeHandler: function (items) {
         monthlyExpenses.set(items);
+        checkRecurringExpenses(items)
     }})
-    .catch((e) => console.log(e))
-    .finally(() => checkRecurringExpenses(get(monthlyExpenses)));
+    .catch((e) => console.log(e));
 }
 
 
@@ -44,6 +45,7 @@ const checkRecurringExpenses = async (monthlyExpenses) => {
                     originalCurrency: null,
                 }
             }
+            
             
 
             if (newExpenseFromMonthly.currency !== get(baseCurrency)) {

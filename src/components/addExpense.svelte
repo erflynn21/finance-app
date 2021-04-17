@@ -6,7 +6,6 @@
     import { allCurrencies, baseCurrency } from '../stores/currenciesStore';
     import Button from 'framework7-svelte/components/button.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
-    import { addExpense, expenses } from '../stores/expensesStore';
     import { addMonthlyExpense } from '../stores/monthlyExpensesStore';
     import ListItem from 'framework7-svelte/components/list-item.svelte';
     import { Plugins } from '@capacitor/core';
@@ -20,6 +19,7 @@
     } from '../stores/datesStore';
     import { currentRoute } from '../stores/currentRouteStore';
     import { convert } from '../js/convert';
+    import { addExpense } from '../js/expenses';
     const { Keyboard } = Plugins;
 
     let recurring = false;

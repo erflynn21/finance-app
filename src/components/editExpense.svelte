@@ -9,7 +9,6 @@
     import Button from 'framework7-svelte/components/button.svelte';
     import Block from 'framework7-svelte/components/block.svelte';
     import { onDestroy, onMount } from 'svelte';
-    import { updateExpense } from '../stores/expensesStore';
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
     import { Plugins } from '@capacitor/core';
@@ -21,6 +20,7 @@
         selectedYear,
     } from '../stores/datesStore';
     import { convert } from '../js/convert';
+    import { updateExpense } from '../js/expenses';
     const { Keyboard } = Plugins;
 
     let updatedExpense = {

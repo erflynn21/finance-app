@@ -15,7 +15,7 @@
     import { Plugins } from '@capacitor/core';
     import { removeAllListeners } from 'process';
     import { f7 } from 'framework7-svelte';
-    import { deleteExpense } from '../stores/expensesStore';
+    import { deleteExpense } from '../js/expenses';
     import { deleteIncome } from '../stores/incomesStore';
     const { Keyboard } = Plugins;
 
