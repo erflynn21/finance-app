@@ -10,7 +10,7 @@
     const dispatch = createEventDispatcher();
     import Row from 'framework7-svelte/components/row.svelte';
     import Col from 'framework7-svelte/components/col.svelte';
-    import { updateMonthlyBudget } from '../stores/monthlyBudgetsStore';
+    import { updateMonthlyBudget } from '../js/monthlyBudgets';
 
     let updatedMonthlyBudget = {
         title: item.title,

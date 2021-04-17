@@ -2,7 +2,8 @@ import {get} from 'svelte/store';
 import userbase from 'userbase-js';
 import { budgets, budgetsSum, categories } from '../stores/budgetsStore';
 import {baseCurrency} from '../stores/currenciesStore'
-import { addMonthlyBudget, monthlyBudgets } from '../stores/monthlyBudgetsStore';
+import { monthlyBudgets } from '../stores/monthlyBudgetsStore';
+import { addMonthlyBudget } from './monthlyBudgets';
 const databaseName = `budgets`;
 
 const openBudgetsDatabase = () => {

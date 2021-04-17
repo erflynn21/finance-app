@@ -14,15 +14,13 @@
     import { allExpenses, expensesDatabaseName } from '../stores/expensesStore';
     import { openExpensesDatabase, setExpenses } from '../js/expenses';
     import { allIncomes, incomesDatabaseName } from '../stores/incomesStore';
-    import {
-        monthlyBudgetsDatabaseName,
-        openMonthlyBudgetsDatabase,
-    } from '../stores/monthlyBudgetsStore';
+    import { monthlyBudgetsDatabaseName } from '../stores/monthlyBudgetsStore';
     import { getAllDatabases } from '../js/databases';
     import { allDatabases } from '../stores/userStore';
     import { budgets } from '../stores/budgetsStore';
     import { setMonthlyBudgets } from '../js/budgets';
     import { openIncomesDatabase, setIncomes } from '../js/incomes';
+    import { openMonthlyBudgetsDatabase } from '../js/monthlyBudgets';
     const dispatch = createEventDispatcher();
 
     const changeMonth = () => {

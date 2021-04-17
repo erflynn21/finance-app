@@ -13,7 +13,7 @@
     import Toolbar from 'framework7-svelte/components/toolbar.svelte';
     import Link from 'framework7-svelte/components/link.svelte';
     import EditMonthlyBudget from './editMonthlyBudget.svelte';
-    import { deleteMonthlyBudget } from '../stores/monthlyBudgetsStore';
+    import { deleteMonthlyBudget } from '../js/monthlyBudgets';
     import SwiperItem from './swiperItem.svelte';
     import Icon from 'framework7-svelte/components/icon.svelte';
     import { f7 } from 'framework7-svelte';
