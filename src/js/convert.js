@@ -7,14 +7,23 @@ const convert = async (item) => {
         item.originalAmount = item.amount;
         item.originalCurrency = item.currency[0];
     }
-    let date; 
-    if (!item.date) {
-        date = get(startDate);
-    } else {
-        date = item.date
+
+    if (!item.originalAmount) {
+        item.originalAmount = item.amount;
+        item.originalCurrency = item.currency;
     }
 
-    let url = `https://api.exchangerate.host/convert?from=${get(baseCurrency)}&to=${item.originalCurrency}&date=${date}`;
+    let date;
+    let originalCurrency; 
+    if (!item.date) {
+        date = get(startDate);
+        originalCurrency = item.currency
+    } else {
+        date = item.date;
+        originalCurrency = item.originalCurrency
+    }
+
+    let url = `https://api.exchangerate.host/convert?from=${get(baseCurrency)}&to=${originalCurrency}&date=${date}`;
     let response = await fetch(url);
     let data = await response.json();
     let exchangeRate = Number(JSON.stringify(data.info.rate));
