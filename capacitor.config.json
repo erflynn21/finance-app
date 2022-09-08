@@ -1,22 +1,13 @@
 {
-  "appId": "com.evanflynn.expatexpenses",
+  "appId": "com.cumuluscreative.expatexpenses",
   "appName": "Expat Expenses",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
   "plugins": {
     "SplashScreen": {
-      "launchAutoHide": false,
-      "showSpinner": true,
-      "spinnerColor": "#ffffff"
-    },
-    "Keyboard": {
-      "resize": "none"
+      "launchShowDuration": 0
     }
   },
-  "cordova": {},
-  "server": {
-	  "url": "http://127.0.0.1:8080",
-	  "cleartext": true
-  }
+  "cordova": {}
 }

@@ -1,27 +1,26 @@
 {
   "cwd": "/Users/evan/Cumulus/Expat Expenses/expat-expenses-app",
   "type": [
-    "web",
-    "pwa"
+    "capacitor"
   ],
   "name": "Expat Expenses",
   "framework": "svelte",
   "template": "tabs",
-  "bundler": "webpack",
+  "bundler": "vite",
   "cssPreProcessor": false,
   "theming": {
     "customColor": true,
-    "color": "#008000",
+    "color": "#047857",
     "darkTheme": false,
     "iconFonts": true,
-    "fillBars": true
+    "fillBars": false
   },
   "customBuild": false,
-  "webpack": {
-    "developmentSourceMap": true,
-    "productionSourceMap": true,
-    "hashAssets": false,
-    "preserveAssetsPaths": false,
-    "inlineAssets": true
+  "pkg": "com.cumuluscreative.expatexpenses",
+  "capacitor": {
+    "platforms": [
+      "ios",
+      "android"
+    ]
   }
 }
