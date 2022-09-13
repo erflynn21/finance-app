@@ -23,7 +23,7 @@
     onPopupClosed={() => (popupOpened = false)}
     swipeToClose
 >
-    <Page>
+    <Page class="add-transactions-page">
         <Navbar title="Add Transaction">
             <NavRight>
                 <Link popupClose>Close</Link>

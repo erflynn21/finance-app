@@ -89,6 +89,10 @@ html {
   content: none;
 }
 
+/* .list .item-inner:after {
+  content: none;
+} */
+
 .block-title {
   margin-bottom: 0;
 }
@@ -98,8 +102,52 @@ html {
   font-weight: 300;
 }
 
+.add-transactions-page .page-content {
+  padding-bottom: 0 !important;
+}
+
 .add-form {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
+  margin: 0;
+  /* margin: 10px; */
+  position: fixed;
+  width: 100vw;
+}
+
+.add-form .add-form-input {
+  /* center everything */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-form .add-form-input .item-input-error-message {
+  /* center message */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-form ul {
+  /* make it sticky in one location */
+  position: sticky;
+  /* set height to fill the screen minus navbar and bottom safe area variables */
+  height: calc(100vh - var(--f7-page-navbar-offset) - var(--f7-safe-area-bottom) + 25px);
+  /* height: calc(100vh - ); */
+  padding-top: 10px;
+}
+
+.add-form ul li input {
+  /* padding: 15px !important; */
+  margin: 5px 0;
+}
+
+.add-form .item-floating-label {
+  padding-top: 5px !important;
+}
+
+.add-form .item-inner::after {
+  content: none;
 }
 
 .block {
