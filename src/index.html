@@ -28,4 +28,9 @@
   
   <script type="module" src="./js/app.js"></script>
 </body>
+<script>
+  if (global === undefined) {
+    var global = window;
+  }
+</script>
 </html>

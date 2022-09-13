@@ -1,164 +1,173 @@
-<App { ...f7params } >
-
-  <!-- Left panel with cover effect-->
-  <Panel left cover dark>
-    <View>
-      <Page>
-        <Navbar title="Left Panel"/>
-        <Block>Left panel content goes here</Block>
-      </Page>
-    </View>
-  </Panel>
-
-
-  <!-- Right panel with reveal effect-->
-  <Panel right reveal dark>
-    <View>
-      <Page>
-        <Navbar title="Right Panel"/>
-        <Block>Right panel content goes here</Block>
-      </Page>
-    </View>
-  </Panel>
-
-
-  <!-- Views/Tabs container -->
-  <Views tabs class="safe-areas">
-    <!-- Tabbar for switching views-tabs -->
-    <Toolbar tabbar labels bottom>
-      <Link tabLink="#view-home" tabLinkActive iconIos="f7:house_fill" iconAurora="f7:house_fill" iconMd="material:home" text="Home" />
-      <Link tabLink="#view-catalog" iconIos="f7:square_list_fill" iconAurora="f7:square_list_fill" iconMd="material:view_list" text="Catalog" />
-      <Link tabLink="#view-settings" iconIos="f7:gear" iconAurora="f7:gear" iconMd="material:settings" text="Settings" />
-    </Toolbar>
-
-    <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
-    <View id="view-home" main tab tabActive url="/" />
-
-    <!-- Catalog View -->
-    <View id="view-catalog" name="catalog" tab url="/catalog/" />
-
-    <!-- Settings View -->
-    <View id="view-settings" name="settings" tab url="/settings/" />
-
-  </Views>
-
-
-  <!-- Popup -->
-  <Popup id="my-popup">
-    <View>
-      <Page>
-        <Navbar title="Popup">
-          <NavRight>
-            <Link popupClose>Close</Link>
-          </NavRight>
-        </Navbar>
-        <Block>
-          <p>Popup content goes here.</p>
-        </Block>
-      </Page>
-    </View>
-  </Popup>
-
-  <LoginScreen id="my-login-screen">
-    <View>
-      <Page loginScreen>
-        <LoginScreenTitle>Login</LoginScreenTitle>
-        <List form>
-          <ListInput
-            type="text"
-            name="username"
-            placeholder="Your username"
-            bind:value={username}
-          />
-          <ListInput
-            type="password"
-            name="password"
-            placeholder="Your password"
-            bind:value={password}
-          />
-        </List>
-        <List>
-          <ListButton title="Sign In" onClick={() => alertLoginData()} />
-        </List>
-        <BlockFooter>
-          Some text about login information.<br />Click "Sign In" to close Login Screen
-        </BlockFooter>
-      </Page>
-    </View>
-  </LoginScreen>
-</App>
 <script>
-  import { onMount } from 'svelte';
-  import { getDevice }  from 'framework7/lite-bundle';
-  import {
-    f7,
-    f7ready,
-    App,
-    Panel,
-    Views,
-    View,
-    Popup,
-    Page,
-    Navbar,
-    Toolbar,
-    NavRight,
-    Link,
-    Block,
-    BlockTitle,
-    LoginScreen,
-    LoginScreenTitle,
-    List,
-    ListItem,
-    ListInput,
-    ListButton,
-    BlockFooter
-  } from 'framework7-svelte';
+    import { onMount } from 'svelte';
+    import { getDevice } from 'framework7/lite-bundle';
+    import {
+        f7,
+        f7ready,
+        App,
+        Views,
+        View,
+        Toolbar,
+        Link,
+    } from 'framework7-svelte';
 
-  import capacitorApp from '../js/capacitor-app';
-  import routes from '../js/routes';
-  import store from '../js/store';
+    import { initialized, userStore } from '../stores/userStore';
+    import { initUserbase } from '../js/init.js';
+    initUserbase();
 
-  const device = getDevice();
-  // Framework7 Parameters
-  let f7params = {
-    name: 'Expat Expenses', // App name
-    theme: 'auto', // Automatic theme detection
+    import capacitorApp from '../js/capacitor-app';
+    import routes from '../js/routes';
+    import ActionButton from './actionButton.svelte';
 
+    const device = getDevice();
+    // Framework7 Parameters
+    let f7params = {
+        name: 'Expat Expenses', // App name
+        theme: 'auto', // Automatic theme detection
 
-    id: 'com.cumuluscreative.expatexpenses', // App bundle ID
-    // App store
-    store: store,
-    // App routes
-    routes: routes,
+        id: 'com.cumuluscreative.expatexpenses', // App bundle ID
 
-    // Input settings
-    input: {
-      scrollIntoViewOnFocus: device.capacitor,
-      scrollIntoViewCentered: device.capacitor,
-    },
-    // Capacitor Statusbar settings
-    statusbar: {
-      iosOverlaysWebView: true,
-      androidOverlaysWebView: false,
-    },
-  };
-  // Login screen demo data
-  let username = '';
-  let password = '';
+        // App routes
+        routes: routes,
 
-  function alertLoginData() {
-    f7.dialog.alert('Username: ' + username + '<br>Password: ' + password, () => {
-      f7.loginScreen.close();
+        // Input settings
+        input: {
+            scrollIntoViewOnFocus: device.capacitor,
+            scrollIntoViewCentered: device.capacitor,
+        },
+        // Capacitor Statusbar settings
+        statusbar: {
+            iosOverlaysWebView: true,
+            androidOverlaysWebView: false,
+        },
+    };
+
+    onMount(() => {
+        f7ready(() => {
+            // Init capacitor APIs (see capacitor-app.js)
+            if (f7.device.capacitor) {
+                capacitorApp.init(f7);
+            }
+            // Call F7 APIs here
+        });
     });
-  }
-  onMount(() => {
-    f7ready(() => {
-
-      // Init capacitor APIs (see capacitor-app.js)
-      if (f7.device.capacitor) {
-        capacitorApp.init(f7);
-      }
-      // Call F7 APIs here
-    });
-  })
 </script>
+
+<App {...f7params}>
+    <!-- Views/Tabs container -->
+    <Views tabs class="safe-areas">
+        {#if $initialized === false}
+            <View id="view-loading-screen" url="/loading-screen/" />
+        {/if}
+
+        {#if $initialized === true && $userStore === null}
+            <View
+                id="view-auth"
+                url="/auth/"
+                class="safe-areas"
+                style="z-index: 5001;"
+            />
+        {/if}
+
+        {#if $initialized === true && $userStore.profile.onboardingDone === false}
+            <View id="view-onboarding" url="/onboarding/" />
+        {/if}
+
+        {#if $userStore !== null && $userStore.profile.onboardingDone === 'true'}
+            <Toolbar tabbar labels bottom>
+                <Link
+                    tabLink="#view-overview"
+                    tabLinkActive
+                    iconF7="chart_pie"
+                    iconColor="gray"
+                    iconSize="30px"
+                />
+                <Link
+                    tabLink="#view-budget"
+                    iconF7="doc_text"
+                    iconColor="gray"
+                    iconSize="30px"
+                />
+                <Link
+                    tabLink="#view-transactions"
+                    iconF7="money_dollar_circle"
+                    iconColor="gray"
+                    iconSize="30px"
+                />
+                <Link
+                    tabLink="#view-settings"
+                    iconF7="gear"
+                    iconColor="gray"
+                    iconSize="30px"
+                />
+            </Toolbar>
+
+            <ActionButton />
+        {/if}
+
+        {#if $userStore !== null && $userStore.profile.onboardingDone === 'true'}
+            <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
+            <View id="view-overview" main tab tabActive url="/" />
+
+            <!-- Budget View -->
+            <View id="view-budget" name="catalog" tab url="/budget/" />
+
+            <!-- Transactions View -->
+            <View
+                id="view-transactions"
+                name="transactions"
+                tab
+                url="/transactions/"
+            />
+
+            <!-- Settings View -->
+            <View id="view-settings" name="settings" tab url="/settings/" />
+        {/if}
+    </Views>
+</App>
+
+<style>
+    :global(.loader) {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    :global(.tab-link-active .icon) {
+        background: rgb(6, 95, 70);
+        background: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 1) 0%,
+            rgba(5, 150, 105, 1) 100%
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    :global(.fab-right-bottom) {
+        z-index: 5002;
+        bottom: calc(var(--f7-fab-margin) + var(--f7-safe-area-bottom));
+    }
+
+    :global(.fab-backdrop) {
+        z-index: 5002;
+    }
+
+    :global(.fab > a, .fab-buttons a) {
+        box-shadow: none;
+        transition-delay: 0;
+        transition-duration: 200ms;
+    }
+
+    :global(.navbar-bg) {
+        background: rgb(6, 95, 70);
+        background: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 1) 0%,
+            rgba(5, 150, 105, 1) 100%
+        );
+    }
+</style>
