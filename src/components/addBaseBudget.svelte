@@ -3,8 +3,6 @@
     import { onMount } from 'svelte';
     import { addBaseBudget } from '../js/baseBudgets';
     import { budgetCurrency, currencyOptions } from '../stores/currenciesStore';
-    console.log($budgetCurrency);
-    console.log($currencyOptions);
 
     let baseBudget = {
         amount: null,
@@ -33,6 +31,14 @@
     onMount(() => {
         initPickers();
     });
+
+    const clearError = () => {
+        let input = document.getElementById('add-form-input');
+        let error = input.getElementsByClassName('item-input-error-message')[0];
+        if (error) {
+            error.remove();
+        }
+    };
 </script>
 
 <List noHairlines class="add-form">
@@ -50,6 +56,11 @@
         errorMessage="Please provide a valid amount."
         inputStyle="text-align: center; font-size: 1.5rem"
         validate
+        onValidate={(isValid) => {
+            if (isValid) {
+                clearError();
+            }
+        }}
     />
 
     <ListInput
@@ -63,8 +74,7 @@
         bind:value={baseBudget.title}
         clearButton
         required
-        on:input={() => f7.input.validate('#baseBudgetTitle')}
-        errorMessage="Please provide a valid budget title."
+        validate
     />
 
     <ListInput

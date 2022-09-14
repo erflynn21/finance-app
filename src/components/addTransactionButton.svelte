@@ -125,7 +125,6 @@
     };
 
     const clearError = () => {
-        console.log('ran');
         let input = document.getElementById('add-form-input');
         let error = input.getElementsByClassName('item-input-error-message')[0];
         if (error) {
@@ -189,8 +188,7 @@
                 bind:value={transaction.title}
                 clearButton
                 required
-                on:input={() => f7.input.validate('#transactionTitle')}
-                errorMessage="Please provide a valid transaction title."
+                validate
             />
 
             <ListInput
