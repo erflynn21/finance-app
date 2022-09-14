@@ -17,7 +17,7 @@
 
     import capacitorApp from '../js/capacitor-app';
     import routes from '../js/routes';
-    import ActionButton from './actionButton.svelte';
+    import AddTransactionButton from './addTransactionButton.svelte';
 
     const device = getDevice();
     // Framework7 Parameters
@@ -102,7 +102,7 @@
                 />
             </Toolbar>
 
-            <ActionButton />
+            <AddTransactionButton />
         {/if}
 
         {#if $userStore !== null && $userStore.profile.onboardingDone === 'true'}

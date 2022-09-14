@@ -9,16 +9,16 @@ const openCurrenciesDatabase = async () => {
             changeHandler: (items) => {
                 setCurrencies(items);
             }
-        });
+        })
     } catch (e) {
         return e;
     }
 }
 
 const setCurrencies = (items) => {
-    budgetCurrency.set(items[0].baseCurrency);
-    spendingCurrency.set(items[0].spendingCurrency);
-    currencyOptions.set(items[0].currencyOptions);
+    budgetCurrency.set(items[0].item.budgetCurrency);
+    spendingCurrency.set(items[0].item.spendingCurrency);
+    currencyOptions.set(items[0].item.currencyOptions);
 }
 
 const addCurrencies = async (currencies) => {

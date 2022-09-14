@@ -1,6 +1,9 @@
+import { f7 } from 'framework7-svelte';
 import { get } from 'svelte/store';
 import userbase from 'userbase-js';
 import { transactionsDatabaseName, transactions, expenses, expensesSum, income, incomeSum, savings, savingsSum, investments, investmentsSum  } from '../stores/transactionsStore';
+import { budgetCurrency, spendingCurrency } from '../stores/currenciesStore';
+import { convert } from './convert';
 
 const openTransactionsDatabase = async () => {
     try {
@@ -8,6 +11,7 @@ const openTransactionsDatabase = async () => {
             databaseName: get(transactionsDatabaseName),
             changeHandler: (items) => {
                 transactions.set(items);
+                console.log(items);
             },
         });
     } catch (e) {
@@ -143,9 +147,21 @@ const setInvestments = (items) => {
     }, 0));
 }
 
-const addTransaction = (transaction) => {
+const addTransaction = async (transaction) => {
+    f7.dialog.preloader('Adding transaction...');
+    transaction.amount = Number(transaction.amount);
+
+    if (transaction.currency === null) {
+        transaction.currency = get(spendingCurrency);
+    }
+
+    if (transaction.currency !== get(budgetCurrency)) {
+        f7.dialog.preloader('Converting to ' + get(budgetCurrency));
+        await convert(transaction).then(() => f7.dialog.close());
+    }
+
     try {
-        return userbase.insertItem({ databaseName: get(transactionsDatabaseName), item: transaction });
+        return userbase.insertItem({ databaseName: get(transactionsDatabaseName), item: transaction }).then(() => f7.dialog.close());
     } catch (e) {
         return e;
     }

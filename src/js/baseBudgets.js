@@ -60,28 +60,29 @@ const setMonthlyBudgets = async (baseBudgets) => {
     });
 }
 
-const addBudget = (budget) => {
+const addBaseBudget = (baseBudget) => {
+    baseBudget.amount = Number(baseBudget.amount);
     try {
-        return userbase.insertItem({ databaseName, item: budget });
+        return userbase.insertItem({ databaseName, item: baseBudget });
     } catch (e) {
         return e;
     }
 };
 
-const updateBudget = (budget, budgetId) => {
+const updateBaseBudget = (baseBudget, baseBudgetId) => {
     try {
-        return userbase.updateItem({ databaseName, item: budget, itemId: budgetId });
+        return userbase.updateItem({ databaseName, item: baseBudget, itemId: baseBudgetId });
     } catch (e) {
         return e;
     }
 };
 
-const deleteBudget = (budgetId) => {
+const deleteBaseBudget = (baseBudgetId) => {
     try {
-        return userbase.deleteItem({ databaseName, itemId: budgetId });
+        return userbase.deleteItem({ databaseName, itemId: baseBudgetId });
     } catch (e) {
         return e;
     }
 }
 
-export { openBaseBudgetsDatabase, setCategories, setMonthlyBudgets, addBudget, updateBudget, deleteBudget };
+export { openBaseBudgetsDatabase, setCategories, setMonthlyBudgets, addBaseBudget, updateBaseBudget, deleteBaseBudget };

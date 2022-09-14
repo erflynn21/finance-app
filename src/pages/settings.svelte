@@ -33,7 +33,7 @@
     <Navbar title="Settings" />
     <List>
         <ListItem title="Currency Options" link="/currency-options/" />
-        <ListItem title="Budgets" link="/budgets/" />
+        <ListItem title="Budgets" link="/baseBudgets/" />
         <ListItem
             title="Monthly Recurring Expenses"
             link="/monthly-expenses/"

@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
-const budgetCurrency = writable('USD');
-const spendingCurrency = writable('CNY');
-const currencyOptions = writable(['USD', 'CNY']);
+const budgetCurrency = writable(null);
+const spendingCurrency = writable(null);
+const currencyOptions = writable(null);
 
 export { budgetCurrency, currencyOptions, spendingCurrency };

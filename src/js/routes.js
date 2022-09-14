@@ -5,6 +5,7 @@ import TransactionsPage from '../pages/transactions.svelte';
 import SettingsPage from '../pages/settings.svelte';
 import AuthPage from '../pages/auth.svelte';
 import OnboardingPage from '../pages/onboarding.svelte';
+import BaseBudgetsPage from '../pages/baseBudgets.svelte';
 
 import NotFoundPage from '../pages/404.svelte';
 
@@ -36,6 +37,10 @@ var routes = [
   {
     path: '/onboarding/',
     component: OnboardingPage,
+  },
+  {
+    path: '/baseBudgets/',
+    component: BaseBudgetsPage,
   },
   {
     path: '(.*)',
