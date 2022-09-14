@@ -14,7 +14,6 @@
         Button,
     } from 'framework7-svelte';
     import {
-        budgetCurrency,
         spendingCurrency,
         currencyOptions,
     } from '../stores/currenciesStore';
@@ -220,7 +219,7 @@
                 readonly
             />
 
-            {#if transaction.type === 'Expense'}
+            {#if transaction.type === 'Expense' && $categories.length > 0}
                 <div use:initCategoryPicker />
                 <ListInput
                     on:click={initCategoryPicker}

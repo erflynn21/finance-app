@@ -34,7 +34,7 @@ const setCategories = () => {
     if (get(baseBudgets).length > 0) {
         let budgetCategories = [];
         get(baseBudgets).forEach((budget) => {
-            budgetCategories = [...budgetCategories, budget.item.category];
+            budgetCategories = [...budgetCategories, budget.item.title];
         });
         categories.set(budgetCategories);
     }

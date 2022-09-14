@@ -22,7 +22,7 @@
             ],
             on: {
                 close: (values) => {
-                    transaction.currency = values.value[0];
+                    baseBudget.currency = values.value[0];
                 },
             },
         });
@@ -33,17 +33,27 @@
     });
 
     const clearError = () => {
-        let input = document.getElementById('add-form-input');
-        let error = input.getElementsByClassName('item-input-error-message')[0];
+        let error = document.getElementsByClassName(
+            'item-input-error-message'
+        )[0];
         if (error) {
             error.remove();
         }
+    };
+
+    const clearForm = () => {
+        baseBudget = {
+            amount: null,
+            title: '',
+            currency: $budgetCurrency,
+        };
     };
 </script>
 
 <List noHairlines class="add-form">
     <ListInput
         class="add-form-input"
+        id="add-form-input"
         type="number"
         placeholder="Amount"
         bind:value={baseBudget.amount}
@@ -53,7 +63,6 @@
         inputmode="decimal"
         pattern="^[0-9]*\.[0-9][0-9]$"
         required
-        errorMessage="Please provide a valid amount."
         inputStyle="text-align: center; font-size: 1.5rem"
         validate
         onValidate={(isValid) => {
@@ -86,5 +95,7 @@
         inputId="transaction-currency"
     />
 
-    <Button on:click={() => addBaseBudget(baseBudget)} large>Add</Button>
+    <Button on:click={() => addBaseBudget(baseBudget).then(clearForm)} large
+        >Add</Button
+    >
 </List>

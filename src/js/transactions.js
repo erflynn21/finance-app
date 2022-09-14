@@ -11,7 +11,6 @@ const openTransactionsDatabase = async () => {
             databaseName: get(transactionsDatabaseName),
             changeHandler: (items) => {
                 transactions.set(items);
-                console.log(items);
             },
         });
     } catch (e) {
