@@ -5,16 +5,16 @@ import { openMonthlyBudgetsDatabase } from './monthlyBudgets.js';
 import { openRecurringTransactionsDatabase } from './recurringTransactions.js';
 
 const openDatabases = () => {
-    // open currencies database
-    openCurrenciesDatabase();
-    // open base budgets
-    openBaseBudgetsDatabase();
     // open transactions
-    openTransactionsDatabase();
+    openTransactionsDatabase()
+    // open currencies database
+    openCurrenciesDatabase()
     // open monthlBudgets
-    openMonthlyBudgetsDatabase();
+    openMonthlyBudgetsDatabase().then(() => {
+        openBaseBudgetsDatabase();
+    })
     // open recurring transactions
-    openRecurringTransactionsDatabase();
+    openRecurringTransactionsDatabase()
 }
 
 export { openDatabases };

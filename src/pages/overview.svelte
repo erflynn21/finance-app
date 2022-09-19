@@ -13,6 +13,7 @@
     // import { selectedMonthName, selectedYear } from '../stores/datesStore';
     // import { expensesSum } from '../stores/expensesStore';
     import { tweened } from 'svelte/motion';
+    import AddTransactionButton from '../components/addTransactionButton.svelte';
     // import { monthlyBudgetsSum } from '../stores/monthlyBudgetsStore';
     // import { incomesSum } from '../stores/incomesStore';
     // import ChangeMonth from '../components/changeMonth.svelte';
@@ -175,6 +176,8 @@
             <ChangeMonth on:collapse={closeModal} />
         </Sheet>
     {/if} -->
+
+    <AddTransactionButton />
 </Page>
 
 <style>

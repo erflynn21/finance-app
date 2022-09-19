@@ -13,6 +13,7 @@
 
     import { initialized, userStore } from '../stores/userStore';
     import { initUserbase } from '../js/init.js';
+    import { budgetCurrency } from '../stores/currenciesStore';
     initUserbase();
 
     import capacitorApp from '../js/capacitor-app';
@@ -69,59 +70,61 @@
             />
         {/if}
 
-        {#if $initialized === true && $userStore.profile.onboardingDone === false}
-            <View id="view-onboarding" url="/onboarding/" />
-        {/if}
+        {#if $userStore !== null}
+            {#if $initialized === true && $userStore.profile.onboardingDone === false}
+                <View id="view-onboarding" url="/onboarding/" />
+            {/if}
 
-        {#if $userStore !== null && $userStore.profile.onboardingDone === 'true'}
-            <Toolbar tabbar labels bottom>
-                <Link
-                    tabLink="#view-overview"
-                    tabLinkActive
-                    iconF7="chart_pie"
-                    iconColor="gray"
-                    iconSize="30px"
+            {#if $userStore !== null && $userStore.profile.onboardingDone === 'true'}
+                <Toolbar tabbar labels bottom>
+                    <Link
+                        tabLink="#view-overview"
+                        tabLinkActive
+                        iconF7="chart_pie"
+                        iconColor="gray"
+                        iconSize="30px"
+                    />
+                    <Link
+                        tabLink="#view-budget"
+                        iconF7="doc_text"
+                        iconColor="gray"
+                        iconSize="30px"
+                    />
+                    <Link
+                        tabLink="#view-transactions"
+                        iconF7="money_dollar_circle"
+                        iconColor="gray"
+                        iconSize="30px"
+                    />
+                    <Link
+                        tabLink="#view-settings"
+                        iconF7="gear"
+                        iconColor="gray"
+                        iconSize="30px"
+                    />
+                </Toolbar>
+
+                <!-- <AddTransactionButton /> -->
+            {/if}
+
+            {#if $userStore !== null && $userStore.profile.onboardingDone === 'true' && $budgetCurrency !== null}
+                <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
+                <View id="view-overview" main tab tabActive url="/" />
+
+                <!-- Budget View -->
+                <View id="view-budget" name="catalog" tab url="/budget/" />
+
+                <!-- Transactions View -->
+                <View
+                    id="view-transactions"
+                    name="transactions"
+                    tab
+                    url="/transactions/"
                 />
-                <Link
-                    tabLink="#view-budget"
-                    iconF7="doc_text"
-                    iconColor="gray"
-                    iconSize="30px"
-                />
-                <Link
-                    tabLink="#view-transactions"
-                    iconF7="money_dollar_circle"
-                    iconColor="gray"
-                    iconSize="30px"
-                />
-                <Link
-                    tabLink="#view-settings"
-                    iconF7="gear"
-                    iconColor="gray"
-                    iconSize="30px"
-                />
-            </Toolbar>
 
-            <AddTransactionButton />
-        {/if}
-
-        {#if $userStore !== null && $userStore.profile.onboardingDone === 'true'}
-            <!-- Your main view/tab, should have "view-main" class. It also has "tabActive" prop -->
-            <View id="view-overview" main tab tabActive url="/" />
-
-            <!-- Budget View -->
-            <View id="view-budget" name="catalog" tab url="/budget/" />
-
-            <!-- Transactions View -->
-            <View
-                id="view-transactions"
-                name="transactions"
-                tab
-                url="/transactions/"
-            />
-
-            <!-- Settings View -->
-            <View id="view-settings" name="settings" tab url="/settings/" />
+                <!-- Settings View -->
+                <View id="view-settings" name="settings" tab url="/settings/" />
+            {/if}
         {/if}
     </Views>
 </App>

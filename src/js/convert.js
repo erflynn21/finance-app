@@ -3,7 +3,6 @@ import { budgetCurrency } from '../stores/currenciesStore';
 import { startDate } from '../stores/datesStore';
 
 const convert = async (item) => {
-    console.log(item);
     if (item.originalAmount === null) {
         item.originalAmount = item.amount;
         item.originalCurrency = item.currency;
@@ -28,12 +27,10 @@ const convert = async (item) => {
     let response = await fetch(url);
     let data = await response.json();
     let exchangeRate = Number(JSON.stringify(data.info.rate));
-    console.log(exchangeRate);
     item.amount = Number(
         (item.originalAmount / exchangeRate).toFixed(2)
     );
     item.currency = get(budgetCurrency);
-    console.log(item);
     return(item);
 };
 

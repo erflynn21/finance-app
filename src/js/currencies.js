@@ -43,4 +43,14 @@ const updateCurrencies = async (currencies) => {
     }
 }
 
-export { openCurrenciesDatabase, addCurrencies, updateCurrencies };
+const formatAmount = (amount, currency) => {
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency,
+        currencyDisplay: 'narrowSymbol',
+    });
+
+    return formatter.format(amount);
+}
+
+export { openCurrenciesDatabase, addCurrencies, updateCurrencies, formatAmount };

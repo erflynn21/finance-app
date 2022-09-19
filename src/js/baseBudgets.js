@@ -1,8 +1,10 @@
 import { get } from 'svelte/store';
 import userbase from 'userbase-js';
+import { budgetCurrency } from '../stores/currenciesStore';
+import { convert } from '../js/convert'
 import { baseBudgets, baseBudgetsSum, categories } from '../stores/baseBudgetsStore';
 import { monthlyBudgets } from '../stores/monthlyBudgetsStore';
-import { addMonthlyBudget } from './monthlyBudgets';
+import { addMonthlyBudget, deleteMonthlyBudget } from './monthlyBudgets';
 const databaseName = 'baseBudgets';
 
 const openBaseBudgetsDatabase = () => {
@@ -24,7 +26,9 @@ const openBaseBudgetsDatabase = () => {
 
             // set categories
             setCategories();
-            
+
+            // set monthly budgets
+            setMonthlyBudgets(items);
         },
     });
 }
@@ -42,15 +46,15 @@ const setCategories = () => {
 
 const setMonthlyBudgets = async (baseBudgets) => {
     baseBudgets.forEach(async budget => {
-        let monthlyBudget = get(monthlyBudgets).filter((monthlybudget) => monthlybudget.item.category === budget.item.category);
+        let monthlyBudget = get(monthlyBudgets).filter((monthlybudget) => monthlybudget.item.title === budget.item.title);
         if (monthlyBudget.length == 0) {
             let newMonthlyBudget = {
                 amount: budget.item.amount,
-                category: budget.item.category,
+                title: budget.item.title,
                 currency: budget.item.currency,
             }
 
-            if (newMonthlyBudget.currency !== get(baseCurrency)) {
+            if (newMonthlyBudget.currency !== get(budgetCurrency)) {
                 await convert(newMonthlyBudget);
             }
             await addMonthlyBudget(newMonthlyBudget);

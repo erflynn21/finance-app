@@ -14,7 +14,7 @@ const initUserbase = () => {
             if (user) {
                 userStore.set(user);
                 openDatabases();
-            }
+            } 
             initialized.set(true);
         })
         .catch((e) => {

@@ -7,6 +7,7 @@
         List,
         ListItem,
     } from 'framework7-svelte';
+    import AddTransactionButton from '../components/addTransactionButton.svelte';
     import { signOut } from '../js/auth';
 
     // sign out
@@ -42,4 +43,6 @@
         <ListItem title="Account" link="/account/" />
     </List>
     <Button on:click={signOutUser}>Sign Out</Button>
+
+    <AddTransactionButton />
 </Page>

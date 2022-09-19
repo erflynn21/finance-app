@@ -11,10 +11,11 @@
         Link,
     } from 'framework7-svelte';
     import AddBaseBudget from '../components/addBaseBudget.svelte';
+    import { formatAmount } from '../js/currencies';
     import { baseBudgets } from '../stores/baseBudgetsStore';
 </script>
 
-<Page>
+<Page name="baseBudgets" noToolbar>
     <Navbar title="Budgets" backLink="Back" />
     <Block class="text-align-center description">
         Below are the budgets that will be automatically regenerated every month
@@ -25,12 +26,12 @@
         Note: Updating a budget category will not update the current month's
         budget category or previous month's, only those generated in the future.
     </Block>
-    <!-- <Block class="text-align-center total">
-        Total Budgeted Amount: {$baseCurrencySymbol}{$budgetsSum}
-    </Block> -->
     <List class="budgets">
         {#each $baseBudgets as { item, itemId } (itemId)}
-            <ListItem>{item.title}</ListItem>
+            <ListItem
+                title={item.title}
+                after={formatAmount(item.amount, item.currency)}
+            />
             <!-- <div animate:flip={{ duration: 400 }}>
                 <SettingsSwiper {item} {itemId} type="budget" />
             </div> -->
