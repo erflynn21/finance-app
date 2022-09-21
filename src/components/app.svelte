@@ -104,7 +104,7 @@
                     />
                 </Toolbar>
 
-                <!-- <AddTransactionButton /> -->
+                <AddTransactionButton />
             {/if}
 
             {#if $userStore !== null && $userStore.profile.onboardingDone === 'true' && $budgetCurrency !== null}

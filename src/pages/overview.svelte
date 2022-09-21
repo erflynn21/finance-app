@@ -177,7 +177,7 @@
         </Sheet>
     {/if} -->
 
-    <AddTransactionButton />
+    <!-- <AddTransactionButton /> -->
 </Page>
 
 <style>

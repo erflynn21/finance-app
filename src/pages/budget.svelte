@@ -102,7 +102,7 @@
 
     <div class="spacer" />
 
-    <AddTransactionButton />
+    <!-- <AddTransactionButton /> -->
 </Page>
 
 <style>

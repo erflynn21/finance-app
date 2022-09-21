@@ -37,6 +37,7 @@
     let displayDate = new Date();
 
     const initPickers = () => {
+        console.log('ran');
         const datepicker = f7.calendar.create({
             inputEl: '#transaction-date',
             value: [displayDate],
